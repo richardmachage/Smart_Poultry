@@ -1,6 +1,7 @@
 package com.example.smartpoultry.presentation.screens.composables
 
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -42,6 +43,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.TextFieldValue
@@ -49,6 +51,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.smartpoultry.R
 import com.example.smartpoultry.presentation.uiModels.BottomNavigationItem
 
@@ -118,8 +121,7 @@ fun MySimpleEditText(
     var text by remember { mutableStateOf(TextFieldValue("")) }
     OutlinedTextField(
         modifier = modifier
-            .fillMaxWidth()
-            //.padding(start = 8.dp, end = 8.dp)
+            .fillMaxSize()
         ,
         value = text,
         onValueChange = { newText -> text = newText },
@@ -130,7 +132,7 @@ fun MySimpleEditText(
                 contentDescription = iconLeadingDescription
             )
         },
-        singleLine = true
+        singleLine = true,
     )
 }
 

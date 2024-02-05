@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import com.example.smartpoultry.presentation.screens.composables.MyBottomNavBar
 import com.example.smartpoultry.presentation.screens.composables.MyCardInventory
 import com.example.smartpoultry.presentation.screens.composables.MyTopAppBar
+import com.example.smartpoultry.presentation.screens.eggCollection.EggScreen
 import com.example.smartpoultry.presentation.screens.home.HomeScreen
 import com.example.smartpoultry.presentation.screens.logIn.LogInScreen
 import com.example.smartpoultry.presentation.screens.signUp.SignUpScreen
@@ -37,9 +38,9 @@ class MainActivity : ComponentActivity() {
                        bottomBar = { MyBottomNavBar()},
 
                     ) {paddingValues ->
-                        HomeScreen(
+                        EggScreen(
                             modifier = Modifier
-                                .padding(paddingValues)
+                               .padding(paddingValues)
                         )
                     }
 

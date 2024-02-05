@@ -55,7 +55,6 @@ fun DatePicker() {
 @Composable
 fun MyDatePicker(
     dateDialogState : MaterialDialogState,
-    defaultDate : LocalDate,
     positiveButton : () -> Unit,
     negativeButton : () -> Unit
 ){
@@ -72,7 +71,7 @@ fun MyDatePicker(
         Text(
             text = DateTimeFormatter
                 .ofPattern("dd MMM yyyy")
-                .format(defaultDate), // date to be displayed by default
+                .format(pickedDate), // date to be displayed by default
             fontSize = 20.sp
         )
 
@@ -130,16 +129,10 @@ fun PreviewDatePicker(){
             color = MaterialTheme.colorScheme.background
         ) {
 
-            var pickedDate by remember {
-                mutableStateOf(LocalDate.now())
-            }
-
-
             val dateDialogState = rememberMaterialDialogState()
 
             MyDatePicker(
                 dateDialogState = dateDialogState,
-                defaultDate = LocalDate.now(),
                 positiveButton = {},
                 negativeButton = {}
             )

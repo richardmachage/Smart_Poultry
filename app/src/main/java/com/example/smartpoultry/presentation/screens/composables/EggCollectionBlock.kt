@@ -49,12 +49,10 @@ fun MyCardEggCollection(
             .shadow(
                 elevation = 10.dp,
                 shape = RoundedCornerShape(10.dp)
-
             )
             .width(
                 (LocalConfiguration.current.screenWidthDp / 4).dp
             )
-            .height(90.dp)
 
     ){
         Text(
