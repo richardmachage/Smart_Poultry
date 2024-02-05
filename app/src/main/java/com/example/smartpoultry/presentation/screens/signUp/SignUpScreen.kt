@@ -8,6 +8,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -24,8 +25,8 @@ import com.example.smartpoultry.presentation.screens.composables.NormText
 fun SignUpScreen() {
     Surface(
         modifier = Modifier
-            .fillMaxSize()
-            .padding(8.dp)
+            .fillMaxSize(),
+        color = MaterialTheme.colorScheme.background
     ) {
         Column {
             NormText(text = "Sign Up")

@@ -3,6 +3,7 @@ package com.example.smartpoultry.presentation.screens.home
 import android.annotation.SuppressLint
 import androidx.compose.foundation.border
 import androidx.compose.foundation.gestures.scrollable
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -48,8 +49,9 @@ fun HomeScreen(
 
 
     Surface(
-        modifier = Modifier
-            .fillMaxSize()
+        modifier = modifier
+            .fillMaxSize(),
+        color = MaterialTheme.colorScheme.background
     ) {
 
         Column( //Full Screen column
@@ -58,9 +60,9 @@ fun HomeScreen(
                 .padding(8.dp)
                 .verticalScroll(rememberScrollState())
         ) {
-            Text(text = "Smart Poultry")
+            //Text(text = "Smart Poultry")
 
-            MyVerticalSpacer(height = 20)
+           // MyVerticalSpacer(height = 20)
 
             Column(
                 //Inventory block
@@ -107,7 +109,7 @@ fun HomeScreen(
 
             MyVerticalSpacer(height = 20)
 
-            Column (
+            Column(
                 //Alerts Block
                 modifier = Modifier
                     .border(
@@ -119,58 +121,95 @@ fun HomeScreen(
                     )
                     .fillMaxWidth()
                     .padding(6.dp)
-            ){
+            ) {
                 Text(text = "Alerts:")
-                Row (
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ){
+                Row(
+                    modifier = Modifier
+                        .padding(6.dp)
+                        .fillMaxWidth()
+                        .horizontalScroll(rememberScrollState()),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+
+                ) {
                     Card {
-                        Text(text = "cell 1",
+                        Text(
+                            text = "cell 1",
 
                             modifier = Modifier
-                                .padding(3.dp))
+                                .padding(3.dp)
+                        )
                     }
 
                     MyHorizontalSpacer(width = 10)
 
                     Card {
-                        Text(text = "cell 12",
+                        Text(
+                            text = "cell 12",
 
                             modifier = Modifier
-                                .padding(3.dp))
+                                .padding(3.dp)
+                        )
                     }
 
                     MyHorizontalSpacer(width = 10)
 
                     Card {
-                        Text(text = "cell 11",
+                        Text(
+                            text = "cell 11",
 
                             modifier = Modifier
-                                .padding(3.dp))
+                                .padding(3.dp)
+                        )
                     }
                     MyHorizontalSpacer(width = 10)
 
                     Card {
-                        Text(text = "cell 4",
+                        Text(
+                            text = "cell 4",
 
                             modifier = Modifier
-                                .padding(3.dp))
+                                .padding(3.dp)
+                        )
                     }
                     MyHorizontalSpacer(width = 10)
 
                     Card {
-                        Text(text = "cell 3",
+                        Text(
+                            text = "cell 3",
 
                             modifier = Modifier
-                                .padding(3.dp))
+                                .padding(3.dp)
+                        )
                     }
                     MyHorizontalSpacer(width = 10)
 
                     Card {
-                        Text(text = "cell 6",
+                        Text(
+                            text = "cell 6",
 
                             modifier = Modifier
-                                .padding(3.dp))
+                                .padding(3.dp)
+                        )
+                    }
+                    MyHorizontalSpacer(width = 10)
+
+                    Card {
+                        Text(
+                            text = "cell 17",
+
+                            modifier = Modifier
+                                .padding(3.dp)
+                        )
+                    }
+                    MyHorizontalSpacer(width = 10)
+
+                    Card {
+                        Text(
+                            text = "cell 16",
+
+                            modifier = Modifier
+                                .padding(3.dp)
+                        )
                     }
                 }
             }
@@ -199,7 +238,7 @@ fun HomeScreen(
                     chart = lineChart(),
                     model = homeViewModel.chartEntryModel,
                     startAxis = rememberStartAxis(
-                       // titleComponent = textComponent(),
+                        // titleComponent = textComponent(),
                         title = "Eggs Produced"
                     ),
                     bottomAxis = rememberBottomAxis(
@@ -236,13 +275,11 @@ fun HomeScreen(
                         title = "Sacks of Feeds"
                     ),
                     bottomAxis = rememberBottomAxis(
-                       titleComponent = textComponent(),
+                        titleComponent = textComponent(),
                         title = "Date"
                     )
                 )
             }
-
-           MyVerticalSpacer(height = 70)
         }
     }
 }

@@ -6,21 +6,30 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.materialIcon
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarColors
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -96,6 +105,32 @@ fun MyEditText(
         },
         singleLine = true
 
+    )
+}
+
+@Composable
+fun MySimpleEditText(
+    keyboardType: KeyboardType,
+    iconLeading: ImageVector,
+    iconLeadingDescription: String,
+    modifier: Modifier
+    ) {
+    var text by remember { mutableStateOf(TextFieldValue("")) }
+    OutlinedTextField(
+        modifier = modifier
+            .fillMaxWidth()
+            //.padding(start = 8.dp, end = 8.dp)
+        ,
+        value = text,
+        onValueChange = { newText -> text = newText },
+        keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
+        leadingIcon = {
+            Icon(
+                imageVector = iconLeading,
+                contentDescription = iconLeadingDescription
+            )
+        },
+        singleLine = true
     )
 }
 
@@ -290,8 +325,33 @@ fun MyCardInventory(
         )
     }
 }
-@Preview(showBackground = true)
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun MyTopAppBar(){
+    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
+
+    TopAppBar(
+        title = {
+            Text(text = "Home")
+        },
+        actions = {
+            IconButton(onClick = { /*TODO*/ })
+            {
+                Icon(imageVector= Icons.Default.AccountCircle, contentDescription ="Account Icon" )
+            }
+            IconButton(onClick = { /*TODO*/ })
+            {
+                Icon(imageVector = Icons.Default.Settings, contentDescription ="Settings Icon")
+            }
+        },
+        scrollBehavior = scrollBehavior,
+    )
+
+}
+
+@Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun MyPreview() {
-    MyCardInventory(item = "Chicken", number =2000 )//, modifier = Modifier)
+
 }

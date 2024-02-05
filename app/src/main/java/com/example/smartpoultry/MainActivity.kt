@@ -13,6 +13,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import com.example.smartpoultry.presentation.screens.composables.MyBottomNavBar
 import com.example.smartpoultry.presentation.screens.composables.MyCardInventory
+import com.example.smartpoultry.presentation.screens.composables.MyTopAppBar
 import com.example.smartpoultry.presentation.screens.home.HomeScreen
 import com.example.smartpoultry.presentation.screens.logIn.LogInScreen
 import com.example.smartpoultry.presentation.screens.signUp.SignUpScreen
@@ -26,19 +27,25 @@ class MainActivity : ComponentActivity() {
         setContent {
             SmartPoultryTheme {
                 // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    Scaffold(
-                       bottomBar = { MyBottomNavBar()}
+//                Surface(
+//                    modifier = Modifier.fillMaxSize(),
+//                    color = MaterialTheme.colorScheme.background
+//                ) {
+
+                Scaffold(
+                    topBar = {MyTopAppBar()},
+                       bottomBar = { MyBottomNavBar()},
+
                     ) {paddingValues ->
                         HomeScreen(
                             modifier = Modifier
                                 .padding(paddingValues)
                         )
                     }
-                }
+
+                //}
+
+
             }
         }
     }
