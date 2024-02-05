@@ -30,6 +30,7 @@ android {
         }
     }
     compileOptions {
+        isCoreLibraryDesugaringEnabled = true
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
@@ -80,4 +81,10 @@ dependencies {
     implementation("com.patrykandpatrick.vico:compose-m3:1.13.1")
     // Houses the core logic for charts and other elements. Included in all other modules.
     implementation("com.patrykandpatrick.vico:core:1.13.1")
+
+    //date picker library
+    implementation("io.github.vanpra.compose-material-dialogs:datetime:0.9.0")
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")
+
+
 }

@@ -113,7 +113,7 @@ fun MySingleBlock(
 
             }
 
-            Row( // This row holds the cell ards
+            Row( // This row holds the cell cards
                 modifier = Modifier
                     .horizontalScroll(rememberScrollState())
                     .fillMaxWidth()
