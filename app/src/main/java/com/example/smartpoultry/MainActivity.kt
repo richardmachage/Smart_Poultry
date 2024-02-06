@@ -38,10 +38,7 @@ class MainActivity : ComponentActivity() {
                        bottomBar = { MyBottomNavBar()},
 
                     ) {paddingValues ->
-                        EggScreen(
-                            modifier = Modifier
-                               .padding(paddingValues)
-                        )
+
                     }
 
                 //}
