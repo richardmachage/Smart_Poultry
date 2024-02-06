@@ -1,6 +1,8 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("com.google.devtools.ksp") version "1.9.0-1.0.13" // Depends on your kotlin version
+
 }
 
 android {
@@ -69,7 +71,7 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-test-manifest")
 
     //viewModel for compose
-    implementation ("androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0")
 
 
     //Vico Charts
@@ -86,5 +88,9 @@ dependencies {
     implementation("io.github.vanpra.compose-material-dialogs:datetime:0.9.0")
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")
 
+    //Compose destinations "Ramcosta"
+    val composeDestinationsVersion = "1.10.0"
+    implementation("io.github.raamcosta.compose-destinations:core:$composeDestinationsVersion")
+    ksp("io.github.raamcosta.compose-destinations:ksp:$composeDestinationsVersion")
 
 }
