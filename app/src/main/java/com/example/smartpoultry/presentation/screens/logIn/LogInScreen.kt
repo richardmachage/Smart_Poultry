@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
@@ -22,15 +21,24 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.smartpoultry.R
+import com.example.smartpoultry.presentation.screens.NavGraphs
 import com.example.smartpoultry.presentation.screens.composables.MyEditTextClear
 import com.example.smartpoultry.presentation.screens.composables.MyPasswordEditText
-import com.example.smartpoultry.presentation.screens.composables.MyVerticalSpacer
 import com.example.smartpoultry.presentation.screens.composables.MyTextButton
+import com.example.smartpoultry.presentation.screens.composables.MyVerticalSpacer
 import com.example.smartpoultry.presentation.screens.composables.NormButton
 import com.example.smartpoultry.presentation.screens.composables.NormText
+import com.example.smartpoultry.presentation.screens.destinations.MainScreenDestination
+import com.example.smartpoultry.presentation.screens.destinations.SignUpScreenDestination
+import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import com.ramcosta.composedestinations.navigation.popUpTo
 
+@Destination(start = true)
 @Composable
-fun LogInScreen(){
+fun LogInScreen(
+    navigator: DestinationsNavigator
+) {
     Surface(
         modifier = Modifier
             .fillMaxSize(),
@@ -45,7 +53,7 @@ fun LogInScreen(){
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-              MyVerticalSpacer(height = 50)
+                MyVerticalSpacer(height = 50)
                 Image(
                     modifier = Modifier
                         .width(100.dp)
@@ -92,9 +100,11 @@ fun LogInScreen(){
 
                 MyVerticalSpacer(height = 20)
 
-                NormButton(
+                NormButton( // Log in Button
                     onButtonClick = {
-                        /*TODO*/
+                        navigator.navigate(MainScreenDestination) {
+                            popUpTo(NavGraphs.root.startRoute) { inclusive = false }
+                        }
                     },
                     btnName = "Log In",
                     modifier = Modifier
@@ -102,8 +112,8 @@ fun LogInScreen(){
 
             }
 
-            MyTextButton(
-                onButtonClick = { /*TODO*/ },
+            MyTextButton( //Not registered button
+                onButtonClick = { navigator.navigate(SignUpScreenDestination) },
                 btnText = "You don't have an account? Click to sign up",
                 modifier = Modifier
             )
@@ -113,6 +123,6 @@ fun LogInScreen(){
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
-fun PreviewLogInScreen(){
-    LogInScreen()
+fun PreviewLogInScreen() {
+    //LogInScreen()
 }

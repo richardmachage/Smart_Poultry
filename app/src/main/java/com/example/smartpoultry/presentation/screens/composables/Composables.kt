@@ -221,62 +221,6 @@ fun MyPasswordEditText(
 }
 
 
-@Composable
-fun MyBottomNavBar() {
-    val items = listOf<BottomNavigationItem>(
-        BottomNavigationItem(
-            title = "Home",
-            selectedIcon = Icons.Filled.Home,
-            unselectedIcon = Icons.Outlined.Home
-        ),
-        BottomNavigationItem(
-            title = "Analytics",
-            selectedIcon = ImageVector.vectorResource(R.drawable.analytics_filled),
-            unselectedIcon = ImageVector.vectorResource(R.drawable.analytics_outlined)
-        ),
-        BottomNavigationItem(
-            title = "Alerts",
-            selectedIcon = ImageVector.vectorResource(R.drawable.notification_filled),
-            unselectedIcon = ImageVector.vectorResource(R.drawable.notification_outline)
-        ),
-        BottomNavigationItem(
-            title = "Eggs",
-            selectedIcon = ImageVector.vectorResource(R.drawable.egg_filled),
-            unselectedIcon = ImageVector.vectorResource(R.drawable.egg_outline),
-        )
-    )
-
-    var selectedItemIndex by rememberSaveable {
-        mutableStateOf(0)
-    }
-
-    NavigationBar {
-        items.forEachIndexed { index, item ->
-            NavigationBarItem(
-                selected = selectedItemIndex == index,
-                onClick = {
-                    selectedItemIndex = index
-                    //add code to handle navigation
-                },
-                icon = {
-                    Icon(
-                        imageVector = if (selectedItemIndex == index) {
-                            item.selectedIcon
-                        } else {
-                            item.unselectedIcon
-                        },
-                        contentDescription = item.title
-                    )
-                },
-                label = {
-                    Text(text = item.title)
-                }
-            )
-
-        }
-    }
-
-}
 
 @Composable
 fun MyVerticalSpacer(height : Int){

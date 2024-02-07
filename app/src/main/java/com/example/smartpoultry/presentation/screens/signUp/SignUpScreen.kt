@@ -20,9 +20,15 @@ import com.example.smartpoultry.presentation.screens.composables.MyPasswordEditT
 import com.example.smartpoultry.presentation.screens.composables.MyVerticalSpacer
 import com.example.smartpoultry.presentation.screens.composables.NormButton
 import com.example.smartpoultry.presentation.screens.composables.NormText
+import com.example.smartpoultry.presentation.screens.destinations.LogInScreenDestination
+import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
+@Destination
 @Composable
-fun SignUpScreen() {
+fun SignUpScreen(
+    navigator: DestinationsNavigator
+) {
     Surface(
         modifier = Modifier
             .fillMaxSize(),
@@ -70,8 +76,9 @@ fun SignUpScreen() {
 
             MyVerticalSpacer(height = 30)
 
-            NormButton(
+            NormButton( //The sign up Button
                 onButtonClick = {
+                                navigator.navigate(LogInScreenDestination)
                     /*TODO*/
                 },
                 btnName = "Sign Up",
@@ -86,5 +93,5 @@ fun SignUpScreen() {
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun SignUpPreview(){
-    SignUpScreen()
+    //SignUpScreen()
 }

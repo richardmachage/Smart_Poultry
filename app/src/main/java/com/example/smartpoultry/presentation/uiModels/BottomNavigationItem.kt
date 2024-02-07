@@ -13,6 +13,7 @@ import androidx.compose.ui.res.vectorResource
 import com.example.smartpoultry.R
 
 data class BottomNavigationItem(
+    val route: String,
     val title: String,
     val selectedIcon: ImageVector,
     val unselectedIcon: ImageVector,

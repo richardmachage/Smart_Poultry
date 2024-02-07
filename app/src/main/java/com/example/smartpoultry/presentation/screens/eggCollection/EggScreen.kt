@@ -24,6 +24,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.smartpoultry.presentation.screens.composables.MyDatePicker
 import com.example.smartpoultry.presentation.screens.composables.MySingleBlock
 import com.example.smartpoultry.presentation.theme.SmartPoultryTheme
+import com.ramcosta.composedestinations.annotation.Destination
 import com.vanpra.composematerialdialogs.MaterialDialog
 import com.vanpra.composematerialdialogs.datetime.date.DatePickerDefaults
 import com.vanpra.composematerialdialogs.datetime.date.datepicker
@@ -31,9 +32,10 @@ import com.vanpra.composematerialdialogs.rememberMaterialDialogState
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
+@Destination
 @Composable
 fun EggScreen(
-    modifier: Modifier
+    //modifier: Modifier
 ){
 
     var eggViewModel = viewModel<EggScreenViewModel>()
@@ -41,7 +43,7 @@ fun EggScreen(
 
 
     Surface (
-        modifier = modifier
+        modifier = Modifier
             .fillMaxSize(),
         color = MaterialTheme.colorScheme.background
     ){
@@ -121,6 +123,6 @@ fun EggScreen(
 @Composable
 fun PrevEgg(){
     SmartPoultryTheme {
-        EggScreen(modifier = Modifier)
+       // EggScreen(modifier = Modifier)
     }
 }

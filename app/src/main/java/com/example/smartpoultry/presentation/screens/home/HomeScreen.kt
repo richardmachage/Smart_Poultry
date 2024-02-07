@@ -37,12 +37,13 @@ import com.patrykandpatrick.vico.compose.axis.vertical.startAxis
 import com.patrykandpatrick.vico.compose.chart.Chart
 import com.patrykandpatrick.vico.compose.chart.line.lineChart
 import com.patrykandpatrick.vico.core.component.text.textComponent
+import com.ramcosta.composedestinations.annotation.Destination
 
-
+@Destination
 //@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun HomeScreen(
-    modifier: Modifier
+    //modifier: Modifier
 ) {
 
     //viewmodel initialization
@@ -50,7 +51,7 @@ fun HomeScreen(
 
 
     Surface(
-        modifier = modifier
+        modifier = Modifier
             .fillMaxSize(),
         color = MaterialTheme.colorScheme.background
     ) {
@@ -289,6 +290,6 @@ fun HomeScreen(
 @Preview(showSystemUi = true, showBackground = true)
 @Composable
 fun HomeScreenPrev() {
-    HomeScreen(modifier = Modifier)
+  //  HomeScreen(modifier = Modifier)
 
 }

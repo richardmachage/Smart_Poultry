@@ -11,6 +11,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
+import com.example.smartpoultry.presentation.screens.NavGraph
+import com.example.smartpoultry.presentation.screens.NavGraphs
 import com.example.smartpoultry.presentation.screens.composables.MyBottomNavBar
 import com.example.smartpoultry.presentation.screens.composables.MyCardInventory
 import com.example.smartpoultry.presentation.screens.composables.MyTopAppBar
@@ -19,6 +21,7 @@ import com.example.smartpoultry.presentation.screens.home.HomeScreen
 import com.example.smartpoultry.presentation.screens.logIn.LogInScreen
 import com.example.smartpoultry.presentation.screens.signUp.SignUpScreen
 import com.example.smartpoultry.presentation.theme.SmartPoultryTheme
+import com.ramcosta.composedestinations.DestinationsNavHost
 
 
 class MainActivity : ComponentActivity() {
@@ -27,22 +30,8 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             SmartPoultryTheme {
-                // A surface container using the 'background' color from the theme
-//                Surface(
-//                    modifier = Modifier.fillMaxSize(),
-//                    color = MaterialTheme.colorScheme.background
-//                ) {
 
-                Scaffold(
-                    topBar = {MyTopAppBar()},
-                       bottomBar = { MyBottomNavBar()},
-
-                    ) {paddingValues ->
-
-                    }
-
-                //}
-
+                DestinationsNavHost(navGraph = NavGraphs.root)
 
             }
         }

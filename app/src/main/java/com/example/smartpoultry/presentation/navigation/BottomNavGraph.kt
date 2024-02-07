@@ -1,0 +1,31 @@
+package com.example.smartpoultry.presentation.navigation
+
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import com.example.smartpoultry.presentation.screens.alerts.AlertScreen
+import com.example.smartpoultry.presentation.screens.analytics.AnalyticsScreen
+import com.example.smartpoultry.presentation.screens.destinations.AlertScreenDestination
+import com.example.smartpoultry.presentation.screens.destinations.AnalyticsScreenDestination
+import com.example.smartpoultry.presentation.screens.destinations.EggScreenDestination
+import com.example.smartpoultry.presentation.screens.destinations.HomeScreenDestination
+import com.example.smartpoultry.presentation.screens.eggCollection.EggScreen
+import com.example.smartpoultry.presentation.screens.home.HomeScreen
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+
+@Composable
+fun BottomNavGraph(
+    navController: NavHostController,
+    modifier : Modifier
+    //navigator : DestinationsNavigator
+){
+    NavHost(navController = navController, startDestination = HomeScreenDestination.route , modifier = modifier){
+        composable(route = HomeScreenDestination.route){ HomeScreen() }
+        composable(route = AnalyticsScreenDestination.route){ AnalyticsScreen() }
+        composable(route = AlertScreenDestination.route){ AlertScreen() }
+        composable(route = EggScreenDestination.route){ EggScreen() }
+    }
+}
