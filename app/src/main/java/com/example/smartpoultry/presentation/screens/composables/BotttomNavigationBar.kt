@@ -63,9 +63,6 @@ fun MyBottomNavBar(
             unselectedIcon = ImageVector.vectorResource(R.drawable.egg_outline),
         )
     )
-    var selectedItemIndex by rememberSaveable {
-        mutableIntStateOf(0)
-    }
 
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
