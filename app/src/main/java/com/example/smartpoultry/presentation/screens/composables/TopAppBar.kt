@@ -13,15 +13,22 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.example.smartpoultry.presentation.screens.destinations.AccountScreenDestination
 import com.example.smartpoultry.presentation.screens.destinations.AlertScreenDestination
 import com.example.smartpoultry.presentation.screens.destinations.AnalyticsScreenDestination
 import com.example.smartpoultry.presentation.screens.destinations.EggScreenDestination
 import com.example.smartpoultry.presentation.screens.destinations.HomeScreenDestination
+import com.example.smartpoultry.presentation.screens.destinations.SettingsScreenDestination
+import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
-
+@Destination
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MyTopAppBar( navController : NavController){
+fun MyTopAppBar(
+    navController : NavController,
+    navigator: DestinationsNavigator
+    ){
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
@@ -35,11 +42,11 @@ fun MyTopAppBar( navController : NavController){
             }
         },
         actions = {
-            IconButton(onClick = { /*TODO*/ })
+            IconButton(onClick = { navigator.navigate(AccountScreenDestination) })
             {
                 Icon(imageVector= Icons.Default.AccountCircle, contentDescription ="Account Icon" )
             }
-            IconButton(onClick = { /*TODO*/ })
+            IconButton(onClick = { navigator.navigate(SettingsScreenDestination) })
             {
                 Icon(imageVector = Icons.Default.Settings, contentDescription ="Settings Icon")
             }

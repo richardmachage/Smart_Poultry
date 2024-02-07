@@ -10,16 +10,19 @@ import com.example.smartpoultry.presentation.screens.composables.MyBottomNavBar
 import com.example.smartpoultry.presentation.screens.composables.MyTopAppBar
 import com.example.smartpoultry.presentation.theme.SmartPoultryTheme
 import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
 @Destination
 @Composable
-fun MainScreen(){
+fun MainScreen(
+    navigator: DestinationsNavigator
+){
     val navController = rememberNavController()
 
     SmartPoultryTheme {
 
         Scaffold (
-            topBar = { MyTopAppBar(navController)},
+            topBar = { MyTopAppBar(navController, navigator)},
             bottomBar = { MyBottomNavBar(navController)}
         ){ paddingValues ->
             BottomNavGraph(
