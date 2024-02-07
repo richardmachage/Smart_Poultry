@@ -1,0 +1,3 @@
+utils package
+for utility classes and extension functions that are widely used across the application.
+This could include date formatting, network connectivity checks, etc.
