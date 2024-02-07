@@ -272,29 +272,6 @@ fun MyCardInventory(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun MyTopAppBar(){
-    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
-
-    TopAppBar(
-        title = {
-            Text(text = "Home")
-        },
-        actions = {
-            IconButton(onClick = { /*TODO*/ })
-            {
-                Icon(imageVector= Icons.Default.AccountCircle, contentDescription ="Account Icon" )
-            }
-            IconButton(onClick = { /*TODO*/ })
-            {
-                Icon(imageVector = Icons.Default.Settings, contentDescription ="Settings Icon")
-            }
-        },
-        scrollBehavior = scrollBehavior,
-    )
-
-}
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable

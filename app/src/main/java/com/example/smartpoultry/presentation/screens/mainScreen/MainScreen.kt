@@ -19,7 +19,7 @@ fun MainScreen(){
     SmartPoultryTheme {
 
         Scaffold (
-            topBar = { MyTopAppBar()},
+            topBar = { MyTopAppBar(navController)},
             bottomBar = { MyBottomNavBar(navController)}
         ){ paddingValues ->
             BottomNavGraph(
