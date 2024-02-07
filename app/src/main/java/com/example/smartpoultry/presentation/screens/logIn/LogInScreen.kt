@@ -103,7 +103,7 @@ fun LogInScreen(
                 NormButton( // Log in Button
                     onButtonClick = {
                         navigator.navigate(MainScreenDestination) {
-                            popUpTo(NavGraphs.root.startRoute) { inclusive = false }
+                            popUpTo(NavGraphs.root.startRoute) { inclusive = true }
                         }
                     },
                     btnName = "Log In",

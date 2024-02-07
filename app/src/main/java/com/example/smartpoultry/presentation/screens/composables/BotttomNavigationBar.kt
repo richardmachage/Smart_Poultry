@@ -71,27 +71,16 @@ fun MyBottomNavBar(
     val currentRoute = navBackStackEntry?.destination?.route
 
     NavigationBar {
-        items.forEachIndexed { index, item ->
+        items.forEachIndexed { _, item ->
             var selected = currentRoute == item.route
             NavigationBarItem(
-                selected = selectedItemIndex == index,//selected,  //navController.currentDestination?.route == item.route,//
+                selected = selected,  //navController.currentDestination?.route == item.route,//
                 onClick = {
-                    selectedItemIndex = index
-                    //Navigate and avoid creating multiple instances of the destination
                     navController.navigate(item.route) {
                         popUpTo(navController.graph.findStartDestination().id)
                         launchSingleTop =true
-                       // launchSingleTop = true // Avoid multiple copies of the same destination
-                        //restoreState = true // Restore state when reselecting a previously selected item
 
-                        // Pop up to the start destination of the graph to
-                        // avoid building up a large stack of destinations
-                        // on the back stack as users select items
-//                        popUpTo(navController.graph.startDestinationId){
-//                            saveState = true
-//                        }
                     }
-                    //add code to handle navigation
                 },
                 icon = {
                     Icon(

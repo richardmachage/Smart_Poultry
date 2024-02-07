@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.smartpoultry.presentation.screens.NavGraphs
 import com.example.smartpoultry.presentation.screens.composables.MyEditTextClear
 import com.example.smartpoultry.presentation.screens.composables.MyPasswordEditText
 import com.example.smartpoultry.presentation.screens.composables.MyVerticalSpacer
@@ -23,6 +24,7 @@ import com.example.smartpoultry.presentation.screens.composables.NormText
 import com.example.smartpoultry.presentation.screens.destinations.LogInScreenDestination
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import com.ramcosta.composedestinations.navigation.popUpTo
 
 @Destination
 @Composable
@@ -78,8 +80,10 @@ fun SignUpScreen(
 
             NormButton( //The sign up Button
                 onButtonClick = {
-                                navigator.navigate(LogInScreenDestination)
-                    /*TODO*/
+                    navigator.navigate(LogInScreenDestination){
+                        popUpTo(NavGraphs.root.startRoute) { inclusive = true }
+                    }
+
                 },
                 btnName = "Sign Up",
                 modifier = Modifier
