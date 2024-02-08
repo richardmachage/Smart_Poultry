@@ -8,7 +8,7 @@ import java.time.LocalDate
 data class EggCollection(
     @PrimaryKey(autoGenerate = true)
     val id : Int = 0,
-    val date : LocalDate,
+    val date : String,
     val cell : String,
     val eggCount : Int
 )
