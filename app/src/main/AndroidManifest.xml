@@ -8,6 +8,7 @@
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@drawable/chicken"
         android:label="@string/app_name"
+        android:name=".application.MyApplication"
         android:roundIcon="@drawable/chicken"
         android:supportsRtl="true"
         android:theme="@style/Theme.SmartPoultry"

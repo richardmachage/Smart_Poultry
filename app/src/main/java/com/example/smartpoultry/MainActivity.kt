@@ -22,17 +22,16 @@ import com.example.smartpoultry.presentation.screens.logIn.LogInScreen
 import com.example.smartpoultry.presentation.screens.signUp.SignUpScreen
 import com.example.smartpoultry.presentation.theme.SmartPoultryTheme
 import com.ramcosta.composedestinations.DestinationsNavHost
+import dagger.hilt.EntryPoint
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    //@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             SmartPoultryTheme {
-
                 DestinationsNavHost(navGraph = NavGraphs.root)
-
             }
         }
     }
