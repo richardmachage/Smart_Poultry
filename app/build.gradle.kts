@@ -98,4 +98,15 @@ dependencies {
     implementation("com.google.dagger:hilt-android:2.44")
     kapt("com.google.dagger:hilt-android-compiler:2.44")
 
+    //Room database
+    val roomVersion = "2.6.1"
+    implementation("androidx.room:room-runtime:$roomVersion")
+    annotationProcessor("androidx.room:room-compiler:$roomVersion")
+    kapt("androidx.room:room-compiler:$roomVersion") // Kotlin annotation processing tool
+    implementation("androidx.room:room-ktx:$roomVersion") // Kotlin Extensions and Coroutines support for Room
+
+
+
+
+
 }
