@@ -2,7 +2,8 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("com.google.devtools.ksp") version "1.9.0-1.0.13" // Depends on your kotlin version
-
+    kotlin("kapt")
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -92,5 +93,9 @@ dependencies {
     val composeDestinationsVersion = "1.10.0"
     implementation("io.github.raamcosta.compose-destinations:core:$composeDestinationsVersion")
     ksp("io.github.raamcosta.compose-destinations:ksp:$composeDestinationsVersion")
+
+    //Hilt dependency injection
+    implementation("com.google.dagger:hilt-android:2.44")
+    kapt("com.google.dagger:hilt-android-compiler:2.44")
 
 }
