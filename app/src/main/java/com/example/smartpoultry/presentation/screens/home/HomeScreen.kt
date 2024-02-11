@@ -96,7 +96,7 @@ fun HomeScreen(
                     )
 
                     MyCardInventory(
-                        item = "Cages",
+                        item = "Blocks",
                         number = 114
                     )
 

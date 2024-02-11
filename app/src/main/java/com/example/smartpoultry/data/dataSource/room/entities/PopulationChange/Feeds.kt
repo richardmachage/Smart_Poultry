@@ -1,0 +1,13 @@
+package com.example.smartpoultry.data.dataSource.room.entities.PopulationChange
+
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+
+@Entity("feeds_table")
+data class Feeds(
+    @PrimaryKey(autoGenerate = true)
+    val recordId : Int = 0,
+    val date : String,
+    val numOfSacks : Int
+
+)
