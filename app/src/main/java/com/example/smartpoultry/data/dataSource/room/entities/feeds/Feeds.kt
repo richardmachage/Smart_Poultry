@@ -1,4 +1,4 @@
-package com.example.smartpoultry.data.dataSource.room.entities.PopulationChange
+package com.example.smartpoultry.data.dataSource.room.entities.feeds
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
