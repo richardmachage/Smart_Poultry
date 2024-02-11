@@ -4,7 +4,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.time.LocalDate
 
-@Entity
+@Entity(tableName = "egg_collection_tbl")
 data class EggCollection(
     @PrimaryKey(autoGenerate = true)
     val productionId : Int = 0,
