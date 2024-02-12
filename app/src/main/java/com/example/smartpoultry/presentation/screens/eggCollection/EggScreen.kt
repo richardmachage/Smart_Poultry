@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -21,6 +22,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.DialogProperties
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.smartpoultry.presentation.screens.composables.MyBlocks
 import com.example.smartpoultry.presentation.screens.composables.MyDatePicker
 import com.example.smartpoultry.presentation.screens.composables.MySingleBlock
 import com.example.smartpoultry.presentation.theme.SmartPoultryTheme
@@ -106,7 +108,7 @@ fun EggScreen(
 
             }
 
-            Column(
+            /*Column(
                 modifier = Modifier
                     .fillMaxSize()
                     .verticalScroll(rememberScrollState())
@@ -114,7 +116,9 @@ fun EggScreen(
                 for(block in 1..10){
                     MySingleBlock(blockNumber = block, numberOfCells = 12)
                 }
-            }
+            }*/
+
+            MyBlocks(numOfBlocks = 20)
         }
    }
 }
