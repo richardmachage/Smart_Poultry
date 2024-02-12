@@ -6,7 +6,6 @@ import androidx.room.Insert
 import androidx.room.Query
 import kotlinx.coroutines.flow.Flow
 import java.sql.Date
-import java.time.LocalDate
 
 @Dao
 interface FeedsDao {

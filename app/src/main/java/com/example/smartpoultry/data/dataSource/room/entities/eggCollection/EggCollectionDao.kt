@@ -4,7 +4,6 @@ import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
-import com.example.smartpoultry.data.dataSource.room.entities.feeds.Feeds
 import kotlinx.coroutines.flow.Flow
 import java.sql.Date
 
