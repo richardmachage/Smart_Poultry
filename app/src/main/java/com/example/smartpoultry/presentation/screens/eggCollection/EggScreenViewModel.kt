@@ -8,7 +8,15 @@ class EggScreenViewModel : ViewModel(){
     var selectedDate = mutableStateOf(LocalDate.now())
         private set
 
+    var totalEggCount = mutableStateOf("")
+        private set
+
+    fun setTotalEggCount(totalEggs : Int) {
+        totalEggCount.value = totalEggs.toString()
+    }
+
     fun setSelectedDate(date: LocalDate){
         selectedDate.value = date
     }
+
 }
