@@ -17,6 +17,9 @@ interface EggCollectionDao {
     suspend fun deleteCollectionRecord(eggCollection: EggCollection)
 
     @Query("SELECT * FROM egg_collection_tbl ORDER BY date DESC")
-    fun getCollectionRecords(): Flow<List<EggCollection>>
+    fun getAllCollectionRecords(): Flow<List<EggCollection>>
+
+    @Query("SELECT * FROM egg_collection_tbl WHERE date = :date")
+    fun getCollectionRecord(date:String): Flow<List<EggCollection>>
 
 }
