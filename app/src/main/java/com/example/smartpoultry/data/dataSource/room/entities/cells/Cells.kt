@@ -7,6 +7,7 @@ import androidx.room.PrimaryKey
 data class Cells(
     @PrimaryKey(autoGenerate = true)
     val cellId : Int = 0,
+    val blockId : Int,
     val cellNum : Int,
-    val henCount : Int,
+    val henCount : Int = 0,
 )
