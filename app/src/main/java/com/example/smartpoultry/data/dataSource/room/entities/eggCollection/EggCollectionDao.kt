@@ -4,7 +4,9 @@ import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
+import com.example.smartpoultry.data.dataSource.room.entities.feeds.Feeds
 import kotlinx.coroutines.flow.Flow
+import java.sql.Date
 
 @Dao
 interface EggCollectionDao {
@@ -21,5 +23,8 @@ interface EggCollectionDao {
 
     @Query("SELECT * FROM egg_collection_tbl WHERE date = :date")
     fun getCollectionRecord(date:String): Flow<List<EggCollection>>
+
+    @Query("SELECT * FROM egg_collection_tbl WHERE date BETWEEN :startDate AND :endDate ")
+    fun getCollectionRecordsBetween(startDate : Date, endDate: Date) : Flow<List<EggCollection>>
 
 }
