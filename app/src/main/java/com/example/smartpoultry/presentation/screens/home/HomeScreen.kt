@@ -24,6 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.smartpoultry.presentation.screens.composables.DatePicker
 import com.example.smartpoultry.presentation.screens.composables.MyBottomNavBar
@@ -47,7 +48,7 @@ fun HomeScreen(
 ) {
 
     //viewmodel initialization
-    val homeViewModel: HomeViewModel = viewModel()
+    val homeViewModel: HomeViewModel = hiltViewModel()
 
 
     Surface(

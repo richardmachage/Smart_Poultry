@@ -2,12 +2,18 @@ package com.example.smartpoultry.presentation.screens.home
 
 import android.os.Build
 import androidx.lifecycle.ViewModel
+import com.example.smartpoultry.domain.repository.BlocksRepository
 import com.patrykandpatrick.vico.core.axis.AxisPosition
 import com.patrykandpatrick.vico.core.axis.formatter.AxisValueFormatter
 import com.patrykandpatrick.vico.core.entry.entryModelOf
+import dagger.hilt.android.lifecycle.HiltViewModel
 import java.time.LocalDate
+import javax.inject.Inject
 
-class HomeViewModel : ViewModel() {
+@HiltViewModel
+class HomeViewModel @Inject constructor(
+    private val blocksRepository: BlocksRepository
+): ViewModel() {
 
     private val dateLabels = mapOf(
         0f to "26 Jan",
