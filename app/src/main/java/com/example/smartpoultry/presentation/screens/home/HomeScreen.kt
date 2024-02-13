@@ -19,6 +19,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
@@ -49,7 +50,7 @@ fun HomeScreen(
 
     //viewmodel initialization
     val homeViewModel: HomeViewModel = hiltViewModel()
-
+    val totalBlocks = homeViewModel.totalBlocks.collectAsState()
 
     Surface(
         modifier = Modifier
@@ -98,7 +99,7 @@ fun HomeScreen(
 
                     MyCardInventory(
                         item = "Blocks",
-                        number = 114
+                        number = totalBlocks.value.size
                     )
 
                     MyCardInventory(

@@ -2,11 +2,14 @@ package com.example.smartpoultry.presentation.screens.home
 
 import android.os.Build
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.smartpoultry.domain.repository.BlocksRepository
 import com.patrykandpatrick.vico.core.axis.AxisPosition
 import com.patrykandpatrick.vico.core.axis.formatter.AxisValueFormatter
 import com.patrykandpatrick.vico.core.entry.entryModelOf
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.stateIn
 import java.time.LocalDate
 import javax.inject.Inject
 
@@ -14,6 +17,12 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     private val blocksRepository: BlocksRepository
 ): ViewModel() {
+
+    val totalBlocks = blocksRepository.getAllBlocks().stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(),
+        emptyList()
+    )
 
     private val dateLabels = mapOf(
         0f to "26 Jan",
@@ -27,5 +36,7 @@ class HomeViewModel @Inject constructor(
     }
 
     val chartEntryModel = entryModelOf(200f,600f,400f,800f)
+
+
 
 }
