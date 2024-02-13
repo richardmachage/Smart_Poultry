@@ -11,11 +11,15 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.vectorResource
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.example.smartpoultry.R
 import com.example.smartpoultry.presentation.screens.destinations.AccountScreenDestination
 import com.example.smartpoultry.presentation.screens.destinations.AlertScreenDestination
 import com.example.smartpoultry.presentation.screens.destinations.AnalyticsScreenDestination
+import com.example.smartpoultry.presentation.screens.destinations.BlockCellScreenDestination
 import com.example.smartpoultry.presentation.screens.destinations.EggScreenDestination
 import com.example.smartpoultry.presentation.screens.destinations.HomeScreenDestination
 import com.example.smartpoultry.presentation.screens.destinations.SettingsScreenDestination
@@ -39,6 +43,7 @@ fun MyTopAppBar(
               AnalyticsScreenDestination.route -> {Text(text ="Analytics" )}
               AlertScreenDestination.route -> {Text(text ="Alerts" )}
               EggScreenDestination.route -> {Text(text ="Egg collection" )}
+              BlockCellScreenDestination.route -> {Text(text ="Blocks & Cells" )}
             }
         },
         actions = {
@@ -46,6 +51,11 @@ fun MyTopAppBar(
             {
                 Icon(imageVector= Icons.Default.AccountCircle, contentDescription ="Account Icon" )
             }
+
+            IconButton(onClick = { navigator.navigate(AlertScreenDestination) }) {
+                Icon(imageVector = ImageVector.vectorResource(R.drawable.notification_filled), contentDescription ="Notifications" )
+            }
+
             IconButton(onClick = { navigator.navigate(SettingsScreenDestination) })
             {
                 Icon(imageVector = Icons.Default.Settings, contentDescription ="Settings Icon")

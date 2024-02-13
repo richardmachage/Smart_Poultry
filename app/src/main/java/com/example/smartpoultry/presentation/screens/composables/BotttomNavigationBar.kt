@@ -1,7 +1,9 @@
 package com.example.smartpoultry.presentation.screens.composables
 
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Icon
@@ -24,6 +26,7 @@ import com.example.smartpoultry.presentation.screens.NavGraphs
 import com.example.smartpoultry.presentation.screens.appCurrentDestinationAsState
 import com.example.smartpoultry.presentation.screens.destinations.AlertScreenDestination
 import com.example.smartpoultry.presentation.screens.destinations.AnalyticsScreenDestination
+import com.example.smartpoultry.presentation.screens.destinations.BlockCellScreenDestination
 import com.example.smartpoultry.presentation.screens.destinations.EggScreenDestination
 import com.example.smartpoultry.presentation.screens.destinations.HomeScreenDestination
 import com.example.smartpoultry.presentation.screens.eggCollection.EggScreen
@@ -51,10 +54,10 @@ fun MyBottomNavBar(
             unselectedIcon = ImageVector.vectorResource(R.drawable.analytics_outlined)
         ),
         BottomNavigationItem(
-            route = AlertScreenDestination.route,
-            title = "Alerts",
-            selectedIcon = ImageVector.vectorResource(R.drawable.notification_filled),
-            unselectedIcon = ImageVector.vectorResource(R.drawable.notification_outline)
+            route = BlockCellScreenDestination.route,
+            title = "Blocks & Cells ",//"Alerts",
+            selectedIcon = Icons.Filled.Edit,//ImageVector.vectorResource(R.drawable.notification_filled),
+            unselectedIcon = Icons.Outlined.Edit,//.vectorResource(R.drawable.notification_outline)
         ),
         BottomNavigationItem(
             route = EggScreenDestination.route,

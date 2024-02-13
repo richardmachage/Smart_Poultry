@@ -8,8 +8,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.smartpoultry.presentation.screens.alerts.AlertScreen
 import com.example.smartpoultry.presentation.screens.analytics.AnalyticsScreen
+import com.example.smartpoultry.presentation.screens.blockCellScreen.BlockCellScreen
 import com.example.smartpoultry.presentation.screens.destinations.AlertScreenDestination
 import com.example.smartpoultry.presentation.screens.destinations.AnalyticsScreenDestination
+import com.example.smartpoultry.presentation.screens.destinations.BlockCellScreenDestination
 import com.example.smartpoultry.presentation.screens.destinations.EggScreenDestination
 import com.example.smartpoultry.presentation.screens.destinations.HomeScreenDestination
 import com.example.smartpoultry.presentation.screens.eggCollection.EggScreen
@@ -27,5 +29,6 @@ fun BottomNavGraph(
         composable(route = AnalyticsScreenDestination.route){ AnalyticsScreen() }
         composable(route = AlertScreenDestination.route){ AlertScreen() }
         composable(route = EggScreenDestination.route){ EggScreen() }
+        composable(route = BlockCellScreenDestination.route){ BlockCellScreen()}
     }
 }
