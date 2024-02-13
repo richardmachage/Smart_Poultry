@@ -2,11 +2,13 @@ package com.example.smartpoultry.data.repository
 
 import com.example.smartpoultry.data.dataSource.room.entities.blocks.Blocks
 import com.example.smartpoultry.data.dataSource.room.entities.blocks.BlocksDao
-import com.example.smartpoultry.domain.domainModels.Block
 import com.example.smartpoultry.domain.repository.BlocksRepository
 import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
 
-class BlocksRepositoryImpl(private val blocksDao: BlocksDao) : BlocksRepository {
+class BlocksRepositoryImpl @Inject constructor(
+    private val blocksDao: BlocksDao
+) : BlocksRepository {
     override suspend fun addNewBlock(block: Blocks) {
         return blocksDao.addNewBlock(block)
     }
