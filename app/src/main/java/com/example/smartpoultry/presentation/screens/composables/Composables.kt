@@ -251,7 +251,7 @@ fun MyCardInventory(
             .width(
                 (LocalConfiguration.current.screenWidthDp / 4).dp
             )
-            .height(100.dp)
+            //.height(100.dp)
 
     ){
         Text(

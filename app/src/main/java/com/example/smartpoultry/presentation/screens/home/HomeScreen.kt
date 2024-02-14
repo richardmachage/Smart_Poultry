@@ -9,7 +9,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -22,6 +24,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -86,28 +89,62 @@ fun HomeScreen(
                 Text(text = "Inventory Status :")
                 MyVerticalSpacer(height = 10)
 
-                Row( //inventory cards
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceEvenly
-                ) {
+                Column {
+                    Row( //inventory cards
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceEvenly
+                    ) {
 
-                    MyCardInventory(
-                        item = "Chicken",
-                        number = 2000
-                    )
+                        MyCardInventory(
+                            item = "Chicken",
+                            number = 2000
+                        )
 
-                    MyCardInventory(
-                        item = "Blocks",
-                        number = totalBlocks.value.size
-                    )
+                        MyCardInventory(
+                            item = "Blocks",
+                            number = totalBlocks.value.size
+                        )
 
-                    MyCardInventory(
-                        item = "Feed Sacks",
-                        number = 114
-                    )
+                        MyCardInventory(
+                            item = "Cells",
+                            number = 114
+                        )
+
+                    }
+
+                    //The Sacks of feeds Card
+                    Card (
+                        modifier = Modifier
+                            .padding(12.dp)
+                            .shadow(
+                                elevation = 10.dp,
+                                shape = RoundedCornerShape(10.dp)
+
+                            )
+                            .fillMaxWidth()
+                           // .height(100.dp)
+
+                    ){
+                        Text(
+                            text = "Sacks of Feeds : 16",
+                            modifier = Modifier
+                                .padding(6.dp)
+                                .align(Alignment.Start)
+                        )
+
+                        /*Text(
+                            text = "16",
+                            modifier = Modifier
+                                .padding(6.dp)
+                                .align(Alignment.Start)
+                            // textAlign = TextAlign.Center
+
+                        )*/
+                    }
 
                 }
+
 
             }
 
@@ -292,6 +329,5 @@ fun HomeScreen(
 @Preview(showSystemUi = true, showBackground = true)
 @Composable
 fun HomeScreenPrev() {
-  //  HomeScreen(modifier = Modifier)
-
+  HomeScreen()
 }
