@@ -11,7 +11,7 @@ interface EggCollectionRepository{
 
     fun getAllRecords() : Flow<List<EggCollection>>
 
-    fun getRecord(date: String) : Flow<List<EggCollection>>
+    fun getRecord(date: Date) : Flow<List<EggCollection>>
 
     fun getCollectionsBetween(startDate: Date, endDate: Date) : Flow<List<EggCollection>>
 

@@ -3,7 +3,9 @@ package com.example.smartpoultry.di
 import android.app.Application
 import com.example.smartpoultry.data.dataSource.room.database.SmartPoultryDatabase
 import com.example.smartpoultry.data.repositoryImpl.BlocksRepositoryImpl
+import com.example.smartpoultry.data.repositoryImpl.EggCollectionRepositoryImpl
 import com.example.smartpoultry.domain.repository.BlocksRepository
+import com.example.smartpoultry.domain.repository.EggCollectionRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -23,6 +25,12 @@ object AppModule {
     @Singleton
     fun providesBlocksRepository(database: SmartPoultryDatabase): BlocksRepository{
         return BlocksRepositoryImpl(database.blocksDao())
+    }
+
+    @Provides
+    @Singleton
+    fun providesEggCollectionRepository(database: SmartPoultryDatabase): EggCollectionRepository{
+        return EggCollectionRepositoryImpl(database.eggCollectionDao())
     }
 
 
