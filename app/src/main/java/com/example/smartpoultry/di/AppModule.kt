@@ -5,9 +5,11 @@ import com.example.smartpoultry.data.dataSource.room.database.SmartPoultryDataba
 import com.example.smartpoultry.data.repositoryImpl.BlocksRepositoryImpl
 import com.example.smartpoultry.data.repositoryImpl.CellsRepositoryImpl
 import com.example.smartpoultry.data.repositoryImpl.EggCollectionRepositoryImpl
+import com.example.smartpoultry.data.repositoryImpl.FeedsRepositoryImpl
 import com.example.smartpoultry.domain.repository.BlocksRepository
 import com.example.smartpoultry.domain.repository.CellsRepository
 import com.example.smartpoultry.domain.repository.EggCollectionRepository
+import com.example.smartpoultry.domain.repository.FeedsRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -39,6 +41,12 @@ object AppModule {
     @Singleton
     fun providesCellsRepository(database: SmartPoultryDatabase): CellsRepository{
         return CellsRepositoryImpl(database.cellsDao())
+    }
+
+    @Provides
+    @Singleton
+    fun provideFeedsRepository(database: SmartPoultryDatabase): FeedsRepository{
+        return FeedsRepositoryImpl(database.feedsDao())
     }
 
 }
