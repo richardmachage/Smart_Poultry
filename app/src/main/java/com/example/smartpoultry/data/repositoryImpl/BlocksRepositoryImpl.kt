@@ -1,4 +1,4 @@
-package com.example.smartpoultry.data.repository
+package com.example.smartpoultry.data.repositoryImpl
 
 import com.example.smartpoultry.data.dataSource.room.entities.blocks.Blocks
 import com.example.smartpoultry.data.dataSource.room.entities.blocks.BlocksDao

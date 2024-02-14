@@ -2,7 +2,7 @@ package com.example.smartpoultry.di
 
 import android.app.Application
 import com.example.smartpoultry.data.dataSource.room.database.SmartPoultryDatabase
-import com.example.smartpoultry.data.repository.BlocksRepositoryImpl
+import com.example.smartpoultry.data.repositoryImpl.BlocksRepositoryImpl
 import com.example.smartpoultry.domain.repository.BlocksRepository
 import dagger.Module
 import dagger.Provides
