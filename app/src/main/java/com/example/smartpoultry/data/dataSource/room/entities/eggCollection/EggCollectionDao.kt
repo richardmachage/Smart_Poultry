@@ -30,7 +30,7 @@ interface EggCollectionDao {
     fun getAllRecordsForCell(cellId : Int) : Flow<List<EggCollection>>
 
     @Query("SELECT * FROM egg_collection_tbl WHERE cellId = :cellId AND date BETWEEN :startDate AND  :endDate")
-    fun getRecordsForCellBetween(cellId: Int, startDate: Date,endDate: Date)
+    fun getRecordsForCellBetween(cellId: Int, startDate: Date,endDate: Date) : Flow<List<EggCollection>>
 
 
 }
