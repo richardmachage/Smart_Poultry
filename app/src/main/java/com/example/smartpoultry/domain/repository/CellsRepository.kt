@@ -5,9 +5,9 @@ import kotlinx.coroutines.flow.Flow
 
 interface CellsRepository {
 
-    suspend fun addNewCell(cells: Cells)
+    suspend fun addNewCell(cell: Cells)
 
-    suspend fun deleteCell(cells: Cells)
+    suspend fun deleteCell(cell: Cells)
 
     fun getAllCells() : Flow<List<Cells>>
 
