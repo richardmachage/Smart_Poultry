@@ -3,8 +3,10 @@ package com.example.smartpoultry.di
 import android.app.Application
 import com.example.smartpoultry.data.dataSource.room.database.SmartPoultryDatabase
 import com.example.smartpoultry.data.repositoryImpl.BlocksRepositoryImpl
+import com.example.smartpoultry.data.repositoryImpl.CellsRepositoryImpl
 import com.example.smartpoultry.data.repositoryImpl.EggCollectionRepositoryImpl
 import com.example.smartpoultry.domain.repository.BlocksRepository
+import com.example.smartpoultry.domain.repository.CellsRepository
 import com.example.smartpoultry.domain.repository.EggCollectionRepository
 import dagger.Module
 import dagger.Provides
@@ -33,5 +35,10 @@ object AppModule {
         return EggCollectionRepositoryImpl(database.eggCollectionDao())
     }
 
+    @Provides
+    @Singleton
+    fun providesCellsRepository(database: SmartPoultryDatabase): CellsRepository{
+        return CellsRepositoryImpl(database.cellsDao())
+    }
 
 }
