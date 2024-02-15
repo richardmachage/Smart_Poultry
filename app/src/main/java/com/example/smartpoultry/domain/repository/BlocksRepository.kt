@@ -5,7 +5,7 @@ import com.example.smartpoultry.domain.domainModels.Block
 import kotlinx.coroutines.flow.Flow
 
 interface BlocksRepository {
-    suspend fun addNewBlock(block: Blocks)
+    suspend fun addNewBlock(block: Blocks) : Long
     suspend fun deleteBlock(block: Blocks)
 
     fun getAllBlocks() : Flow<List<Blocks>>

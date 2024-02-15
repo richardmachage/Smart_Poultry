@@ -4,6 +4,7 @@ import android.os.Build
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.smartpoultry.domain.repository.BlocksRepository
+import com.example.smartpoultry.domain.repository.CellsRepository
 import com.patrykandpatrick.vico.core.axis.AxisPosition
 import com.patrykandpatrick.vico.core.axis.formatter.AxisValueFormatter
 import com.patrykandpatrick.vico.core.entry.entryModelOf
@@ -15,13 +16,21 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val blocksRepository: BlocksRepository
+    private val blocksRepository: BlocksRepository,
+    private val cellsRepository: CellsRepository
+
 ): ViewModel() {
 
     val totalBlocks = blocksRepository.getAllBlocks().stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(),
-        emptyList()
+        initialValue = emptyList()
+    )
+
+    val totalCells = cellsRepository.getAllCells().stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(),
+        initialValue = emptyList()
     )
 
     private val dateLabels = mapOf(

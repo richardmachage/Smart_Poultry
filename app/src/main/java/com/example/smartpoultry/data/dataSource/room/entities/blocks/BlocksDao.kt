@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface BlocksDao{
     @Insert
-    suspend fun addNewBlock(block : Blocks)
+    suspend fun addNewBlock(block : Blocks) : Long
 
     @Delete
     suspend fun deleteBlock(block : Blocks)

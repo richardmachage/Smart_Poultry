@@ -20,4 +20,6 @@ interface CellsDao{
     @Query("SELECT * FROM cells_tbl WHERE cellId = :cellId")
     fun getCell(cellId : Int) : Flow<List<Cells>>
 
+
+
 }

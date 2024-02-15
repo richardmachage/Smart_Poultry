@@ -54,6 +54,7 @@ fun HomeScreen(
     //viewmodel initialization
     val homeViewModel: HomeViewModel = hiltViewModel()
     val totalBlocks = homeViewModel.totalBlocks.collectAsState()
+    val totalCells = homeViewModel.totalCells.collectAsState()
 
     Surface(
         modifier = Modifier
@@ -108,7 +109,7 @@ fun HomeScreen(
 
                         MyCardInventory(
                             item = "Cells",
-                            number = 114
+                            number = totalCells.value.size
                         )
 
                     }

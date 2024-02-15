@@ -9,7 +9,7 @@ import javax.inject.Inject
 class BlocksRepositoryImpl @Inject constructor(
     private val blocksDao: BlocksDao
 ) : BlocksRepository {
-    override suspend fun addNewBlock(block: Blocks) {
+    override suspend fun addNewBlock(block: Blocks) : Long {
         return blocksDao.addNewBlock(block)
     }
 
