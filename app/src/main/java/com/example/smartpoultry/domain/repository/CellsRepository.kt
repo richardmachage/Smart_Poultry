@@ -12,4 +12,6 @@ interface CellsRepository {
     fun getAllCells() : Flow<List<Cells>>
 
     fun getCell(cellId:Int): Flow<List<Cells>>
+
+    fun getTotalHenCount():Flow<List<Int>>
 }

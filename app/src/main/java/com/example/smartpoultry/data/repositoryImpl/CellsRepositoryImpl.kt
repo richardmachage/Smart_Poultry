@@ -24,4 +24,8 @@ class CellsRepositoryImpl @Inject constructor(
     override fun getCell(cellId: Int): Flow<List<Cells>> {
         return cellsDao.getCell(cellId = cellId)
     }
+
+    override fun getTotalHenCount(): Flow<List<Int>> {
+        return cellsDao.getTotalHenCount()
+    }
 }
