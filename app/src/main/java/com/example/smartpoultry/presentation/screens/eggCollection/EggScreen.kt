@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -22,6 +23,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -64,6 +66,7 @@ fun EggScreen(
 
     val eggViewModel = hiltViewModel<EggScreenViewModel>()
     val dateDialogState = rememberMaterialDialogState()
+    val listOfBlocks = eggViewModel.getAllBlocks.collectAsState()
 
 
     Surface (
@@ -131,9 +134,9 @@ fun EggScreen(
             }
 
 
-            //Blocks and cells begin here
+            //Blocks and cells UI begins here
             LazyColumn{
-                items(10){ blockNumber->
+                items(items=listOfBlocks.value){ block->
 
                     var totalEggCount by remember {
                         mutableStateOf("")
@@ -162,7 +165,7 @@ fun EggScreen(
                                 Text(
                                     modifier = Modifier
                                         .padding(6.dp),
-                                    text = "Block : $blockNumber"
+                                    text = "Block : ${block.blockNum}"
                                 )
 
                                 Text(
@@ -176,7 +179,7 @@ fun EggScreen(
                            //This are the cell cards
                             //MyCells(numOfCells = numberOfCells)
                             LazyRow {
-                                items(10) { cellNumber ->
+                                items(block.totalCells) { cellNumber ->
                                     Card(
                                         modifier = Modifier
                                             .padding(6.dp)
