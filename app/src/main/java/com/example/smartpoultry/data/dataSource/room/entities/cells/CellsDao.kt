@@ -20,6 +20,7 @@ interface CellsDao{
     @Query("SELECT * FROM cells_tbl WHERE cellId = :cellId")
     fun getCell(cellId : Int) : Flow<List<Cells>>
 
-
+    @Query("SELECT SUM('henCount') FROM cells_tbl")
+    fun getTotalChicken(): Flow<List<Int>>
 
 }
