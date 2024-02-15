@@ -1,4 +1,4 @@
-package com.example.smartpoultry
+package com.example.smartpoultry.activity
 
 import android.annotation.SuppressLint
 import android.os.Bundle
