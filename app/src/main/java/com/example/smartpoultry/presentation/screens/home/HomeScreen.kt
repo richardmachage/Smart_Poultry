@@ -21,6 +21,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -55,6 +56,7 @@ fun HomeScreen(
     val homeViewModel: HomeViewModel = hiltViewModel()
     val totalBlocks = homeViewModel.totalBlocks.collectAsState()
     val totalCells = homeViewModel.totalCells.collectAsState()
+    val totalHenCount = homeViewModel.totalHenCount.collectAsState()
 
     Surface(
         modifier = Modifier
@@ -99,7 +101,7 @@ fun HomeScreen(
 
                         MyCardInventory(
                             item = "Chicken",
-                            number = 2000
+                            number = totalHenCount.value
                         )
 
                         MyCardInventory(
