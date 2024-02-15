@@ -2,6 +2,7 @@ package com.example.smartpoultry.data.repositoryImpl
 
 import com.example.smartpoultry.data.dataSource.room.entities.blocks.Blocks
 import com.example.smartpoultry.data.dataSource.room.entities.blocks.BlocksDao
+import com.example.smartpoultry.data.dataSource.room.relations.BlocksWithCells
 import com.example.smartpoultry.domain.repository.BlocksRepository
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
@@ -25,5 +26,8 @@ class BlocksRepositoryImpl @Inject constructor(
         return blocksDao.getBlock(block.blockId)
     }
 
+    override fun getBlocksWithCells(): Flow<List<BlocksWithCells>> {
+        return blocksDao.getBlocksWithCells()
+    }
 
 }
