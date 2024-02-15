@@ -4,6 +4,8 @@ import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.Transaction
+import com.example.smartpoultry.data.dataSource.room.relations.BlocksWithCells
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -19,4 +21,8 @@ interface BlocksDao{
 
     @Query("SELECT * FROM blocks_tbl WHERE blockId = :blockId")
     fun getBlock(blockId : Int) : Flow<List<Blocks>>
+
+    @Transaction
+    @Query("SELECT * FROM blocks_tbl ")
+    fun getBlocksWithCells() : Flow<List<BlocksWithCells>>
 }
