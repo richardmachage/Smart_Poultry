@@ -33,6 +33,12 @@ class HomeViewModel @Inject constructor(
         initialValue = emptyList()
     )
 
+    val totalHenCount = cellsRepository.getTotalHenCount().stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(),
+        initialValue = emptyList()
+    )
+
     private val dateLabels = mapOf(
         0f to "26 Jan",
         1f to "27 Jan",
