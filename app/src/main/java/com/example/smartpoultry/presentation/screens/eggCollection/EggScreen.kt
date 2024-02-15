@@ -165,7 +165,7 @@ fun EggScreen(
                                 Text(
                                     modifier = Modifier
                                         .padding(6.dp),
-                                    text = "Block : ${block.blockNum}"
+                                    text = "Block : ${block.block.blockNum}"
                                 )
 
                                 Text(
@@ -179,7 +179,7 @@ fun EggScreen(
                            //This are the cell cards
                             //MyCells(numOfCells = numberOfCells)
                             LazyRow {
-                                items(block.totalCells) { cellNumber ->
+                                items(block.cell) { cell ->
                                     Card(
                                         modifier = Modifier
                                             .padding(6.dp)
@@ -193,7 +193,7 @@ fun EggScreen(
 
                                     ) {
                                         Text(
-                                            text = "Cell: $cellNumber",
+                                            text = "Cell: ${cell.cellNum}",
                                             modifier = Modifier
                                                 .padding(6.dp)
                                                 .align(Alignment.CenterHorizontally)

@@ -18,7 +18,7 @@ class EggScreenViewModel @Inject constructor (
     private val cellsRepository: CellsRepository,
     private val eggCollectionRepository: EggCollectionRepository
 ): ViewModel(){
-    val getAllBlocks = blocksRepository.getAllBlocks().stateIn(
+    val getAllBlocks = blocksRepository.getBlocksWithCells().stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(),
         initialValue = emptyList(),
