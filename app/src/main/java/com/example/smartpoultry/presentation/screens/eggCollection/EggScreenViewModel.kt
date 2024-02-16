@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.smartpoultry.data.dataSource.room.entities.blocks.Blocks
 import com.example.smartpoultry.data.dataSource.room.entities.cells.Cells
+import com.example.smartpoultry.data.dataSource.room.entities.eggCollection.EggCollection
 import com.example.smartpoultry.data.dataSource.room.relations.BlocksWithCells
 import com.example.smartpoultry.domain.repository.BlocksRepository
 import com.example.smartpoultry.domain.repository.CellsRepository
@@ -91,6 +92,16 @@ class EggScreenViewModel @Inject constructor(
         myInputBlocks[blockIndex] = updatedBlock // This triggers recomposition
     }
 
-
+    fun onSaveRecord( cellsInput : List<CellEggCollection>){
+        viewModelScope.launch {
+            cellsInput.forEach{record ->
+                eggCollectionRepository.addNewRecord(EggCollection(
+                    date = Date.valueOf(selectedDate.value.toString()),
+                    cellId = record.cellId,
+                    eggCount = record.eggCount,
+                ))
+            }
+        }
+    }
 
 }

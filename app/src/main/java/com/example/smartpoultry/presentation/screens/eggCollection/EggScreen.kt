@@ -1,5 +1,6 @@
 package com.example.smartpoultry.presentation.screens.eggCollection
 
+import android.widget.Toast
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -36,6 +37,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.KeyboardType
@@ -71,6 +73,7 @@ fun EggScreen() {
     val eggViewModel = hiltViewModel<EggScreenViewModel>()
     val dateDialogState = rememberMaterialDialogState()
     val listOfBlocks = eggViewModel.myInputBlocks
+    val context = LocalContext.current
     //val listOfBlocksDB = eggViewModel.getAllBlocks.collectAsState()
 
 
@@ -225,7 +228,11 @@ fun EggScreen() {
                                                     selection = TextRange(newText.text.length)
                                                 )
                                                 val newEggCount = newText.text.toIntOrNull() ?: 0
-                                                eggViewModel.updateEggCount(blockIndex,cellIndex,newEggCount)
+                                                eggViewModel.updateEggCount(
+                                                    blockIndex,
+                                                    cellIndex,
+                                                    newEggCount
+                                                )
                                             },
                                             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                                             leadingIcon = {
@@ -242,7 +249,14 @@ fun EggScreen() {
                             }
 
                             NormButton(
-                                onButtonClick = { /*TODO*/ },
+                                onButtonClick = {
+                                    eggViewModel.onSaveRecord(listOfBlocks[blockIndex].cells)
+                                    Toast.makeText(
+                                        context,
+                                        "records for ${listOfBlocks[blockIndex].cells}",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                },
                                 btnName = "Save",
                                 modifier = Modifier
                             )
