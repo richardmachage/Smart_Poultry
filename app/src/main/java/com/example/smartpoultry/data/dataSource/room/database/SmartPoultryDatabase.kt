@@ -19,7 +19,7 @@ import com.example.smartpoultry.utils.DbConverters
 
 @Database(
     entities = [EggCollection::class, Blocks::class, Cells::class, Feeds::class, PopChange::class],
-    version = 1,
+    version = 2,
     exportSchema = false
 )
 

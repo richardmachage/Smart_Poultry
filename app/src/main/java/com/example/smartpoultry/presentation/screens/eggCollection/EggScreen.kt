@@ -11,8 +11,10 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange
@@ -20,6 +22,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -34,7 +37,9 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -50,6 +55,7 @@ import com.example.smartpoultry.presentation.screens.composables.MySimpleEditTex
 import com.example.smartpoultry.presentation.screens.composables.MySingleBlock
 import com.example.smartpoultry.presentation.screens.composables.NormButton
 import com.example.smartpoultry.presentation.theme.SmartPoultryTheme
+import com.example.smartpoultry.presentation.uiModels.CellEggCollection
 import com.ramcosta.composedestinations.annotation.Destination
 import com.vanpra.composematerialdialogs.MaterialDialog
 import com.vanpra.composematerialdialogs.datetime.date.DatePickerDefaults
@@ -60,32 +66,31 @@ import java.time.format.DateTimeFormatter
 
 @Destination
 @Composable
-fun EggScreen(
-    //modifier: Modifier
-){
+fun EggScreen() {
 
     val eggViewModel = hiltViewModel<EggScreenViewModel>()
     val dateDialogState = rememberMaterialDialogState()
-    val listOfBlocks = eggViewModel.getAllBlocks.collectAsState()
+    val listOfBlocks = eggViewModel.myInputBlocks
+    //val listOfBlocksDB = eggViewModel.getAllBlocks.collectAsState()
 
 
-    Surface (
+    Surface(
         modifier = Modifier
             .fillMaxSize(),
         color = MaterialTheme.colorScheme.background
-    ){
+    ) {
 
-        Column (
+        Column(
             modifier = Modifier
                 .fillMaxSize()
-        ){
+        ) {
             //Defining the datePicker first
-            Row (
-                modifier=Modifier
+            Row(
+                modifier = Modifier
                     .fillMaxWidth(),
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically
-            ){
+            ) {
                 Text(
                     text = "Date: ",
                     fontSize = 20.sp
@@ -102,12 +107,14 @@ fun EggScreen(
                         dateDialogState.show()
                     }
                 ) {
-                    Icon(imageVector = Icons.Default.DateRange,
-                        contentDescription ="Calender" )
+                    Icon(
+                        imageVector = Icons.Default.DateRange,
+                        contentDescription = "Calender"
+                    )
                 }
             }
             MaterialDialog(
-                dialogState =  dateDialogState,
+                dialogState = dateDialogState,
                 properties = DialogProperties(
                     dismissOnBackPress = true,
                     dismissOnClickOutside = false,
@@ -127,7 +134,7 @@ fun EggScreen(
                         ),
                     initialDate = eggViewModel.selectedDate.value,
                     title = "Select Date"
-                ){chosenDate->
+                ) { chosenDate ->
                     eggViewModel.setSelectedDate(chosenDate)
                 }
 
@@ -135,9 +142,8 @@ fun EggScreen(
 
 
             //Blocks and cells UI begins here
-            LazyColumn{
-                items(items=listOfBlocks.value){ block->
-
+            LazyColumn {
+                itemsIndexed(listOfBlocks) { blockIndex, block ->
                     var totalEggCount by remember {
                         mutableStateOf("")
                     }
@@ -165,21 +171,21 @@ fun EggScreen(
                                 Text(
                                     modifier = Modifier
                                         .padding(6.dp),
-                                    text = "Block : ${block.block.blockNum}"
+                                    text = "Block : ${listOfBlocks[blockIndex].blockId}"
                                 )
 
                                 Text(
                                     modifier = Modifier
                                         .padding(6.dp),
-                                    text = "Total Eggs: $totalEggCount"
+                                    text = "Total Eggs: ${listOfBlocks[blockIndex].cells.sumOf { cellEggCollection: CellEggCollection -> cellEggCollection.eggCount }}"
                                 )
 
                             }
 
-                           //This are the cell cards
+                            //This are the cell cards
                             //MyCells(numOfCells = numberOfCells)
                             LazyRow {
-                                items(block.cell) { cell ->
+                                itemsIndexed(listOfBlocks[blockIndex].cells) { cellIndex, cell ->
                                     Card(
                                         modifier = Modifier
                                             .padding(6.dp)
@@ -193,18 +199,42 @@ fun EggScreen(
 
                                     ) {
                                         Text(
-                                            text = "Cell: ${cell.cellNum}",
+                                            text = "Cell: ${listOfBlocks[blockIndex].cells[cellIndex].cellNum}",
                                             modifier = Modifier
                                                 .padding(6.dp)
                                                 .align(Alignment.CenterHorizontally)
                                         )
 
-                                        MySimpleEditText(
+                                        /*MySimpleEditText(
                                             keyboardType = KeyboardType.Number,
                                             iconLeading = ImageVector.vectorResource(R.drawable.egg_outline),
                                             iconLeadingDescription = "Eggs Icon",
                                             modifier = Modifier
                                                 .padding(6.dp)
+                                        )*/
+                                        var textFieldValueState by remember {
+                                            mutableStateOf(TextFieldValue(text = listOfBlocks[blockIndex].cells[cellIndex].eggCount.toString()))
+                                        }
+                                        OutlinedTextField(
+                                            modifier = Modifier
+                                                .fillMaxSize(),
+                                            value = textFieldValueState,//TextFieldValue(listOfBlocks[blockIndex].cells[cellIndex].eggCount.toString()),//)cell.eggCount.toString()),
+                                            onValueChange = { newText ->
+                                                textFieldValueState = newText.copy(
+                                                    text = newText.text,
+                                                    selection = TextRange(newText.text.length)
+                                                )
+                                                val newEggCount = newText.text.toIntOrNull() ?: 0
+                                                eggViewModel.updateEggCount(blockIndex,cellIndex,newEggCount)
+                                            },
+                                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                                            leadingIcon = {
+                                                Icon(
+                                                    imageVector = ImageVector.vectorResource(R.drawable.egg_outline),
+                                                    contentDescription = "egg"
+                                                )
+                                            },
+                                            singleLine = true,
                                         )
                                     }
 
@@ -222,15 +252,15 @@ fun EggScreen(
                 }
             }
 
-            MyBlocks(numOfBlocks = 20)
+            //MyBlocks(numOfBlocks = 20)
         }
-   }
+    }
 }
 
 @Preview(showSystemUi = true, showBackground = true)
 @Composable
-fun PrevEgg(){
+fun PrevEgg() {
     SmartPoultryTheme {
-       EggScreen()
+        EggScreen()
     }
 }

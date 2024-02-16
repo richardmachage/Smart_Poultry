@@ -10,6 +10,6 @@ data class EggCollection(
     @PrimaryKey(autoGenerate = true)
     val productionId : Int = 0,
     val date : Date,
-    val cellId : String,
+    val cellId : Int,
     val eggCount : Int
 )
