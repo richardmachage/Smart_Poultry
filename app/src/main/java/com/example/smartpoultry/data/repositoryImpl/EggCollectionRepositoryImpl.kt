@@ -1,9 +1,11 @@
 package com.example.smartpoultry.data.repositoryImpl
 
+import android.database.sqlite.SQLiteConstraintException
 import com.example.smartpoultry.data.dataSource.room.entities.eggCollection.EggCollection
 import com.example.smartpoultry.data.dataSource.room.entities.eggCollection.EggCollectionDao
 import com.example.smartpoultry.domain.repository.EggCollectionRepository
 import kotlinx.coroutines.flow.Flow
+import java.lang.Exception
 import java.sql.Date
 import javax.inject.Inject
 
@@ -11,8 +13,14 @@ class EggCollectionRepositoryImpl @Inject constructor (
     private val eggCollectionDao: EggCollectionDao
 ) : EggCollectionRepository
 {
-    override suspend fun addNewRecord(eggCollection: EggCollection) {
-        eggCollectionDao.insertCollectionRecord(eggCollection)
+    override suspend fun addNewRecord(eggCollection: EggCollection) : Boolean{
+        var insertStatus = true
+        try {
+            eggCollectionDao.insertCollectionRecord(eggCollection)
+        }catch (e : Exception){
+            insertStatus = false
+        }
+        return insertStatus
     }
 
     override suspend fun deleteRecord(eggCollection: EggCollection) {

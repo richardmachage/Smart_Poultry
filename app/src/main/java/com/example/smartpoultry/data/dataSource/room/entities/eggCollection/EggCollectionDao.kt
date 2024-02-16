@@ -3,6 +3,7 @@ package com.example.smartpoultry.data.dataSource.room.entities.eggCollection
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import kotlinx.coroutines.flow.Flow
 import java.sql.Date
@@ -11,7 +12,7 @@ import java.sql.Date
 interface EggCollectionDao {
     //here goes all functions needed to modify the EggCollection table
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.ABORT)
     suspend  fun insertCollectionRecord(eggCollection: EggCollection)
 
     @Delete

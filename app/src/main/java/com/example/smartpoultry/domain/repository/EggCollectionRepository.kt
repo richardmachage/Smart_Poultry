@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.Flow
 import java.sql.Date
 
 interface EggCollectionRepository{
-    suspend fun addNewRecord(eggCollection: EggCollection)
+    suspend fun addNewRecord(eggCollection: EggCollection) : Boolean
 
     suspend fun deleteRecord(eggCollection: EggCollection)
 

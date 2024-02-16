@@ -49,6 +49,7 @@ import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.smartpoultry.R
+import com.example.smartpoultry.presentation.screens.composables.CircularProgressBar
 import com.example.smartpoultry.presentation.screens.composables.MyBlocks
 import com.example.smartpoultry.presentation.screens.composables.MyCardEggCollection
 import com.example.smartpoultry.presentation.screens.composables.MyCells
@@ -82,6 +83,8 @@ fun EggScreen() {
             .fillMaxSize(),
         color = MaterialTheme.colorScheme.background
     ) {
+
+        CircularProgressBar(isLoading = eggViewModel.isLoading.value)
 
         Column(
             modifier = Modifier
@@ -208,13 +211,6 @@ fun EggScreen() {
                                                 .align(Alignment.CenterHorizontally)
                                         )
 
-                                        /*MySimpleEditText(
-                                            keyboardType = KeyboardType.Number,
-                                            iconLeading = ImageVector.vectorResource(R.drawable.egg_outline),
-                                            iconLeadingDescription = "Eggs Icon",
-                                            modifier = Modifier
-                                                .padding(6.dp)
-                                        )*/
                                         var textFieldValueState by remember {
                                             mutableStateOf(TextFieldValue(text = listOfBlocks[blockIndex].cells[cellIndex].eggCount.toString()))
                                         }
@@ -250,13 +246,25 @@ fun EggScreen() {
 
                             NormButton(
                                 onButtonClick = {
+                                    eggViewModel.isLoading.value = true
+
                                     eggViewModel.onSaveRecord(block = blockIndex, cellsInput = listOfBlocks[blockIndex].cells)
                                     //eggViewModel.updateEggCount(blockIndex,)
-                                    Toast.makeText(
-                                        context,
-                                        "records for Block: ${listOfBlocks[blockIndex].blockNum} saved successfully",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
+                                    if (eggViewModel.insertStatus.value){
+                                        Toast.makeText(
+                                            context,
+                                            "records for Block: ${listOfBlocks[blockIndex].blockNum} saved successfully",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                    }else{
+                                        Toast.makeText(
+                                            context,
+                                            "Failed! Records for Block: ${listOfBlocks[blockIndex].blockNum} for date: ${eggViewModel.selectedDate.value} already exist",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                    }
+
+                                    eggViewModel.isLoading.value = false
 
                                 },
                                 btnName = "Save",

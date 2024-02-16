@@ -36,6 +36,8 @@ class EggScreenViewModel @Inject constructor(
         initialValue = emptyList(),
     )
 
+    var isLoading = mutableStateOf(false)
+    var insertStatus = mutableStateOf(true)
     var myInputBlocks = mutableStateListOf<BlockEggCollection>()
         private set
 
@@ -94,16 +96,23 @@ class EggScreenViewModel @Inject constructor(
 
     fun onSaveRecord( block:Int, cellsInput : List<CellEggCollection>){
         viewModelScope.launch {
-            cellsInput.forEachIndexed{index, record ->
-                eggCollectionRepository.addNewRecord(EggCollection(
-                    date = Date.valueOf(selectedDate.value.toString()),
-                    cellId = record.cellId,
-                    eggCount = record.eggCount,
-                ))
+            run loop@{
+                cellsInput.forEach{ record ->
+                    if(
+                        eggCollectionRepository.addNewRecord(EggCollection(
+                            date = Date.valueOf(selectedDate.value.toString()),
+                            cellId = record.cellId,
+                            eggCount = record.eggCount,
+                        ))){
+                        insertStatus.value = true
+                    }else {
+                        insertStatus.value = false
+                        return@loop
+                    }
+                }
             }
+
         }
     }
-
-
 
 }
