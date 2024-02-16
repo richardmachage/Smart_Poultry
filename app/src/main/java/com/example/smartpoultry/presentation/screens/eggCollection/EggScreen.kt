@@ -250,12 +250,14 @@ fun EggScreen() {
 
                             NormButton(
                                 onButtonClick = {
-                                    eggViewModel.onSaveRecord(listOfBlocks[blockIndex].cells)
+                                    eggViewModel.onSaveRecord(block = blockIndex, cellsInput = listOfBlocks[blockIndex].cells)
+                                    //eggViewModel.updateEggCount(blockIndex,)
                                     Toast.makeText(
                                         context,
-                                        "records for ${listOfBlocks[blockIndex].cells}",
+                                        "records for Block: ${listOfBlocks[blockIndex].blockNum} saved successfully",
                                         Toast.LENGTH_SHORT
                                     ).show()
+
                                 },
                                 btnName = "Save",
                                 modifier = Modifier

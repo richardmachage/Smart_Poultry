@@ -92,9 +92,9 @@ class EggScreenViewModel @Inject constructor(
         myInputBlocks[blockIndex] = updatedBlock // This triggers recomposition
     }
 
-    fun onSaveRecord( cellsInput : List<CellEggCollection>){
+    fun onSaveRecord( block:Int, cellsInput : List<CellEggCollection>){
         viewModelScope.launch {
-            cellsInput.forEach{record ->
+            cellsInput.forEachIndexed{index, record ->
                 eggCollectionRepository.addNewRecord(EggCollection(
                     date = Date.valueOf(selectedDate.value.toString()),
                     cellId = record.cellId,
