@@ -7,12 +7,11 @@ import com.example.smartpoultry.data.dataSource.room.relations.BlocksWithCells
 import com.example.smartpoultry.domain.repository.BlocksRepository
 import com.example.smartpoultry.domain.repository.CellsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class cellsViewModel @Inject constructor(
+class CellsViewModel @Inject constructor(
     private val cellsRepository: CellsRepository,
     private val blocksRepository: BlocksRepository,
 ): ViewModel() {
