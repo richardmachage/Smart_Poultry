@@ -26,4 +26,5 @@ class cellsViewModel @Inject constructor(
             }
         }
     }
+
 }
