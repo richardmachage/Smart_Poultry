@@ -32,4 +32,8 @@ class CellsRepositoryImpl @Inject constructor(
     override fun getCellsForBlock(blockId : Int): Flow<List<Cells>> {
         return cellsDao.getCellsForABLock(blockId = blockId)
     }
+
+    override suspend fun updateCellInfo(cell: Cells) {
+        cellsDao.updateCellInfo(cell)
+    }
 }

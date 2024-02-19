@@ -16,4 +16,6 @@ interface CellsRepository {
     fun getTotalHenCount():Flow<Int>
 
     fun getCellsForBlock(blockId : Int):Flow<List<Cells>>
+
+    suspend fun updateCellInfo(cell: Cells)
 }

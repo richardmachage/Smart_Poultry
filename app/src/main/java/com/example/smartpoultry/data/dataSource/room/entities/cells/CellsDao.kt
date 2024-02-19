@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -26,6 +27,10 @@ interface CellsDao{
     @Query("SELECT * FROM cells_tbl WHERE blockId = :blockId")
     fun getCellsForABLock(blockId:Int):Flow<List<Cells>>
 
-    @Query("UPDATE cells_tbl SET cellNum = :cellNum, henCount = :henCount WHERE cellId = :cellId")
+    @Update
+    suspend fun updateCellInfo(cells: Cells)
+
+   /* @Query("UPDATE cells_tbl SET cellNum = :cellNum, henCount = :henCount WHERE cellId = :cellId")
     fun updateCellDetails(cellId:Int, cellNum:Int, henCount : Int)
+*/
 }

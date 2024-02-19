@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
@@ -27,6 +28,7 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.smartpoultry.data.dataSource.room.entities.cells.Cells
 import com.example.smartpoultry.presentation.screens.composables.MyVerticalSpacer
 import com.ramcosta.composedestinations.annotation.Destination
 
@@ -67,13 +69,21 @@ fun CellsScreen(
                            onValueChange = {
                                cellsViewModel.henCountText.value = it
                            },
-                           label = { Text(text = "Hen Count")}
+                           label = { Text(text = "Hen Count") },
+
                        )
                    }
             },
             confirmButton = {
                             Button(onClick = {
-                                Toast.makeText(context,"Confirm Button Clicked", Toast.LENGTH_SHORT).show()
+                                cellsViewModel.updateCellInfo(Cells(
+                                    cellId = cell.cellId,
+                                    blockId = cell.blockId,
+                                    cellNum = cellsViewModel.cellNumText.value.toInt(),
+                                    henCount = cellsViewModel.henCountText.value.toInt()
+                                    )
+                                )
+                                Toast.makeText(context,"Cell Info updated successfully", Toast.LENGTH_SHORT).show()
                             }) {
                                 Text(text = "Save")
                             }
@@ -95,7 +105,6 @@ fun CellsScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(6.dp)
         ) {
 
             Row(
@@ -114,8 +123,11 @@ fun CellsScreen(
                 itemsIndexed(listOfCells) { _, item ->
                     Column(
                         modifier = Modifier
+                            .clickable {
+                                cellsViewModel.setTheSelectedCell(item)
+                                cellsViewModel.showDialog.value = true
+                            }
                             .fillMaxWidth()
-                            .padding(8.dp)
                             .border(
                                 width = 1.dp,
                                 color = MaterialTheme.colorScheme.primary,
@@ -123,10 +135,7 @@ fun CellsScreen(
                                     (0.03 * LocalConfiguration.current.screenWidthDp).dp
                                 )
                             )
-                            .clickable {
-                                cellsViewModel.setTheSelectedCell(item)
-                                cellsViewModel.showDialog.value = true
-                            }
+                            .padding(6.dp)
                     ) {
                         Text(text = "Cell Id : ${item.cellId}")
                         Text(text = "Cell number : ${item.cellNum}")
