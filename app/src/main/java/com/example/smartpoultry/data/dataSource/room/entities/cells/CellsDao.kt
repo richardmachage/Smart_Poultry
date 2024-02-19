@@ -22,7 +22,7 @@ interface CellsDao{
     fun getCell(cellId : Int) : Flow<List<Cells>>
 
     @Query("SELECT SUM('henCount') FROM cells_tbl")
-    fun getTotalHenCount(): Flow<Int>
+    fun getTotalHenCount(): Flow<List<Int>>
 
     @Query("SELECT * FROM cells_tbl WHERE blockId = :blockId")
     fun getCellsForABLock(blockId:Int):Flow<List<Cells>>

@@ -3,6 +3,7 @@ package com.example.smartpoultry.presentation.screens.home
 import android.os.Build
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.smartpoultry.data.dataSource.room.entities.cells.Cells
 import com.example.smartpoultry.domain.repository.BlocksRepository
 import com.example.smartpoultry.domain.repository.CellsRepository
 import com.patrykandpatrick.vico.core.axis.AxisPosition
@@ -10,7 +11,9 @@ import com.patrykandpatrick.vico.core.axis.formatter.AxisValueFormatter
 import com.patrykandpatrick.vico.core.entry.entryModelOf
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 import java.time.LocalDate
 import javax.inject.Inject
 
@@ -33,11 +36,13 @@ class HomeViewModel @Inject constructor(
         initialValue = emptyList()
     )
 
-    val totalHenCount = cellsRepository.getTotalHenCount().stateIn(
+
+    /*val totalHenCount = cellsRepository.getTotalHenCount().stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(),
-        initialValue = 0
+        initialValue = emptyList()
     )
+    */
 
     private val dateLabels = mapOf(
         0f to "26 Jan",

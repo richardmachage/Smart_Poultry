@@ -13,7 +13,7 @@ interface CellsRepository {
 
     fun getCell(cellId:Int): Flow<List<Cells>>
 
-    fun getTotalHenCount():Flow<Int>
+    fun getTotalHenCount():Flow<List<Int>>
 
     fun getCellsForBlock(blockId : Int):Flow<List<Cells>>
 

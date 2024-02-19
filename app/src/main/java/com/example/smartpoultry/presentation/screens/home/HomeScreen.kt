@@ -31,6 +31,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.smartpoultry.data.dataSource.room.entities.cells.Cells
 import com.example.smartpoultry.presentation.screens.composables.DatePicker
 import com.example.smartpoultry.presentation.screens.composables.MyBottomNavBar
 import com.example.smartpoultry.presentation.screens.composables.MyCardInventory
@@ -56,7 +57,6 @@ fun HomeScreen(
     val homeViewModel: HomeViewModel = hiltViewModel()
     val totalBlocks = homeViewModel.totalBlocks.collectAsState()
     val totalCells = homeViewModel.totalCells.collectAsState()
-    val totalHenCount = homeViewModel.totalHenCount.collectAsState()
 
     Surface(
         modifier = Modifier
@@ -101,7 +101,7 @@ fun HomeScreen(
 
                         MyCardInventory(
                             item = "Chicken",
-                            number = totalHenCount.value
+                            number = totalCells.value.sumOf { cell : Cells -> cell.henCount }
                         )
 
                         MyCardInventory(
