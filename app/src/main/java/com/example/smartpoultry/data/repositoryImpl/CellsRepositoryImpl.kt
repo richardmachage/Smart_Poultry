@@ -28,4 +28,8 @@ class CellsRepositoryImpl @Inject constructor(
     override fun getTotalHenCount(): Flow<Int> {
         return cellsDao.getTotalHenCount()
     }
+
+    override fun getCellsForBlock(blockId : Int): Flow<List<Cells>> {
+        return cellsDao.getCellsForABLock(blockId = blockId)
+    }
 }
