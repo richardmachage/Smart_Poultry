@@ -26,4 +26,6 @@ interface CellsDao{
     @Query("SELECT * FROM cells_tbl WHERE blockId = :blockId")
     fun getCellsForABLock(blockId:Int):Flow<List<Cells>>
 
+    @Query("UPDATE cells_tbl SET cellNum = :cellNum, henCount = :henCount WHERE cellId = :cellId")
+    fun updateCellDetails(cellId:Int, cellNum:Int, henCount : Int)
 }

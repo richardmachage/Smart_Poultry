@@ -108,12 +108,14 @@ fun CellsScreen(
 
             MyVerticalSpacer(height = 3)
 
-            LazyColumn {
+            LazyColumn (
+                modifier = Modifier.padding(3.dp)
+            ){
                 itemsIndexed(listOfCells) { _, item ->
                     Column(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(6.dp)
+                            .padding(8.dp)
                             .border(
                                 width = 1.dp,
                                 color = MaterialTheme.colorScheme.primary,
