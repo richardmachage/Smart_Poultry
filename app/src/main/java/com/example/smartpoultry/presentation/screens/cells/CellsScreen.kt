@@ -83,7 +83,8 @@ fun CellsScreen(
                                     henCount = cellsViewModel.henCountText.value.toInt()
                                     )
                                 )
-                                Toast.makeText(context,"Cell Info updated successfully", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(context,"Cell number ${cell.cellNum} Info updated successfully", Toast.LENGTH_SHORT).show()
+                                cellsViewModel.showDialog.value = false
                             }) {
                                 Text(text = "Save")
                             }
