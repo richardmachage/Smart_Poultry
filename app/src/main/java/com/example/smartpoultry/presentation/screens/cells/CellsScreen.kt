@@ -32,9 +32,8 @@ fun CellsScreen(
     blockId: Int
 ) {
     val cellsViewModel = hiltViewModel<CellsViewModel>()
-    //val listOfBLocks by cellsViewModel.listOfBlocks.collectAsState()
     val listOfCells by remember {
-         cellsViewModel.getCellsForBLock(blockId)
+        cellsViewModel.getCellsForBLock(blockId)
     }.collectAsState()
 
 
@@ -48,10 +47,10 @@ fun CellsScreen(
                 .padding(6.dp)
         ) {
 
-            Row (
+            Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceEvenly
-            ){
+            ) {
                 Text(text = "Block : $blockId")
                 Text(text = "Number of cells is : ${listOfCells.size}")
             }

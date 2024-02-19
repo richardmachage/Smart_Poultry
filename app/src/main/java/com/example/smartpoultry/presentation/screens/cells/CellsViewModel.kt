@@ -17,14 +17,6 @@ class CellsViewModel @Inject constructor(
     private val cellsRepository: CellsRepository,
     private val blocksRepository: BlocksRepository,
 ): ViewModel() {
-   lateinit var blockId : State<Int>
-
-
-    val listOfBlocks = blocksRepository.getAllBlocks().stateIn(
-        viewModelScope,
-        SharingStarted.WhileSubscribed(),
-        emptyList(),
-    )
 
     fun getCellsForBLock(blockId: Int): StateFlow<List<Cells>> {
 
