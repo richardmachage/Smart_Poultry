@@ -21,14 +21,14 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 @Composable
 fun BottomNavGraph(
     navController: NavHostController,
-    modifier : Modifier
-    //navigator : DestinationsNavigator
+    modifier : Modifier,
+    navigator : DestinationsNavigator
 ){
     NavHost(navController = navController, startDestination = HomeScreenDestination.route , modifier = modifier){
         composable(route = HomeScreenDestination.route){ HomeScreen() }
         composable(route = AnalyticsScreenDestination.route){ AnalyticsScreen() }
         composable(route = AlertScreenDestination.route){ AlertScreen() }
         composable(route = EggScreenDestination.route){ EggScreen() }
-        composable(route = BlockCellScreenDestination.route){ BlockCellScreen()}
+        composable(route = BlockCellScreenDestination.route){ BlockCellScreen(navigator)}
     }
 }

@@ -2,11 +2,13 @@ package com.example.smartpoultry.presentation.screens.blockCellScreen
 
 import android.widget.Toast
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddCircle
@@ -31,15 +33,21 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.Navigator
 import com.example.smartpoultry.data.dataSource.room.entities.blocks.Blocks
+import com.example.smartpoultry.presentation.screens.cells.CellsScreen
 import com.example.smartpoultry.presentation.screens.composables.MyVerticalSpacer
+import com.example.smartpoultry.presentation.screens.destinations.CellsScreenDestination
 import com.example.smartpoultry.presentation.uiModels.BlockItem
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import dagger.hilt.android.lifecycle.HiltViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @com.ramcosta.composedestinations.annotation.Destination
 @Composable
-fun BlockCellScreen() {
+fun BlockCellScreen(
+    navigator:DestinationsNavigator
+) {
     /*val viewModel = viewModel<BlockCellViewModel>(
         factory = object : ViewModelProvider.Factory{
             override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -131,10 +139,11 @@ fun BlockCellScreen() {
                     .padding(6.dp),
                 contentPadding = paddingValues
             ){
-                items(listOfBlocks){block->
+                itemsIndexed(listOfBlocks){blockIndex,block->
                     MyVerticalSpacer(height = 10)
                     Column(
                         Modifier
+                            .clickable { navigator.navigate(CellsScreenDestination(block.blockId)) }
                             .fillMaxWidth()
                             .border(
                                 width = 1.dp,

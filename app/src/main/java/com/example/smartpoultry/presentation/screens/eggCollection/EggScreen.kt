@@ -150,9 +150,6 @@ fun EggScreen() {
             //Blocks and cells UI begins here
             LazyColumn {
                 itemsIndexed(listOfBlocks) { blockIndex, block ->
-                    var totalEggCount by remember {
-                        mutableStateOf("")
-                    }
 
                     Column(
                         modifier = Modifier

@@ -9,23 +9,30 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.smartpoultry.data.dataSource.room.entities.cells.Cells
+import com.example.smartpoultry.data.dataSource.room.relations.BlocksWithCells
 import com.ramcosta.composedestinations.annotation.Destination
 
 @Destination
 @Composable
-fun CellsScreen(){
+fun CellsScreen(
+    blockId : Int
+){
     val cellsViewModel = hiltViewModel<CellsViewModel>()
+    //val  listOfCells = cellsViewModel.blocksWithCells[0].cells
+    println("Block Index : ")
 
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background
     ) {
-        LazyColumn{
-            itemsIndexed(cellsViewModel.blocksWithCells[0].cell){
+        Text(text = "BLockId : $blockId")
+        /*LazyColumn{
+            itemsIndexed(listOfCells){
                 index, item ->
                 Text(text = "Cell number : ${item.cellNum}")
-                Text(text = "Number of Chiken : ${item.henCount}")
+                Text(text = "Number of Chicken : ${item.henCount}")
             }
-        }
+        }*/
     }
 }

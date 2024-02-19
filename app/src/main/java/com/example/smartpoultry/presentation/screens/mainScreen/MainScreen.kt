@@ -28,7 +28,8 @@ fun MainScreen(
             BottomNavGraph(
                 modifier = Modifier
                     .padding(paddingValues = paddingValues),
-                navController = navController)
+                navController = navController,
+                navigator = navigator)
         }
     }
 }

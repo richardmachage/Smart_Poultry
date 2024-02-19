@@ -2,10 +2,8 @@ package com.example.smartpoultry.presentation.screens.eggCollection
 
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.smartpoultry.data.dataSource.room.entities.blocks.Blocks
 import com.example.smartpoultry.data.dataSource.room.entities.cells.Cells
 import com.example.smartpoultry.data.dataSource.room.entities.eggCollection.EggCollection
 import com.example.smartpoultry.data.dataSource.room.relations.BlocksWithCells
@@ -16,12 +14,10 @@ import com.example.smartpoultry.presentation.uiModels.BlockEggCollection
 import com.example.smartpoultry.presentation.uiModels.CellEggCollection
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import java.sql.Date
 import java.time.LocalDate
-import java.util.ArrayList
 import javax.inject.Inject
 
 @HiltViewModel
