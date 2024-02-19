@@ -1,9 +1,10 @@
 package com.example.smartpoultry.presentation.screens.cells
 
-import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.smartpoultry.data.dataSource.room.entities.cells.Cells
+import com.example.smartpoultry.domain.domainModels.Cell
 import com.example.smartpoultry.domain.repository.BlocksRepository
 import com.example.smartpoultry.domain.repository.CellsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,8 +17,15 @@ import javax.inject.Inject
 class CellsViewModel @Inject constructor(
     private val cellsRepository: CellsRepository,
     private val blocksRepository: BlocksRepository,
-): ViewModel() {
+) : ViewModel() {
 
+    var showDialog = mutableStateOf(false)
+    lateinit var selectedCell: Cells
+
+
+    //dialog inputs
+    var cellNumText = mutableStateOf("")
+    var henCountText = mutableStateOf("")
     fun getCellsForBLock(blockId: Int): StateFlow<List<Cells>> {
 
         return cellsRepository.getCellsForBlock(blockId).stateIn(
@@ -27,4 +35,7 @@ class CellsViewModel @Inject constructor(
         )
     }
 
+    fun setTheSelectedCell(cell: Cells) {
+        selectedCell = cell
+    }
 }
