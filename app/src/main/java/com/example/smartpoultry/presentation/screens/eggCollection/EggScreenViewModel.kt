@@ -1,5 +1,7 @@
 package com.example.smartpoultry.presentation.screens.eggCollection
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -12,6 +14,7 @@ import com.example.smartpoultry.domain.repository.CellsRepository
 import com.example.smartpoultry.domain.repository.EggCollectionRepository
 import com.example.smartpoultry.presentation.uiModels.BlockEggCollection
 import com.example.smartpoultry.presentation.uiModels.CellEggCollection
+import com.example.smartpoultry.utils.myDateFormatter
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
@@ -48,6 +51,7 @@ class EggScreenViewModel @Inject constructor(
     }
 
 
+    @RequiresApi(Build.VERSION_CODES.O)
     var selectedDate = mutableStateOf(LocalDate.now())
         private set
 
@@ -58,6 +62,7 @@ class EggScreenViewModel @Inject constructor(
         totalEggCount.value = totalEggs.toString()
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     fun setSelectedDate(date: LocalDate) {
         selectedDate.value = date
     }
@@ -90,13 +95,14 @@ class EggScreenViewModel @Inject constructor(
         myInputBlocks[blockIndex] = updatedBlock // This triggers recomposition
     }
 
-    fun onSaveRecord( block:Int, cellsInput : List<CellEggCollection>){
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun onSaveRecord(block:Int, cellsInput : List<CellEggCollection>){
         viewModelScope.launch {
             run loop@{
                 cellsInput.forEach{ record ->
                     if(
                         eggCollectionRepository.addNewRecord(EggCollection(
-                            date = Date.valueOf(selectedDate.value.toString()),
+                            date = Date.valueOf(selectedDate.value.toString()), //Date.valueOf(myDateFormatter(selectedDate.value)),
                             cellId = record.cellId,
                             eggCount = record.eggCount,
                         ))){
