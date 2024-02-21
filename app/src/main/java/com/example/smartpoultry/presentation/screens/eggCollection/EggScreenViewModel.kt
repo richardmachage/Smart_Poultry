@@ -62,12 +62,6 @@ class EggScreenViewModel @Inject constructor(
         chosenDateValue = Date(localDateToJavaDate(localDate))
     }
 
-    var totalEggCount = mutableStateOf("")
-        private set
-
-    fun setTotalEggCount(totalEggs: Int) {
-        totalEggCount.value = totalEggs.toString()
-    }
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun setSelectedDate(date: LocalDate) {

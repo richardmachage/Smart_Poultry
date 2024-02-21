@@ -152,7 +152,7 @@ fun EggScreen() {
 
 
             //Blocks and cells UI begins here
-            LazyColumn {
+            LazyColumn { //Column of Blocks
                 itemsIndexed(listOfBlocks) { blockIndex, block ->
 
                     Column(
