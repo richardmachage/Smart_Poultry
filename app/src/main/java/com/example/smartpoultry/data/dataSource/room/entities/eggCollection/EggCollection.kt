@@ -4,7 +4,6 @@ import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
 import java.sql.Date
-import java.time.LocalDate
 
 @Entity(
     tableName = "egg_collection_tbl",
