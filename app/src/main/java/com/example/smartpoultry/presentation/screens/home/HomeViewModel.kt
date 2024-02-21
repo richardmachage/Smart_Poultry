@@ -1,8 +1,10 @@
 package com.example.smartpoultry.presentation.screens.home
 
 import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.smartpoultry.data.dataModels.DailyEggCollection
 import com.example.smartpoultry.data.dataSource.room.entities.cells.Cells
 import com.example.smartpoultry.data.dataSource.room.entities.eggCollection.EggCollection
 import com.example.smartpoultry.domain.repository.BlocksRepository
@@ -19,6 +21,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import java.sql.Date
 import java.time.LocalDate
 import java.util.ArrayList
 import javax.inject.Inject
@@ -44,13 +47,19 @@ class HomeViewModel @Inject constructor(
         initialValue = emptyList()
     )
 
-    //var eggCollectionRecords = getEggCollectionRecords()
+    var eggCollectionRecords = eggCollectionRepository
+        .getRecentEggCollectionRecords(Date(LocalDate.now().toEpochDay())).stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(),
+            initialValue = emptyList(),
+        )
 
 
-    fun getEggCollectionRecords(): List<EggCollection> {
-        var theList = emptyList<EggCollection>()
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun getEggCollectionRecords(): List<DailyEggCollection> {
+        var theList = emptyList<DailyEggCollection>()
         viewModelScope.launch {
-            eggCollectionRepository.getAllRecords().collect {
+            eggCollectionRepository.getRecentEggCollectionRecords(Date(LocalDate.now().toEpochDay())).collect {
                 theList = it
             }
         }
@@ -82,6 +91,7 @@ class HomeViewModel @Inject constructor(
     }
 
 
+    @RequiresApi(Build.VERSION_CODES.O)
     val chartEntryModelProducer = ChartEntryModelProducer(getChartEntries())
     //val chartEntryModel = entryModelOf(200f,600f,400f,800f)
 
@@ -89,10 +99,13 @@ class HomeViewModel @Inject constructor(
 
     //var chartEntries = ArrayList<FloatEntry>()
 
+    @RequiresApi(Build.VERSION_CODES.O)
     fun getChartEntries() : ArrayList<FloatEntry> {
+
         val chartEntries = ArrayList<FloatEntry>()
         getEggCollectionRecords().forEachIndexed() { index,record ->
-            chartEntries[index] = entryOf(x=record.eggCount, y = record.date.time)
+            chartEntries[index] = entryOf(x=record.totalEggs, y = record.date.time)
+            println("${record.date} : ${record.totalEggs} eggs")
         }
         return chartEntries
     }

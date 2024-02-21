@@ -1,6 +1,8 @@
 package com.example.smartpoultry.presentation.screens.home
 
 import android.annotation.SuppressLint
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.border
 import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.horizontalScroll
@@ -47,6 +49,7 @@ import com.patrykandpatrick.vico.compose.chart.line.lineChart
 import com.patrykandpatrick.vico.core.component.text.textComponent
 import com.ramcosta.composedestinations.annotation.Destination
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Destination
 //@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -58,6 +61,7 @@ fun HomeScreen(
     val homeViewModel: HomeViewModel = hiltViewModel()
     val totalBlocks = homeViewModel.totalBlocks.collectAsState()
     val totalCells = homeViewModel.totalCells.collectAsState()
+    val dailyEggCollections = homeViewModel.eggCollectionRecords.collectAsState()
 
     Surface(
         modifier = Modifier
@@ -131,7 +135,7 @@ fun HomeScreen(
 
                     ){
                         Text(
-                            text = "Sacks of Feeds : 16",
+                            text = "Egg collection records, total eggs : ${dailyEggCollections.value.size}",//"Sacks of Feeds : 16",
                             modifier = Modifier
                                 .padding(6.dp)
                                 .align(Alignment.Start)
@@ -346,5 +350,5 @@ fun HomeScreen(
 @Preview(showSystemUi = true, showBackground = true)
 @Composable
 fun HomeScreenPrev() {
-  HomeScreen()
+  //HomeScreen()
 }

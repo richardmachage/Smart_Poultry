@@ -34,7 +34,7 @@ interface EggCollectionDao {
     @Query("SELECT * FROM egg_collection_tbl WHERE cellId = :cellId AND date BETWEEN :startDate AND  :endDate")
     fun getRecordsForCellBetween(cellId: Int, startDate: Date,endDate: Date) : Flow<List<EggCollection>>
 
-    @Query("SELECT date, SUM(eggCount) as totalEggs FROM egg_collection_tbl WHERE date >=:startDate ORDER BY date ASC")
+    @Query("SELECT date, SUM(eggCount) as totalEggs FROM egg_collection_tbl WHERE date >=:startDate GROUP BY date")
     fun getRecentEggCollectionRecords(startDate: Date) : Flow<List<DailyEggCollection>>
 
 }
