@@ -14,6 +14,7 @@ import com.example.smartpoultry.domain.repository.CellsRepository
 import com.example.smartpoultry.domain.repository.EggCollectionRepository
 import com.example.smartpoultry.presentation.uiModels.BlockEggCollection
 import com.example.smartpoultry.presentation.uiModels.CellEggCollection
+import com.example.smartpoultry.utils.localDateToJavaDate
 import com.example.smartpoultry.utils.myDateFormatter
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
@@ -54,6 +55,12 @@ class EggScreenViewModel @Inject constructor(
     @RequiresApi(Build.VERSION_CODES.O)
     var selectedDate = mutableStateOf(LocalDate.now())
         private set
+    private lateinit var chosenDateValue :Date
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun setChosenDateValue(localDate: LocalDate){
+        chosenDateValue = Date(localDateToJavaDate(localDate))
+    }
 
     var totalEggCount = mutableStateOf("")
         private set

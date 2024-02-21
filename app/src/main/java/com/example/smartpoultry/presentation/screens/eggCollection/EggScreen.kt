@@ -1,6 +1,8 @@
 package com.example.smartpoultry.presentation.screens.eggCollection
 
+import android.os.Build
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -67,6 +69,7 @@ import com.vanpra.composematerialdialogs.rememberMaterialDialogState
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Destination
 @Composable
 fun EggScreen() {
@@ -141,6 +144,7 @@ fun EggScreen() {
                     initialDate = eggViewModel.selectedDate.value,
                     title = "Select Date"
                 ) { chosenDate ->
+                    eggViewModel.setChosenDateValue(chosenDate)
                     eggViewModel.setSelectedDate(chosenDate)
                 }
 
