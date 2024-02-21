@@ -78,14 +78,15 @@ dependencies {
 
 
     //Vico Charts
+    val vicoVersion = "1.14.0"
     // For Jetpack Compose.
-    implementation("com.patrykandpatrick.vico:compose:1.13.1")
+    implementation("com.patrykandpatrick.vico:compose:$vicoVersion")
     // For `compose`. Creates a `ChartStyle` based on an M2 Material Theme.
     //implementation("com.patrykandpatrick.vico:compose-m2:1.13.1")
     // For `compose`. Creates a `ChartStyle` based on an M3 Material Theme.
-    implementation("com.patrykandpatrick.vico:compose-m3:1.13.1")
+    implementation("com.patrykandpatrick.vico:compose-m3:$vicoVersion")
     // Houses the core logic for charts and other elements. Included in all other modules.
-    implementation("com.patrykandpatrick.vico:core:1.13.1")
+    implementation("com.patrykandpatrick.vico:core:$vicoVersion")
 
     //date picker library
     implementation("io.github.vanpra.compose-material-dialogs:datetime:0.9.0")

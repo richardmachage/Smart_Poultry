@@ -33,6 +33,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.smartpoultry.data.dataSource.room.entities.cells.Cells
 import com.example.smartpoultry.presentation.screens.composables.DatePicker
+import com.example.smartpoultry.presentation.screens.composables.LineGraph
 import com.example.smartpoultry.presentation.screens.composables.MyBottomNavBar
 import com.example.smartpoultry.presentation.screens.composables.MyCardInventory
 import com.example.smartpoultry.presentation.screens.composables.MyHorizontalSpacer
@@ -274,28 +275,41 @@ fun HomeScreen(
                     .padding(6.dp),
             ) {
                 Text(text = "Recent Production Trends:")
+/*
 
                 MyVerticalSpacer(height = 10)
 
                 Chart(
                     //line chart
                     chart = lineChart(),
-                    model = homeViewModel.chartEntryModel,
+                    //model = homeViewModel.chartEntryModel,
+                    chartModelProducer = homeViewModel.chartEntryModelProducer,
                     startAxis = rememberStartAxis(
-                        // titleComponent = textComponent(),
+                       // valueFormatter = homeViewModel.verticalAxisValueFormatter,
+                        titleComponent = textComponent(),
                         title = "Eggs Produced"
                     ),
                     bottomAxis = rememberBottomAxis(
-                        valueFormatter = homeViewModel.horizontalAxisValueFormatter,
-                        titleComponent = textComponent(),
+                       valueFormatter = homeViewModel.horizontalAxisValueFormatter,
+                   //   titleComponent = textComponent(),
                         title = "Date"
                     ),
+                )
+*/
+
+                MyVerticalSpacer(height = 10)
+
+                LineGraph(
+                    chartEntryModel = homeViewModel.chartEntryModelProducer,
+                    startAxisTitle = "Eggs produced",
+                    bottomAxisTitle = "Date",
+                  //  bottomAxisValueFormatter = homeViewModel.horizontalAxisValueFormatter
                 )
 
 
             }
 
-            MyVerticalSpacer(height = 20)
+            /*MyVerticalSpacer(height = 20)
 
             Column(//Recent feeds Block
                 modifier = Modifier
@@ -315,15 +329,15 @@ fun HomeScreen(
                     chart = lineChart(),
                     model = homeViewModel.chartEntryModel,
                     startAxis = rememberStartAxis(
-                        titleComponent = textComponent(),
-                        title = "Sacks of Feeds"
+                       //titleComponent = textComponent(),
+                        //title = "Sacks of Feeds"
                     ),
                     bottomAxis = rememberBottomAxis(
-                        titleComponent = textComponent(),
+                       titleComponent = textComponent(),
                         title = "Date"
                     )
                 )
-            }
+            }*/
         }
     }
 }

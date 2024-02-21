@@ -5,6 +5,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import com.example.smartpoultry.data.dataModels.DailyEggCollection
 import kotlinx.coroutines.flow.Flow
 import java.sql.Date
 
@@ -33,5 +34,7 @@ interface EggCollectionDao {
     @Query("SELECT * FROM egg_collection_tbl WHERE cellId = :cellId AND date BETWEEN :startDate AND  :endDate")
     fun getRecordsForCellBetween(cellId: Int, startDate: Date,endDate: Date) : Flow<List<EggCollection>>
 
+    @Query("SELECT date, SUM(eggCount) as totalEggs FROM egg_collection_tbl WHERE date >=:startDate ORDER BY date ASC")
+    fun getRecentEggCollectionRecords(startDate: Date) : Flow<List<DailyEggCollection>>
 
 }
