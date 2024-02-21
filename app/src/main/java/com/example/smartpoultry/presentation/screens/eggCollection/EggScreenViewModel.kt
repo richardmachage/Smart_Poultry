@@ -103,7 +103,7 @@ class EggScreenViewModel @Inject constructor(
                 cellsInput.forEach{ record ->
                     if(
                         eggCollectionRepository.addNewRecord(EggCollection(
-                            date = Date.valueOf(selectedDate.value.toString()), //Date.valueOf(myDateFormatter(selectedDate.value)),
+                            date = chosenDateValue,//Date.valueOf(selectedDate.value.toString()), //Date.valueOf(myDateFormatter(selectedDate.value)),
                             cellId = record.cellId,
                             eggCount = record.eggCount,
                         ))){
