@@ -1,6 +1,7 @@
 package com.example.smartpoultry.data.repositoryImpl
 
 import android.database.sqlite.SQLiteConstraintException
+import com.example.smartpoultry.data.dataModels.DailyEggCollection
 import com.example.smartpoultry.data.dataSource.room.entities.eggCollection.EggCollection
 import com.example.smartpoultry.data.dataSource.room.entities.eggCollection.EggCollectionDao
 import com.example.smartpoultry.domain.repository.EggCollectionRepository
@@ -45,5 +46,9 @@ class EggCollectionRepositoryImpl @Inject constructor (
 
     override fun getRecordsForCellBetween(cellId: Int, startDate: Date, endDate: Date): Flow<List<EggCollection>> {
         return eggCollectionDao.getRecordsForCellBetween(cellId, startDate,endDate)
+    }
+
+    override fun getRecentEggCollectionRecords(startDate: Date): Flow<List<DailyEggCollection>> {
+        return  eggCollectionDao.getRecentEggCollectionRecords(startDate)
     }
 }
