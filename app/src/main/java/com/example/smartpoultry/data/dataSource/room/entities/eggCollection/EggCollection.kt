@@ -15,5 +15,6 @@ data class EggCollection(
     val productionId : Int = 0,
     val date : Date,
     val cellId : Int,
-    val eggCount : Int
+    val eggCount : Int,
+    val henCount : Int
 )
