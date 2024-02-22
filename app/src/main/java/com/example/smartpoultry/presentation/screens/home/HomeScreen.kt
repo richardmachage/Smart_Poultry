@@ -315,7 +315,7 @@ fun HomeScreen(
                 */
 
                 MyVerticalSpacer(height = 10)
-                
+
 
                 Log.i("Entries List size before graph : ", dailyEggCollections.size.toString())
                 if (dailyEggCollections.isNotEmpty()) RecentEggsLineChart(dailyEggCollections = dailyEggCollections)

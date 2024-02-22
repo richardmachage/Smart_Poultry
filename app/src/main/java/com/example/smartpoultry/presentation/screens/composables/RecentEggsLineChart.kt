@@ -17,6 +17,8 @@ import java.text.SimpleDateFormat
 import java.time.format.DateTimeFormatter
 import com.patrykandpatrick.vico.compose.chart.Chart
 import com.patrykandpatrick.vico.compose.chart.line.lineChart
+import com.patrykandpatrick.vico.core.component.text.textComponent
+import kotlin.math.roundToInt
 
 
 @SuppressLint("SimpleDateFormat")
@@ -42,11 +44,29 @@ fun RecentEggsLineChart(dailyEggCollections: List<DailyEggCollection>) {
             turnToChartData.getOrNull((value).toInt())?.xDateValue?: ""
         }
 
+    val verticalAxisValueFormatter =
+        AxisValueFormatter<AxisPosition.Vertical.Start>{value, chartValues ->
+            value.roundToInt().toString()
+        }
+
     Chart(
-        chart = lineChart(),
+        chart = lineChart(
+
+        ),
         model = chartEntryModel,
-        startAxis = rememberStartAxis(),
-        bottomAxis = rememberBottomAxis(valueFormatter = horizontalAxisValueFormatter)
+        startAxis = rememberStartAxis(
+            valueFormatter = verticalAxisValueFormatter,
+            titleComponent = textComponent(),
+            title = "Number of Eggs"
+            ),
+        bottomAxis = rememberBottomAxis(
+            valueFormatter = horizontalAxisValueFormatter,
+            titleComponent = textComponent(),
+            title = "Date",
+        ),
+        isZoomEnabled = true
+
+
     )
 
 
