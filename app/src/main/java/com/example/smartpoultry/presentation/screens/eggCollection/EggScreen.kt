@@ -66,6 +66,7 @@ import com.vanpra.composematerialdialogs.MaterialDialog
 import com.vanpra.composematerialdialogs.datetime.date.DatePickerDefaults
 import com.vanpra.composematerialdialogs.datetime.date.datepicker
 import com.vanpra.composematerialdialogs.rememberMaterialDialogState
+import kotlinx.coroutines.delay
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
@@ -80,6 +81,7 @@ fun EggScreen() {
     val context = LocalContext.current
     //val listOfBlocksDB = eggViewModel.getAllBlocks.collectAsState()
 
+    CircularProgressBar(isLoading = eggViewModel.isLoading.value)
 
     Surface(
         modifier = Modifier
@@ -87,7 +89,6 @@ fun EggScreen() {
         color = MaterialTheme.colorScheme.background
     ) {
 
-        CircularProgressBar(isLoading = eggViewModel.isLoading.value)
 
         Column(
             modifier = Modifier
@@ -248,6 +249,8 @@ fun EggScreen() {
                             NormButton(
                                 onButtonClick = {
                                     eggViewModel.isLoading.value = true
+                                   // eggViewModel.delayApp(2000)
+
 
                                     eggViewModel.onSaveRecord(block = blockIndex, cellsInput = listOfBlocks[blockIndex].cells)
                                     //eggViewModel.updateEggCount(blockIndex,)

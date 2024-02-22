@@ -17,6 +17,7 @@ import com.example.smartpoultry.presentation.uiModels.CellEggCollection
 import com.example.smartpoultry.utils.localDateToJavaDate
 import com.example.smartpoultry.utils.myDateFormatter
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -97,9 +98,15 @@ class EggScreenViewModel @Inject constructor(
         myInputBlocks[blockIndex] = updatedBlock // This triggers recomposition
     }
 
+    fun delayApp(time : Long){
+        viewModelScope.launch {
+            delay(time)
+        }
+    }
     @RequiresApi(Build.VERSION_CODES.O)
     fun onSaveRecord(block:Int, cellsInput : List<CellEggCollection>){
         viewModelScope.launch {
+
             run loop@{
                 cellsInput.forEach{ record ->
                     if(
