@@ -7,6 +7,7 @@ import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import com.example.smartpoultry.data.dataModels.DailyEggCollection
 import com.example.smartpoultry.presentation.uiModels.ChartClass
+import com.example.smartpoultry.utils.toGraphDate
 import com.patrykandpatrick.vico.compose.axis.horizontal.rememberBottomAxis
 import com.patrykandpatrick.vico.compose.axis.vertical.rememberStartAxis
 import com.patrykandpatrick.vico.core.axis.AxisPosition
@@ -28,7 +29,7 @@ import kotlin.math.roundToInt
 @Composable
 fun RecentEggsLineChart(dailyEggCollections: List<DailyEggCollection>) {
     val turnToChartData = dailyEggCollections.map { (date, totalEggs) ->
-        ChartClass(xDateValue = SimpleDateFormat("dd-MMM").format(date), yNumOfEggs = totalEggs)
+        ChartClass(xDateValue = toGraphDate(date), yNumOfEggs = totalEggs)
     }
 
     val chartData = turnToChartData.mapIndexed { index, (_, numOfEggs) ->
