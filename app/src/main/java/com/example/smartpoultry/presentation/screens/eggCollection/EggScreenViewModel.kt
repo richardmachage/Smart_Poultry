@@ -72,8 +72,9 @@ class EggScreenViewModel @Inject constructor(
         return listOfCells.map { cell ->
             CellEggCollection(
                 cellId = cell.cellId,
-                cellNum = listOfCells.indexOf(cell) + 1,
-                eggCount = 0
+                cellNum = cell.cellNum, //listOfCells.indexOf(cell) + 1,
+                eggCount = 0,
+                henCount = cell.henCount
             )
         }
     }
@@ -106,6 +107,7 @@ class EggScreenViewModel @Inject constructor(
                             date = chosenDateValue,//Date.valueOf(selectedDate.value.toString()), //Date.valueOf(myDateFormatter(selectedDate.value)),
                             cellId = record.cellId,
                             eggCount = record.eggCount,
+                            henCount = record.henCount
                         ))){
                         insertStatus.value = true
                     }else {
