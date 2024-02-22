@@ -17,6 +17,8 @@ import java.text.SimpleDateFormat
 import java.time.format.DateTimeFormatter
 import com.patrykandpatrick.vico.compose.chart.Chart
 import com.patrykandpatrick.vico.compose.chart.line.lineChart
+import com.patrykandpatrick.vico.compose.style.ProvideChartStyle
+import com.patrykandpatrick.vico.core.axis.AxisItemPlacer
 import com.patrykandpatrick.vico.core.component.text.textComponent
 import kotlin.math.roundToInt
 
@@ -25,7 +27,7 @@ import kotlin.math.roundToInt
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun RecentEggsLineChart(dailyEggCollections: List<DailyEggCollection>) {
-    val turnToChartData = dailyEggCollections.map {  (date, totalEggs) ->
+    val turnToChartData = dailyEggCollections.map { (date, totalEggs) ->
         ChartClass(xDateValue = SimpleDateFormat("dd-MMM").format(date), yNumOfEggs = totalEggs)
     }
 
@@ -41,33 +43,34 @@ fun RecentEggsLineChart(dailyEggCollections: List<DailyEggCollection>) {
 
     val horizontalAxisValueFormatter =
         AxisValueFormatter<AxisPosition.Horizontal.Bottom> { value, _ ->
-            turnToChartData.getOrNull((value).toInt())?.xDateValue?: ""
+            turnToChartData.getOrNull((value).toInt())?.xDateValue ?: ""
         }
 
     val verticalAxisValueFormatter =
-        AxisValueFormatter<AxisPosition.Vertical.Start>{value, chartValues ->
+        AxisValueFormatter<AxisPosition.Vertical.Start> { value, chartValues ->
             value.roundToInt().toString()
         }
-
-    Chart(
-        chart = lineChart(
-
-        ),
-        model = chartEntryModel,
-        startAxis = rememberStartAxis(
-            valueFormatter = verticalAxisValueFormatter,
-            titleComponent = textComponent(),
-            title = "Number of Eggs"
+    ProvideChartStyle {
+        Chart(
+            chart = lineChart(
             ),
-        bottomAxis = rememberBottomAxis(
-            valueFormatter = horizontalAxisValueFormatter,
-            titleComponent = textComponent(),
-            title = "Date",
-        ),
-        isZoomEnabled = true
+            model = chartEntryModel,
+            startAxis = rememberStartAxis(
+                valueFormatter = verticalAxisValueFormatter,
+                titleComponent = textComponent(),
+                title = "Number of Eggs",
+                itemPlacer = AxisItemPlacer.Vertical.default(maxItemCount = 6)
+            ),
+            bottomAxis = rememberBottomAxis(
+                valueFormatter = horizontalAxisValueFormatter,
+                titleComponent = textComponent(),
+                title = "Date",
+            ),
+            isZoomEnabled = true
 
 
-    )
+        )
+    }
 
 
 }
