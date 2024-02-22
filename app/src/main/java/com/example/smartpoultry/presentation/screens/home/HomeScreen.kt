@@ -2,6 +2,7 @@ package com.example.smartpoultry.presentation.screens.home
 
 import android.annotation.SuppressLint
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.border
 import androidx.compose.foundation.gestures.scrollable
@@ -25,6 +26,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
@@ -41,12 +44,16 @@ import com.example.smartpoultry.presentation.screens.composables.MyCardInventory
 import com.example.smartpoultry.presentation.screens.composables.MyHorizontalSpacer
 import com.example.smartpoultry.presentation.screens.composables.MyVerticalSpacer
 import com.example.smartpoultry.presentation.screens.composables.NormText
+import com.example.smartpoultry.presentation.screens.composables.RecentEggsLineChart
 import com.patrykandpatrick.vico.compose.axis.horizontal.rememberBottomAxis
 import com.patrykandpatrick.vico.compose.axis.vertical.rememberStartAxis
 import com.patrykandpatrick.vico.compose.axis.vertical.startAxis
 import com.patrykandpatrick.vico.compose.chart.Chart
 import com.patrykandpatrick.vico.compose.chart.line.lineChart
 import com.patrykandpatrick.vico.core.component.text.textComponent
+import com.patrykandpatrick.vico.core.entry.ChartEntryModel
+import com.patrykandpatrick.vico.core.entry.ChartEntryModelProducer
+import com.patrykandpatrick.vico.core.entry.entryOf
 import com.ramcosta.composedestinations.annotation.Destination
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -61,8 +68,12 @@ fun HomeScreen(
     val homeViewModel: HomeViewModel = hiltViewModel()
     val totalBlocks = homeViewModel.totalBlocks.collectAsState()
     val totalCells = homeViewModel.totalCells.collectAsState()
-    val dailyEggCollections = homeViewModel.eggCollectionRecords.collectAsState()
+    val dailyEggCollections by homeViewModel.eggCollectionRecords.collectAsState()
+    try {
 
+    }catch (e : Exception){
+        Log.i("Error caught: ", e.message.toString())
+    }
     Surface(
         modifier = Modifier
             .fillMaxSize(),
@@ -77,7 +88,7 @@ fun HomeScreen(
         ) {
             //Text(text = "Smart Poultry")
 
-           // MyVerticalSpacer(height = 20)
+            // MyVerticalSpacer(height = 20)
 
             Column(
                 //Inventory block
@@ -106,7 +117,7 @@ fun HomeScreen(
 
                         MyCardInventory(
                             item = "Chicken",
-                            number = totalCells.value.sumOf { cell : Cells -> cell.henCount }
+                            number = totalCells.value.sumOf { cell: Cells -> cell.henCount }
                         )
 
                         MyCardInventory(
@@ -122,7 +133,7 @@ fun HomeScreen(
                     }
 
                     //The Sacks of feeds Card
-                    Card (
+                    Card(
                         modifier = Modifier
                             .padding(12.dp)
                             .shadow(
@@ -131,11 +142,13 @@ fun HomeScreen(
 
                             )
                             .fillMaxWidth()
-                           // .height(100.dp)
+                        // .height(100.dp)
 
-                    ){
+                    ) {
+
+
                         Text(
-                            text = "Egg collection records, total eggs : ${dailyEggCollections.value.size}",//"Sacks of Feeds : 16",
+                            text = if (dailyEggCollections.isNotEmpty()) "Egg collection records, total eggs :${dailyEggCollections[0].totalEggs}" else "0",//"Sacks of Feeds : 16",
                             modifier = Modifier
                                 .padding(6.dp)
                                 .align(Alignment.Start)
@@ -179,7 +192,7 @@ fun HomeScreen(
                         .horizontalScroll(rememberScrollState()),
                     horizontalArrangement = Arrangement.SpaceBetween,
 
-                ) {
+                    ) {
                     Card {
                         Text(
                             text = "cell 1",
@@ -279,41 +292,38 @@ fun HomeScreen(
                     .padding(6.dp),
             ) {
                 Text(text = "Recent Production Trends:")
-/*
+                /*
+
+                                MyVerticalSpacer(height = 10)
+
+                                Chart(
+                                    //line chart
+                                    chart = lineChart(),
+                                    //model = homeViewModel.chartEntryModel,
+                                    chartModelProducer = homeViewModel.chartEntryModelProducer,
+                                    startAxis = rememberStartAxis(
+                                       // valueFormatter = homeViewModel.verticalAxisValueFormatter,
+                                        titleComponent = textComponent(),
+                                        title = "Eggs Produced"
+                                    ),
+                                    bottomAxis = rememberBottomAxis(
+                                       valueFormatter = homeViewModel.horizontalAxisValueFormatter,
+                                   //   titleComponent = textComponent(),
+                                        title = "Date"
+                                    ),
+                                )
+                */
 
                 MyVerticalSpacer(height = 10)
+                
 
-                Chart(
-                    //line chart
-                    chart = lineChart(),
-                    //model = homeViewModel.chartEntryModel,
-                    chartModelProducer = homeViewModel.chartEntryModelProducer,
-                    startAxis = rememberStartAxis(
-                       // valueFormatter = homeViewModel.verticalAxisValueFormatter,
-                        titleComponent = textComponent(),
-                        title = "Eggs Produced"
-                    ),
-                    bottomAxis = rememberBottomAxis(
-                       valueFormatter = homeViewModel.horizontalAxisValueFormatter,
-                   //   titleComponent = textComponent(),
-                        title = "Date"
-                    ),
-                )
-*/
-
-                MyVerticalSpacer(height = 10)
-
-                LineGraph(
-                    chartEntryModel = homeViewModel.chartEntryModelProducer,
-                    startAxisTitle = "Eggs produced",
-                    bottomAxisTitle = "Date",
-                  //  bottomAxisValueFormatter = homeViewModel.horizontalAxisValueFormatter
-                )
-
+                Log.i("Entries List size before graph : ", dailyEggCollections.size.toString())
+                if (dailyEggCollections.isNotEmpty()) RecentEggsLineChart(dailyEggCollections = dailyEggCollections)
+                Log.i("Entries List size after graph : ", dailyEggCollections.size.toString())
 
             }
 
-            /*MyVerticalSpacer(height = 20)
+            MyVerticalSpacer(height = 20)
 
             Column(//Recent feeds Block
                 modifier = Modifier
@@ -329,26 +339,26 @@ fun HomeScreen(
             ) {
                 Text(text = "Recent Feeding Trends:")
                 MyVerticalSpacer(height = 10)
-                Chart(
+               /* Chart(
                     chart = lineChart(),
-                    model = homeViewModel.chartEntryModel,
+                    model = ,
                     startAxis = rememberStartAxis(
-                       //titleComponent = textComponent(),
+                        //titleComponent = textComponent(),
                         //title = "Sacks of Feeds"
                     ),
                     bottomAxis = rememberBottomAxis(
-                       titleComponent = textComponent(),
+                        titleComponent = textComponent(),
                         title = "Date"
                     )
                 )
-            }*/
+*/
+            }
         }
     }
 }
 
-
-@Preview(showSystemUi = true, showBackground = true)
-@Composable
-fun HomeScreenPrev() {
-  //HomeScreen()
-}
+    @Preview(showSystemUi = true, showBackground = true)
+    @Composable
+    fun HomeScreenPrev() {
+        //HomeScreen()
+    }
