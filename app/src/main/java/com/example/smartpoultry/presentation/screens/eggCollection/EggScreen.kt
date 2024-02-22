@@ -13,12 +13,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material3.Card
@@ -29,7 +26,6 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -49,15 +45,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.smartpoultry.R
 import com.example.smartpoultry.presentation.screens.composables.CircularProgressBar
-import com.example.smartpoultry.presentation.screens.composables.MyBlocks
-import com.example.smartpoultry.presentation.screens.composables.MyCardEggCollection
-import com.example.smartpoultry.presentation.screens.composables.MyCells
-import com.example.smartpoultry.presentation.screens.composables.MyDatePicker
-import com.example.smartpoultry.presentation.screens.composables.MySimpleEditText
-import com.example.smartpoultry.presentation.screens.composables.MySingleBlock
 import com.example.smartpoultry.presentation.screens.composables.NormButton
 import com.example.smartpoultry.presentation.theme.SmartPoultryTheme
 import com.example.smartpoultry.presentation.uiModels.CellEggCollection
@@ -66,8 +55,6 @@ import com.vanpra.composematerialdialogs.MaterialDialog
 import com.vanpra.composematerialdialogs.datetime.date.DatePickerDefaults
 import com.vanpra.composematerialdialogs.datetime.date.datepicker
 import com.vanpra.composematerialdialogs.rememberMaterialDialogState
-import kotlinx.coroutines.delay
-import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -289,6 +276,6 @@ fun EggScreen() {
 @Composable
 fun PrevEgg() {
     SmartPoultryTheme {
-        EggScreen()
+       // EggScreen()
     }
 }
