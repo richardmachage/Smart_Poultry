@@ -4,7 +4,11 @@ import android.annotation.SuppressLint
 import android.icu.text.Transliterator.Position
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import com.example.smartpoultry.data.dataModels.DailyEggCollection
 import com.example.smartpoultry.presentation.uiModels.ChartClass
 import com.example.smartpoultry.utils.toGraphDate
@@ -17,9 +21,11 @@ import com.patrykandpatrick.vico.core.entry.entryOf
 import java.text.SimpleDateFormat
 import java.time.format.DateTimeFormatter
 import com.patrykandpatrick.vico.compose.chart.Chart
+import com.patrykandpatrick.vico.compose.chart.column.columnChart
 import com.patrykandpatrick.vico.compose.chart.line.lineChart
 import com.patrykandpatrick.vico.compose.style.ProvideChartStyle
 import com.patrykandpatrick.vico.core.axis.AxisItemPlacer
+import com.patrykandpatrick.vico.core.component.text.TextComponent
 import com.patrykandpatrick.vico.core.component.text.textComponent
 import kotlin.math.roundToInt
 
@@ -52,25 +58,48 @@ fun RecentEggsLineChart(dailyEggCollections: List<DailyEggCollection>) {
             value.roundToInt().toString()
         }
     ProvideChartStyle {
+        Text(text = "Column Chart")
         Chart(
-            chart = lineChart(
-            ),
+            chart = columnChart(),
             model = chartEntryModel,
             startAxis = rememberStartAxis(
                 valueFormatter = verticalAxisValueFormatter,
-                titleComponent = textComponent(),
+                titleComponent = textComponent().apply { color = MaterialTheme.colorScheme.primary.toArgb() },
                 title = "Number of Eggs",
                 itemPlacer = AxisItemPlacer.Vertical.default(maxItemCount = 6)
             ),
             bottomAxis = rememberBottomAxis(
                 valueFormatter = horizontalAxisValueFormatter,
-                titleComponent = textComponent(),
+                titleComponent = textComponent().apply { color = MaterialTheme.colorScheme.primary.toArgb() },
                 title = "Date",
+                //guideline = null
+            ),
+            isZoomEnabled = true
+            
+        )
+        
+        MyVerticalSpacer(height = 5)
+        Text(text = "LineChart")
+
+        Chart(
+            chart = lineChart(),
+            model = chartEntryModel,
+            startAxis = rememberStartAxis(
+                valueFormatter = verticalAxisValueFormatter,
+                titleComponent = textComponent().apply { color = MaterialTheme.colorScheme.primary.toArgb() },
+                title = "Number of Eggs",
+                itemPlacer = AxisItemPlacer.Vertical.default(maxItemCount = 6)
+            ),
+            bottomAxis = rememberBottomAxis(
+                valueFormatter = horizontalAxisValueFormatter,
+                titleComponent = textComponent().apply { color = MaterialTheme.colorScheme.primary.toArgb() },
+                title = "Date",
+                //guideline = null
             ),
             isZoomEnabled = true
 
-
         )
+
     }
 
 
