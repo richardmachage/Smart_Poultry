@@ -3,6 +3,7 @@ package com.example.smartpoultry.presentation.screens.analytics
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -69,7 +70,8 @@ fun AnalyticsScreen(
 
                 Row (
                     modifier = Modifier
-                        .fillMaxWidth()
+                        .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.Center
                 ){
                     var listOfCells by remember { mutableStateOf(emptyList<Cells>()) }
                     if (listOfBlocksWithCells.isNotEmpty()) {
