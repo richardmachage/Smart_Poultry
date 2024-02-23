@@ -1,13 +1,19 @@
 package com.example.smartpoultry.presentation.screens.analytics
 
 import androidx.lifecycle.ViewModel
-import com.patrykandpatrick.vico.core.entry.entryOf
-import kotlin.random.Random
+import com.example.smartpoultry.domain.repository.BlocksRepository
+import com.example.smartpoultry.domain.repository.CellsRepository
+import com.example.smartpoultry.domain.repository.EggCollectionRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class AnalyticsViewModel : ViewModel() {
+@HiltViewModel
+class AnalyticsViewModel @Inject constructor (
+    private val cellsRepository: CellsRepository,
+    private val blocksRepository: BlocksRepository,
+    private val eggCollectionRepository: EggCollectionRepository,
+) : ViewModel() {
 
-    var listOfEntries = getRandomEntries()
-    fun getRandomEntries() = List(4) { entryOf(it, Random.nextFloat() * 16f) }
 
 
 }
