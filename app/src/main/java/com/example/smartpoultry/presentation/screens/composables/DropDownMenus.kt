@@ -110,3 +110,49 @@ fun CellsDropDownMenu( // for cells
     }
 
 }
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun UserTypeDropDownMenu(
+    listOfItems: List<String> = listOf("Collector","Manager", "Director"),
+    onItemClick: (String) -> Unit,
+    modifier: Modifier = Modifier,
+){
+
+    var selectedText by remember { mutableStateOf("-") }
+    var expanded by remember { mutableStateOf(false) }
+
+    ExposedDropdownMenuBox(
+        modifier = modifier
+            .padding(3.dp),
+        expanded = expanded,
+        onExpandedChange = {
+            expanded = !expanded
+        }) {
+
+        OutlinedTextField(
+            modifier = modifier.menuAnchor(),
+            value = "Cell $selectedText",
+            onValueChange = {},
+            readOnly = true,
+            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
+            label = { Text(text = "Cell")}
+        )
+
+        ExposedDropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false }
+        ) {
+            listOfItems.forEach { item ->
+                DropdownMenuItem(
+                    text = { Text(text = "Cell ${item}") },
+                    onClick = {
+                        selectedText = item
+                        onItemClick(item)
+                        expanded = false
+                    }
+                )
+            }
+        }
+    }
+}
