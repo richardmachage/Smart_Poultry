@@ -8,7 +8,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -23,7 +22,7 @@ fun BlocksDropDownMenu( //for Blocks
     onItemClick: (List<Cells>) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    var selectedText by remember { mutableIntStateOf(listOfItems[0].block.blockNum) }
+    var selectedText by remember { mutableStateOf("-") }
     var expanded by remember { mutableStateOf(false) }
 
     ExposedDropdownMenuBox(
@@ -48,7 +47,7 @@ fun BlocksDropDownMenu( //for Blocks
                 DropdownMenuItem(
                     text = { Text(text = "Block ${block.block.blockNum}") },
                     onClick = {
-                        selectedText = block.block.blockNum
+                        selectedText = block.block.blockNum.toString()
                         onItemClick(block.cell)
                         expanded = false
                     }
@@ -65,7 +64,7 @@ fun CellsDropDownMenu( // for cells
     onItemClick: (Cells) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    var selectedText by remember { mutableIntStateOf(listOfItems[0].cellNum) }
+    var selectedText by remember { mutableStateOf("-") }
     var expanded by remember { mutableStateOf(false) }
 
     ExposedDropdownMenuBox(
@@ -90,7 +89,7 @@ fun CellsDropDownMenu( // for cells
                 DropdownMenuItem(
                     text = { Text(text = "Cell ${cell.cellNum}") },
                     onClick = {
-                        selectedText = cell.cellNum
+                        selectedText = cell.cellNum.toString()
                         onItemClick(cell)
                         expanded = false
                     }
