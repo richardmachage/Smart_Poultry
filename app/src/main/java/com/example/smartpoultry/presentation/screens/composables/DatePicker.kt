@@ -3,15 +3,16 @@ package com.example.smartpoultry.presentation.screens.composables
 import android.annotation.SuppressLint
 import android.os.Build
 import androidx.annotation.RequiresApi
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -19,74 +20,104 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.sp
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
+import com.example.smartpoultry.utils.localDateToJavaDate
 import com.vanpra.composematerialdialogs.MaterialDialog
 import com.vanpra.composematerialdialogs.MaterialDialogState
 import com.vanpra.composematerialdialogs.datetime.date.DatePickerDefaults
 import com.vanpra.composematerialdialogs.datetime.date.datepicker
 import com.vanpra.composematerialdialogs.rememberMaterialDialogState
+import java.text.SimpleDateFormat
 import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 
 
-@SuppressLint("NewApi")
+@SuppressLint("NewApi", "SimpleDateFormat")
 @Composable
 
 @RequiresApi(Build.VERSION_CODES.O)
 fun MyDatePicker(
-    dateDialogState : MaterialDialogState,
-    positiveButton : () -> Unit,
-    negativeButton : () -> Unit
-){
+    dateDialogState: MaterialDialogState,
+    label: String,
+    positiveButtonOnClick: (LocalDate) -> Unit,
+    negativeButton: () -> Unit
+) {
+
     var pickedDate by remember {
         mutableStateOf(LocalDate.now())
     }
 
-    Row (
+    OutlinedTextField(
         modifier = Modifier
-            .fillMaxWidth(),
-        Arrangement.Center,
-        Alignment.CenterVertically
-    ){
-        Text(
-            text = DateTimeFormatter
-                .ofPattern("dd MMM yyyy")
-                .format(pickedDate), // date to be displayed by default
-            fontSize = 20.sp
-        )
-
-        IconButton(
-            onClick = {
-                dateDialogState.show()
+            .fillMaxWidth()
+            .padding(4.dp),
+        value = SimpleDateFormat("dd/MM/yyyy")
+            .format(
+                localDateToJavaDate(pickedDate)
+            ),
+        label = { Text(text = label) },
+//        placeholder = { Text(text = label) },
+        onValueChange = { },
+        trailingIcon = {
+            IconButton(
+                onClick = {
+                    dateDialogState.show()
+                }
+            ) {
+                Icon(
+                    imageVector = Icons.Default.DateRange,
+                    contentDescription = "Calender"
+                )
             }
-        ) {
-            Icon(imageVector = Icons.Default.DateRange,
-                contentDescription ="Calender" )
-        }
-    }
 
-    MaterialDialog ( // defines a material dialog
+        },
+        singleLine = true,
+        readOnly = true
+    )
+
+    /* Row (
+         modifier = Modifier
+             .fillMaxWidth(),
+         Arrangement.SpaceEvenly,
+         Alignment.CenterVertically
+     ){
+         TextField(
+             modifier = Modifier
+                 .padding(3.dp)
+             ,
+             value = SimpleDateFormat("dd/MM/yyyy")
+                 .format(
+                 localDateToJavaDate(pickedDate)
+             ),
+             onValueChange ={},
+             label = { Text(text = label)},
+             maxLines = 1,
+             readOnly = true
+         )
+
+
+     }
+ */
+    MaterialDialog( // defines a material dialog
         dialogState = dateDialogState,
         properties = DialogProperties(
             dismissOnBackPress = true,
             dismissOnClickOutside = false,
         ),
         buttons = {
-            positiveButton(text = "OK"){
+            positiveButton(text = "OK") {
                 //TODO what happens after ok is clicked?
-                positiveButton()
+                positiveButtonOnClick(pickedDate)
             }
 
-            negativeButton(text = "Cancel"){
+            negativeButton(text = "Cancel") {
                 negativeButton()
             }
 
         }
-    ){ // now here we specify the kind of material dialog such as date picker
+    ) { // now here we specify the kind of material dialog such as date picker
         datepicker(
             colors = DatePickerDefaults.colors(
                 headerBackgroundColor = MaterialTheme.colorScheme.onPrimary,
@@ -94,11 +125,10 @@ fun MyDatePicker(
                 dateActiveBackgroundColor = MaterialTheme.colorScheme.tertiary,
                 dateActiveTextColor = MaterialTheme.colorScheme.primary,
 
-            ),
+                ),
             initialDate = LocalDate.now(),
             title = "Select date",
-        ){
-            selectedDate ->
+        ) { selectedDate ->
             pickedDate = selectedDate
         }
     }
@@ -107,20 +137,24 @@ fun MyDatePicker(
 @RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
-fun PreviewDatePicker(){
-    MaterialTheme{
+fun PreviewDatePicker() {
+    MaterialTheme {
         Surface(
             modifier = Modifier.fillMaxSize(),
             color = MaterialTheme.colorScheme.background
         ) {
 
-            val dateDialogState = rememberMaterialDialogState()
+            Column {
+                val dateDialogState = rememberMaterialDialogState()
 
-            MyDatePicker(
-                dateDialogState = dateDialogState,
-                positiveButton = {},
-                negativeButton = {}
-            )
+                MyDatePicker(
+                    dateDialogState = dateDialogState,
+                    label = "start date",
+                    positiveButtonOnClick = {},
+                    negativeButton = {}
+                )
+            }
+
         }
     }
 }

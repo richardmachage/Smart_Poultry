@@ -1,12 +1,13 @@
 package com.example.smartpoultry.presentation.screens.composables
 
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -28,21 +29,22 @@ fun BlocksDropDownMenu( //for Blocks
     var expanded by remember { mutableStateOf(false) }
 
     ExposedDropdownMenuBox(
-        modifier= modifier
-            .padding(3.dp),
-            //.fillMaxWidth(0.4f),
+        modifier = modifier
+            .padding(3.dp)
+            .fillMaxWidth(0.4f),
         expanded = expanded,
         onExpandedChange = {
             expanded = !expanded
         }) {
 
-        TextField(
+        OutlinedTextField(
             modifier = modifier.menuAnchor(),
             value = "Block $selectedText",
             onValueChange = {},
             readOnly = true,
             trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
             maxLines = 1,
+            label = { Text(text = "Block")}
         )
 
         ExposedDropdownMenu(
@@ -81,13 +83,14 @@ fun CellsDropDownMenu( // for cells
             expanded = !expanded
         }) {
 
-        TextField(
+        OutlinedTextField(
             modifier = modifier.menuAnchor(),
             value = "Cell $selectedText",
             onValueChange = {},
             readOnly = true,
             trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
-        )
+            label = { Text(text = "Cell")}
+            )
 
         ExposedDropdownMenu(
             expanded = expanded,
