@@ -32,6 +32,7 @@ import com.example.smartpoultry.data.dataSource.room.entities.cells.Cells
 import com.example.smartpoultry.presentation.screens.composables.MyCardInventory
 import com.example.smartpoultry.presentation.screens.composables.MyHorizontalSpacer
 import com.example.smartpoultry.presentation.screens.composables.MyVerticalSpacer
+import com.example.smartpoultry.presentation.screens.composables.RecentEggsLineChart
 import com.ramcosta.composedestinations.annotation.Destination
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -294,7 +295,8 @@ fun HomeScreen(
 
                 MyVerticalSpacer(height = 10)
 
-
+                //Create graph
+                if (dailyEggCollections.isNotEmpty()) RecentEggsLineChart(dailyEggCollections = dailyEggCollections)
 
             }
 

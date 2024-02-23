@@ -38,7 +38,7 @@ interface EggCollectionDao {
     fun getRecentEggCollectionRecords(startDate: Date) : Flow<List<DailyEggCollection>>
 
     @Query("SELECT * FROM egg_collection_tbl WHERE date>=:startDate")
-    fun getCellEggCollectionForPastDays(startDate: Date) //on implementation, calculate date fromm past number of days input
+    fun getCellEggCollectionForPastDays(startDate: Date) : Flow<List<EggCollection>>//on implementation, calculate date fromm past number of days input
 
     @Query("SELECT * FROM egg_collection_tbl WHERE strftime('%Y-%m', datetime(date / 1000, 'unixepoch')) = :yearMonth AND cellId=:cellId")
     fun getCellCollectionByMonth(cellId: Int,yearMonth: String): Flow<List<EggCollection>>
