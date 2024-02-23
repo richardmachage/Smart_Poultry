@@ -1,32 +1,26 @@
 package com.example.smartpoultry.presentation.screens.composables
 
 import android.annotation.SuppressLint
-import android.icu.text.Transliterator.Position
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import com.example.smartpoultry.data.dataModels.DailyEggCollection
 import com.example.smartpoultry.presentation.uiModels.ChartClass
 import com.example.smartpoultry.utils.toGraphDate
 import com.patrykandpatrick.vico.compose.axis.horizontal.rememberBottomAxis
 import com.patrykandpatrick.vico.compose.axis.vertical.rememberStartAxis
-import com.patrykandpatrick.vico.core.axis.AxisPosition
-import com.patrykandpatrick.vico.core.axis.formatter.AxisValueFormatter
-import com.patrykandpatrick.vico.core.entry.entryModelOf
-import com.patrykandpatrick.vico.core.entry.entryOf
-import java.text.SimpleDateFormat
-import java.time.format.DateTimeFormatter
 import com.patrykandpatrick.vico.compose.chart.Chart
 import com.patrykandpatrick.vico.compose.chart.column.columnChart
 import com.patrykandpatrick.vico.compose.chart.line.lineChart
-import com.patrykandpatrick.vico.compose.style.ProvideChartStyle
 import com.patrykandpatrick.vico.core.axis.AxisItemPlacer
-import com.patrykandpatrick.vico.core.component.text.TextComponent
+import com.patrykandpatrick.vico.core.axis.AxisPosition
+import com.patrykandpatrick.vico.core.axis.formatter.AxisValueFormatter
 import com.patrykandpatrick.vico.core.component.text.textComponent
+import com.patrykandpatrick.vico.core.entry.entryModelOf
+import com.patrykandpatrick.vico.core.entry.entryOf
 import kotlin.math.roundToInt
 
 
@@ -57,8 +51,8 @@ fun RecentEggsLineChart(dailyEggCollections: List<DailyEggCollection>) {
         AxisValueFormatter<AxisPosition.Vertical.Start> { value, chartValues ->
             value.roundToInt().toString()
         }
-    ProvideChartStyle {
         Text(text = "Column Chart")
+
         Chart(
             chart = columnChart(),
             model = chartEntryModel,
@@ -100,7 +94,7 @@ fun RecentEggsLineChart(dailyEggCollections: List<DailyEggCollection>) {
 
         )
 
-    }
+
 
 
 }
