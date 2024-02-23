@@ -60,9 +60,6 @@ fun HomeScreen(
                 .padding(8.dp)
                 .verticalScroll(rememberScrollState())
         ) {
-            //Text(text = "Smart Poultry")
-
-            // MyVerticalSpacer(height = 20)
 
             Column(
                 //Inventory block

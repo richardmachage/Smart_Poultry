@@ -26,7 +26,7 @@ class AnalyticsViewModel @Inject constructor (
         emptyList(),
     )
 
-    fun eggCollectionBetweenDates(cellId : Int, startDate:Date, endDate : Date) : Flow<List<EggCollection>> {
+    fun getCellCollectionBetweenDates(cellId : Int, startDate:Date, endDate : Date) : Flow<List<EggCollection>> {
             return eggCollectionRepository.getRecordsForCellBetween(cellId,startDate,endDate).stateIn(
                 scope = viewModelScope,
                 started = SharingStarted.Eagerly,
