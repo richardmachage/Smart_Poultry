@@ -1,7 +1,6 @@
 package com.example.smartpoultry.presentation.screens.home
 
 import android.os.Build
-import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.border
 import androidx.compose.foundation.horizontalScroll
@@ -48,11 +47,7 @@ fun HomeScreen(
     val totalBlocks = homeViewModel.totalBlocks.collectAsState()
     val totalCells = homeViewModel.totalCells.collectAsState()
     val dailyEggCollections by homeViewModel.eggCollectionRecords.collectAsState()
-    try {
 
-    }catch (e : Exception){
-        Log.i("Error caught: ", e.message.toString())
-    }
     Surface(
         modifier = Modifier
             .fillMaxSize(),
