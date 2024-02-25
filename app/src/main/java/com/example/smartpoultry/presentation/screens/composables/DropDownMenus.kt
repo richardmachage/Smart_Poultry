@@ -2,10 +2,13 @@ package com.example.smartpoultry.presentation.screens.composables
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -131,12 +134,21 @@ fun UserTypeDropDownMenu(
         }) {
 
         OutlinedTextField(
-            modifier = modifier.menuAnchor(),
-            value = "Cell $selectedText",
+            modifier = modifier
+                .menuAnchor()
+                .fillMaxWidth()
+                .padding(start = (6.dp), end = (6.dp)),
+            value = " $selectedText",
             onValueChange = {},
             readOnly = true,
             trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
-            label = { Text(text = "Cell")}
+            label = { Text(text = "User Type")},
+            leadingIcon = {
+                Icon(
+                    imageVector = Icons.Default.AccountCircle,
+                    contentDescription = "User"
+                )
+            }
         )
 
         ExposedDropdownMenu(
@@ -145,7 +157,7 @@ fun UserTypeDropDownMenu(
         ) {
             listOfItems.forEach { item ->
                 DropdownMenuItem(
-                    text = { Text(text = "Cell ${item}") },
+                    text = { Text(text = item) },
                     onClick = {
                         selectedText = item
                         onItemClick(item)

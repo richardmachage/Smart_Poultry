@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.MaterialTheme
@@ -28,6 +27,7 @@ import com.example.smartpoultry.presentation.screens.composables.MyTextButton
 import com.example.smartpoultry.presentation.screens.composables.MyVerticalSpacer
 import com.example.smartpoultry.presentation.screens.composables.NormButton
 import com.example.smartpoultry.presentation.screens.composables.NormText
+import com.example.smartpoultry.presentation.screens.composables.UserTypeDropDownMenu
 import com.example.smartpoultry.presentation.screens.destinations.MainScreenDestination
 import com.example.smartpoultry.presentation.screens.destinations.SignUpScreenDestination
 import com.ramcosta.composedestinations.annotation.Destination
@@ -68,13 +68,18 @@ fun LogInScreen(
                 MyVerticalSpacer(height = 50)
 
                 Column {
-                    MyEditTextClear( //Input email address
+                    /*MyEditTextClear( //Input User type
                         label = "User type",
                         keyboardType = KeyboardType.Email,
                         iconLeading = Icons.Default.AccountCircle,
                         iconLeadingDescription = "AccountType",
                         hint = "User type"
+                    )*/
+                    
+                    UserTypeDropDownMenu(
+                        onItemClick = {},
                     )
+                    
                     MyEditTextClear( //Input email address
                         label = "Email",
                         keyboardType = KeyboardType.Email,
@@ -124,5 +129,5 @@ fun LogInScreen(
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun PreviewLogInScreen() {
-    //LogInScreen()
+  //  LogInScreen(DestinationsNavigator)
 }

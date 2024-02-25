@@ -1,6 +1,7 @@
 package com.example.smartpoultry.presentation.screens.composables
 
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.toArgb
 import com.example.smartpoultry.presentation.uiModels.ChartClass
@@ -48,6 +49,7 @@ fun CellAnalysisGraph(
                 value.roundToInt().toString()
             }
 
+        Text(text = "Line Chart: ")
         Chart(
             chart = lineChart(),
             model = chartEntryModel,
@@ -70,6 +72,7 @@ fun CellAnalysisGraph(
         )
 
         MyVerticalSpacer(height = 5)
+        Text(text = "Column Chart: ")
         Chart(
             chart = columnChart(),
             model = chartEntryModel,
