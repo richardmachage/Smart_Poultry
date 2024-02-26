@@ -1,5 +1,6 @@
 package com.example.smartpoultry.presentation.screens.composables
 
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -221,6 +222,7 @@ fun MonthsDropDownMenu(
         )
 
         ExposedDropdownMenu(
+            modifier = modifier.fillMaxHeight(),
             expanded = expanded,
             onDismissRequest = { expanded = false }
         ) {

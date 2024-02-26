@@ -27,6 +27,7 @@ class AnalyticsViewModel @Inject constructor (
 ) : ViewModel() {
     var plotChart = mutableStateOf(false)
     var selectedCellID = mutableIntStateOf(0)
+     var selectedMonth = mutableStateOf("")
 
     @RequiresApi(Build.VERSION_CODES.O)
     var startDate = mutableStateOf(LocalDate.now())
@@ -34,7 +35,7 @@ class AnalyticsViewModel @Inject constructor (
     @RequiresApi(Build.VERSION_CODES.O)
     var endDate = mutableStateOf(LocalDate.now())
     var isCustomRangeAnalysis = mutableStateOf(false)
-    var isPastXDaysAnalysis = mutableStateOf(false)
+    var isPastXDaysAnalysis = mutableStateOf(true)
     var isMonthlyAnalysis = mutableStateOf(false)
 
 

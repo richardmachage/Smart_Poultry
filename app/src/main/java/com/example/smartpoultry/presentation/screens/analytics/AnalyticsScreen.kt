@@ -11,11 +11,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -25,12 +26,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.smartpoultry.data.dataSource.room.entities.cells.Cells
 import com.example.smartpoultry.presentation.screens.composables.BlocksDropDownMenu
 import com.example.smartpoultry.presentation.screens.composables.CellAnalysisGraph
 import com.example.smartpoultry.presentation.screens.composables.CellsDropDownMenu
+import com.example.smartpoultry.presentation.screens.composables.MonthsDropDownMenu
 import com.example.smartpoultry.presentation.screens.composables.MyDatePicker
 import com.example.smartpoultry.presentation.screens.composables.MyVerticalSpacer
 import com.example.smartpoultry.presentation.screens.composables.NormButton
@@ -80,15 +83,19 @@ fun AnalyticsScreen(
             ) {
                 Text("Trend analysis by cell:")
 
+                MyVerticalSpacer(height = 8)
                 RadioButtonGroup(
-                    listOfOptions = listOf("Past X Days", "Custom Range", "Monthly"),
+                    title = "Select type of analysis:",
+                    listOfOptions = listOf("Past\nX Days", "Custom\nRange", "Monthly"),
                     onOptionSelect = { selectedOption ->
-                        analyticsViewModel.isCustomRangeAnalysis.value = (selectedOption == "Custom Range")
-                        analyticsViewModel.isPastXDaysAnalysis.value = (selectedOption == "Past X Days")
+                        analyticsViewModel.isCustomRangeAnalysis.value =
+                            (selectedOption == "Custom Range")
+                        analyticsViewModel.isPastXDaysAnalysis.value =
+                            (selectedOption == "Past X Days")
                         analyticsViewModel.isMonthlyAnalysis.value = (selectedOption == "Monthly")
                     },
                 )
-
+                MyVerticalSpacer(height = 8)
 
                 Row(
                     modifier = Modifier
@@ -110,32 +117,57 @@ fun AnalyticsScreen(
                             onItemClick = { cell ->
                                 analyticsViewModel.selectedCellID.intValue = cell.cellId
                                 analyticsViewModel.plotChart.value = false
-
                             }
                         )
                     }
                 }
-                if (analyticsViewModel.isPastXDaysAnalysis.value){
-                    TextField(value = "Past days", onValueChange = {})
+
+                if (analyticsViewModel.isPastXDaysAnalysis.value) {
+                    MyVerticalSpacer(height = 5)
+
+                    Text(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(6.dp),
+                        text = "Analyze the trends for a given number of past days"
+                    )
+
+                    var text by remember {
+                        mutableStateOf("")
+                    }
+                    OutlinedTextField(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(6.dp),
+                        value = text,
+                        onValueChange = { newText ->
+                            text = newText
+                        },
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                        label = { Text(text = "Number of Past Days") },
+                        maxLines = 1,
+                    )
+
                 }
 
-                if (analyticsViewModel.isMonthlyAnalysis.value){
-                    Row {
-                        Text(text = "YEAR")
-                        Text(text = "Month")
-                    }
+                if (analyticsViewModel.isMonthlyAnalysis.value) {
+                    MonthsDropDownMenu(
+                        onItemClick = { month ->
+                            analyticsViewModel.selectedMonth.value = month
+                        }
+                    )
                 }
 
                 if (analyticsViewModel.isCustomRangeAnalysis.value) {
-                MyDatePicker(// start date
-                    dateDialogState = rememberMaterialDialogState(),
-                    label = "Start Date",
-                    positiveButtonOnClick = { pickedDate ->
-                        analyticsViewModel.startDate.value = pickedDate
-                        analyticsViewModel.plotChart.value = false
-                    },
-                    negativeButton = {}
-                )
+                    MyDatePicker(// start date
+                        dateDialogState = rememberMaterialDialogState(),
+                        label = "Start Date",
+                        positiveButtonOnClick = { pickedDate ->
+                            analyticsViewModel.startDate.value = pickedDate
+                            analyticsViewModel.plotChart.value = false
+                        },
+                        negativeButton = {}
+                    )
 
 
                     MyDatePicker( // end date
