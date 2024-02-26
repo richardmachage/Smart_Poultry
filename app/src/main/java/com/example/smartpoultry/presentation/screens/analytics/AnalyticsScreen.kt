@@ -81,7 +81,12 @@ fun AnalyticsScreen(
                     .fillMaxWidth()
                     .padding(6.dp),
             ) {
-                Text("Trend analysis by cell:")
+                Text("Trend analysis")
+
+                RadioButtonGroup(
+                    title = "Select level of analysis",
+                    listOfOptions = listOf("Cell", "Block", "Overall")
+                )
 
                 MyVerticalSpacer(height = 8)
                 RadioButtonGroup(
