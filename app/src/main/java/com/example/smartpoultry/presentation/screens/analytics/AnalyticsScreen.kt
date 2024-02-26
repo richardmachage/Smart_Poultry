@@ -1,6 +1,7 @@
 package com.example.smartpoultry.presentation.screens.analytics
 
 import android.os.Build
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -23,6 +24,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.smartpoultry.data.dataSource.room.entities.cells.Cells
@@ -32,6 +34,7 @@ import com.example.smartpoultry.presentation.screens.composables.CellsDropDownMe
 import com.example.smartpoultry.presentation.screens.composables.MyDatePicker
 import com.example.smartpoultry.presentation.screens.composables.MyVerticalSpacer
 import com.example.smartpoultry.presentation.screens.composables.NormButton
+import com.example.smartpoultry.presentation.screens.composables.RadioButtonGroup
 import com.example.smartpoultry.presentation.uiModels.ChartClass
 import com.example.smartpoultry.utils.toGraphDate
 import com.ramcosta.composedestinations.annotation.Destination
@@ -45,6 +48,8 @@ fun AnalyticsScreen(
 ) {
     val analyticsViewModel = hiltViewModel<AnalyticsViewModel>()
     val listOfBlocksWithCells by remember { analyticsViewModel.listOfBlocksWithCells }.collectAsState()
+    val context = LocalContext.current
+
 
     //simple logic  for graph of egg collection between dates
 
@@ -74,6 +79,16 @@ fun AnalyticsScreen(
                     .padding(6.dp),
             ) {
                 Text("Trend analysis by cell:")
+
+                RadioButtonGroup(
+                    listOfOptions = listOf("General Analysis", "Range Analysis"),
+                    onOptionSelect = { selectedOption ->
+                        analyticsViewModel.isRangeAnalysis.value = (selectedOption == "Range Analysis")
+                        Toast.makeText(context, "$selectedOption selected", Toast.LENGTH_SHORT)
+                            .show()
+                    }
+                )
+
 
                 Row(
                     modifier = Modifier
@@ -112,23 +127,25 @@ fun AnalyticsScreen(
                     negativeButton = {}
                 )
 
-                MyDatePicker( // end date
-                    dateDialogState = rememberMaterialDialogState(),
-                    label = "End Date",
-                    positiveButtonOnClick = { pickedDate ->
-                        analyticsViewModel.endDate.value = pickedDate
-                        analyticsViewModel.plotChart.value = false
-                    },
-                    negativeButton = {}
-                )
+                if (analyticsViewModel.isRangeAnalysis.value) {
+                    MyDatePicker( // end date
+                        dateDialogState = rememberMaterialDialogState(),
+                        label = "End Date",
+                        positiveButtonOnClick = { pickedDate ->
+                            analyticsViewModel.endDate.value = pickedDate
+                            analyticsViewModel.plotChart.value = false
+                        },
+                        negativeButton = {}
+                    )
+                }
 
-                var buttonText by remember { mutableStateOf("Plot graph")}
+                var buttonText by remember { mutableStateOf("Plot graph") }
                 NormButton(
                     onButtonClick = {
 
-                        if (!analyticsViewModel.plotChart.value){
-                            analyticsViewModel.plotChart.value =true
-                        }else{
+                        if (!analyticsViewModel.plotChart.value) {
+                            analyticsViewModel.plotChart.value = true
+                        } else {
                             analyticsViewModel.plotChart.value = false
                         }
                     },
@@ -162,8 +179,8 @@ fun AnalyticsScreen(
                             bottomAxisTitle = "Date",
                         )
 
-                    }else{
-                       // analyticsViewModel.plotChart.value = false
+                    } else {
+                        // analyticsViewModel.plotChart.value = false
                         Text(text = "Not data retrieved for that period")
                         MyVerticalSpacer(height = 10)
                         Text(text = "Hint:")

@@ -29,6 +29,7 @@ class AnalyticsViewModel @Inject constructor (
     var selectedCellID = mutableIntStateOf(0)
     var startDate = mutableStateOf(LocalDate.now())
     var endDate = mutableStateOf(LocalDate.now())
+    var isRangeAnalysis = mutableStateOf(false)
 
 
     val listOfBlocksWithCells = blocksRepository.getBlocksWithCells().stateIn(
