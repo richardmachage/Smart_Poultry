@@ -15,6 +15,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -80,11 +81,12 @@ fun AnalyticsScreen(
                 Text("Trend analysis by cell:")
 
                 RadioButtonGroup(
-                    listOfOptions = listOf("General Analysis", "Range Analysis"),
+                    listOfOptions = listOf("Past X Days", "Custom Range", "Monthly"),
                     onOptionSelect = { selectedOption ->
-                        analyticsViewModel.isRangeAnalysis.value =
-                            (selectedOption == "Range Analysis")
-                    }
+                        analyticsViewModel.isCustomRangeAnalysis.value = (selectedOption == "Custom Range")
+                        analyticsViewModel.isPastXDaysAnalysis.value = (selectedOption == "Past X Days")
+                        analyticsViewModel.isMonthlyAnalysis.value = (selectedOption == "Monthly")
+                    },
                 )
 
 
@@ -100,7 +102,6 @@ fun AnalyticsScreen(
                             onItemClick = {
                                 listOfCells = it
                                 analyticsViewModel.plotChart.value = false
-
                             }
                         )
 
@@ -114,7 +115,18 @@ fun AnalyticsScreen(
                         )
                     }
                 }
+                if (analyticsViewModel.isPastXDaysAnalysis.value){
+                    TextField(value = "Past days", onValueChange = {})
+                }
 
+                if (analyticsViewModel.isMonthlyAnalysis.value){
+                    Row {
+                        Text(text = "YEAR")
+                        Text(text = "Month")
+                    }
+                }
+
+                if (analyticsViewModel.isCustomRangeAnalysis.value) {
                 MyDatePicker(// start date
                     dateDialogState = rememberMaterialDialogState(),
                     label = "Start Date",
@@ -125,7 +137,7 @@ fun AnalyticsScreen(
                     negativeButton = {}
                 )
 
-                if (analyticsViewModel.isRangeAnalysis.value) {
+
                     MyDatePicker( // end date
                         dateDialogState = rememberMaterialDialogState(),
                         label = "End Date",
@@ -140,12 +152,7 @@ fun AnalyticsScreen(
                 var buttonText by remember { mutableStateOf("Plot graph") }
                 NormButton(
                     onButtonClick = {
-
-                        if (!analyticsViewModel.plotChart.value) {
-                            analyticsViewModel.plotChart.value = true
-                        } else {
-                            analyticsViewModel.plotChart.value = false
-                        }
+                        analyticsViewModel.plotChart.value = !analyticsViewModel.plotChart.value
                     },
                     btnName = buttonText,
                     modifier = Modifier.fillMaxWidth()
@@ -155,7 +162,9 @@ fun AnalyticsScreen(
 
                 if (analyticsViewModel.plotChart.value) {
                     //plot the chart
-                    //first get the data
+                    //first get the data...yes but which data??? here there should be a condition
+                    //for the kind of data retrieved (Query) based on the type of trend
+
                     val listOfRecords by remember { analyticsViewModel.getCellCollectionBetweenDates() }.collectAsState(
                         initial = emptyList()
                     )

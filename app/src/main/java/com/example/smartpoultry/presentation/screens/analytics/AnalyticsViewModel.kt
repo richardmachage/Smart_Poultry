@@ -27,9 +27,15 @@ class AnalyticsViewModel @Inject constructor (
 ) : ViewModel() {
     var plotChart = mutableStateOf(false)
     var selectedCellID = mutableIntStateOf(0)
+
+    @RequiresApi(Build.VERSION_CODES.O)
     var startDate = mutableStateOf(LocalDate.now())
+
+    @RequiresApi(Build.VERSION_CODES.O)
     var endDate = mutableStateOf(LocalDate.now())
-    var isRangeAnalysis = mutableStateOf(false)
+    var isCustomRangeAnalysis = mutableStateOf(false)
+    var isPastXDaysAnalysis = mutableStateOf(false)
+    var isMonthlyAnalysis = mutableStateOf(false)
 
 
     val listOfBlocksWithCells = blocksRepository.getBlocksWithCells().stateIn(
@@ -54,5 +60,6 @@ class AnalyticsViewModel @Inject constructor (
             )
 
     }
+
 
 }

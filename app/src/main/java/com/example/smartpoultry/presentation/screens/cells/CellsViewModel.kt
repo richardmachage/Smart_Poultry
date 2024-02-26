@@ -4,7 +4,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.smartpoultry.data.dataSource.room.entities.cells.Cells
-import com.example.smartpoultry.domain.domainModels.Cell
 import com.example.smartpoultry.domain.repository.BlocksRepository
 import com.example.smartpoultry.domain.repository.CellsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -44,5 +43,10 @@ class CellsViewModel @Inject constructor(
         viewModelScope.launch {
             cellsRepository.updateCellInfo(cell)
         }
+    }
+
+    fun clearTextFields(){
+        henCountText.value = ""
+        cellNumText.value = ""
     }
 }

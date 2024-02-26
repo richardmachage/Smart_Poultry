@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
@@ -85,6 +84,7 @@ fun CellsScreen(
                                 )
                                 Toast.makeText(context,"Cell number ${cell.cellNum} Info updated successfully", Toast.LENGTH_SHORT).show()
                                 cellsViewModel.showDialog.value = false
+                                //cellsViewModel.clearTextFields()
                             }) {
                                 Text(text = "Save")
                             }
@@ -99,6 +99,7 @@ fun CellsScreen(
             }
         )
     }
+    
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background
@@ -121,7 +122,8 @@ fun CellsScreen(
             LazyColumn (
                 modifier = Modifier.padding(3.dp)
             ){
-                itemsIndexed(listOfCells) { _, item ->
+                itemsIndexed(listOfCells) {_, item ->
+                    MyVerticalSpacer(height = 6)
                     Column(
                         modifier = Modifier
                             .clickable {
