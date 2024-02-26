@@ -1,9 +1,17 @@
 package com.example.smartpoultry.presentation.screens.composables
 
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.unit.dp
 import com.example.smartpoultry.presentation.uiModels.ChartClass
 import com.patrykandpatrick.vico.compose.axis.horizontal.rememberBottomAxis
 import com.patrykandpatrick.vico.compose.axis.vertical.rememberStartAxis
@@ -49,49 +57,65 @@ fun CellAnalysisGraph(
                 value.roundToInt().toString()
             }
 
-        Text(text = "Line Chart: ")
-        Chart(
-            chart = lineChart(),
-            model = chartEntryModel,
-            startAxis = rememberStartAxis(
-                valueFormatter = verticalAxisValueFormatter,
-                titleComponent = textComponent().apply {
-                    color = MaterialTheme.colorScheme.primary.toArgb()
-                },
-                title = startAxisTitle,
-                itemPlacer = AxisItemPlacer.Vertical.default(maxItemCount = itemPlacerCount)
-            ),
-            bottomAxis = rememberBottomAxis(
-                valueFormatter = horizontalAxisValueFormatter,
-                titleComponent = textComponent().apply {
-                    color = MaterialTheme.colorScheme.primary.toArgb()
-                },
-                title = bottomAxisTitle
-            ),
-            isZoomEnabled = true,
-        )
+        Column (
 
-        MyVerticalSpacer(height = 5)
-        Text(text = "Column Chart: ")
-        Chart(
-            chart = columnChart(),
-            model = chartEntryModel,
-            startAxis = rememberStartAxis(
-                valueFormatter = verticalAxisValueFormatter,
-                titleComponent = textComponent().apply {
-                    color = MaterialTheme.colorScheme.primary.toArgb()
-                },
-                title = startAxisTitle,
-                itemPlacer = AxisItemPlacer.Vertical.default(maxItemCount = itemPlacerCount)
-            ),
-            bottomAxis = rememberBottomAxis(
-                valueFormatter = horizontalAxisValueFormatter,
-                titleComponent = textComponent().apply {
-                    color = MaterialTheme.colorScheme.primary.toArgb()
-                },
-                title = bottomAxisTitle
-            ),
-            isZoomEnabled = true,
-        )
+            modifier = Modifier
+                .border(
+                    width = 1.dp,
+                    color = MaterialTheme.colorScheme.primary,
+                    shape = RoundedCornerShape(
+                        (0.03 * LocalConfiguration.current.screenWidthDp).dp
+                    )
+                )
+                .fillMaxWidth()
+                .padding(6.dp)
+        ){
+
+
+            Text(text = "Line Chart: ")
+            Chart(
+                chart = lineChart(),
+                model = chartEntryModel,
+                startAxis = rememberStartAxis(
+                    valueFormatter = verticalAxisValueFormatter,
+                    titleComponent = textComponent().apply {
+                        color = MaterialTheme.colorScheme.primary.toArgb()
+                    },
+                    title = startAxisTitle,
+                    itemPlacer = AxisItemPlacer.Vertical.default(maxItemCount = itemPlacerCount)
+                ),
+                bottomAxis = rememberBottomAxis(
+                    valueFormatter = horizontalAxisValueFormatter,
+                    titleComponent = textComponent().apply {
+                        color = MaterialTheme.colorScheme.primary.toArgb()
+                    },
+                    title = bottomAxisTitle
+                ),
+                isZoomEnabled = true,
+            )
+
+            MyVerticalSpacer(height = 5)
+            Text(text = "Column Chart: ")
+            Chart(
+                chart = columnChart(),
+                model = chartEntryModel,
+                startAxis = rememberStartAxis(
+                    valueFormatter = verticalAxisValueFormatter,
+                    titleComponent = textComponent().apply {
+                        color = MaterialTheme.colorScheme.primary.toArgb()
+                    },
+                    title = startAxisTitle,
+                    itemPlacer = AxisItemPlacer.Vertical.default(maxItemCount = itemPlacerCount)
+                ),
+                bottomAxis = rememberBottomAxis(
+                    valueFormatter = horizontalAxisValueFormatter,
+                    titleComponent = textComponent().apply {
+                        color = MaterialTheme.colorScheme.primary.toArgb()
+                    },
+                    title = bottomAxisTitle
+                ),
+                isZoomEnabled = true,
+            )
+        }
     }
 }

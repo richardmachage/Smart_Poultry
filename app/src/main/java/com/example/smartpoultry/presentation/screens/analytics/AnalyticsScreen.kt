@@ -1,8 +1,8 @@
 package com.example.smartpoultry.presentation.screens.analytics
 
 import android.os.Build
+import android.widget.Toast
 import androidx.annotation.RequiresApi
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
@@ -24,7 +23,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -71,13 +69,13 @@ fun AnalyticsScreen(
             Column(
                 // Analysis by cell
                 modifier = Modifier
-                    .border(
+                    /*.border(
                         width = 1.dp,
                         color = MaterialTheme.colorScheme.primary,
                         shape = RoundedCornerShape(
                             (0.03 * LocalConfiguration.current.screenWidthDp).dp
                         )
-                    )
+                    )*/
                     .fillMaxWidth()
                     .padding(6.dp),
             ) {
@@ -93,11 +91,28 @@ fun AnalyticsScreen(
                     title = "Select type of analysis:",
                     listOfOptions = listOf("Past\nX Days", "Custom\nRange", "Monthly"),
                     onOptionSelect = { selectedOption ->
-                        analyticsViewModel.isCustomRangeAnalysis.value =
-                            (selectedOption == "Custom Range")
-                        analyticsViewModel.isPastXDaysAnalysis.value =
-                            (selectedOption == "Past X Days")
-                        analyticsViewModel.isMonthlyAnalysis.value = (selectedOption == "Monthly")
+                        when (selectedOption) {
+                            "Custom\nRange" -> {
+                                analyticsViewModel.isCustomRangeAnalysis.value = true
+                                analyticsViewModel.isPastXDaysAnalysis.value = false
+                                analyticsViewModel.isMonthlyAnalysis.value = false
+                                Toast.makeText(context,"Custom Range : ${analyticsViewModel.isCustomRangeAnalysis.value}", Toast.LENGTH_SHORT).show()
+                            }
+                            "Past\nX Days" -> {
+                                analyticsViewModel.isCustomRangeAnalysis.value = false
+                                analyticsViewModel.isPastXDaysAnalysis.value = true
+                                analyticsViewModel.isMonthlyAnalysis.value = false
+                                Toast.makeText(context," Past X Days : ${analyticsViewModel.isPastXDaysAnalysis.value}", Toast.LENGTH_SHORT).show()
+
+                            }
+                            "Monthly"-> {
+                                analyticsViewModel.isCustomRangeAnalysis.value = false
+                                analyticsViewModel.isPastXDaysAnalysis.value = false
+                                analyticsViewModel.isMonthlyAnalysis.value = true
+                                Toast.makeText(context,"Monthly : ${analyticsViewModel.isMonthlyAnalysis.value}", Toast.LENGTH_SHORT).show()
+
+                            }
+                        }
                     },
                 )
                 MyVerticalSpacer(height = 8)
