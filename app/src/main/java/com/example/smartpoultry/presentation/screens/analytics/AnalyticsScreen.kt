@@ -1,7 +1,6 @@
 package com.example.smartpoultry.presentation.screens.analytics
 
 import android.os.Build
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -83,9 +82,8 @@ fun AnalyticsScreen(
                 RadioButtonGroup(
                     listOfOptions = listOf("General Analysis", "Range Analysis"),
                     onOptionSelect = { selectedOption ->
-                        analyticsViewModel.isRangeAnalysis.value = (selectedOption == "Range Analysis")
-                        Toast.makeText(context, "$selectedOption selected", Toast.LENGTH_SHORT)
-                            .show()
+                        analyticsViewModel.isRangeAnalysis.value =
+                            (selectedOption == "Range Analysis")
                     }
                 )
 
