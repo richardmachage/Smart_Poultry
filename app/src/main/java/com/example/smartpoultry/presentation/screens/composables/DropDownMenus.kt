@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
@@ -156,6 +157,74 @@ fun UserTypeDropDownMenu(
             onDismissRequest = { expanded = false }
         ) {
             listOfItems.forEach { item ->
+                DropdownMenuItem(
+                    text = { Text(text = item) },
+                    onClick = {
+                        selectedText = item
+                        onItemClick(item)
+                        expanded = false
+                    }
+                )
+            }
+        }
+    }
+}
+
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun MonthsDropDownMenu(
+    modifier: Modifier = Modifier,
+    onItemClick: (String) -> Unit
+){
+    var listOfMonths = listOf(
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December",
+    )
+    var selectedText by remember { mutableStateOf("-") }
+    var expanded by remember { mutableStateOf(false) }
+
+    ExposedDropdownMenuBox(
+        modifier = modifier
+            .padding(3.dp),
+        expanded = expanded,
+        onExpandedChange = {
+            expanded = !expanded
+        }) {
+
+        OutlinedTextField(
+            modifier = modifier
+                .menuAnchor()
+                .fillMaxWidth()
+                .padding(start = (6.dp), end = (6.dp)),
+            value = " $selectedText",
+            onValueChange = {},
+            readOnly = true,
+            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
+            label = { Text(text = "Month")},
+            leadingIcon = {
+                Icon(
+                    imageVector = Icons.Default.DateRange,
+                    contentDescription = "User"
+                )
+            }
+        )
+
+        ExposedDropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false }
+        ) {
+            listOfMonths.forEach { item ->
                 DropdownMenuItem(
                     text = { Text(text = item) },
                     onClick = {
