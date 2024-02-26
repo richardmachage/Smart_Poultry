@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -30,17 +29,11 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.Navigator
-import com.example.smartpoultry.data.dataSource.room.entities.blocks.Blocks
-import com.example.smartpoultry.presentation.screens.cells.CellsScreen
 import com.example.smartpoultry.presentation.screens.composables.MyVerticalSpacer
 import com.example.smartpoultry.presentation.screens.destinations.CellsScreenDestination
 import com.example.smartpoultry.presentation.uiModels.BlockItem
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
-import dagger.hilt.android.lifecycle.HiltViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @com.ramcosta.composedestinations.annotation.Destination
@@ -97,6 +90,7 @@ fun BlockCellScreen(
                             )
                         )
                         blockCellViewModel.showDialog.value = false
+                        blockCellViewModel.clearTextFields()
                     }else{
                         Toast.makeText(context,"Empty Fields", Toast.LENGTH_SHORT).show()
                     }

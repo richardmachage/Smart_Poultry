@@ -55,4 +55,9 @@ class BlockCellViewModel @Inject constructor(
 
         }
     }
+
+    fun clearTextFields(){
+        blockNumText.value = ""
+        cellsText.value = ""
+    }
 }
