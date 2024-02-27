@@ -176,13 +176,14 @@ fun UserTypeDropDownMenu(
 }
 
 
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MonthsDropDownMenu(
     modifier: Modifier = Modifier,
     onItemClick: (String) -> Unit
 ){
-    var listOfMonths = listOf(
+    val listOfMonths = listOf(
         "January",
         "February",
         "March",
@@ -209,9 +210,8 @@ fun MonthsDropDownMenu(
 
         OutlinedTextField(
             modifier = modifier
-                .menuAnchor()
-                .fillMaxWidth()
-                .padding(start = (6.dp), end = (6.dp)),
+                .menuAnchor(),
+              // .fillMaxWidth(0.5f)
             value = " $selectedText",
             onValueChange = {},
             readOnly = true,
@@ -226,11 +226,65 @@ fun MonthsDropDownMenu(
         )
 
         ExposedDropdownMenu(
-            modifier = modifier.fillMaxHeight(),
+            modifier = modifier.fillMaxHeight(0.3f),
             expanded = expanded,
             onDismissRequest = { expanded = false }
         ) {
             listOfMonths.forEach { item ->
+                DropdownMenuItem(
+                    text = { Text(text = item) },
+                    onClick = {
+                        selectedText = item
+                        onItemClick(item)
+                        expanded = false
+                    }
+                )
+            }
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun YearsDropDownMenu(
+    modifier: Modifier = Modifier,
+    onItemClick: (String) -> Unit
+){
+    val listOfYears = listOf("2024","2023")
+    var selectedText by remember { mutableStateOf("-") }
+    var expanded by remember { mutableStateOf(false) }
+
+    ExposedDropdownMenuBox(
+        modifier = modifier
+            .padding(3.dp),
+        expanded = expanded,
+        onExpandedChange = {
+            expanded = !expanded
+        }) {
+
+        OutlinedTextField(
+            modifier = modifier
+                .menuAnchor()
+                .fillMaxWidth(0.5f),
+            value = " $selectedText",
+            onValueChange = {},
+            readOnly = true,
+            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
+            label = { Text(text = "Year")},
+            leadingIcon = {
+                Icon(
+                    imageVector = Icons.Default.DateRange,
+                    contentDescription = "Year"
+                )
+            }
+        )
+
+        ExposedDropdownMenu(
+           // modifier = modifier.fillMaxHeight(),
+            expanded = expanded,
+            onDismissRequest = { expanded = false }
+        ) {
+            listOfYears.forEach { item ->
                 DropdownMenuItem(
                     text = { Text(text = item) },
                     onClick = {

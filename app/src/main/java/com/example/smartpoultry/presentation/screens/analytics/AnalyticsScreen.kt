@@ -22,6 +22,7 @@ import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
@@ -36,6 +37,7 @@ import com.example.smartpoultry.presentation.screens.composables.MyDatePicker
 import com.example.smartpoultry.presentation.screens.composables.MyVerticalSpacer
 import com.example.smartpoultry.presentation.screens.composables.NormButton
 import com.example.smartpoultry.presentation.screens.composables.RadioButtonGroup
+import com.example.smartpoultry.presentation.screens.composables.YearsDropDownMenu
 import com.example.smartpoultry.presentation.uiModels.ChartClass
 import com.example.smartpoultry.utils.toGraphDate
 import com.ramcosta.composedestinations.annotation.Destination
@@ -51,7 +53,7 @@ fun AnalyticsScreen(
     val listOfBlocksWithCells by remember { analyticsViewModel.listOfBlocksWithCells }.collectAsState()
     val context = LocalContext.current
     var width by remember {
-        mutableFloatStateOf(0.4f)
+        mutableFloatStateOf(0.5f)
     }
 
 
@@ -90,7 +92,7 @@ fun AnalyticsScreen(
                     onOptionSelect = { selectedOption ->
                         analyticsViewModel.levelOfAnalysis.value = selectedOption
                         if (selectedOption == "Block") width = 1f
-                        if (selectedOption == "Cell") width = 0.4f
+                        if (selectedOption == "Cell") width = 0.5f
                     }
                 )
 
@@ -118,6 +120,7 @@ fun AnalyticsScreen(
                                 analyticsViewModel.isMonthlyAnalysis.value = true
                             }
                         }
+                        analyticsViewModel.plotChart.value = false
                     },
                 )
                 MyVerticalSpacer(height = 8)
@@ -183,11 +186,25 @@ fun AnalyticsScreen(
                 }
 
                 if (analyticsViewModel.isMonthlyAnalysis.value) {
-                    MonthsDropDownMenu(
-                        onItemClick = { month ->
-                            analyticsViewModel.selectedMonth.value = month
-                        }
-                    )
+                    Row(
+                        modifier = Modifier
+                           .fillMaxWidth(),
+                            horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        YearsDropDownMenu(
+                            onItemClick = {year ->
+                                analyticsViewModel.selectedYear.value = year
+                            }
+                        )
+
+                        MonthsDropDownMenu(
+                            onItemClick = { month ->
+                                analyticsViewModel.selectedMonth.value = month
+                            }
+                        )
+
+                    }
                 }
 
                 if (analyticsViewModel.isCustomRangeAnalysis.value) {
@@ -229,12 +246,14 @@ fun AnalyticsScreen(
                     //first get the data...yes but which data??? here there should be a condition
                     //for the kind of data retrieved (Query) based on the type of trend
 
-
                     //here, come up with algo to select dataset depending on type of analysis and level of analysis
-                    val listOfRecords by remember { analyticsViewModel.getCellCollectionBetweenDates() }.collectAsState(
+                    val listOfRecords by remember {
+                        if (analyticsViewModel.isPastXDaysAnalysis.value) analyticsViewModel.getCellEggCollectionForPastDays()
+                        else if (analyticsViewModel.isCustomRangeAnalysis.value) analyticsViewModel.getCellCollectionBetweenDates()
+                        else analyticsViewModel.getCellMonthlyRecords()
+                         }.collectAsState(
                         initial = emptyList()
                     )
-
 
 
                     if (listOfRecords.isNotEmpty()) {

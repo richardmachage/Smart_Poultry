@@ -10,19 +10,37 @@ import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
 @RequiresApi(Build.VERSION_CODES.O)
-fun myDateFormatter(date : LocalDate) : String{
+fun myDateFormatter(date: LocalDate): String {
     return DateTimeFormatter.ofPattern("dd/mm/yyyy").format(date)
 }
 
 
 @RequiresApi(Build.VERSION_CODES.O)
-fun localDateToJavaDate(localDate: LocalDate): Long{
+fun localDateToJavaDate(localDate: LocalDate): Long {
     val startOfDayUtc = localDate.atStartOfDay(ZoneId.of("UTC"))
 
     return startOfDayUtc.toInstant().toEpochMilli()
 }
 
 @SuppressLint("SimpleDateFormat")
-fun toGraphDate(date: Date) : String{
+fun toGraphDate(date: Date): String {
     return SimpleDateFormat("dd-MMM").format(date)
+}
+
+fun toYearMonth(year: String, month: String): String {
+    return when (month) {
+        "January" -> "$year-01"
+        "February" -> "$year-02"
+        "March" -> "$year-03"
+        "April" -> "$year-04"
+        "May" -> "$year-05"
+        "June" -> "$year-06"
+        "July" -> "$year-07"
+        "August" -> "$year-08"
+        "September" -> "$year-09"
+        "October" -> "$year-10"
+        "November" -> "$year-11"
+        "December" -> "$year-12"
+        else -> ""
+    }
 }

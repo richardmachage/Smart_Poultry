@@ -119,7 +119,7 @@ fun HomeScreen(
 
 
                         Text(
-                            text = if (dailyEggCollections.isNotEmpty()) "Egg collection records, total eggs :${dailyEggCollections[0].totalEggs}" else "0",//"Sacks of Feeds : 16",
+                            text = "Sacks of Feeds : 16",
                             modifier = Modifier
                                 .padding(6.dp)
                                 .align(Alignment.Start)

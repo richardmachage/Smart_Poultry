@@ -27,6 +27,7 @@ class AnalyticsViewModel @Inject constructor(
 ) : ViewModel() {
     var plotChart = mutableStateOf(false)
     var selectedCellID = mutableIntStateOf(0)
+    var selectedYear = mutableStateOf("")
     var selectedMonth = mutableStateOf("")
     var levelOfAnalysis = mutableStateOf("Cell")
 
@@ -63,7 +64,20 @@ class AnalyticsViewModel @Inject constructor(
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    fun  getCellEggCollectionForPastDays(cellId: Int, startDate: Date) : Flow<List<EggCollection>>{
+    fun getCellMonthlyRecords():Flow<List<EggCollection>>{
+        return eggCollectionRepository.getCellEggCollectionForPastDays(
+            cellId = selectedCellID.intValue,
+            startDate = Date(localDateToJavaDate(
+                getDateDaysAgo(pastDays.value.toInt())
+            ))
+        ).stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(),
+            initialValue = emptyList(),
+        )
+    }
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun  getCellEggCollectionForPastDays() : Flow<List<EggCollection>>{
         return eggCollectionRepository.getCellEggCollectionForPastDays(
             cellId = selectedCellID.intValue,
             startDate = Date(localDateToJavaDate(
