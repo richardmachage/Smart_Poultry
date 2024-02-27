@@ -34,5 +34,4 @@ interface EggCollectionRepository{
 
     fun getBlockEggCollectionForPastDays(blockId:Int, startDate: Date) : Flow<List<DailyEggCollection>>
 
-
 }

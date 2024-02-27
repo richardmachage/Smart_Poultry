@@ -80,6 +80,6 @@ class EggCollectionRepositoryImpl @Inject constructor (
         blockId: Int,
         startDate: Date
     ): Flow<List<DailyEggCollection>> {
-        return eggCollectionDao.getBlockEggCollectionsForPastDays(blockId, startDate = )
+        return eggCollectionDao.getBlockEggCollectionsForPastDays(blockId, startDate)
     }
 }
