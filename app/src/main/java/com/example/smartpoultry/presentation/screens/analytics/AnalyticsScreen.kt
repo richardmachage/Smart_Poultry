@@ -230,7 +230,7 @@ fun AnalyticsScreen(
                     )
                 }
 
-                var buttonText by remember { mutableStateOf("Plot graph") }
+                val buttonText by remember { mutableStateOf("Plot graph") }
                 NormButton(
                     onButtonClick = {
                         analyticsViewModel.plotChart.value = !analyticsViewModel.plotChart.value
