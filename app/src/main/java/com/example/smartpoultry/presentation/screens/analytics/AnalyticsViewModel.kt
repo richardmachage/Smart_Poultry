@@ -62,7 +62,19 @@ class AnalyticsViewModel @Inject constructor(
         )
     }
 
-
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun  getCellEggCollectionForPastDays(cellId: Int, startDate: Date) : Flow<List<EggCollection>>{
+        return eggCollectionRepository.getCellEggCollectionForPastDays(
+            cellId = selectedCellID.intValue,
+            startDate = Date(localDateToJavaDate(
+                getDateDaysAgo(pastDays.value.toInt())
+            ))
+        ).stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(),
+            initialValue = emptyList(),
+        )
+    }
     @RequiresApi(Build.VERSION_CODES.O)
     fun getDateDaysAgo(numberOfDays: Int): LocalDate {
         return LocalDate.now().minusDays(numberOfDays.toLong())
