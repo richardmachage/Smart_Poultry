@@ -80,7 +80,7 @@ class AnalyticsViewModel @Inject constructor(
         return eggCollectionRepository.getCellEggCollectionForPastDays(
             cellId = selectedCellID.intValue,
             startDate = Date(localDateToJavaDate(
-                getDateDaysAgo(pastDays.value.toInt())
+                getDateDaysAgo(pastDays.value.toIntOrNull() ?:0)
             ))
         ).stateIn(
             scope = viewModelScope,

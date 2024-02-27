@@ -35,6 +35,7 @@ fun CellAnalysisGraph(
     bottomAxisTitle: String,
 
     ) {
+
     if (isGraphPlotted) {
         //convert the input data into chartData for plotting
         val chartData = listOfRecords.mapIndexed { index, (_, numOfEggs) ->
@@ -77,12 +78,12 @@ fun CellAnalysisGraph(
                 chart = lineChart(),
                 model = chartEntryModel,
                 startAxis = rememberStartAxis(
-                    valueFormatter = verticalAxisValueFormatter,
+                   // valueFormatter = verticalAxisValueFormatter,
                     titleComponent = textComponent().apply {
                         color = MaterialTheme.colorScheme.primary.toArgb()
                     },
                     title = startAxisTitle,
-                    itemPlacer = AxisItemPlacer.Vertical.default(maxItemCount = itemPlacerCount)
+                   itemPlacer = AxisItemPlacer.Vertical.default(maxItemCount = itemPlacerCount)
                 ),
                 bottomAxis = rememberBottomAxis(
                     valueFormatter = horizontalAxisValueFormatter,
@@ -100,7 +101,7 @@ fun CellAnalysisGraph(
                 chart = columnChart(),
                 model = chartEntryModel,
                 startAxis = rememberStartAxis(
-                    valueFormatter = verticalAxisValueFormatter,
+                   // valueFormatter = verticalAxisValueFormatter,
                     titleComponent = textComponent().apply {
                         color = MaterialTheme.colorScheme.primary.toArgb()
                     },

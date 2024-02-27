@@ -1,6 +1,7 @@
 package com.example.smartpoultry.presentation.screens.analytics
 
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -29,6 +30,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.smartpoultry.data.dataSource.room.entities.cells.Cells
+import com.example.smartpoultry.data.dataSource.room.entities.eggCollection.EggCollection
 import com.example.smartpoultry.presentation.screens.composables.BlocksDropDownMenu
 import com.example.smartpoultry.presentation.screens.composables.CellAnalysisGraph
 import com.example.smartpoultry.presentation.screens.composables.CellsDropDownMenu
@@ -144,7 +146,7 @@ fun AnalyticsScreen(
                                 },
                                 width = width,
 
-                            )
+                                )
 
                             //toggle to show cells drop down list only when analysis level is by cell
                             if (analyticsViewModel.levelOfAnalysis.value == "Cell") {
@@ -188,12 +190,12 @@ fun AnalyticsScreen(
                 if (analyticsViewModel.isMonthlyAnalysis.value) {
                     Row(
                         modifier = Modifier
-                           .fillMaxWidth(),
-                            horizontalArrangement = Arrangement.Center,
+                            .fillMaxWidth(),
+                        horizontalArrangement = Arrangement.Center,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         YearsDropDownMenu(
-                            onItemClick = {year ->
+                            onItemClick = { year ->
                                 analyticsViewModel.selectedYear.value = year
                                 analyticsViewModel.plotChart.value = false
                             }
@@ -205,7 +207,6 @@ fun AnalyticsScreen(
                                 analyticsViewModel.plotChart.value = false
                             }
                         )
-
                     }
                 }
 
@@ -253,9 +254,9 @@ fun AnalyticsScreen(
                         if (analyticsViewModel.isPastXDaysAnalysis.value) analyticsViewModel.getCellEggCollectionForPastDays()
                         else if (analyticsViewModel.isCustomRangeAnalysis.value) analyticsViewModel.getCellCollectionBetweenDates()
                         else analyticsViewModel.getCellMonthlyRecords()
-                         }.collectAsState(
-                        initial = emptyList()
-                    )
+                    }.collectAsState(
+                            initial = emptyList()
+                        )
 
 
                     if (listOfRecords.isNotEmpty()) {
@@ -266,11 +267,15 @@ fun AnalyticsScreen(
                                 yNumOfEggs = it.eggCount
                             )
                         }
+                        turnToChartData.forEach {
+                            Log.i(it.xDateValue, it.yNumOfEggs.toString())
+                        }
 
                         CellAnalysisGraph(
                             isGraphPlotted = analyticsViewModel.plotChart.value,
                             listOfRecords = turnToChartData,
-                            itemPlacerCount = 6,
+                            itemPlacerCount =
+                            (listOfRecords.maxOf { eggCollection: EggCollection ->  eggCollection.eggCount })+1,
                             startAxisTitle = "Num of Eggs",
                             bottomAxisTitle = "Date",
                         )
