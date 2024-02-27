@@ -16,13 +16,13 @@ import androidx.compose.ui.res.vectorResource
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.smartpoultry.R
-import com.example.smartpoultry.presentation.screens.destinations.AccountScreenDestination
-import com.example.smartpoultry.presentation.screens.destinations.AlertScreenDestination
-import com.example.smartpoultry.presentation.screens.destinations.AnalyticsScreenDestination
-import com.example.smartpoultry.presentation.screens.destinations.BlockCellScreenDestination
-import com.example.smartpoultry.presentation.screens.destinations.EggScreenDestination
-import com.example.smartpoultry.presentation.screens.destinations.HomeScreenDestination
-import com.example.smartpoultry.presentation.screens.destinations.SettingsScreenDestination
+import com.example.smartpoultry.presentation.destinations.AccountScreenDestination
+import com.example.smartpoultry.presentation.destinations.AlertScreenDestination
+import com.example.smartpoultry.presentation.destinations.AnalyticsScreenDestination
+import com.example.smartpoultry.presentation.destinations.BlockCellScreenDestination
+import com.example.smartpoultry.presentation.destinations.EggScreenDestination
+import com.example.smartpoultry.presentation.destinations.HomeScreenDestination
+import com.example.smartpoultry.presentation.destinations.SettingsScreenDestination
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 

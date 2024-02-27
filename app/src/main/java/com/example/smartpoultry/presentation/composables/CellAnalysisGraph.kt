@@ -73,28 +73,6 @@ fun CellAnalysisGraph(
         ){
 
 
-            Text(text = "Line Chart: ")
-            Chart(
-                chart = lineChart(),
-                model = chartEntryModel,
-                startAxis = rememberStartAxis(
-                   // valueFormatter = verticalAxisValueFormatter,
-                    titleComponent = textComponent().apply {
-                        color = MaterialTheme.colorScheme.primary.toArgb()
-                    },
-                    title = startAxisTitle,
-                   itemPlacer = AxisItemPlacer.Vertical.default(maxItemCount = itemPlacerCount)
-                ),
-                bottomAxis = rememberBottomAxis(
-                    valueFormatter = horizontalAxisValueFormatter,
-                    titleComponent = textComponent().apply {
-                        color = MaterialTheme.colorScheme.primary.toArgb()
-                    },
-                    title = bottomAxisTitle
-                ),
-                isZoomEnabled = true,
-            )
-
             MyVerticalSpacer(height = 5)
             Text(text = "Column Chart: ")
             Chart(
@@ -117,6 +95,30 @@ fun CellAnalysisGraph(
                 ),
                 isZoomEnabled = true,
             )
+
+            Text(text = "Line Chart: ")
+            Chart(
+                chart = lineChart(),
+                model = chartEntryModel,
+                startAxis = rememberStartAxis(
+                    // valueFormatter = verticalAxisValueFormatter,
+                    titleComponent = textComponent().apply {
+                        color = MaterialTheme.colorScheme.primary.toArgb()
+                    },
+                    title = startAxisTitle,
+                    itemPlacer = AxisItemPlacer.Vertical.default(maxItemCount = itemPlacerCount)
+                ),
+                bottomAxis = rememberBottomAxis(
+                    valueFormatter = horizontalAxisValueFormatter,
+                    titleComponent = textComponent().apply {
+                        color = MaterialTheme.colorScheme.primary.toArgb()
+                    },
+                    title = bottomAxisTitle
+                ),
+                isZoomEnabled = true,
+            )
+
+
         }
     }
 }

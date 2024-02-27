@@ -9,11 +9,11 @@ import androidx.navigation.compose.composable
 import com.example.smartpoultry.presentation.screens.alerts.AlertScreen
 import com.example.smartpoultry.presentation.screens.analytics.AnalyticsScreen
 import com.example.smartpoultry.presentation.screens.blockCellScreen.BlockCellScreen
-import com.example.smartpoultry.presentation.screens.destinations.AlertScreenDestination
-import com.example.smartpoultry.presentation.screens.destinations.AnalyticsScreenDestination
-import com.example.smartpoultry.presentation.screens.destinations.BlockCellScreenDestination
-import com.example.smartpoultry.presentation.screens.destinations.EggScreenDestination
-import com.example.smartpoultry.presentation.screens.destinations.HomeScreenDestination
+import com.example.smartpoultry.presentation.destinations.AlertScreenDestination
+import com.example.smartpoultry.presentation.destinations.AnalyticsScreenDestination
+import com.example.smartpoultry.presentation.destinations.BlockCellScreenDestination
+import com.example.smartpoultry.presentation.destinations.EggScreenDestination
+import com.example.smartpoultry.presentation.destinations.HomeScreenDestination
 import com.example.smartpoultry.presentation.screens.eggCollection.EggScreen
 import com.example.smartpoultry.presentation.screens.home.HomeScreen
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
