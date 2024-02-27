@@ -52,4 +52,8 @@ class EggCollectionRepositoryImpl @Inject constructor (
     override fun getCellEggCollectionForPastDays(cellId: Int, startDate: Date): Flow<List<EggCollection>> {
         return  eggCollectionDao.getCellEggCollectionForPastDays(cellId,startDate)
     }
+
+    override fun getCellCollectionByMonth(cellId: Int, yearMonth: String): Flow<List<EggCollection>> {
+        return eggCollectionDao.getCellCollectionByMonth(cellId = cellId, yearMonth = yearMonth)
+    }
 }

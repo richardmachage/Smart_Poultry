@@ -11,6 +11,7 @@ import com.example.smartpoultry.domain.repository.BlocksRepository
 import com.example.smartpoultry.domain.repository.CellsRepository
 import com.example.smartpoultry.domain.repository.EggCollectionRepository
 import com.example.smartpoultry.utils.localDateToJavaDate
+import com.example.smartpoultry.utils.toYearMonth
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
@@ -65,11 +66,9 @@ class AnalyticsViewModel @Inject constructor(
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun getCellMonthlyRecords():Flow<List<EggCollection>>{
-        return eggCollectionRepository.getCellEggCollectionForPastDays(
+        return eggCollectionRepository.getCellCollectionByMonth(
             cellId = selectedCellID.intValue,
-            startDate = Date(localDateToJavaDate(
-                getDateDaysAgo(pastDays.value.toInt())
-            ))
+            yearMonth = toYearMonth( year = selectedYear.value, month = selectedMonth.value)
         ).stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(),

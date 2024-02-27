@@ -24,4 +24,6 @@ interface EggCollectionRepository{
 
     fun getCellEggCollectionForPastDays(cellId: Int, startDate: Date) : Flow<List<EggCollection>>
 
+    fun getCellCollectionByMonth(cellId: Int,yearMonth: String): Flow<List<EggCollection>>
+
 }
