@@ -1,4 +1,4 @@
-package com.example.smartpoultry.presentation.screens.composables
+package com.example.smartpoultry.presentation.composables
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size

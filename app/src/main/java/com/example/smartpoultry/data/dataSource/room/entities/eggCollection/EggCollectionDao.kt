@@ -58,6 +58,6 @@ interface EggCollectionDao {
 
 
     @Transaction
-    @Query("SELECT date, SUM(eggCount) AS totalEggs FROM egg_collection_tbl INNER JOIN cells_tbl ON egg_collection_tbl.cellId = cells_tbl.cellId WHERE cells_tbl.blockId = :blockId AND strftime('%Y-%m', datetime(date / 1000, 'unixepoch')) = :yearMonth")
+    @Query("SELECT date, SUM(eggCount) AS totalEggs FROM egg_collection_tbl INNER JOIN cells_tbl ON egg_collection_tbl.cellId = cells_tbl.cellId WHERE cells_tbl.blockId = :blockId AND strftime('%Y-%m', datetime(date / 1000, 'unixepoch')) = :yearMonth GROUP BY date")
     fun getBlockCollectionByMonth(blockId: Int, yearMonth: String) : Flow<List<DailyEggCollection>>
 }

@@ -16,11 +16,11 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.smartpoultry.presentation.screens.NavGraphs
-import com.example.smartpoultry.presentation.screens.composables.MyEditTextClear
-import com.example.smartpoultry.presentation.screens.composables.MyPasswordEditText
-import com.example.smartpoultry.presentation.screens.composables.MyVerticalSpacer
-import com.example.smartpoultry.presentation.screens.composables.NormButton
-import com.example.smartpoultry.presentation.screens.composables.NormText
+import com.example.smartpoultry.presentation.composables.MyEditTextClear
+import com.example.smartpoultry.presentation.composables.MyPasswordEditText
+import com.example.smartpoultry.presentation.composables.MyVerticalSpacer
+import com.example.smartpoultry.presentation.composables.NormButton
+import com.example.smartpoultry.presentation.composables.NormText
 import com.example.smartpoultry.presentation.screens.destinations.LogInScreenDestination
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator

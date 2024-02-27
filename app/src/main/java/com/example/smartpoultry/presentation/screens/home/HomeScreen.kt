@@ -28,10 +28,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.smartpoultry.data.dataSource.room.entities.cells.Cells
-import com.example.smartpoultry.presentation.screens.composables.MyCardInventory
-import com.example.smartpoultry.presentation.screens.composables.MyHorizontalSpacer
-import com.example.smartpoultry.presentation.screens.composables.MyVerticalSpacer
-import com.example.smartpoultry.presentation.screens.composables.RecentEggsLineChart
+import com.example.smartpoultry.presentation.composables.MyCardInventory
+import com.example.smartpoultry.presentation.composables.MyHorizontalSpacer
+import com.example.smartpoultry.presentation.composables.MyVerticalSpacer
+import com.example.smartpoultry.presentation.composables.RecentEggsLineChart
 import com.ramcosta.composedestinations.annotation.Destination
 
 @RequiresApi(Build.VERSION_CODES.O)

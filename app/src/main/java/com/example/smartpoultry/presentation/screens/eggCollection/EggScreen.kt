@@ -46,8 +46,8 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.smartpoultry.R
-import com.example.smartpoultry.presentation.screens.composables.CircularProgressBar
-import com.example.smartpoultry.presentation.screens.composables.NormButton
+import com.example.smartpoultry.presentation.composables.CircularProgressBar
+import com.example.smartpoultry.presentation.composables.NormButton
 import com.example.smartpoultry.presentation.theme.SmartPoultryTheme
 import com.example.smartpoultry.presentation.uiModels.CellEggCollection
 import com.ramcosta.composedestinations.annotation.Destination

@@ -1,4 +1,4 @@
-package com.example.smartpoultry.presentation.screens.composables
+package com.example.smartpoultry.presentation.composables
 
 import android.annotation.SuppressLint
 import android.os.Build

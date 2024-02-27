@@ -1,4 +1,4 @@
-package com.example.smartpoultry.presentation.screens.composables
+package com.example.smartpoultry.presentation.composables
 
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth

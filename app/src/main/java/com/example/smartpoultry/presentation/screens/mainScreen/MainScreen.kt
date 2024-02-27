@@ -6,8 +6,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
 import com.example.smartpoultry.presentation.navigation.BottomNavGraph
-import com.example.smartpoultry.presentation.screens.composables.MyBottomNavBar
-import com.example.smartpoultry.presentation.screens.composables.MyTopAppBar
+import com.example.smartpoultry.presentation.composables.MyBottomNavBar
+import com.example.smartpoultry.presentation.composables.MyTopAppBar
 import com.example.smartpoultry.presentation.theme.SmartPoultryTheme
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -22,8 +22,8 @@ fun MainScreen(
     SmartPoultryTheme {
 
         Scaffold (
-            topBar = { MyTopAppBar(navController, navigator)},
-            bottomBar = { MyBottomNavBar(navController)}
+            topBar = { MyTopAppBar(navController, navigator) },
+            bottomBar = { MyBottomNavBar(navController) }
         ){ paddingValues ->
             BottomNavGraph(
                 modifier = Modifier

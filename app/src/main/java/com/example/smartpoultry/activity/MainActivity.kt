@@ -13,9 +13,9 @@ import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import com.example.smartpoultry.presentation.screens.NavGraph
 import com.example.smartpoultry.presentation.screens.NavGraphs
-import com.example.smartpoultry.presentation.screens.composables.MyBottomNavBar
-import com.example.smartpoultry.presentation.screens.composables.MyCardInventory
-import com.example.smartpoultry.presentation.screens.composables.MyTopAppBar
+import com.example.smartpoultry.presentation.composables.MyBottomNavBar
+import com.example.smartpoultry.presentation.composables.MyCardInventory
+import com.example.smartpoultry.presentation.composables.MyTopAppBar
 import com.example.smartpoultry.presentation.screens.eggCollection.EggScreen
 import com.example.smartpoultry.presentation.screens.home.HomeScreen
 import com.example.smartpoultry.presentation.screens.logIn.LogInScreen

@@ -31,15 +31,15 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.smartpoultry.data.dataModels.DailyEggCollection
 import com.example.smartpoultry.data.dataSource.room.entities.cells.Cells
 import com.example.smartpoultry.data.dataSource.room.entities.eggCollection.EggCollection
-import com.example.smartpoultry.presentation.screens.composables.BlocksDropDownMenu
-import com.example.smartpoultry.presentation.screens.composables.CellAnalysisGraph
-import com.example.smartpoultry.presentation.screens.composables.CellsDropDownMenu
-import com.example.smartpoultry.presentation.screens.composables.MonthsDropDownMenu
-import com.example.smartpoultry.presentation.screens.composables.MyDatePicker
-import com.example.smartpoultry.presentation.screens.composables.MyVerticalSpacer
-import com.example.smartpoultry.presentation.screens.composables.NormButton
-import com.example.smartpoultry.presentation.screens.composables.RadioButtonGroup
-import com.example.smartpoultry.presentation.screens.composables.YearsDropDownMenu
+import com.example.smartpoultry.presentation.composables.BlocksDropDownMenu
+import com.example.smartpoultry.presentation.composables.CellAnalysisGraph
+import com.example.smartpoultry.presentation.composables.CellsDropDownMenu
+import com.example.smartpoultry.presentation.composables.MonthsDropDownMenu
+import com.example.smartpoultry.presentation.composables.MyDatePicker
+import com.example.smartpoultry.presentation.composables.MyVerticalSpacer
+import com.example.smartpoultry.presentation.composables.NormButton
+import com.example.smartpoultry.presentation.composables.RadioButtonGroup
+import com.example.smartpoultry.presentation.composables.YearsDropDownMenu
 import com.example.smartpoultry.presentation.uiModels.ChartClass
 import com.example.smartpoultry.utils.toGraphDate
 import com.ramcosta.composedestinations.annotation.Destination
@@ -257,9 +257,9 @@ fun AnalyticsScreen(
                             else return@remember analyticsViewModel.getCellMonthlyRecords()
                         }
                         else if(analyticsViewModel.levelOfAnalysis.value == "Block"){
-                            if (analyticsViewModel.isPastXDaysAnalysis.value) return@remember analyticsViewModel.getBlockEggCollection()
-                            else if (analyticsViewModel.isCustomRangeAnalysis.value) return@remember analyticsViewModel.getCellCollectionBetweenDates()
-                            else return@remember analyticsViewModel.getCellMonthlyRecords()
+                            if (analyticsViewModel.isPastXDaysAnalysis.value) return@remember analyticsViewModel.getBlockCollectionsForPastDays()
+                            else if (analyticsViewModel.isCustomRangeAnalysis.value) return@remember analyticsViewModel.getBlockEggCollectionBetweenDates()
+                            else return@remember analyticsViewModel.getMonthlyBlockCollections()
                         }
                         else{ //meaning the level is just overall
                             if (analyticsViewModel.isPastXDaysAnalysis.value) return@remember analyticsViewModel.getCellEggCollectionForPastDays()
