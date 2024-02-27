@@ -167,16 +167,13 @@ fun AnalyticsScreen(
                         text = "Analyze the trends for a given number of past days"
                     )
 
-                    var text by remember {
-                        mutableStateOf("")
-                    }
                     OutlinedTextField(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(6.dp),
-                        value = text,
+                        value = analyticsViewModel.pastDays.value,
                         onValueChange = { newText ->
-                            text = newText
+                            analyticsViewModel.pastDays.value = newText.trim()
                         },
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                         label = { Text(text = "Number of Past Days") },

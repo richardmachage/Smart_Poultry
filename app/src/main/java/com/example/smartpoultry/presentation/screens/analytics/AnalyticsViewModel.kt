@@ -30,6 +30,7 @@ class AnalyticsViewModel @Inject constructor(
     var selectedMonth = mutableStateOf("")
     var levelOfAnalysis = mutableStateOf("Cell")
 
+
     @RequiresApi(Build.VERSION_CODES.O)
     var startDate = mutableStateOf(LocalDate.now())
 
@@ -40,6 +41,7 @@ class AnalyticsViewModel @Inject constructor(
     var isPastXDaysAnalysis = mutableStateOf(true)
     var isMonthlyAnalysis = mutableStateOf(false)
 
+    var pastDays = mutableStateOf("")
 
     val listOfBlocksWithCells = blocksRepository.getBlocksWithCells().stateIn(
         scope = viewModelScope,
@@ -60,6 +62,10 @@ class AnalyticsViewModel @Inject constructor(
         )
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun getDateDaysAgo(numberOfDays: Int): LocalDate {
+        return LocalDate.now().minusDays(numberOfDays.toLong())
+    }
 
 
 }
