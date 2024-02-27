@@ -27,7 +27,7 @@ import com.example.smartpoultry.data.dataSource.room.relations.BlocksWithCells
 @Composable
 fun BlocksDropDownMenu( //for Blocks
     listOfItems: List<BlocksWithCells>,
-    onItemClick: (List<Cells>) -> Unit,
+    onItemClick: ( blockId:Int, cells : List<Cells>) -> Unit,
     modifier: Modifier = Modifier,
     width : Float = 0.4f
 ) {
@@ -65,7 +65,7 @@ fun BlocksDropDownMenu( //for Blocks
                     text = { Text(text = "Block ${block.block.blockNum}") },
                     onClick = {
                         selectedText = block.block.blockNum.toString()
-                        onItemClick(block.cell)
+                        onItemClick(block.block.blockId,block.cell)
                         expanded = false
                     }
                 )

@@ -27,6 +27,7 @@ class AnalyticsViewModel @Inject constructor(
     private val eggCollectionRepository: EggCollectionRepository,
 ) : ViewModel() {
     var plotChart = mutableStateOf(false)
+    var selectedBlockId = mutableIntStateOf(0)
     var selectedCellID = mutableIntStateOf(0)
     var selectedYear = mutableStateOf("")
     var selectedMonth = mutableStateOf("")

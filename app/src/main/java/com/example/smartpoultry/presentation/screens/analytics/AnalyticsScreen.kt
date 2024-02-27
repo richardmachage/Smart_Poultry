@@ -140,12 +140,12 @@ fun AnalyticsScreen(
                         if (analyticsViewModel.levelOfAnalysis.value != "Overall") {
                             BlocksDropDownMenu(
                                 listOfItems = listOfBlocksWithCells,
-                                onItemClick = {
-                                    listOfCells = it
+                                onItemClick = { blockId, cells ->
+                                    listOfCells = cells
+                                    analyticsViewModel.selectedBlockId.intValue = blockId
                                     analyticsViewModel.plotChart.value = false
                                 },
                                 width = width,
-
                                 )
 
                             //toggle to show cells drop down list only when analysis level is by cell
