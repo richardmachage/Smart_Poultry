@@ -43,4 +43,6 @@ interface EggCollectionDao {
     @Query("SELECT * FROM egg_collection_tbl WHERE strftime('%Y-%m', datetime(date / 1000, 'unixepoch')) = :yearMonth AND cellId=:cellId")
     fun getCellCollectionByMonth(cellId: Int,yearMonth: String): Flow<List<EggCollection>>
 
+
+
 }
