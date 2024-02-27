@@ -195,12 +195,14 @@ fun AnalyticsScreen(
                         YearsDropDownMenu(
                             onItemClick = {year ->
                                 analyticsViewModel.selectedYear.value = year
+                                analyticsViewModel.plotChart.value = false
                             }
                         )
 
                         MonthsDropDownMenu(
                             onItemClick = { month ->
                                 analyticsViewModel.selectedMonth.value = month
+                                analyticsViewModel.plotChart.value = false
                             }
                         )
 
