@@ -100,6 +100,44 @@ class AnalyticsViewModel @Inject constructor(
                 initialValue = emptyList(),
             )
     }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun getBlockEggCollectionBetweenDates():Flow<List<DailyEggCollection>>{
+        return eggCollectionRepository.getBlockCollectionsBetweenDates(
+            blockId = selectedBlockId.intValue,
+            startDate = Date(localDateToJavaDate(startDate.value)),
+            endDate = Date(localDateToJavaDate(endDate.value))
+        ).stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(),
+            initialValue = emptyList(),
+        )
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun getBlockCollectionsForPastDays(): Flow<List<DailyEggCollection>> {
+        return eggCollectionRepository.getBlockEggCollectionForPastDays(
+            blockId = selectedBlockId.intValue,
+            startDate = Date(localDateToJavaDate(
+                getDateDaysAgo(pastDays.value.toIntOrNull() ?:0)
+            ))
+        ).stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(),
+            initialValue = emptyList(),
+        )
+    }
+
+    fun getMonthlyBlockCollections() : Flow<List<DailyEggCollection>>{
+        return  eggCollectionRepository.getBlockCollectionByMonth(
+            blockId = selectedBlockId.intValue,
+            yearMonth = toYearMonth( year = selectedYear.value, month = selectedMonth.value)
+        ).stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(),
+            initialValue = emptyList(),
+        )
+    }
     @RequiresApi(Build.VERSION_CODES.O)
     fun getDateDaysAgo(numberOfDays: Int): LocalDate {
         return LocalDate.now().minusDays(numberOfDays.toLong())
