@@ -50,4 +50,10 @@ interface EggCollectionDao {
     @Transaction
     @Query("SELECT date, SUM(eggCount) AS totalEggs FROM egg_collection_tbl INNER JOIN cells_tbl ON egg_collection_tbl.cellId = cells_tbl.cellId WHERE cells_tbl.blockId = :blockId GROUP BY date")
     fun getBlockEggCollections(blockId: Int) : Flow<List<DailyEggCollection>>
+
+    @Transaction
+    @Query("SELECT date, SUM(eggCount) AS totalEggs FROM egg_collection_tbl INNER JOIN cells_tbl ON egg_collection_tbl.cellId = cells_tbl.cellId WHERE cells_tbl.blockId = :blockId AND date BETWEEN :startDate AND :endDate GROUP BY date")
+    fun getBlockEggCollectionsBetweenDates(blockId: Int) : Flow<List<DailyEggCollection>>
+
+
 }
