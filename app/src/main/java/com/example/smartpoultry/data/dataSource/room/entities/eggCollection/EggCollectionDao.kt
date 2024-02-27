@@ -6,6 +6,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.example.smartpoultry.data.dataModels.DailyEggCollection
+import com.example.smartpoultry.data.dataSource.room.relations.CellsWithEggCollections
 import kotlinx.coroutines.flow.Flow
 import java.sql.Date
 
@@ -43,6 +44,7 @@ interface EggCollectionDao {
     @Query("SELECT * FROM egg_collection_tbl WHERE strftime('%Y-%m', datetime(date / 1000, 'unixepoch')) = :yearMonth AND cellId=:cellId")
     fun getCellCollectionByMonth(cellId: Int,yearMonth: String): Flow<List<EggCollection>>
 
-
+    @Query("SELECT * FROM cells_tbl WHERE blockId = :blockId")
+    fun getBlockEggCollection(blockId : Int) : Flow<CellsWithEggCollections>
 
 }
