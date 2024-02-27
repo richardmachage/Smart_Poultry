@@ -28,7 +28,8 @@ import com.example.smartpoultry.data.dataSource.room.relations.BlocksWithCells
 fun BlocksDropDownMenu( //for Blocks
     listOfItems: List<BlocksWithCells>,
     onItemClick: (List<Cells>) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    width : Float = 0.4f
 ) {
     var selectedText by remember { mutableStateOf("-") }
     var expanded by remember { mutableStateOf(false) }
@@ -36,14 +37,17 @@ fun BlocksDropDownMenu( //for Blocks
     ExposedDropdownMenuBox(
         modifier = modifier
             .padding(3.dp)
-            .fillMaxWidth(0.4f),
+            .fillMaxWidth(width),
         expanded = expanded,
         onExpandedChange = {
             expanded = !expanded
         }) {
 
         OutlinedTextField(
-            modifier = modifier.menuAnchor(),
+            modifier = modifier
+                .menuAnchor()
+                .fillMaxWidth()
+            ,
             value = "Block $selectedText",
             onValueChange = {},
             readOnly = true,

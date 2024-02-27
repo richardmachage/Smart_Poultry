@@ -20,20 +20,22 @@ import java.time.LocalDate
 import javax.inject.Inject
 
 @HiltViewModel
-class AnalyticsViewModel @Inject constructor (
+class AnalyticsViewModel @Inject constructor(
     private val cellsRepository: CellsRepository,
     private val blocksRepository: BlocksRepository,
     private val eggCollectionRepository: EggCollectionRepository,
 ) : ViewModel() {
     var plotChart = mutableStateOf(false)
     var selectedCellID = mutableIntStateOf(0)
-     var selectedMonth = mutableStateOf("")
+    var selectedMonth = mutableStateOf("")
+    var levelOfAnalysis = mutableStateOf("Cell")
 
     @RequiresApi(Build.VERSION_CODES.O)
     var startDate = mutableStateOf(LocalDate.now())
 
     @RequiresApi(Build.VERSION_CODES.O)
     var endDate = mutableStateOf(LocalDate.now())
+
     var isCustomRangeAnalysis = mutableStateOf(false)
     var isPastXDaysAnalysis = mutableStateOf(true)
     var isMonthlyAnalysis = mutableStateOf(false)
@@ -45,22 +47,19 @@ class AnalyticsViewModel @Inject constructor (
         emptyList(),
     )
 
-   // @RequiresApi(Build.VERSION_CODES.O)
-    //var listOfRecords = getCellCollectionBetweenDates()
-
     @RequiresApi(Build.VERSION_CODES.O)
-    fun getCellCollectionBetweenDates() : Flow<List<EggCollection>> {
-            return eggCollectionRepository.getRecordsForCellBetween(
-                cellId = selectedCellID.intValue,
-                startDate = Date(localDateToJavaDate( startDate.value)),
-                endDate = Date(localDateToJavaDate( endDate.value))
-            ).stateIn(
-                scope = viewModelScope,
-                started = SharingStarted.WhileSubscribed(),
-                initialValue = emptyList(),
-            )
-
+    fun getCellCollectionBetweenDates(): Flow<List<EggCollection>> {
+        return eggCollectionRepository.getRecordsForCellBetween(
+            cellId = selectedCellID.intValue,
+            startDate = Date(localDateToJavaDate(startDate.value)),
+            endDate = Date(localDateToJavaDate(endDate.value))
+        ).stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(),
+            initialValue = emptyList(),
+        )
     }
+
 
 
 }

@@ -1,7 +1,6 @@
 package com.example.smartpoultry.presentation.screens.analytics
 
 import android.os.Build
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -19,6 +18,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -50,6 +50,9 @@ fun AnalyticsScreen(
     val analyticsViewModel = hiltViewModel<AnalyticsViewModel>()
     val listOfBlocksWithCells by remember { analyticsViewModel.listOfBlocksWithCells }.collectAsState()
     val context = LocalContext.current
+    var width by remember {
+        mutableFloatStateOf(0.4f)
+    }
 
 
     //simple logic  for graph of egg collection between dates
@@ -82,8 +85,13 @@ fun AnalyticsScreen(
                 Text("Trend analysis")
 
                 RadioButtonGroup(
-                    title = "Select level of analysis",
-                    listOfOptions = listOf("Cell", "Block", "Overall")
+                    title = "Select level of analysis:",
+                    listOfOptions = listOf("Cell", "Block", "Overall"),
+                    onOptionSelect = { selectedOption ->
+                        analyticsViewModel.levelOfAnalysis.value = selectedOption
+                        if (selectedOption == "Block") width = 1f
+                        if (selectedOption == "Cell") width = 0.4f
+                    }
                 )
 
                 MyVerticalSpacer(height = 8)
@@ -96,26 +104,24 @@ fun AnalyticsScreen(
                                 analyticsViewModel.isCustomRangeAnalysis.value = true
                                 analyticsViewModel.isPastXDaysAnalysis.value = false
                                 analyticsViewModel.isMonthlyAnalysis.value = false
-                                Toast.makeText(context,"Custom Range : ${analyticsViewModel.isCustomRangeAnalysis.value}", Toast.LENGTH_SHORT).show()
                             }
+
                             "Past\nX Days" -> {
                                 analyticsViewModel.isCustomRangeAnalysis.value = false
                                 analyticsViewModel.isPastXDaysAnalysis.value = true
                                 analyticsViewModel.isMonthlyAnalysis.value = false
-                                Toast.makeText(context," Past X Days : ${analyticsViewModel.isPastXDaysAnalysis.value}", Toast.LENGTH_SHORT).show()
-
                             }
-                            "Monthly"-> {
+
+                            "Monthly" -> {
                                 analyticsViewModel.isCustomRangeAnalysis.value = false
                                 analyticsViewModel.isPastXDaysAnalysis.value = false
                                 analyticsViewModel.isMonthlyAnalysis.value = true
-                                Toast.makeText(context,"Monthly : ${analyticsViewModel.isMonthlyAnalysis.value}", Toast.LENGTH_SHORT).show()
-
                             }
                         }
                     },
                 )
                 MyVerticalSpacer(height = 8)
+
 
                 Row(
                     modifier = Modifier
@@ -123,22 +129,31 @@ fun AnalyticsScreen(
                     horizontalArrangement = Arrangement.SpaceEvenly
                 ) {
                     var listOfCells by remember { mutableStateOf(emptyList<Cells>()) }
-                    if (listOfBlocksWithCells.isNotEmpty()) {
-                        BlocksDropDownMenu(
-                            listOfItems = listOfBlocksWithCells,
-                            onItemClick = {
-                                listOfCells = it
-                                analyticsViewModel.plotChart.value = false
-                            }
-                        )
 
-                        CellsDropDownMenu(
-                            listOfItems = listOfCells,
-                            onItemClick = { cell ->
-                                analyticsViewModel.selectedCellID.intValue = cell.cellId
-                                analyticsViewModel.plotChart.value = false
+                    if (listOfBlocksWithCells.isNotEmpty()) {
+
+                        if (analyticsViewModel.levelOfAnalysis.value != "Overall") {
+                            BlocksDropDownMenu(
+                                listOfItems = listOfBlocksWithCells,
+                                onItemClick = {
+                                    listOfCells = it
+                                    analyticsViewModel.plotChart.value = false
+                                },
+                                width = width,
+
+                            )
+
+                            //toggle to show cells drop down list only when analysis level is by cell
+                            if (analyticsViewModel.levelOfAnalysis.value == "Cell") {
+                                CellsDropDownMenu(
+                                    listOfItems = listOfCells,
+                                    onItemClick = { cell ->
+                                        analyticsViewModel.selectedCellID.intValue = cell.cellId
+                                        analyticsViewModel.plotChart.value = false
+                                    }
+                                )
                             }
-                        )
+                        }
                     }
                 }
 
@@ -217,9 +232,13 @@ fun AnalyticsScreen(
                     //first get the data...yes but which data??? here there should be a condition
                     //for the kind of data retrieved (Query) based on the type of trend
 
+
+                    //here, come up with algo to select dataset depending on type of analysis and level of analysis
                     val listOfRecords by remember { analyticsViewModel.getCellCollectionBetweenDates() }.collectAsState(
                         initial = emptyList()
                     )
+
+
 
                     if (listOfRecords.isNotEmpty()) {
                         //plot the chart
