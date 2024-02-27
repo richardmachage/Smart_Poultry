@@ -158,12 +158,12 @@ fun AnalyticsScreen(
                 }
 
                 if (analyticsViewModel.isPastXDaysAnalysis.value) {
-                    MyVerticalSpacer(height = 5)
+                    //MyVerticalSpacer(height = 3)
 
                     Text(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(6.dp),
+                            .padding(8.dp),
                         text = "Analyze the trends for a given number of past days"
                     )
 

@@ -17,10 +17,9 @@ import javax.inject.Inject
 @RequiresApi(Build.VERSION_CODES.O)
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val blocksRepository: BlocksRepository,
-    private val cellsRepository: CellsRepository,
-    private val eggCollectionRepository: EggCollectionRepository,
-
+    blocksRepository: BlocksRepository,
+    cellsRepository: CellsRepository,
+    eggCollectionRepository: EggCollectionRepository,
     ) : ViewModel() {
 
     val totalBlocks = blocksRepository.getAllBlocks().stateIn(

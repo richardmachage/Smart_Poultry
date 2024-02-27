@@ -62,6 +62,7 @@ class AnalyticsViewModel @Inject constructor(
         )
     }
 
+
     @RequiresApi(Build.VERSION_CODES.O)
     fun getDateDaysAgo(numberOfDays: Int): LocalDate {
         return LocalDate.now().minusDays(numberOfDays.toLong())
