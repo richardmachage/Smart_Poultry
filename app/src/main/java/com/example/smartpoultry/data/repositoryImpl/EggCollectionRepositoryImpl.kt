@@ -60,4 +60,26 @@ class EggCollectionRepositoryImpl @Inject constructor (
     override fun getBlockEggCollection(blockId: Int): Flow<List<DailyEggCollection>> {
         return eggCollectionDao.getBlockEggCollections(blockId)
     }
+
+    override fun getBlockCollectionByMonth(
+        blockId: Int,
+        yearMonth: String
+    ): Flow<List<DailyEggCollection>> {
+        return eggCollectionDao.getBlockCollectionByMonth(blockId = blockId, yearMonth = yearMonth)
+    }
+
+    override fun getBlockCollectionsBetweenDates(
+        blockId: Int,
+        startDate: Date,
+        endDate: Date
+    ): Flow<List<DailyEggCollection>> {
+        return eggCollectionDao.getBlockEggCollectionsBetweenDates(blockId,startDate,endDate)
+    }
+
+    override fun getBlockEggCollectionForPastDays(
+        blockId: Int,
+        startDate: Date
+    ): Flow<List<DailyEggCollection>> {
+        return eggCollectionDao.getBlockEggCollectionsForPastDays(blockId, startDate = )
+    }
 }

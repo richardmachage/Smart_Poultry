@@ -28,5 +28,11 @@ interface EggCollectionRepository{
 
     fun getBlockEggCollection(blockId : Int) : Flow<List<DailyEggCollection>>
 
+    fun getBlockCollectionByMonth(blockId: Int, yearMonth: String) : Flow<List<DailyEggCollection>>
+
+    fun getBlockCollectionsBetweenDates(blockId: Int, startDate: Date,endDate: Date) : Flow<List<DailyEggCollection>>
+
+    fun getBlockEggCollectionForPastDays(blockId:Int, startDate: Date) : Flow<List<DailyEggCollection>>
+
 
 }
