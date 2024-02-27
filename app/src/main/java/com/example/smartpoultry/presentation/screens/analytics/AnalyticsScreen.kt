@@ -1,7 +1,6 @@
 package com.example.smartpoultry.presentation.screens.analytics
 
 import android.os.Build
-import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -29,6 +28,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.smartpoultry.data.dataModels.DailyEggCollection
 import com.example.smartpoultry.data.dataSource.room.entities.cells.Cells
 import com.example.smartpoultry.data.dataSource.room.entities.eggCollection.EggCollection
 import com.example.smartpoultry.presentation.screens.composables.BlocksDropDownMenu
@@ -251,9 +251,22 @@ fun AnalyticsScreen(
 
                     //here, come up with algo to select dataset depending on type of analysis and level of analysis
                     val listOfRecords by remember {
-                        if (analyticsViewModel.isPastXDaysAnalysis.value) analyticsViewModel.getCellEggCollectionForPastDays()
-                        else if (analyticsViewModel.isCustomRangeAnalysis.value) analyticsViewModel.getCellCollectionBetweenDates()
-                        else analyticsViewModel.getCellMonthlyRecords()
+                        if (analyticsViewModel.levelOfAnalysis.value == "Cell") {
+                            if (analyticsViewModel.isPastXDaysAnalysis.value) return@remember analyticsViewModel.getCellEggCollectionForPastDays()
+                            else if (analyticsViewModel.isCustomRangeAnalysis.value) return@remember analyticsViewModel.getCellCollectionBetweenDates()
+                            else return@remember analyticsViewModel.getCellMonthlyRecords()
+                        }
+                        else if(analyticsViewModel.levelOfAnalysis.value == "Block"){
+                            if (analyticsViewModel.isPastXDaysAnalysis.value) return@remember analyticsViewModel.getBlockEggCollection()
+                            else if (analyticsViewModel.isCustomRangeAnalysis.value) return@remember analyticsViewModel.getCellCollectionBetweenDates()
+                            else return@remember analyticsViewModel.getCellMonthlyRecords()
+                        }
+                        else{ //meaning the level is just overall
+                            if (analyticsViewModel.isPastXDaysAnalysis.value) return@remember analyticsViewModel.getCellEggCollectionForPastDays()
+                            else if (analyticsViewModel.isCustomRangeAnalysis.value) return@remember analyticsViewModel.getCellCollectionBetweenDates()
+                            else return@remember analyticsViewModel.getCellMonthlyRecords()
+                        }
+
                     }.collectAsState(
                             initial = emptyList()
                         )
@@ -261,21 +274,28 @@ fun AnalyticsScreen(
 
                     if (listOfRecords.isNotEmpty()) {
                         //plot the chart
-                        val turnToChartData = listOfRecords.map {
-                            ChartClass(
-                                xDateValue = toGraphDate(it.date),
-                                yNumOfEggs = it.eggCount
-                            )
-                        }
-                        turnToChartData.forEach {
-                            Log.i(it.xDateValue, it.yNumOfEggs.toString())
-                        }
+                        val itemPlacerCount = 0
+                        val turnToChartData = listOfRecords.map { record->
+                            when (record){
+                                is EggCollection -> ChartClass(
+                                    xDateValue = toGraphDate(record.date),
+                                    yNumOfEggs = record.eggCount
+
+                                )
+                                is DailyEggCollection -> ChartClass(
+                                    xDateValue = toGraphDate(record.date),
+                                    yNumOfEggs = record.totalEggs
+                                )
+
+                                else -> {}
+                            }
+                        } as List<ChartClass>
 
                         CellAnalysisGraph(
                             isGraphPlotted = analyticsViewModel.plotChart.value,
-                            listOfRecords = turnToChartData,
+                            listOfRecords = turnToChartData.map { it as ChartClass },
                             itemPlacerCount =
-                            (listOfRecords.maxOf { eggCollection: EggCollection ->  eggCollection.eggCount })+1,
+                            (turnToChartData.maxOf { chartClass: ChartClass ->  chartClass.yNumOfEggs })+1,
                             startAxisTitle = "Num of Eggs",
                             bottomAxisTitle = "Date",
                         )

@@ -6,6 +6,7 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.smartpoultry.data.dataModels.DailyEggCollection
 import com.example.smartpoultry.data.dataSource.room.entities.eggCollection.EggCollection
 import com.example.smartpoultry.domain.repository.BlocksRepository
 import com.example.smartpoultry.domain.repository.CellsRepository
@@ -88,6 +89,16 @@ class AnalyticsViewModel @Inject constructor(
             started = SharingStarted.WhileSubscribed(),
             initialValue = emptyList(),
         )
+    }
+
+    fun getBlockEggCollection():Flow<List<DailyEggCollection>>{
+        return eggCollectionRepository.getBlockEggCollection(
+            blockId = selectedBlockId.intValue
+        ).stateIn(
+                scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(),
+                initialValue = emptyList(),
+            )
     }
     @RequiresApi(Build.VERSION_CODES.O)
     fun getDateDaysAgo(numberOfDays: Int): LocalDate {

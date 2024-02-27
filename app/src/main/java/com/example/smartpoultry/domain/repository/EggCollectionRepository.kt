@@ -2,7 +2,6 @@ package com.example.smartpoultry.domain.repository
 
 import com.example.smartpoultry.data.dataModels.DailyEggCollection
 import com.example.smartpoultry.data.dataSource.room.entities.eggCollection.EggCollection
-import com.example.smartpoultry.data.dataSource.room.relations.CellsWithEggCollections
 import kotlinx.coroutines.flow.Flow
 import java.sql.Date
 
@@ -27,7 +26,7 @@ interface EggCollectionRepository{
 
     fun getCellCollectionByMonth(cellId: Int,yearMonth: String): Flow<List<EggCollection>>
 
-    fun getBlockEggCollection(blockId : Int) : Flow<CellsWithEggCollections>
+    fun getBlockEggCollection(blockId : Int) : Flow<List<DailyEggCollection>>
 
 
 }

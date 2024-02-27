@@ -3,7 +3,6 @@ package com.example.smartpoultry.data.repositoryImpl
 import com.example.smartpoultry.data.dataModels.DailyEggCollection
 import com.example.smartpoultry.data.dataSource.room.entities.eggCollection.EggCollection
 import com.example.smartpoultry.data.dataSource.room.entities.eggCollection.EggCollectionDao
-import com.example.smartpoultry.data.dataSource.room.relations.CellsWithEggCollections
 import com.example.smartpoultry.domain.repository.EggCollectionRepository
 import kotlinx.coroutines.flow.Flow
 import java.sql.Date
@@ -58,7 +57,7 @@ class EggCollectionRepositoryImpl @Inject constructor (
         return eggCollectionDao.getCellCollectionByMonth(cellId = cellId, yearMonth = yearMonth)
     }
 
-    override fun getBlockEggCollection(blockId: Int): Flow<CellsWithEggCollections> {
-        return eggCollectionDao.getBlockEggCollection(blockId)
+    override fun getBlockEggCollection(blockId: Int): Flow<List<DailyEggCollection>> {
+        return eggCollectionDao.getBlockEggCollections(blockId)
     }
 }

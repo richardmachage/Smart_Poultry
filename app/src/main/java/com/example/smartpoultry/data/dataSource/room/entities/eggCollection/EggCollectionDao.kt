@@ -5,8 +5,8 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Transaction
 import com.example.smartpoultry.data.dataModels.DailyEggCollection
-import com.example.smartpoultry.data.dataSource.room.relations.CellsWithEggCollections
 import kotlinx.coroutines.flow.Flow
 import java.sql.Date
 
@@ -44,7 +44,10 @@ interface EggCollectionDao {
     @Query("SELECT * FROM egg_collection_tbl WHERE strftime('%Y-%m', datetime(date / 1000, 'unixepoch')) = :yearMonth AND cellId=:cellId")
     fun getCellCollectionByMonth(cellId: Int,yearMonth: String): Flow<List<EggCollection>>
 
+/*
     @Query("SELECT * FROM cells_tbl WHERE blockId = :blockId")
-    fun getBlockEggCollection(blockId : Int) : Flow<CellsWithEggCollections>
-
+    fun getBlockEggCollection(blockId : Int) : Flow<List<CellsWithEggCollections>>*/
+    @Transaction
+    @Query("SELECT date, SUM(eggCount) AS totalEggs FROM egg_collection_tbl INNER JOIN cells_tbl ON egg_collection_tbl.cellId = cells_tbl.cellId WHERE cells_tbl.blockId = :blockId GROUP BY date")
+    fun getBlockEggCollections(blockId: Int) : Flow<List<DailyEggCollection>>
 }
