@@ -1,24 +1,134 @@
 package com.example.smartpoultry.presentation.screens.feeds
 
+import android.os.Build
+import androidx.annotation.RequiresApi
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import com.example.smartpoultry.presentation.composables.MyDatePicker
+import com.example.smartpoultry.presentation.composables.MyInputDialog
+import com.example.smartpoultry.presentation.composables.MyOutlineTextFiled
+import com.example.smartpoultry.presentation.composables.NormButton
+import com.example.smartpoultry.presentation.theme.SmartPoultryTheme
 import com.ramcosta.composedestinations.annotation.Destination
+import com.vanpra.composematerialdialogs.rememberMaterialDialogState
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Destination
 @Composable
-fun FeedsScreen(){
-    val feedsViewModel = hiltViewModel<FeedsViewModel>()
+fun FeedsScreen() {
+    //val feedsViewModel = hiltViewModel<FeedsViewModel>()
 
-    Surface(
-        modifier = Modifier.fillMaxSize(),
-        color = MaterialTheme.colorScheme.background
-        
+    var showDialog by remember{ mutableStateOf(false) }
+
+    MyInputDialog(
+        showDialog = showDialog,
+        title = "Add Feeds",
+        onConfirm = {
+            showDialog = false
+        },
+        onDismiss = {
+            showDialog = false
+        }
     ) {
-        Text(text = "Feeds Screen")
+            var text1 by remember {
+                mutableStateOf("")
+            }
+            var text2 by remember {
+                mutableStateOf("")
+            }
+
+            Column(
+                modifier = Modifier.padding(6.dp)
+            ) {
+
+                MyOutlineTextFiled(
+                    label = "Number of Sacks Added",
+                    keyboardType = KeyboardType.Number,
+                    onValueChange = {
+                        text1 = it
+                    }
+                )
+
+                MyDatePicker(
+                    dateDialogState = rememberMaterialDialogState(),
+                    label = "Date",
+                    positiveButtonOnClick = { localDate ->
+                        //feedsViewModel.selectedDate.value = localDate
+                    },
+                    negativeButton = {}
+                )
+            }
+        }
+
+    SmartPoultryTheme {
+
+
+        Surface(
+            modifier = Modifier
+                .fillMaxSize(),
+            color = MaterialTheme.colorScheme.background
+
+        ) {
+            Column(
+                modifier = Modifier.padding(6.dp)
+
+            ) {
+
+                Column(
+                    Modifier
+                        .border(
+                            width = 1.dp,
+                            color = MaterialTheme.colorScheme.tertiary,
+                            shape = RoundedCornerShape(
+                                (0.03 * LocalConfiguration.current.screenWidthDp).dp
+                            )
+                        )
+                        .fillMaxWidth()
+                        .padding(6.dp)
+                ) {
+                    Text(text = "Sacks of Feeds in Store : 19")
+
+                    NormButton(
+                        onButtonClick = {
+                                        showDialog = true
+                        },
+                        btnName = "Add Feeds",
+                        modifier = Modifier.fillMaxWidth())
+                }
+                MyDatePicker(
+                    dateDialogState = rememberMaterialDialogState(),
+                    label = "Date",
+                    positiveButtonOnClick = { localDate ->
+                        //feedsViewModel.selectedDate.value = localDate
+                    },
+                    negativeButton = {}
+                )
+            }
+
+        }
     }
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
+@Preview(showSystemUi = true, showBackground = true)
+@Composable
+fun PrevFeedsScreens() {
+    FeedsScreen()
 }

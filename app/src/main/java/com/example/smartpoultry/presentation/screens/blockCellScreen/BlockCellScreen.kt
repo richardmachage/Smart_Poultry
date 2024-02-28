@@ -80,6 +80,7 @@ fun BlockCellScreen(
                     )
                 }
             },
+
             confirmButton = {
                 Button(onClick = {
                     if(blockCellViewModel.blockNumText.value.isNotBlank() && blockCellViewModel.cellsText.value.isNotBlank()){
