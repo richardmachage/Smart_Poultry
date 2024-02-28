@@ -12,6 +12,11 @@ interface FeedsDao {
     @Insert
     suspend fun addNewFeedsRecord(feedRecord : Feeds) : Long
 
+    @Insert
+    suspend fun addNewFeedTrackRecord(feedTrack: FeedTrack) : Long
+
+
+
     @Delete
     suspend fun deleteFeedsRecord(feedRecord: Feeds)
 
