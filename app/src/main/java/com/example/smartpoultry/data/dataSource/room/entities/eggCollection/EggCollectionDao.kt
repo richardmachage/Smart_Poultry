@@ -52,12 +52,17 @@ interface EggCollectionDao {
     @Transaction
     @Query("SELECT date, SUM(eggCount) AS totalEggs FROM egg_collection_tbl INNER JOIN cells_tbl ON egg_collection_tbl.cellId = cells_tbl.cellId WHERE cells_tbl.blockId = :blockId AND date>=:startDate GROUP BY date")
     fun getBlockEggCollectionsForPastDays(blockId: Int, startDate: Date) : Flow<List<DailyEggCollection>>
+
     @Transaction
     @Query("SELECT date, SUM(eggCount) AS totalEggs FROM egg_collection_tbl INNER JOIN cells_tbl ON egg_collection_tbl.cellId = cells_tbl.cellId WHERE cells_tbl.blockId = :blockId AND date BETWEEN :startDate AND :endDate GROUP BY date")
     fun getBlockEggCollectionsBetweenDates(blockId: Int, startDate: Date,endDate: Date) : Flow<List<DailyEggCollection>>
 
-
     @Transaction
     @Query("SELECT date, SUM(eggCount) AS totalEggs FROM egg_collection_tbl INNER JOIN cells_tbl ON egg_collection_tbl.cellId = cells_tbl.cellId WHERE cells_tbl.blockId = :blockId AND strftime('%Y-%m', datetime(date / 1000, 'unixepoch')) = :yearMonth GROUP BY date")
     fun getBlockCollectionByMonth(blockId: Int, yearMonth: String) : Flow<List<DailyEggCollection>>
+
+    @Query("SELECT date,SUM(eggCount) AS totalEggs FROM egg_collection_tbl WHERE strftime('%Y-%m', datetime(date / 1000, 'unixepoch')) = :yearMonth GROUP BY date")
+    fun getOverallCollectionByMonth(yearMonth: String) : Flow<List<DailyEggCollection>>
+
+    //@Query("SEle")
 }

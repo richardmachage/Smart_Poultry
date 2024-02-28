@@ -53,6 +53,7 @@ class AnalyticsViewModel @Inject constructor(
         emptyList(),
     )
 
+
     @RequiresApi(Build.VERSION_CODES.O)
     fun getCellCollectionBetweenDates(): Flow<List<EggCollection>> {
         return eggCollectionRepository.getRecordsForCellBetween(
