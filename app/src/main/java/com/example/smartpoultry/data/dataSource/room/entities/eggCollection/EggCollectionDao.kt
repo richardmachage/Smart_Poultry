@@ -64,5 +64,10 @@ interface EggCollectionDao {
     @Query("SELECT date,SUM(eggCount) AS totalEggs FROM egg_collection_tbl WHERE strftime('%Y-%m', datetime(date / 1000, 'unixepoch')) = :yearMonth GROUP BY date")
     fun getOverallCollectionByMonth(yearMonth: String) : Flow<List<DailyEggCollection>>
 
-    //@Query("SEle")
+    @Query("SELECT date, SUM(eggCount) AS totalEggs FROM egg_collection_tbl WHERE date BETWEEN :startDate AND :endDate GROUP BY date")
+    fun getOverallCollectionBetweenDates(startDate: Date,endDate: Date) : Flow<List<DailyEggCollection>>
+
+    @Query("SELECT date, SUM(eggcount) AS totalEggs FROM egg_collection_tbl WHERE date >= :startDate GROUP BY date")
+    fun getOverallCollectionForPAstDays(startDate: Date) : Flow<List<DailyEggCollection>>
+
 }
