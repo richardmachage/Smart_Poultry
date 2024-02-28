@@ -21,6 +21,7 @@ import com.example.smartpoultry.presentation.destinations.AlertScreenDestination
 import com.example.smartpoultry.presentation.destinations.AnalyticsScreenDestination
 import com.example.smartpoultry.presentation.destinations.BlockCellScreenDestination
 import com.example.smartpoultry.presentation.destinations.EggScreenDestination
+import com.example.smartpoultry.presentation.destinations.FeedsScreenDestination
 import com.example.smartpoultry.presentation.destinations.HomeScreenDestination
 import com.example.smartpoultry.presentation.destinations.SettingsScreenDestination
 import com.ramcosta.composedestinations.annotation.Destination
@@ -30,36 +31,63 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MyTopAppBar(
-    navController : NavController,
+    navController: NavController,
     navigator: DestinationsNavigator
-    ){
+) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
     TopAppBar(
         title = {
-            when(currentRoute){
-              HomeScreenDestination.route -> {Text(text ="Home" )}
-              AnalyticsScreenDestination.route -> {Text(text ="Analytics" )}
-              AlertScreenDestination.route -> {Text(text ="Alerts" )}
-              EggScreenDestination.route -> {Text(text ="Egg collection" )}
-              BlockCellScreenDestination.route -> {Text(text ="Blocks & Cells" )}
+            when (currentRoute) {
+                HomeScreenDestination.route -> {
+                    Text(text = "Home")
+                }
+
+                AnalyticsScreenDestination.route -> {
+                    Text(text = "Analytics")
+                }
+
+                AlertScreenDestination.route -> {
+                    Text(text = "Alerts")
+                }
+
+                EggScreenDestination.route -> {
+                    Text(text = "Egg collection")
+                }
+
+                BlockCellScreenDestination.route -> {
+                    Text(text = "Blocks & Cells")
+                }
             }
         },
         actions = {
-            IconButton(onClick = { navigator.navigate(AccountScreenDestination) })
-            {
-                Icon(imageVector= Icons.Default.AccountCircle, contentDescription ="Account Icon" )
+            IconButton(onClick = { navigator.navigate(AlertScreenDestination) }) {
+                Icon(
+                    imageVector = ImageVector.vectorResource(R.drawable.notification_filled),
+                    contentDescription = "Notifications"
+                )
             }
 
-            IconButton(onClick = { navigator.navigate(AlertScreenDestination) }) {
-                Icon(imageVector = ImageVector.vectorResource(R.drawable.notification_filled), contentDescription ="Notifications" )
+            IconButton(onClick = { navigator.navigate(FeedsScreenDestination) })
+            {
+                Icon(
+                    imageVector = ImageVector.vectorResource(R.drawable.feeds_filled),
+                    contentDescription = "Feeds"
+                )
+            }
+
+            IconButton(onClick = { navigator.navigate(AccountScreenDestination) })
+            {
+                Icon(imageVector = Icons.Default.AccountCircle, contentDescription = "Account Icon")
             }
 
             IconButton(onClick = { navigator.navigate(SettingsScreenDestination) })
             {
-                Icon(imageVector = Icons.Default.Settings, contentDescription ="Settings Icon")
+                Icon(imageVector = Icons.Default.Settings, contentDescription = "Settings Icon")
             }
+
+
         },
         scrollBehavior = scrollBehavior,
     )

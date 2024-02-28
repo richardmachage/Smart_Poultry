@@ -2,6 +2,7 @@ package com.example.smartpoultry.presentation.screens.feeds
 
 import androidx.lifecycle.ViewModel
 import com.example.smartpoultry.domain.repository.FeedsRepository
+import com.ramcosta.composedestinations.annotation.Destination
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
