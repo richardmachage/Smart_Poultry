@@ -212,6 +212,7 @@ fun AnalyticsScreen(
 
                 if (analyticsViewModel.isCustomRangeAnalysis.value) {
                     MyDatePicker(// start date
+                        modifier = Modifier.fillMaxWidth(),
                         dateDialogState = rememberMaterialDialogState(),
                         label = "Start Date",
                         positiveButtonOnClick = { pickedDate ->
@@ -223,6 +224,7 @@ fun AnalyticsScreen(
 
 
                     MyDatePicker( // end date
+                        modifier = Modifier.fillMaxWidth(),
                         dateDialogState = rememberMaterialDialogState(),
                         label = "End Date",
                         positiveButtonOnClick = { pickedDate ->

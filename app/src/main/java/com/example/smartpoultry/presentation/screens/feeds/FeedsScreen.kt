@@ -20,11 +20,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.smartpoultry.presentation.composables.MyDatePicker
 import com.example.smartpoultry.presentation.composables.MyInputDialog
 import com.example.smartpoultry.presentation.composables.MyOutlineTextFiled
+import com.example.smartpoultry.presentation.composables.MySearchByDate
 import com.example.smartpoultry.presentation.composables.MyVerticalSpacer
 import com.example.smartpoultry.presentation.composables.NormButton
 import com.example.smartpoultry.presentation.composables.NormText
@@ -131,6 +131,7 @@ fun FeedsScreen() {
                     Text(text = "Record feed usage: ")
 
                     MyDatePicker(
+                        modifier = Modifier.fillMaxWidth(),
                         dateDialogState = rememberMaterialDialogState(),
                         label = "Date",
                         positiveButtonOnClick = { localDate ->
@@ -164,17 +165,15 @@ fun FeedsScreen() {
                         .fillMaxWidth()
                         .padding(6.dp)
                 ){
-                    NormText(text = "View Records:")
+                    NormText(text = "Search Records:")
 
+                    MySearchByDate(
+                        onSearch = {
+
+                        }
+                    )
                 }
             }
         }
     }
-}
-
-@RequiresApi(Build.VERSION_CODES.O)
-@Preview(showSystemUi = true, showBackground = true)
-@Composable
-fun PrevFeedsScreens() {
-    FeedsScreen()
 }
