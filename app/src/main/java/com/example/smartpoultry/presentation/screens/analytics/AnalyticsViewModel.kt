@@ -139,6 +139,44 @@ class AnalyticsViewModel @Inject constructor(
             initialValue = emptyList(),
         )
     }
+
+    fun getMonthlyOverallCollections() : Flow<List<DailyEggCollection>>{
+        return eggCollectionRepository.getOverallCollectionByMonth(
+            yearMonth = toYearMonth(year = selectedYear.value, month = selectedMonth.value)
+        ).stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(),
+            initialValue = emptyList(),
+        )
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun getOverallCollectionBetweenDays(): Flow<List<DailyEggCollection>> {
+        return eggCollectionRepository.getOverallCollectionBetweenDates(
+            startDate = Date(localDateToJavaDate(startDate.value)),
+            endDate = Date(localDateToJavaDate(endDate.value))
+        ).stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(),
+            initialValue = emptyList(),
+        )
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun getOverallCollectionsForPastDays(): Flow<List<DailyEggCollection>> {
+        return eggCollectionRepository.getOverallCollectionForPAstDays(
+            startDate = Date(
+                localDateToJavaDate(
+                    getDateDaysAgo(pastDays.value.toIntOrNull() ?: 0)
+                )
+            )
+        ).stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(),
+            initialValue = emptyList(),
+        )
+    }
+
     @RequiresApi(Build.VERSION_CODES.O)
     fun getDateDaysAgo(numberOfDays: Int): LocalDate {
         return LocalDate.now().minusDays(numberOfDays.toLong())
