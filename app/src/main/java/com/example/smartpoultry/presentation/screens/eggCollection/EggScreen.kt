@@ -238,7 +238,6 @@ fun EggScreen() {
                                     eggViewModel.isLoading.value = true
                                    // eggViewModel.delayApp(2000)
 
-
                                     eggViewModel.onSaveRecord(block = blockIndex, cellsInput = listOfBlocks[blockIndex].cells)
                                     //eggViewModel.updateEggCount(blockIndex,)
                                     if (eggViewModel.insertStatus.value){
@@ -259,7 +258,7 @@ fun EggScreen() {
 
                                 },
                                 btnName = "Save",
-                                modifier = Modifier
+                                modifier = Modifier.fillMaxWidth()
                             )
                         }
                     }
