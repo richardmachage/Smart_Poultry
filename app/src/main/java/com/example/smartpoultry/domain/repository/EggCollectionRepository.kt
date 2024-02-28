@@ -34,4 +34,10 @@ interface EggCollectionRepository{
 
     fun getBlockEggCollectionForPastDays(blockId:Int, startDate: Date) : Flow<List<DailyEggCollection>>
 
+    fun getOverallCollectionByMonth(yearMonth: String) : Flow<List<DailyEggCollection>>
+
+    fun getOverallCollectionBetweenDates(startDate: Date,endDate: Date) : Flow<List<DailyEggCollection>>
+
+    fun getOverallCollectionForPAstDays(startDate: Date) : Flow<List<DailyEggCollection>>
+
 }
