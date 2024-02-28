@@ -5,7 +5,6 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange
@@ -39,10 +38,11 @@ import java.time.LocalDate
 
 @RequiresApi(Build.VERSION_CODES.O)
 fun MyDatePicker(
+    modifier: Modifier = Modifier,
     dateDialogState: MaterialDialogState,
     label: String,
     positiveButtonOnClick: (LocalDate) -> Unit,
-    negativeButton: () -> Unit
+    negativeButton: () -> Unit = {}
 ) {
 
     var pickedDate by remember {
@@ -50,8 +50,8 @@ fun MyDatePicker(
     }
 
     OutlinedTextField(
-        modifier = Modifier
-            .fillMaxWidth()
+        modifier = modifier
+            //.fillMaxWidth()
             .padding(4.dp),
         value = SimpleDateFormat("dd/MM/yyyy")
             .format(
@@ -77,29 +77,7 @@ fun MyDatePicker(
         readOnly = true
     )
 
-    /* Row (
-         modifier = Modifier
-             .fillMaxWidth(),
-         Arrangement.SpaceEvenly,
-         Alignment.CenterVertically
-     ){
-         TextField(
-             modifier = Modifier
-                 .padding(3.dp)
-             ,
-             value = SimpleDateFormat("dd/MM/yyyy")
-                 .format(
-                 localDateToJavaDate(pickedDate)
-             ),
-             onValueChange ={},
-             label = { Text(text = label)},
-             maxLines = 1,
-             readOnly = true
-         )
 
-
-     }
- */
     MaterialDialog( // defines a material dialog
         dialogState = dateDialogState,
         properties = DialogProperties(

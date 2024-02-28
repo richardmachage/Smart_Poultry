@@ -2,21 +2,6 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
-      <entry key="MyPreview">
-        <State />
-      </entry>
-      <entry key="PrevEgg">
-        <State />
-      </entry>
-      <entry key="PrevEggCollection">
-        <State />
-      </entry>
-      <entry key="PreviewDatePicker">
-        <State />
-      </entry>
-      <entry key="PreviewLogInScreen">
-        <State />
-      </entry>
       <entry key="app">
         <State />
       </entry>

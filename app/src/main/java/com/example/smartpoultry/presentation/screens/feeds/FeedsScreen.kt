@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -24,18 +25,21 @@ import androidx.compose.ui.unit.dp
 import com.example.smartpoultry.presentation.composables.MyDatePicker
 import com.example.smartpoultry.presentation.composables.MyInputDialog
 import com.example.smartpoultry.presentation.composables.MyOutlineTextFiled
+import com.example.smartpoultry.presentation.composables.MyVerticalSpacer
 import com.example.smartpoultry.presentation.composables.NormButton
+import com.example.smartpoultry.presentation.composables.NormText
 import com.example.smartpoultry.presentation.theme.SmartPoultryTheme
 import com.ramcosta.composedestinations.annotation.Destination
 import com.vanpra.composematerialdialogs.rememberMaterialDialogState
 
+@OptIn(ExperimentalMaterial3Api::class)
 @RequiresApi(Build.VERSION_CODES.O)
 @Destination
 @Composable
 fun FeedsScreen() {
     //val feedsViewModel = hiltViewModel<FeedsViewModel>()
 
-    var showDialog by remember{ mutableStateOf(false) }
+    var showDialog by remember { mutableStateOf(false) }
 
     MyInputDialog(
         showDialog = showDialog,
@@ -47,39 +51,35 @@ fun FeedsScreen() {
             showDialog = false
         }
     ) {
-            var text1 by remember {
-                mutableStateOf("")
-            }
-            var text2 by remember {
-                mutableStateOf("")
-            }
-
-            Column(
-                modifier = Modifier.padding(6.dp)
-            ) {
-
-                MyOutlineTextFiled(
-                    label = "Number of Sacks Added",
-                    keyboardType = KeyboardType.Number,
-                    onValueChange = {
-                        text1 = it
-                    }
-                )
-
-                MyDatePicker(
-                    dateDialogState = rememberMaterialDialogState(),
-                    label = "Date",
-                    positiveButtonOnClick = { localDate ->
-                        //feedsViewModel.selectedDate.value = localDate
-                    },
-                    negativeButton = {}
-                )
-            }
+        var text1 by remember {
+            mutableStateOf("")
         }
 
+        Column(
+            modifier = Modifier.padding(6.dp)
+        ) {
+
+            MyDatePicker(
+                dateDialogState = rememberMaterialDialogState(),
+                label = "Date",
+                positiveButtonOnClick = { localDate ->
+                    //feedsViewModel.selectedDate.value = localDate
+                },
+                negativeButton = {}
+            )
+
+            MyOutlineTextFiled(
+                label = "Number of Sacks Added",
+                keyboardType = KeyboardType.Number,
+                onValueChange = {
+                    text1 = it
+                }
+            )
+
+        }
+    }
+
     SmartPoultryTheme {
-
-
         Surface(
             modifier = Modifier
                 .fillMaxSize(),
@@ -107,21 +107,67 @@ fun FeedsScreen() {
 
                     NormButton(
                         onButtonClick = {
-                                        showDialog = true
+                            showDialog = true
                         },
                         btnName = "Add Feeds",
-                        modifier = Modifier.fillMaxWidth())
+                        modifier = Modifier.fillMaxWidth()
+                    )
                 }
-                MyDatePicker(
-                    dateDialogState = rememberMaterialDialogState(),
-                    label = "Date",
-                    positiveButtonOnClick = { localDate ->
-                        //feedsViewModel.selectedDate.value = localDate
-                    },
-                    negativeButton = {}
-                )
-            }
 
+                MyVerticalSpacer(height = 10)
+
+                Column(
+                    Modifier
+                        .border(
+                            width = 1.dp,
+                            color = MaterialTheme.colorScheme.tertiary,
+                            shape = RoundedCornerShape(
+                                (0.03 * LocalConfiguration.current.screenWidthDp).dp
+                            )
+                        )
+                        .fillMaxWidth()
+                        .padding(6.dp)
+                ) {
+                    Text(text = "Record feed usage: ")
+
+                    MyDatePicker(
+                        dateDialogState = rememberMaterialDialogState(),
+                        label = "Date",
+                        positiveButtonOnClick = { localDate ->
+                            //feedsViewModel.selectedDate.value = localDate
+                        },
+                        negativeButton = {}
+                    )
+
+                    var text by remember{ mutableStateOf("") }
+                    MyOutlineTextFiled(
+                        modifier = Modifier.fillMaxWidth(),
+                        label = "Sacks used",
+                        keyboardType = KeyboardType.Number,
+                        onValueChange = {
+                            text = it
+                        }
+                    )
+                }
+
+                MyVerticalSpacer(height = 10)
+
+                Column(
+                    Modifier
+                        .border(
+                            width = 1.dp,
+                            color = MaterialTheme.colorScheme.tertiary,
+                            shape = RoundedCornerShape(
+                                (0.03 * LocalConfiguration.current.screenWidthDp).dp
+                            )
+                        )
+                        .fillMaxWidth()
+                        .padding(6.dp)
+                ){
+                    NormText(text = "View Records:")
+
+                }
+            }
         }
     }
 }
