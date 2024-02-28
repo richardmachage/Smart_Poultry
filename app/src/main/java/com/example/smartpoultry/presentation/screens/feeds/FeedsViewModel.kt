@@ -13,7 +13,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.launch
 import java.sql.Date
 import java.time.LocalDate
 import javax.inject.Inject
@@ -44,14 +43,13 @@ class FeedsViewModel @Inject constructor(
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    fun onAddFeedRecord() {
-        viewModelScope.launch {
-            feedsRepository.addNewFeedsRecord(
-                Feeds(
-                    date = Date(localDateToJavaDate(recordSelectedDate.value)),
-                    numOfSacks = recordsNumOfSacks.intValue
-                )
+    suspend fun onAddFeedRecord(): Long {
+
+        return feedsRepository.addNewFeedsRecord(
+            Feeds(
+                date = Date(localDateToJavaDate(recordSelectedDate.value)),
+                numOfSacks = recordsNumOfSacks.intValue
             )
-        }
+        )
     }
 }

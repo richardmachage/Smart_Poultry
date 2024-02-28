@@ -1,6 +1,7 @@
 package com.example.smartpoultry.presentation.screens.feeds
 
 import android.os.Build
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
@@ -19,9 +20,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.smartpoultry.presentation.composables.MyDatePicker
 import com.example.smartpoultry.presentation.composables.MyInputDialog
 import com.example.smartpoultry.presentation.composables.MyOutlineTextFiled
@@ -30,6 +33,7 @@ import com.example.smartpoultry.presentation.composables.NormButton
 import com.example.smartpoultry.presentation.theme.SmartPoultryTheme
 import com.ramcosta.composedestinations.annotation.Destination
 import com.vanpra.composematerialdialogs.rememberMaterialDialogState
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @RequiresApi(Build.VERSION_CODES.O)
@@ -37,7 +41,7 @@ import com.vanpra.composematerialdialogs.rememberMaterialDialogState
 @Composable
 fun FeedsScreen() {
     val feedsViewModel = hiltViewModel<FeedsViewModel>()
-
+    val context = LocalContext.current
     var showDialog by remember { mutableStateOf(false) }
 
 
@@ -153,7 +157,12 @@ fun FeedsScreen() {
                     NormButton(
                         modifier = Modifier.fillMaxWidth(),
                         onButtonClick = {
-                                        feedsViewModel.onAddFeedRecord()
+
+                            feedsViewModel.viewModelScope.launch {
+                                if(feedsViewModel.onAddFeedRecord() > 0){
+                                    Toast.makeText(context,"Saved Successfully", Toast.LENGTH_SHORT).show()
+                                }
+                            }
                         },
                         btnName = "Save"
                     )

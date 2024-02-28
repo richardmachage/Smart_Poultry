@@ -10,8 +10,8 @@ import javax.inject.Inject
 class FeedsRepositoryImpl @Inject constructor(
     private val feedsDao: FeedsDao
 ) : FeedsRepository {
-    override suspend fun addNewFeedsRecord(feedRecord: Feeds) {
-        feedsDao.addNewFeedsRecord(feedRecord = feedRecord)
+    override suspend fun addNewFeedsRecord(feedRecord: Feeds) : Long{
+       return feedsDao.addNewFeedsRecord(feedRecord = feedRecord)
     }
 
     override suspend fun deleteFeedsRecord(feedRecord: Feeds) {

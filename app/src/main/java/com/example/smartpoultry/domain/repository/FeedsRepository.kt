@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.Flow
 import java.sql.Date
 
 interface FeedsRepository {
-    suspend fun addNewFeedsRecord(feedRecord: Feeds)
+    suspend fun addNewFeedsRecord(feedRecord: Feeds) : Long
 
     suspend fun deleteFeedsRecord(feedRecord: Feeds)
 

@@ -10,7 +10,7 @@ import java.sql.Date
 @Dao
 interface FeedsDao {
     @Insert
-    suspend fun addNewFeedsRecord(feedRecord : Feeds)
+    suspend fun addNewFeedsRecord(feedRecord : Feeds) : Long
 
     @Delete
     suspend fun deleteFeedsRecord(feedRecord: Feeds)
