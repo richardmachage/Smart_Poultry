@@ -262,9 +262,9 @@ fun AnalyticsScreen(
                             else return@remember analyticsViewModel.getMonthlyBlockCollections()
                         }
                         else{ //meaning the level is just overall
-                            if (analyticsViewModel.isPastXDaysAnalysis.value) return@remember analyticsViewModel.getCellEggCollectionForPastDays()
-                            else if (analyticsViewModel.isCustomRangeAnalysis.value) return@remember analyticsViewModel.getCellCollectionBetweenDates()
-                            else return@remember analyticsViewModel.getCellMonthlyRecords()
+                            if (analyticsViewModel.isPastXDaysAnalysis.value) return@remember analyticsViewModel.getOverallCollectionsForPastDays()
+                            else if (analyticsViewModel.isCustomRangeAnalysis.value) return@remember analyticsViewModel.getOverallCollectionBetweenDays()
+                            else return@remember analyticsViewModel.getMonthlyOverallCollections()
                         }
 
                     }.collectAsState(
