@@ -21,13 +21,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.smartpoultry.presentation.composables.MyDatePicker
 import com.example.smartpoultry.presentation.composables.MyInputDialog
 import com.example.smartpoultry.presentation.composables.MyOutlineTextFiled
-import com.example.smartpoultry.presentation.composables.MySearchByDate
 import com.example.smartpoultry.presentation.composables.MyVerticalSpacer
 import com.example.smartpoultry.presentation.composables.NormButton
-import com.example.smartpoultry.presentation.composables.NormText
 import com.example.smartpoultry.presentation.theme.SmartPoultryTheme
 import com.ramcosta.composedestinations.annotation.Destination
 import com.vanpra.composematerialdialogs.rememberMaterialDialogState
@@ -37,9 +36,10 @@ import com.vanpra.composematerialdialogs.rememberMaterialDialogState
 @Destination
 @Composable
 fun FeedsScreen() {
-    //val feedsViewModel = hiltViewModel<FeedsViewModel>()
+    val feedsViewModel = hiltViewModel<FeedsViewModel>()
 
     var showDialog by remember { mutableStateOf(false) }
+
 
     MyInputDialog(
         showDialog = showDialog,
@@ -135,25 +135,33 @@ fun FeedsScreen() {
                         dateDialogState = rememberMaterialDialogState(),
                         label = "Date",
                         positiveButtonOnClick = { localDate ->
-                            //feedsViewModel.selectedDate.value = localDate
+                            feedsViewModel.recordSelectedDate.value = localDate
                         },
                         negativeButton = {}
                     )
 
-                    var text by remember{ mutableStateOf("") }
+                    //var text by remember{ mutableStateOf("") }
                     MyOutlineTextFiled(
                         modifier = Modifier.fillMaxWidth(),
                         label = "Sacks used",
                         keyboardType = KeyboardType.Number,
                         onValueChange = {
-                            text = it
+                            feedsViewModel.recordsNumOfSacks.intValue = it.toIntOrNull() ?: 0
                         }
+                    )
+
+                    NormButton(
+                        modifier = Modifier.fillMaxWidth(),
+                        onButtonClick = {
+                                        feedsViewModel.onAddFeedRecord()
+                        },
+                        btnName = "Save"
                     )
                 }
 
                 MyVerticalSpacer(height = 10)
 
-                Column(
+                /*Column(
                     Modifier
                         .border(
                             width = 1.dp,
@@ -169,11 +177,23 @@ fun FeedsScreen() {
 
                     MySearchByDate(
                         onSearch = {
-
+                            feedsViewModel.searchClicked.value = true
                         }
                     )
-                }
+
+                    if (feedsViewModel.searchClicked.value){
+                        val searchReturn by remember {
+                            feedsViewModel.onSearchFeedRecord()
+                        }.collectAsState(initial = emptyList())
+
+                        if(searchReturn.isNotEmpty()){
+                            Text(text = "Date : ${searchReturn[0].date}  Sacks Used: ${searchReturn[0].numOfSacks}")
+                        }
+                    }
+
+                }*/
             }
         }
     }
+
 }

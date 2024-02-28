@@ -2,32 +2,56 @@ package com.example.smartpoultry.presentation.screens.feeds
 
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.smartpoultry.data.dataSource.room.entities.feeds.Feeds
 import com.example.smartpoultry.domain.repository.FeedsRepository
 import com.example.smartpoultry.utils.localDateToJavaDate
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 import java.sql.Date
 import java.time.LocalDate
 import javax.inject.Inject
 
 @HiltViewModel
 class FeedsViewModel @Inject constructor(
-    private val feedsRepository : FeedsRepository
-): ViewModel() {
+    private val feedsRepository: FeedsRepository
+) : ViewModel() {
+
+    var searchClicked = mutableStateOf(false)
+    var recordsNumOfSacks = mutableIntStateOf(0)
 
     @RequiresApi(Build.VERSION_CODES.O)
-    var selectedDate = mutableStateOf(LocalDate.now())
+    var recordSelectedDate = mutableStateOf(LocalDate.now())
 
     @RequiresApi(Build.VERSION_CODES.O)
     var searchDate = mutableStateOf(LocalDate.now())
 
     @RequiresApi(Build.VERSION_CODES.O)
-    fun onSearchFeedRecord(date : LocalDate) : Flow<List<Feeds>>{
+    fun onSearchFeedRecord(): Flow<List<Feeds>> {
         return feedsRepository.getFeedsRecord(
-            Date( localDateToJavaDate(searchDate.value))
+            Date(localDateToJavaDate(searchDate.value))
+        ).stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(),
+            initialValue = emptyList()
         )
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun onAddFeedRecord() {
+        viewModelScope.launch {
+            feedsRepository.addNewFeedsRecord(
+                Feeds(
+                    date = Date(localDateToJavaDate(recordSelectedDate.value)),
+                    numOfSacks = recordsNumOfSacks.intValue
+                )
+            )
+        }
     }
 }
