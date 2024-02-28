@@ -6,6 +6,7 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.smartpoultry.data.dataSource.room.entities.feeds.FeedTrack
 import com.example.smartpoultry.data.dataSource.room.entities.feeds.Feeds
 import com.example.smartpoultry.domain.repository.FeedsRepository
 import com.example.smartpoultry.utils.localDateToJavaDate
@@ -22,11 +23,13 @@ class FeedsViewModel @Inject constructor(
     private val feedsRepository: FeedsRepository
 ) : ViewModel() {
 
-    var searchClicked = mutableStateOf(false)
     var recordsNumOfSacks = mutableIntStateOf(0)
+    var feedTrackNumOfSacks = mutableIntStateOf(0)
 
     @RequiresApi(Build.VERSION_CODES.O)
     var recordSelectedDate = mutableStateOf(LocalDate.now())
+
+    var feedTrackSelectedDate = mutableStateOf(LocalDate.now())
 
     @RequiresApi(Build.VERSION_CODES.O)
     var searchDate = mutableStateOf(LocalDate.now())
@@ -49,6 +52,16 @@ class FeedsViewModel @Inject constructor(
             Feeds(
                 date = Date(localDateToJavaDate(recordSelectedDate.value)),
                 numOfSacks = recordsNumOfSacks.intValue
+            )
+        )
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    suspend fun onAddFeeTrackRecord(): Long{
+        return  feedsRepository.addNewFeedTrackRecord(
+            FeedTrack(
+                date = Date(localDateToJavaDate(feedTrackSelectedDate.value)),
+                numOfSacks = feedTrackNumOfSacks.intValue
             )
         )
     }

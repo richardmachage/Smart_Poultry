@@ -1,5 +1,6 @@
 package com.example.smartpoultry.data.repositoryImpl
 
+import com.example.smartpoultry.data.dataSource.room.entities.feeds.FeedTrack
 import com.example.smartpoultry.data.dataSource.room.entities.feeds.Feeds
 import com.example.smartpoultry.data.dataSource.room.entities.feeds.FeedsDao
 import com.example.smartpoultry.domain.repository.FeedsRepository
@@ -28,5 +29,9 @@ class FeedsRepositoryImpl @Inject constructor(
 
     override fun getFeedRecordsBetween(startDate: Date, endDate: Date): Flow<List<Feeds>> {
         return getFeedRecordsBetween(startDate,endDate)
+    }
+
+    override suspend fun addNewFeedTrackRecord(feedTrack: FeedTrack): Long {
+       return feedsDao.addNewFeedTrackRecord(feedTrack = feedTrack)
     }
 }

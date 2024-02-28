@@ -1,5 +1,6 @@
 package com.example.smartpoultry.domain.repository
 
+import com.example.smartpoultry.data.dataSource.room.entities.feeds.FeedTrack
 import com.example.smartpoultry.data.dataSource.room.entities.feeds.Feeds
 import kotlinx.coroutines.flow.Flow
 import java.sql.Date
@@ -14,5 +15,7 @@ interface FeedsRepository {
     fun getFeedsRecord(date : Date) : Flow<List<Feeds>>
 
     fun getFeedRecordsBetween(startDate : Date, endDate : Date) : Flow<List<Feeds>>
+
+    suspend fun addNewFeedTrackRecord(feedTrack: FeedTrack) : Long
 
 }

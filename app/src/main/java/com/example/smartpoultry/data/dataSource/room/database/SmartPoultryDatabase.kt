@@ -13,13 +13,14 @@ import com.example.smartpoultry.data.dataSource.room.entities.cells.Cells
 import com.example.smartpoultry.data.dataSource.room.entities.cells.CellsDao
 import com.example.smartpoultry.data.dataSource.room.entities.eggCollection.EggCollection
 import com.example.smartpoultry.data.dataSource.room.entities.eggCollection.EggCollectionDao
+import com.example.smartpoultry.data.dataSource.room.entities.feeds.FeedTrack
 import com.example.smartpoultry.data.dataSource.room.entities.feeds.Feeds
 import com.example.smartpoultry.data.dataSource.room.entities.feeds.FeedsDao
 import com.example.smartpoultry.utils.DbConverters
 
 @Database(
-    entities = [EggCollection::class, Blocks::class, Cells::class, Feeds::class, PopChange::class],
-    version = 3,
+    entities = [EggCollection::class, Blocks::class, Cells::class, Feeds::class, PopChange::class, FeedTrack::class],
+    version = 5,
     exportSchema = false
 )
 

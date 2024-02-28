@@ -33,7 +33,9 @@ import com.example.smartpoultry.presentation.composables.NormButton
 import com.example.smartpoultry.presentation.theme.SmartPoultryTheme
 import com.ramcosta.composedestinations.annotation.Destination
 import com.vanpra.composematerialdialogs.rememberMaterialDialogState
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @OptIn(ExperimentalMaterial3Api::class)
 @RequiresApi(Build.VERSION_CODES.O)
@@ -49,15 +51,19 @@ fun FeedsScreen() {
         showDialog = showDialog,
         title = "Add Feeds",
         onConfirm = {
+            feedsViewModel.viewModelScope.launch {
+                if (feedsViewModel.onAddFeeTrackRecord() > 0) {
+                    withContext(Dispatchers.Main){
+                        Toast.makeText(context, "Saved successfully", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
             showDialog = false
         },
         onDismiss = {
             showDialog = false
         }
     ) {
-        var text1 by remember {
-            mutableStateOf("")
-        }
 
         Column(
             modifier = Modifier.padding(6.dp)
@@ -67,7 +73,7 @@ fun FeedsScreen() {
                 dateDialogState = rememberMaterialDialogState(),
                 label = "Date",
                 positiveButtonOnClick = { localDate ->
-                    //feedsViewModel.selectedDate.value = localDate
+                    feedsViewModel.feedTrackSelectedDate.value = localDate
                 },
                 negativeButton = {}
             )
@@ -76,7 +82,7 @@ fun FeedsScreen() {
                 label = "Number of Sacks Added",
                 keyboardType = KeyboardType.Number,
                 onValueChange = {
-                    text1 = it
+                    feedsViewModel.feedTrackNumOfSacks.intValue = it.toIntOrNull() ?:0
                 }
             )
 
@@ -204,5 +210,6 @@ fun FeedsScreen() {
             }
         }
     }
+
 
 }
