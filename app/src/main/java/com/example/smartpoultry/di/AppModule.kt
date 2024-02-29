@@ -10,6 +10,7 @@ import com.example.smartpoultry.domain.repository.BlocksRepository
 import com.example.smartpoultry.domain.repository.CellsRepository
 import com.example.smartpoultry.domain.repository.EggCollectionRepository
 import com.example.smartpoultry.domain.repository.FeedsRepository
+import com.google.firebase.firestore.FirebaseFirestore
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -49,4 +50,9 @@ object AppModule {
         return FeedsRepositoryImpl(database.feedsDao())
     }
 
+    @Provides
+    @Singleton
+    fun providesFirebaseFireStoreInstance(): FirebaseFirestore{
+        return FirebaseFirestore.getInstance()
+    }
 }
