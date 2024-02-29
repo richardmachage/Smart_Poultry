@@ -4,14 +4,31 @@ import com.example.smartpoultry.data.dataSource.room.entities.blocks.Blocks
 import com.example.smartpoultry.data.dataSource.room.entities.blocks.BlocksDao
 import com.example.smartpoultry.data.dataSource.room.relations.BlocksWithCells
 import com.example.smartpoultry.domain.repository.BlocksRepository
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class BlocksRepositoryImpl @Inject constructor(
-    private val blocksDao: BlocksDao
+    private val blocksDao: BlocksDao,
+    private val fireStoreDB : FirebaseFirestore
 ) : BlocksRepository {
     override suspend fun addNewBlock(block: Blocks) : Long {
-        return blocksDao.addNewBlock(block)
+        val blockId = blocksDao.addNewBlock(block)
+        fireStoreDB
+            .collection("Blocks")
+            .document(blockId.toString())
+            .set(
+                Blocks(blockId = blockId.toInt(),
+                    blockNum = block.blockNum,
+                    totalCells = block.totalCells)
+            )
+            .addOnSuccessListener {
+
+            }
+            .addOnFailureListener{
+
+            }
+        return blockId
     }
 
     override suspend fun deleteBlock(block: Blocks) {
