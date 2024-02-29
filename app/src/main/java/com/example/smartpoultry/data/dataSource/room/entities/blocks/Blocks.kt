@@ -7,6 +7,6 @@ import androidx.room.PrimaryKey
 data class Blocks(
     @PrimaryKey(autoGenerate = true)
     val blockId : Int = 0,
-    val blockNum : Int,
-    val totalCells : Int
+    val blockNum : Int = 0,
+    val totalCells : Int = 0,
 )

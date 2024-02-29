@@ -10,7 +10,9 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class BlocksCollectionListener @Inject constructor(
     private val fireStore: FirebaseFirestore,
     private val blocksDao: BlocksDao
@@ -19,7 +21,7 @@ class BlocksCollectionListener @Inject constructor(
         listenForFireStoreChanges()
     }
 
-    
+
     private fun listenForFireStoreChanges() {
         fireStore.collection("Blocks").addSnapshotListener{
             querySnapshot, exception ->
@@ -28,6 +30,7 @@ class BlocksCollectionListener @Inject constructor(
                 Log.w("Error","Listen failed.", exception)
 
             }
+
 
             for (docChange in querySnapshot!!.documentChanges){
                 val block = docChange.document.toObject<Blocks>() //For each change, it converts the document to a Blocks object
