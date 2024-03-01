@@ -1,16 +1,36 @@
 package com.example.smartpoultry.data.repositoryImpl
 
+import com.example.smartpoultry.data.dataSource.remote.firebase.models.Cell
 import com.example.smartpoultry.data.dataSource.room.entities.cells.Cells
 import com.example.smartpoultry.data.dataSource.room.entities.cells.CellsDao
 import com.example.smartpoultry.domain.repository.CellsRepository
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class CellsRepositoryImpl @Inject constructor(
-    private val cellsDao: CellsDao
+    private val cellsDao: CellsDao,
+    private val fireStoreDb : FirebaseFirestore
 ) : CellsRepository {
     override suspend fun addNewCell(cell: Cells) {
-        cellsDao.addNewCell(cell = cell)
+        val cellId = cellsDao.addNewCell(cell = cell)
+        fireStoreDb
+            .collection("Cells")
+            .document(cellId.toString())
+            .set(
+                Cell(
+                    cellId = cellId.toInt(),
+                    blockId = cell.blockId,
+                    cellNum = cell.cellNum,
+                    henCount = cell.henCount
+                )
+            )
+            .addOnSuccessListener {
+
+            }
+            .addOnFailureListener {
+
+            }
     }
 
     override suspend fun deleteCell(cell: Cells) {

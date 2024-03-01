@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.Flow
 interface CellsDao{
 
     @Upsert
-    suspend fun addNewCell(cell: Cells)
+    suspend fun addNewCell(cell: Cells) : Long
     @Delete
     suspend fun deleteCell(cell: Cells)
 
