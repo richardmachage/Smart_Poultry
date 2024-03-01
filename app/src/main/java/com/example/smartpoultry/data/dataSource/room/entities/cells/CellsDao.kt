@@ -2,15 +2,15 @@ package com.example.smartpoultry.data.dataSource.room.entities.cells
 
 import androidx.room.Dao
 import androidx.room.Delete
-import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
+import androidx.room.Upsert
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface CellsDao{
 
-    @Insert
+    @Upsert
     suspend fun addNewCell(cell: Cells)
     @Delete
     suspend fun deleteCell(cell: Cells)
@@ -30,7 +30,4 @@ interface CellsDao{
     @Update
     suspend fun updateCellInfo(cells: Cells)
 
-   /* @Query("UPDATE cells_tbl SET cellNum = :cellNum, henCount = :henCount WHERE cellId = :cellId")
-    fun updateCellDetails(cellId:Int, cellNum:Int, henCount : Int)
-*/
 }
