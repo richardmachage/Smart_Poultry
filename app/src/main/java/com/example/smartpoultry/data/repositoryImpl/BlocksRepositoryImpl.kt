@@ -70,7 +70,17 @@ class BlocksRepositoryImpl @Inject constructor(
     }
 
     override suspend fun deleteBlock(block: Blocks) {
-        return blocksDao.deleteBlock(block = block)
+         blocksDao.deleteBlock(block = block)
+        fireStoreDB
+            .collection("Blocks")
+            .document(block.blockId.toString())
+            .delete()
+            .addOnSuccessListener {
+
+            }
+            .addOnFailureListener{
+
+            }
     }
 
     override fun getAllBlocks(): Flow<List<Blocks>> {
