@@ -55,12 +55,5 @@ object AppModule {
         return FeedsRepositoryImpl(database.feedsDao())
     }
 
-/*
-    @Provides
-    @Singleton
-    fun providesBlocksCollectionListener(database: SmartPoultryDatabase,fireStore: FirebaseFirestore) : BlocksCollectionListener{
-        return BlocksCollectionListener(fireStore,database.blocksDao())
-    }
-*/
 
 }
