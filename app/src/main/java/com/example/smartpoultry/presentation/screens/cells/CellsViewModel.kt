@@ -45,7 +45,7 @@ class CellsViewModel @Inject constructor(
         }
     }
 
-    fun deleteCell(cell:Cells){
+    fun onDeleteCell(cell:Cells){
         viewModelScope.launch {
             cellsRepository.deleteCell(cell)
         }
