@@ -35,6 +35,16 @@ class CellsRepositoryImpl @Inject constructor(
 
     override suspend fun deleteCell(cell: Cells) {
         cellsDao.deleteCell(cell = cell)
+        fireStoreDb
+            .collection("Cells")
+            .document(cell.cellId.toString())
+            .delete()
+            .addOnSuccessListener {
+                
+            }
+            .addOnFailureListener {
+
+            }
     }
 
     override fun getAllCells(): Flow<List<Cells>> {
