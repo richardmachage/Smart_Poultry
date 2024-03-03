@@ -169,8 +169,10 @@ fun CellsScreen(
                         IconButton(
                             onClick = {
                                 //On delete cell
+                                val cellNum = item.cellNum
+                                val cellId = item.cellId
                             cellsViewModel.onDeleteCell(item)
-                            Toast.makeText(context, "Delete clicked", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, "Cell id: $cellId number: $cellNum deleted successfully", Toast.LENGTH_SHORT).show()
                         }) {
                             Icon(imageVector = Icons.Default.Delete, contentDescription = "delete")
                         }
