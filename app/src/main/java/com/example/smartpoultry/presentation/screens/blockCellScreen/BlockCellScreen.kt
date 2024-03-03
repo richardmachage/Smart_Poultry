@@ -38,6 +38,9 @@ import com.example.smartpoultry.presentation.composables.MyVerticalSpacer
 import com.example.smartpoultry.presentation.destinations.CellsScreenDestination
 import com.example.smartpoultry.presentation.uiModels.BlockItem
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @com.ramcosta.composedestinations.annotation.Destination
@@ -168,7 +171,14 @@ fun BlockCellScreen(
 
                         IconButton(onClick = {
                             // on delete block
-                            Toast.makeText(context, "Delete clicked", Toast.LENGTH_SHORT).show()
+                            val blockId = block.blockId
+                            val blockNum = block.blockNum
+
+                            CoroutineScope(Dispatchers.IO).launch {
+                                blockCellViewModel.onDeleteBlock(block = block)
+                            }
+
+                            //Toast.makeText(context, "Block Id: $blockId Number: $blockNum deleted successfully", Toast.LENGTH_SHORT).show()
                         }) {
                             Icon(imageVector = Icons.Default.Delete, contentDescription = "delete")
                         }

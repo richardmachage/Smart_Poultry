@@ -27,5 +27,5 @@ interface BlocksDao{
     fun getBlocksWithCells() : Flow<List<BlocksWithCells>>
 
     @Query("DELETE FROM cells_tbl WHERE blockId = :blockId")
-    fun deleteCellsForBlock(blockId: Int)
+    suspend fun deleteCellsForBlock(blockId: Int)
 }

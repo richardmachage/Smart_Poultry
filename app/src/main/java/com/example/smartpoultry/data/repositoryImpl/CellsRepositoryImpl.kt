@@ -1,5 +1,6 @@
 package com.example.smartpoultry.data.repositoryImpl
 
+import android.util.Log
 import com.example.smartpoultry.data.dataSource.remote.firebase.models.Cell
 import com.example.smartpoultry.data.dataSource.room.entities.cells.Cells
 import com.example.smartpoultry.data.dataSource.room.entities.cells.CellsDao
@@ -12,6 +13,23 @@ class CellsRepositoryImpl @Inject constructor(
     private val cellsDao: CellsDao,
     private val fireStoreDb : FirebaseFirestore
 ) : CellsRepository {
+
+    init {
+        listenForFireStoreChanges()
+    }
+
+    private fun listenForFireStoreChanges() {
+        fireStoreDb.collection("Blocks")
+            .addSnapshotListener {
+                                 querySnapshot, exception ->
+                if (exception != null){ //f an error exists, it logs the error and returns early from the listener.
+                    Log.w("Error","Listen failed.", exception)
+
+                }
+
+            }
+    }
+
     override suspend fun addNewCell(cell: Cells) {
         val cellId = cellsDao.addNewCell(cell = cell)
         fireStoreDb

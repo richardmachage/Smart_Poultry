@@ -56,6 +56,13 @@ class BlockCellViewModel @Inject constructor(
         }
     }
 
+    fun onDeleteBlock(block: Blocks){
+
+        viewModelScope.launch {
+            blocksRepository.deleteBlock(block = block)
+        }
+    }
+
     fun clearTextFields(){
         blockNumText.value = ""
         cellsText.value = ""

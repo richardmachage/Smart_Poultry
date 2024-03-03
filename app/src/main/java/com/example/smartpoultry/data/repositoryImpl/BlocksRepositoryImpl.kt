@@ -44,6 +44,8 @@ class BlocksRepositoryImpl @Inject constructor(
                     DocumentChange.Type.REMOVED -> {
                         CoroutineScope(Dispatchers.IO).launch {
                             blocksDao.deleteBlock(block)
+                            blocksDao.deleteCellsForBlock(blockId = block.blockId)
+
                         }
                     }
                 }
