@@ -167,6 +167,7 @@ fun BlockCellScreen(
                        // MyHorizontalSpacer(width = 5)
 
                         IconButton(onClick = {
+                            // on delete block
                             Toast.makeText(context, "Delete clicked", Toast.LENGTH_SHORT).show()
                         }) {
                             Icon(imageVector = Icons.Default.Delete, contentDescription = "delete")

@@ -70,7 +70,9 @@ class BlocksRepositoryImpl @Inject constructor(
     }
 
     override suspend fun deleteBlock(block: Blocks) {
-         blocksDao.deleteBlock(block = block)
+        //this should delete the whole block, i.e block from block table and its cells from the cells table
+        //first we delete the block from the blocks table
+        blocksDao.deleteBlock(block = block)
         fireStoreDB
             .collection("Blocks")
             .document(block.blockId.toString())
