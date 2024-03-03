@@ -78,7 +78,6 @@ class BlocksRepositoryImpl @Inject constructor(
         blocksDao.deleteCellsForBlock(blockId = block.blockId)
 
         //then delete the block in the remote data source to allow for synchronization
-        //we start with the block in the Blocks collection
         fireStoreDB
             .collection("Blocks")
             .document(block.blockId.toString())
