@@ -45,8 +45,4 @@ class CellsViewModel @Inject constructor(
         }
     }
 
-    fun clearTextFields(){
-        henCountText.value = ""
-        cellNumText.value = ""
-    }
 }
