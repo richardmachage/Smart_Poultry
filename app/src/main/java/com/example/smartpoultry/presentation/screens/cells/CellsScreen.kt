@@ -155,7 +155,7 @@ fun CellsScreen(
                                     cellsViewModel.setTheSelectedCell(item)
                                     cellsViewModel.showDialog.value = true
                                 }
-                                //.fillMaxWidth()
+                                .fillMaxWidth(0.9f)
 
                                 .padding(6.dp)
                         ) {
