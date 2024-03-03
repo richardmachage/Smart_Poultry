@@ -15,6 +15,8 @@ class CellsRepositoryImpl @Inject constructor(
     override suspend fun addNewCell(cell: Cells) {
         val cellId = cellsDao.addNewCell(cell = cell)
         fireStoreDb
+            .collection("Blocks")
+            .document(cell.blockId.toString())
             .collection("Cells")
             .document(cellId.toString())
             .set(
@@ -36,11 +38,13 @@ class CellsRepositoryImpl @Inject constructor(
     override suspend fun deleteCell(cell: Cells) {
         cellsDao.deleteCell(cell = cell)
         fireStoreDb
+            .collection("Blocks")
+            .document(cell.blockId.toString())
             .collection("Cells")
             .document(cell.cellId.toString())
             .delete()
             .addOnSuccessListener {
-                
+
             }
             .addOnFailureListener {
 
