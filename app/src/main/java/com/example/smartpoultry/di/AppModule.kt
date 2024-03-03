@@ -45,8 +45,8 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun providesCellsRepository(database: SmartPoultryDatabase): CellsRepository{
-        return CellsRepositoryImpl(database.cellsDao())
+    fun providesCellsRepository(database: SmartPoultryDatabase, fireStoreDb: FirebaseFirestore): CellsRepository{
+        return CellsRepositoryImpl(cellsDao = database.cellsDao(), fireStoreDb = fireStoreDb)
     }
 
     @Provides
@@ -54,6 +54,5 @@ object AppModule {
     fun provideFeedsRepository(database: SmartPoultryDatabase): FeedsRepository{
         return FeedsRepositoryImpl(database.feedsDao())
     }
-
 
 }
