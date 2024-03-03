@@ -12,8 +12,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -22,6 +26,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
@@ -43,55 +48,61 @@ fun CellsScreen(
     val context = LocalContext.current
 
     //Edit cell Dialog
-    if (cellsViewModel.showDialog.value){
+    if (cellsViewModel.showDialog.value) {
         val cell = cellsViewModel.selectedCell
         cellsViewModel.cellNumText.value = cell.cellNum.toString()
         cellsViewModel.henCountText.value = cell.henCount.toString()
         AlertDialog(
             onDismissRequest = { cellsViewModel.showDialog.value = false },
-            title = { Text(text = "Edit Cell")},
+            title = { Text(text = "Edit Cell") },
             text = {
-                   Column {
-                       Text(text = "Cell ID : ${cell.cellId}")
+                Column {
+                    Text(text = "Cell ID : ${cell.cellId}")
 
-                       TextField( //shows cell num
-                           value = cellsViewModel.cellNumText.value,
-                           onValueChange = {
-                                       cellsViewModel.cellNumText.value = it
-                           },
-                           label = { Text(text = "Cell Number")}
-                       )
-                       MyVerticalSpacer(height = 5)
+                    TextField( //shows cell num
+                        value = cellsViewModel.cellNumText.value,
+                        onValueChange = {
+                            cellsViewModel.cellNumText.value = it
+                        },
+                        label = { Text(text = "Cell Number") }
+                    )
+                    MyVerticalSpacer(height = 5)
 
-                       TextField( //shows hen count
-                           value = cellsViewModel.henCountText.value,
-                           onValueChange = {
-                               cellsViewModel.henCountText.value = it
-                           },
-                           label = { Text(text = "Hen Count") },
+                    TextField(
+                        //shows hen count
+                        value = cellsViewModel.henCountText.value,
+                        onValueChange = {
+                            cellsViewModel.henCountText.value = it
+                        },
+                        label = { Text(text = "Hen Count") },
 
-                       )
-                   }
+                        )
+                }
             },
             confirmButton = {
-                            Button(onClick = {
-                                cellsViewModel.updateCellInfo(Cells(
-                                    cellId = cell.cellId,
-                                    blockId = cell.blockId,
-                                    cellNum = cellsViewModel.cellNumText.value.toInt(),
-                                    henCount = cellsViewModel.henCountText.value.toInt()
-                                    )
-                                )
-                                Toast.makeText(context,"Cell number ${cell.cellNum} Info updated successfully", Toast.LENGTH_SHORT).show()
-                                cellsViewModel.showDialog.value = false
-                                //cellsViewModel.clearTextFields()
-                            }) {
-                                Text(text = "Save")
-                            }
+                Button(onClick = {
+                    cellsViewModel.updateCellInfo(
+                        Cells(
+                            cellId = cell.cellId,
+                            blockId = cell.blockId,
+                            cellNum = cellsViewModel.cellNumText.value.toInt(),
+                            henCount = cellsViewModel.henCountText.value.toInt()
+                        )
+                    )
+                    Toast.makeText(
+                        context,
+                        "Cell number ${cell.cellNum} Info updated successfully",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    cellsViewModel.showDialog.value = false
+                    //cellsViewModel.clearTextFields()
+                }) {
+                    Text(text = "Save")
+                }
             },
             dismissButton = {
                 Button(onClick = {
-                   // Toast.makeText(context, "Cancel Clicked", Toast.LENGTH_SHORT).show()
+                    // Toast.makeText(context, "Cancel Clicked", Toast.LENGTH_SHORT).show()
                     cellsViewModel.showDialog.value = false
                 }) {
                     Text(text = "Cancel")
@@ -99,7 +110,7 @@ fun CellsScreen(
             }
         )
     }
-    
+
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background
@@ -119,17 +130,14 @@ fun CellsScreen(
 
             MyVerticalSpacer(height = 3)
 
-            LazyColumn (
+            LazyColumn(
                 modifier = Modifier.padding(3.dp)
-            ){
-                itemsIndexed(listOfCells) {_, item ->
+            ) {
+                itemsIndexed(listOfCells) { _, item ->
                     MyVerticalSpacer(height = 6)
-                    Column(
-                        modifier = Modifier
-                            .clickable {
-                                cellsViewModel.setTheSelectedCell(item)
-                                cellsViewModel.showDialog.value = true
-                            }
+
+                    Row(
+                        Modifier
                             .fillMaxWidth()
                             .border(
                                 width = 1.dp,
@@ -137,12 +145,33 @@ fun CellsScreen(
                                 shape = RoundedCornerShape(
                                     (0.03 * LocalConfiguration.current.screenWidthDp).dp
                                 )
-                            )
-                            .padding(6.dp)
+                            ),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Text(text = "Cell Id : ${item.cellId}")
-                        Text(text = "Cell number : ${item.cellNum}")
-                        Text(text = "Number of Chicken : ${item.henCount}")
+                        Column(
+                            modifier = Modifier
+                                .clickable {
+                                    cellsViewModel.setTheSelectedCell(item)
+                                    cellsViewModel.showDialog.value = true
+                                }
+                                //.fillMaxWidth()
+
+                                .padding(6.dp)
+                        ) {
+                            Text(text = "Cell Id : ${item.cellId}")
+                            Text(text = "Cell number : ${item.cellNum}")
+                            Text(text = "Number of Chicken : ${item.henCount}")
+                        }
+
+                       // MyHorizontalSpacer(width = 5)
+
+                        IconButton(
+                            onClick = {
+                            Toast.makeText(context, "Delete clicked", Toast.LENGTH_SHORT).show()
+                        }) {
+                            Icon(imageVector = Icons.Default.Delete, contentDescription = "delete")
+                        }
                     }
 
                 }

@@ -34,7 +34,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.smartpoultry.presentation.composables.MyHorizontalSpacer
 import com.example.smartpoultry.presentation.composables.MyVerticalSpacer
 import com.example.smartpoultry.presentation.destinations.CellsScreenDestination
 import com.example.smartpoultry.presentation.uiModels.BlockItem
@@ -151,13 +150,13 @@ fun BlockCellScreen(
                                     (0.03 * LocalConfiguration.current.screenWidthDp).dp
                                 )
                             ),
-                        horizontalArrangement = Arrangement.SpaceBetween,
+                        horizontalArrangement = Arrangement.Absolute.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Column(
                             Modifier
                                 .clickable { navigator.navigate(CellsScreenDestination(block.blockId)) }
-                                //.fillMaxWidth()
+                                .fillMaxWidth(0.9f)
                                 .padding(6.dp)
                         ) {
                             Text(text = "BlockId : ${block.blockId}")
@@ -165,7 +164,7 @@ fun BlockCellScreen(
                             Text(text = "Number of cells: ${block.totalCells}")
                         }
 
-                        MyHorizontalSpacer(width = 5)
+                       // MyHorizontalSpacer(width = 5)
 
                         IconButton(onClick = {
                             Toast.makeText(context, "Delete clicked", Toast.LENGTH_SHORT).show()
