@@ -97,21 +97,26 @@ class BlocksRepositoryImpl @Inject constructor(
             }
 
         //Then delete the cells of the block as well
+        Log.i("Firebase", "query firebase")
+
         fireStoreDB
             .collection("Cells")
-            .whereEqualTo("blockId", block.blockId.toString())
+            .whereEqualTo("blockId", block.blockId)
             .get()
             .addOnSuccessListener { querySnapshot ->
+                Log.i("Firebase", "query successful")
+
                 fireStoreDB.runBatch { batch ->
                     querySnapshot.documents.forEach { document ->
+                        Log.i("Firebase", "deleting cell ${document.id}")
                         batch.delete(fireStoreDB.collection("Cells").document(document.id))
-
                     }
                 }.addOnCompleteListener {
 
                 }
             }
             .addOnFailureListener {
+                Log.i("Firebase", "query failed")
 
             }
 

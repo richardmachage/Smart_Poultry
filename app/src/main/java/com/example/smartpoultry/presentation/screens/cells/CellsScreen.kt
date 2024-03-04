@@ -25,7 +25,9 @@ import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
@@ -33,6 +35,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.smartpoultry.data.dataSource.room.entities.cells.Cells
+import com.example.smartpoultry.presentation.composables.MyInputDialog
 import com.example.smartpoultry.presentation.composables.MyVerticalSpacer
 import com.ramcosta.composedestinations.annotation.Destination
 
@@ -166,13 +169,36 @@ fun CellsScreen(
 
                        // MyHorizontalSpacer(width = 5)
 
+                        var showDeleteDialog by remember { mutableStateOf(false) }
+                        MyInputDialog(
+                            showDialog = showDeleteDialog,
+                            title = "Delete Block",
+                            onConfirm = {
+                                // on delete block
+                                val cellNum = item.cellNum
+                                val cellId = item.cellId
+                                cellsViewModel.onDeleteCell(item)
+
+                                Toast.makeText(context, "Cell id: $cellId number: $cellNum deleted successfully", Toast
+                                    .LENGTH_SHORT).show()
+                                showDeleteDialog = false
+
+                            },
+                            onDismiss = {
+                                showDeleteDialog = false
+                            }
+                        )
+                        {
+                            Column {
+                                Text(text = "Warning! \nDeleting this block will also delete all the cells within the block ")
+                                MyVerticalSpacer(height = 10)
+                                Text(text = "Are you sure you want to delete?")
+                            }
+                        }
                         IconButton(
                             onClick = {
                                 //On delete cell
-                                val cellNum = item.cellNum
-                                val cellId = item.cellId
-                            cellsViewModel.onDeleteCell(item)
-                            Toast.makeText(context, "Cell id: $cellId number: $cellNum deleted successfully", Toast.LENGTH_SHORT).show()
+                                showDeleteDialog = true
                         }) {
                             Icon(imageVector = Icons.Default.Delete, contentDescription = "delete")
                         }
