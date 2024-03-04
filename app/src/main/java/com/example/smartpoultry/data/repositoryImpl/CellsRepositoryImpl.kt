@@ -27,6 +27,7 @@ class CellsRepositoryImpl @Inject constructor(
             .addSnapshotListener { querySnapshot, exception ->
                 if (exception != null) { //f an error exists, it logs the error and returns early from the listener.
                     Log.w("Error", "Listen failed.", exception)
+                    return@addSnapshotListener
                 }
 
                 for (docChange in querySnapshot!!.documentChanges) {

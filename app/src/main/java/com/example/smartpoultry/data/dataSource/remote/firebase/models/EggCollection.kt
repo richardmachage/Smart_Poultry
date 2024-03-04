@@ -3,7 +3,7 @@ package com.example.smartpoultry.data.dataSource.remote.firebase.models
 import java.sql.Date
 
 
-data class EggCollection(
+data class EggCollectionFb(
     val productionId : Int = 0,
     val date : Date = Date(System.currentTimeMillis()),
     val cellId : Int = 0,

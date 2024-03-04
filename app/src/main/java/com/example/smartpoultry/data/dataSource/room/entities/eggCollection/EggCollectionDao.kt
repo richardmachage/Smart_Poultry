@@ -6,6 +6,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
+import androidx.room.Update
 import com.example.smartpoultry.data.dataModels.DailyEggCollection
 import kotlinx.coroutines.flow.Flow
 import java.sql.Date
@@ -16,6 +17,9 @@ interface EggCollectionDao {
 
     @Insert(onConflict = OnConflictStrategy.ABORT)
     suspend  fun insertCollectionRecord(eggCollection: EggCollection)
+
+    @Update
+    suspend fun updateCollectionRecord(eggCollection: EggCollection)
 
     @Delete
     suspend fun deleteCollectionRecord(eggCollection: EggCollection)

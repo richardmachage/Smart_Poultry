@@ -26,7 +26,7 @@ class BlocksRepositoryImpl @Inject constructor(
 
             if (exception != null) { //f an error exists, it logs the error and returns early from the listener.
                 Log.w("Error", "Listen failed.", exception)
-
+                return@addSnapshotListener
             }
 
 
