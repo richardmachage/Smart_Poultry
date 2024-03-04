@@ -23,6 +23,7 @@ import java.sql.Date
 import java.time.LocalDate
 import javax.inject.Inject
 
+@RequiresApi(Build.VERSION_CODES.O)
 @HiltViewModel
 class EggScreenViewModel @Inject constructor(
     private val blocksRepository: BlocksRepository,
@@ -42,6 +43,8 @@ class EggScreenViewModel @Inject constructor(
 
 
     init {
+        setChosenDateValue(LocalDate.now())
+
         viewModelScope.launch {
             getAllBlocks.collect {
                 myInputBlocks.clear()
@@ -54,6 +57,7 @@ class EggScreenViewModel @Inject constructor(
     @RequiresApi(Build.VERSION_CODES.O)
     var selectedDate = mutableStateOf(LocalDate.now())
         private set
+
     private lateinit var chosenDateValue :Date
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -104,7 +108,7 @@ class EggScreenViewModel @Inject constructor(
                 cellsInput.forEach{ record ->
                     if(
                         eggCollectionRepository.addNewRecord(EggCollection(
-                            date = chosenDateValue,//Date.valueOf(selectedDate.value.toString()), //Date.valueOf(myDateFormatter(selectedDate.value)),
+                            date = chosenDateValue,  //Date.valueOf(selectedDate.value.toString()), //Date.valueOf(myDateFormatter(selectedDate.value)),
                             cellId = record.cellId,
                             eggCount = record.eggCount,
                             henCount = record.henCount

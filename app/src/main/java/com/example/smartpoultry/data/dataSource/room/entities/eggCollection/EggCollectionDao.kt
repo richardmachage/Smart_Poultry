@@ -16,7 +16,7 @@ interface EggCollectionDao {
     //here goes all functions needed to modify the EggCollection table
 
     @Insert(onConflict = OnConflictStrategy.ABORT)
-    suspend  fun insertCollectionRecord(eggCollection: EggCollection)
+    suspend  fun insertCollectionRecord(eggCollection: EggCollection) : Long
 
     @Update
     suspend fun updateCollectionRecord(eggCollection: EggCollection)

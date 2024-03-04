@@ -15,63 +15,62 @@ import kotlinx.coroutines.launch
 import java.sql.Date
 import javax.inject.Inject
 
-class EggCollectionRepositoryImpl @Inject constructor (
+class EggCollectionRepositoryImpl @Inject constructor(
     private val eggCollectionDao: EggCollectionDao,
-    private val fireStoreDb : FirebaseFirestore
-) : EggCollectionRepository
-{
+    private val fireStoreDb: FirebaseFirestore
+) : EggCollectionRepository {
 
     init {
-        listenForFireStoreChanges()
+       listenForFireStoreChanges()
     }
 
     private fun listenForFireStoreChanges() {
         fireStoreDb
             .collection("EggCollections")
-            .addSnapshotListener{ querySnapShot, exception ->
+            .addSnapshotListener { querySnapShot, exception ->
 
                 if (exception != null) { //f an error exists, it logs the error and returns early from the listener.
                     Log.w("Error", "Listen failed.", exception)
                     return@addSnapshotListener
                 }
 
-                for (docChange in querySnapShot!!.documentChanges){
-                    val eggCollection = docChange.document.toObject( EggCollectionFb:: class.java)
+                for (docChange in querySnapShot!!.documentChanges) {
+                    val eggCollection = docChange.document.toObject(EggCollectionFb::class.java)
 
-                    when (docChange.type){
+                    when (docChange.type) {
                         DocumentChange.Type.ADDED -> {
                             CoroutineScope(Dispatchers.IO).launch {
                                 eggCollectionDao.insertCollectionRecord(
                                     EggCollection(
-                                        eggCollection.productionId,
-                                        eggCollection.date,
-                                        eggCollection.cellId,
-                                        eggCollection.eggCount,
-                                        eggCollection.henCount
+                                        //eggCollection.productionId,
+                                        date = Date(eggCollection.date.time), //eggCollection.date,
+                                        cellId = eggCollection.cellId,
+                                       eggCount =  eggCollection.eggCount,
+                                        henCount = eggCollection.henCount
                                     )
                                 )
                             }
                         }
+
                         DocumentChange.Type.MODIFIED -> {
                             CoroutineScope(Dispatchers.IO).launch {
                                 eggCollectionDao.updateCollectionRecord(
                                     EggCollection(
                                         eggCollection.productionId,
-                                        eggCollection.date,
-                                        eggCollection.cellId,
+                                        date = Date(eggCollection.date.time),                                        eggCollection.cellId,
                                         eggCollection.eggCount,
                                         eggCollection.henCount
                                     )
                                 )
                             }
                         }
+
                         DocumentChange.Type.REMOVED -> {
                             CoroutineScope(Dispatchers.IO).launch {
                                 eggCollectionDao.deleteCollectionRecord(
                                     EggCollection(
                                         eggCollection.productionId,
-                                        eggCollection.date,
-                                        eggCollection.cellId,
+                                        date = Date(eggCollection.date.time),                                        eggCollection.cellId,
                                         eggCollection.eggCount,
                                         eggCollection.henCount
                                     )
@@ -80,16 +79,27 @@ class EggCollectionRepositoryImpl @Inject constructor (
                         }
                     }
                 }
-
             }
     }
-
-
-    override suspend fun addNewRecord(eggCollection: EggCollection) : Boolean{
+    override suspend fun addNewRecord(eggCollection: EggCollection): Boolean {
         var insertStatus = true
         try {
-            eggCollectionDao.insertCollectionRecord(eggCollection)
-        }catch (e : Exception){
+
+            val recordId = eggCollectionDao.insertCollectionRecord(eggCollection)
+            fireStoreDb
+                .collection("EggCollections")
+                .document(recordId.toString())
+                .set(
+                    EggCollection(
+                        productionId = recordId.toInt(),
+                        date = eggCollection.date,
+                        cellId = eggCollection.cellId,
+                        eggCount = eggCollection.eggCount,
+                        henCount = eggCollection.henCount
+
+                    )
+                )
+        } catch (e: Exception) {
             insertStatus = false
         }
         return insertStatus
@@ -108,29 +118,40 @@ class EggCollectionRepositoryImpl @Inject constructor (
     }
 
     override fun getRecord(date: Date): Flow<List<EggCollection>> {
-        return  eggCollectionDao.getCollectionRecord(date)
+        return eggCollectionDao.getCollectionRecord(date)
     }
 
     override fun getCollectionsBetween(startDate: Date, endDate: Date): Flow<List<EggCollection>> {
-        return eggCollectionDao.getCollectionRecordsBetween(startDate,endDate)
+        return eggCollectionDao.getCollectionRecordsBetween(startDate, endDate)
     }
 
     override fun getAllRecordsForCell(cellId: Int): Flow<List<EggCollection>> {
         return eggCollectionDao.getAllRecordsForCell(cellId)
     }
 
-    override fun getRecordsForCellBetween(cellId: Int, startDate: Date, endDate: Date): Flow<List<EggCollection>> {
-        return eggCollectionDao.getRecordsForCellBetween(cellId, startDate,endDate)
+    override fun getRecordsForCellBetween(
+        cellId: Int,
+        startDate: Date,
+        endDate: Date
+    ): Flow<List<EggCollection>> {
+        return eggCollectionDao.getRecordsForCellBetween(cellId, startDate, endDate)
     }
 
     override fun getRecentEggCollectionRecords(startDate: Date): Flow<List<DailyEggCollection>> {
-        return  eggCollectionDao.getRecentEggCollectionRecords(startDate)
-    }
-    override fun getCellEggCollectionForPastDays(cellId: Int, startDate: Date): Flow<List<EggCollection>> {
-        return  eggCollectionDao.getCellEggCollectionForPastDays(cellId,startDate)
+        return eggCollectionDao.getRecentEggCollectionRecords(startDate)
     }
 
-    override fun getCellCollectionByMonth(cellId: Int, yearMonth: String): Flow<List<EggCollection>> {
+    override fun getCellEggCollectionForPastDays(
+        cellId: Int,
+        startDate: Date
+    ): Flow<List<EggCollection>> {
+        return eggCollectionDao.getCellEggCollectionForPastDays(cellId, startDate)
+    }
+
+    override fun getCellCollectionByMonth(
+        cellId: Int,
+        yearMonth: String
+    ): Flow<List<EggCollection>> {
         return eggCollectionDao.getCellCollectionByMonth(cellId = cellId, yearMonth = yearMonth)
     }
 
@@ -150,7 +171,7 @@ class EggCollectionRepositoryImpl @Inject constructor (
         startDate: Date,
         endDate: Date
     ): Flow<List<DailyEggCollection>> {
-        return eggCollectionDao.getBlockEggCollectionsBetweenDates(blockId,startDate,endDate)
+        return eggCollectionDao.getBlockEggCollectionsBetweenDates(blockId, startDate, endDate)
     }
 
     override fun getBlockEggCollectionForPastDays(
@@ -168,7 +189,7 @@ class EggCollectionRepositoryImpl @Inject constructor (
         startDate: Date,
         endDate: Date
     ): Flow<List<DailyEggCollection>> {
-        return eggCollectionDao.getOverallCollectionBetweenDates(startDate,endDate)
+        return eggCollectionDao.getOverallCollectionBetweenDates(startDate, endDate)
     }
 
     override fun getOverallCollectionByMonth(yearMonth: String): Flow<List<DailyEggCollection>> {
