@@ -118,11 +118,31 @@ fun CellsScreen(
         )
     }
 
+    var showAddCellDialog by remember { mutableStateOf(false) }
+    MyInputDialog(
+        showDialog = showAddCellDialog,
+        title = "Create New Cell",
+        onConfirm = { 
+                    cellsViewModel.onAddNewCell(Cells(
+                        blockId = blockId,
+                        cellNum = if (listOfCells.isNotEmpty()) listOfCells.size + 1 else 1
+                    ))
+            showAddCellDialog = false
+        },
+        onDismiss = {
+            showAddCellDialog = false
+        }
+    ) {
+        Column {
+            Text(text = "Are you sure you want to add a new cell this block?")
+        }
+    }
+
     Scaffold (
         floatingActionButton = {
             IconButton(
                 onClick = {
-
+                 showAddCellDialog = true   
                 }
             ) {
                 Icon(

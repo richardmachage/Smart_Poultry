@@ -51,4 +51,10 @@ class CellsViewModel @Inject constructor(
         }
     }
 
+    fun onAddNewCell(cell : Cells){
+        viewModelScope.launch{
+            cellsRepository.addNewCell(cell)
+        }
+    }
+
 }
