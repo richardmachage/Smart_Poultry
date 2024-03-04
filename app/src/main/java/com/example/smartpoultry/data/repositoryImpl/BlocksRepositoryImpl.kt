@@ -15,32 +15,34 @@ import javax.inject.Inject
 
 class BlocksRepositoryImpl @Inject constructor(
     private val blocksDao: BlocksDao,
-    private val fireStoreDB : FirebaseFirestore
+    private val fireStoreDB: FirebaseFirestore
 ) : BlocksRepository {
     init {
         listenForFireStoreChanges()
     }
-    private fun listenForFireStoreChanges() {
-        fireStoreDB.collection("Blocks").addSnapshotListener{
-                querySnapshot, exception ->
 
-            if (exception != null){ //f an error exists, it logs the error and returns early from the listener.
-                Log.w("Error","Listen failed.", exception)
+    private fun listenForFireStoreChanges() {
+        fireStoreDB.collection("Blocks").addSnapshotListener { querySnapshot, exception ->
+
+            if (exception != null) { //f an error exists, it logs the error and returns early from the listener.
+                Log.w("Error", "Listen failed.", exception)
 
             }
 
 
-            for (docChange in querySnapshot!!.documentChanges){
-                val block = docChange.document.toObject(Blocks::class.java) //For each change, it converts the document to a Blocks object
+            for (docChange in querySnapshot!!.documentChanges) {
+                val block =
+                    docChange.document.toObject(Blocks::class.java) //For each change, it converts the document to a Blocks object
 
-                when (docChange.type){
+                when (docChange.type) {
                     DocumentChange.Type.ADDED,
-                    DocumentChange.Type.MODIFIED ->{
+                    DocumentChange.Type.MODIFIED -> {
                         CoroutineScope(Dispatchers.IO).launch {
                             blocksDao.addNewBlock(block)
 
                         }
                     }
+
                     DocumentChange.Type.REMOVED -> {
                         CoroutineScope(Dispatchers.IO).launch {
                             blocksDao.deleteBlock(block)
@@ -52,20 +54,23 @@ class BlocksRepositoryImpl @Inject constructor(
             }
         }
     }
-    override suspend fun addNewBlock(block: Blocks) : Long {
+
+    override suspend fun addNewBlock(block: Blocks): Long {
         val blockId = blocksDao.addNewBlock(block)
         fireStoreDB
             .collection("Blocks")
             .document(blockId.toString())
             .set(
-                Blocks(blockId = blockId.toInt(),
+                Blocks(
+                    blockId = blockId.toInt(),
                     blockNum = block.blockNum,
-                    totalCells = block.totalCells)
+                    totalCells = block.totalCells
+                )
             )
             .addOnSuccessListener {
 
             }
-            .addOnFailureListener{
+            .addOnFailureListener {
 
             }
         return blockId
@@ -87,11 +92,30 @@ class BlocksRepositoryImpl @Inject constructor(
             .addOnSuccessListener {
 
             }
-            .addOnFailureListener{
+            .addOnFailureListener {
 
             }
 
-        //
+        //Then delete the cells of the block as well
+        fireStoreDB
+            .collection("Cells")
+            .whereEqualTo("blockId", block.blockId.toString())
+            .get()
+            .addOnSuccessListener { querySnapshot ->
+                fireStoreDB.runBatch { batch ->
+                    querySnapshot.documents.forEach { document ->
+                        batch.delete(fireStoreDB.collection("Cells").document(document.id))
+
+                    }
+                }.addOnCompleteListener {
+
+                }
+            }
+            .addOnFailureListener {
+
+            }
+
+
     }
 
     override fun getAllBlocks(): Flow<List<Blocks>> {
