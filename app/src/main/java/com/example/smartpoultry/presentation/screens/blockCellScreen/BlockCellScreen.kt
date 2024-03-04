@@ -63,6 +63,8 @@ fun BlockCellScreen(
     val blockCellViewModel: BlockCellViewModel = hiltViewModel()
 
     val listOfBlocks by blockCellViewModel.listOfBlocks.collectAsState()
+    val listOfBlocksWithCells by blockCellViewModel.listOfBlocksWithCells.collectAsState()
+
     val showDialog = blockCellViewModel.showDialog.value
 
     //AddBlockDialog
@@ -145,7 +147,8 @@ fun BlockCellScreen(
                     .padding(6.dp),
                 contentPadding = paddingValues
             ) {
-                itemsIndexed(listOfBlocks) { blockIndex, block ->
+                itemsIndexed( listOfBlocksWithCells//listOfBlocks
+                ) { blockIndex, blockWithCells ->
                     MyVerticalSpacer(height = 10)
                     Row(
                         Modifier
@@ -162,13 +165,13 @@ fun BlockCellScreen(
                     ) {
                         Column(
                             Modifier
-                                .clickable { navigator.navigate(CellsScreenDestination(block.blockId)) }
+                                .clickable { navigator.navigate(CellsScreenDestination(blockWithCells.block.blockId)) }
                                 .fillMaxWidth(0.9f)
                                 .padding(6.dp)
                         ) {
-                            Text(text = "BlockId : ${block.blockId}")
-                            Text(text = "Block Number : ${block.blockNum}")
-                            Text(text = "Number of cells: ${block.totalCells}")
+                            Text(text = "BlockId : ${blockWithCells.block.blockId}")
+                            Text(text = "Block Number : ${blockWithCells.block.blockNum}")
+                            Text(text = "Number of cells: ${blockWithCells.cell.size}")
                         }
 
                         // MyHorizontalSpacer(width = 5)
@@ -179,11 +182,11 @@ fun BlockCellScreen(
                             title = "Delete Block",
                             onConfirm = {
                                 // on delete block
-                                val blockId = block.blockId
-                                val blockNum = block.blockNum
+                                val blockId = blockWithCells.block.blockId
+                                val blockNum = blockWithCells.block.blockNum
 
                                 CoroutineScope(Dispatchers.IO).launch {
-                                    blockCellViewModel.onDeleteBlock(block = block)
+                                    blockCellViewModel.onDeleteBlock(block = blockWithCells.block)
                                 }
 
                                 showDeleteDialog = false

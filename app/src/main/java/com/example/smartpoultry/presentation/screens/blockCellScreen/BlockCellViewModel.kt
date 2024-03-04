@@ -24,7 +24,13 @@ class BlockCellViewModel @Inject constructor(
     val listOfBlocks = blocksRepository.getAllBlocks().stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(),
-        emptyList(),
+        initialValue = emptyList(),
+    )
+
+    val listOfBlocksWithCells = blocksRepository.getBlocksWithCells().stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(),
+        initialValue = emptyList()
     )
 
     var showDialog = mutableStateOf(false)
