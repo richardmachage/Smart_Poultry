@@ -19,6 +19,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -114,96 +115,109 @@ fun CellsScreen(
         )
     }
 
-    Surface(
-        modifier = Modifier.fillMaxSize(),
-        color = MaterialTheme.colorScheme.background
-    ) {
-        Column(
+    Scaffold { paddingValues->
+
+
+        Surface(
             modifier = Modifier
                 .fillMaxSize()
+                .padding(paddingValues),
+            color = MaterialTheme.colorScheme.background
         ) {
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceEvenly
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
             ) {
-                Text(text = "Block : $blockId")
-                Text(text = "Number of cells is : ${listOfCells.size}")
-            }
 
-            MyVerticalSpacer(height = 3)
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceEvenly
+                ) {
+                    Text(text = "Block : $blockId")
+                    Text(text = "Number of cells is : ${listOfCells.size}")
+                }
 
-            LazyColumn(
-                modifier = Modifier.padding(3.dp)
-            ) {
-                itemsIndexed(listOfCells) { _, item ->
-                    MyVerticalSpacer(height = 6)
+                MyVerticalSpacer(height = 3)
 
-                    Row(
-                        Modifier
-                            .fillMaxWidth()
-                            .border(
-                                width = 1.dp,
-                                color = MaterialTheme.colorScheme.primary,
-                                shape = RoundedCornerShape(
-                                    (0.03 * LocalConfiguration.current.screenWidthDp).dp
-                                )
-                            ),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Column(
-                            modifier = Modifier
-                                .clickable {
-                                    cellsViewModel.setTheSelectedCell(item)
-                                    cellsViewModel.showDialog.value = true
-                                }
-                                .fillMaxWidth(0.9f)
+                LazyColumn(
+                    modifier = Modifier.padding(3.dp)
+                ) {
+                    itemsIndexed(listOfCells) { _, item ->
+                        MyVerticalSpacer(height = 6)
 
-                                .padding(6.dp)
+                        Row(
+                            Modifier
+                                .fillMaxWidth()
+                                .border(
+                                    width = 1.dp,
+                                    color = MaterialTheme.colorScheme.primary,
+                                    shape = RoundedCornerShape(
+                                        (0.03 * LocalConfiguration.current.screenWidthDp).dp
+                                    )
+                                ),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
                         ) {
-                            Text(text = "Cell Id : ${item.cellId}")
-                            Text(text = "Cell number : ${item.cellNum}")
-                            Text(text = "Number of Chicken : ${item.henCount}")
-                        }
+                            Column(
+                                modifier = Modifier
+                                    .clickable {
+                                        cellsViewModel.setTheSelectedCell(item)
+                                        cellsViewModel.showDialog.value = true
+                                    }
+                                    .fillMaxWidth(0.9f)
 
-                       // MyHorizontalSpacer(width = 5)
-
-                        var showDeleteDialog by remember { mutableStateOf(false) }
-                        MyInputDialog(
-                            showDialog = showDeleteDialog,
-                            title = "Delete Block",
-                            onConfirm = {
-                                // on delete block
-                                val cellNum = item.cellNum
-                                val cellId = item.cellId
-                                cellsViewModel.onDeleteCell(item)
-
-                                Toast.makeText(context, "Cell id: $cellId number: $cellNum deleted successfully", Toast
-                                    .LENGTH_SHORT).show()
-                                showDeleteDialog = false
-
-                            },
-                            onDismiss = {
-                                showDeleteDialog = false
+                                    .padding(6.dp)
+                            ) {
+                                Text(text = "Cell Id : ${item.cellId}")
+                                Text(text = "Cell number : ${item.cellNum}")
+                                Text(text = "Number of Chicken : ${item.henCount}")
                             }
-                        )
-                        {
-                            Column {
-                                Text(text = "Warning! \nDeleting this block will also delete all the cells within the block ")
-                                MyVerticalSpacer(height = 10)
-                                Text(text = "Are you sure you want to delete?")
+
+                            // MyHorizontalSpacer(width = 5)
+
+                            var showDeleteDialog by remember { mutableStateOf(false) }
+                            MyInputDialog(
+                                showDialog = showDeleteDialog,
+                                title = "Delete Block",
+                                onConfirm = {
+                                    // on delete block
+                                    val cellNum = item.cellNum
+                                    val cellId = item.cellId
+                                    cellsViewModel.onDeleteCell(item)
+
+                                    Toast.makeText(
+                                        context,
+                                        "Cell id: $cellId number: $cellNum deleted successfully",
+                                        Toast
+                                            .LENGTH_SHORT
+                                    ).show()
+                                    showDeleteDialog = false
+
+                                },
+                                onDismiss = {
+                                    showDeleteDialog = false
+                                }
+                            )
+                            {
+                                Column {
+                                    Text(text = "Warning! \nDeleting this block will also delete all the cells within the block ")
+                                    MyVerticalSpacer(height = 10)
+                                    Text(text = "Are you sure you want to delete?")
+                                }
+                            }
+                            IconButton(
+                                onClick = {
+                                    //On delete cell
+                                    showDeleteDialog = true
+                                }) {
+                                Icon(
+                                    imageVector = Icons.Default.Delete,
+                                    contentDescription = "delete"
+                                )
                             }
                         }
-                        IconButton(
-                            onClick = {
-                                //On delete cell
-                                showDeleteDialog = true
-                        }) {
-                            Icon(imageVector = Icons.Default.Delete, contentDescription = "delete")
-                        }
+
                     }
-
                 }
             }
         }
