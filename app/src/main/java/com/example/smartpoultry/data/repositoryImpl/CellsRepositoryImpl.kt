@@ -5,13 +5,17 @@ import com.example.smartpoultry.data.dataSource.remote.firebase.models.Cell
 import com.example.smartpoultry.data.dataSource.room.entities.cells.Cells
 import com.example.smartpoultry.data.dataSource.room.entities.cells.CellsDao
 import com.example.smartpoultry.domain.repository.CellsRepository
+import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class CellsRepositoryImpl @Inject constructor(
     private val cellsDao: CellsDao,
-    private val fireStoreDb : FirebaseFirestore
+    private val fireStoreDb: FirebaseFirestore
 ) : CellsRepository {
 
     init {
@@ -19,14 +23,58 @@ class CellsRepositoryImpl @Inject constructor(
     }
 
     private fun listenForFireStoreChanges() {
-        fireStoreDb.collection("Blocks")
-            .addSnapshotListener {
-                                 querySnapshot, exception ->
-                if (exception != null){ //f an error exists, it logs the error and returns early from the listener.
-                    Log.w("Error","Listen failed.", exception)
-
+        fireStoreDb.collection("Cells")
+            .addSnapshotListener { querySnapshot, exception ->
+                if (exception != null) { //f an error exists, it logs the error and returns early from the listener.
+                    Log.w("Error", "Listen failed.", exception)
                 }
 
+                for (docChange in querySnapshot!!.documentChanges) {
+                    val cell =
+                        docChange.document.toObject(Cell::class.java) // converting the doc to cell object
+
+                    when (docChange.type) {
+                        DocumentChange.Type.ADDED -> {
+                            CoroutineScope(Dispatchers.IO).launch {
+                                cellsDao.addNewCell(
+                                    Cells(
+                                        cellId = cell.cellId,
+                                        cellNum = cell.cellNum,
+                                        blockId = cell.blockId,
+                                        henCount = cell.henCount
+                                    )
+                                )
+                            }
+                        }
+
+                        DocumentChange.Type.MODIFIED -> {
+                            CoroutineScope(Dispatchers.IO).launch {
+                                cellsDao.updateCellInfo(
+                                    Cells(
+                                        cellId = cell.cellId,
+                                        cellNum = cell.cellNum,
+                                        blockId = cell.blockId,
+                                        henCount = cell.henCount
+                                    )
+                                )
+                            }
+                        }
+
+                        DocumentChange.Type.REMOVED -> {
+                            CoroutineScope(Dispatchers.IO).launch {
+                                cellsDao.deleteCell(
+                                    Cells(
+                                        cellId = cell.cellId,
+                                        cellNum = cell.cellNum,
+                                        blockId = cell.blockId,
+                                        henCount = cell.henCount
+                                    )
+                                )
+                            }
+                        }
+
+                    }
+                }
             }
     }
 
@@ -66,7 +114,7 @@ class CellsRepositoryImpl @Inject constructor(
     }
 
     override fun getAllCells(): Flow<List<Cells>> {
-        return  cellsDao.getAllCells()
+        return cellsDao.getAllCells()
     }
 
     override fun getCell(cellId: Int): Flow<List<Cells>> {
@@ -77,7 +125,7 @@ class CellsRepositoryImpl @Inject constructor(
         return cellsDao.getTotalHenCount()
     }
 
-    override fun getCellsForBlock(blockId : Int): Flow<List<Cells>> {
+    override fun getCellsForBlock(blockId: Int): Flow<List<Cells>> {
         return cellsDao.getCellsForABLock(blockId = blockId)
     }
 
