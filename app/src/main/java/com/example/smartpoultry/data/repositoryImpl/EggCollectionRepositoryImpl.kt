@@ -40,20 +40,26 @@ class EggCollectionRepositoryImpl @Inject constructor(
                     when (docChange.type) {
                         DocumentChange.Type.ADDED -> {
                             CoroutineScope(Dispatchers.IO).launch {
-                                eggCollectionDao.insertCollectionRecord(
-                                    EggCollection(
-                                        //eggCollection.productionId,
-                                        date = Date(eggCollection.date.time), //eggCollection.date,
-                                        cellId = eggCollection.cellId,
-                                       eggCount =  eggCollection.eggCount,
-                                        henCount = eggCollection.henCount
+                                try {
+
+                                    eggCollectionDao.insertCollectionRecord(
+                                        EggCollection(
+                                            //eggCollection.productionId,
+                                            date = Date(eggCollection.date.time), //eggCollection.date,
+                                            cellId = eggCollection.cellId,
+                                            eggCount = eggCollection.eggCount,
+                                            henCount = eggCollection.henCount
+                                        )
                                     )
-                                )
+                                }catch (e : Exception){
+                                    Log.i("Error : ", "record with date ")
+                                }
                             }
                         }
 
                         DocumentChange.Type.MODIFIED -> {
                             CoroutineScope(Dispatchers.IO).launch {
+                                try {
                                 eggCollectionDao.updateCollectionRecord(
                                     EggCollection(
                                         eggCollection.productionId,
@@ -62,6 +68,9 @@ class EggCollectionRepositoryImpl @Inject constructor(
                                         eggCollection.henCount
                                     )
                                 )
+                            } catch (e : Exception){
+                                Log.i("error","record with date exists")
+                            }
                             }
                         }
 
