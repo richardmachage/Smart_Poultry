@@ -119,7 +119,9 @@ dependencies {
     //navigation compose
     implementation("androidx.navigation:navigation-compose:2.7.6")
 
-
+    //work Manager
+    val workVersion = "2.9.0"
+    implementation("androidx.work:work-runtime-ktx:$workVersion")
 
 
 
