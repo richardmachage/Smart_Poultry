@@ -36,6 +36,7 @@ import com.vanpra.composematerialdialogs.rememberMaterialDialogState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.time.LocalDate
 
 @OptIn(ExperimentalMaterial3Api::class)
 @RequiresApi(Build.VERSION_CODES.O)
@@ -75,7 +76,10 @@ fun FeedsScreen() {
                 positiveButtonOnClick = { localDate ->
                     feedsViewModel.feedTrackSelectedDate.value = localDate
                 },
-                negativeButton = {}
+                negativeButton = {},
+                allowedDateValidate = {
+                    it < LocalDate.now() || it == LocalDate.now()
+                }
             )
 
             MyOutlineTextFiled(
@@ -147,7 +151,10 @@ fun FeedsScreen() {
                         positiveButtonOnClick = { localDate ->
                             feedsViewModel.recordSelectedDate.value = localDate
                         },
-                        negativeButton = {}
+                        negativeButton = {},
+                        allowedDateValidate = {
+                            it < LocalDate.now() || it == LocalDate.now()
+                        }
                     )
 
                     //var text by remember{ mutableStateOf("") }

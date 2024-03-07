@@ -55,6 +55,7 @@ import com.vanpra.composematerialdialogs.MaterialDialog
 import com.vanpra.composematerialdialogs.datetime.date.DatePickerDefaults
 import com.vanpra.composematerialdialogs.datetime.date.datepicker
 import com.vanpra.composematerialdialogs.rememberMaterialDialogState
+import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -130,7 +131,10 @@ fun EggScreen() {
 
                         ),
                     initialDate = eggViewModel.selectedDate.value,
-                    title = "Select Date"
+                    title = "Select Date",
+                    allowedDateValidator = {
+                        it < LocalDate.now() || it == LocalDate.now()
+                    }
                 ) { chosenDate ->
                     eggViewModel.setChosenDateValue(chosenDate)
                     eggViewModel.setSelectedDate(chosenDate)

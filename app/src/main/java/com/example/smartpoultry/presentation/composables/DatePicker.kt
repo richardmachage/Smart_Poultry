@@ -42,7 +42,8 @@ fun MyDatePicker(
     dateDialogState: MaterialDialogState,
     label: String,
     positiveButtonOnClick: (LocalDate) -> Unit,
-    negativeButton: () -> Unit = {}
+    allowedDateValidate : (LocalDate) -> Boolean = {true},
+    negativeButton: () -> Unit = {},
 ) {
 
     var pickedDate by remember {
@@ -102,10 +103,12 @@ fun MyDatePicker(
                 headerTextColor = MaterialTheme.colorScheme.primary,
                 dateActiveBackgroundColor = MaterialTheme.colorScheme.tertiary,
                 dateActiveTextColor = MaterialTheme.colorScheme.primary,
-
                 ),
             initialDate = LocalDate.now(),
             title = "Select date",
+            allowedDateValidator = {
+                allowedDateValidate(it)
+            }
         ) { selectedDate ->
             pickedDate = selectedDate
         }
