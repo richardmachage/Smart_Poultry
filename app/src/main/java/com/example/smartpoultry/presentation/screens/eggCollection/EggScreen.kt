@@ -16,11 +16,8 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
@@ -42,21 +39,15 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.smartpoultry.R
-import com.example.smartpoultry.presentation.composables.CircularProgressBar
+import com.example.smartpoultry.presentation.composables.MyDatePicker
 import com.example.smartpoultry.presentation.composables.NormButton
 import com.example.smartpoultry.presentation.theme.SmartPoultryTheme
 import com.example.smartpoultry.presentation.uiModels.CellEggCollection
 import com.ramcosta.composedestinations.annotation.Destination
-import com.vanpra.composematerialdialogs.MaterialDialog
-import com.vanpra.composematerialdialogs.datetime.date.DatePickerDefaults
-import com.vanpra.composematerialdialogs.datetime.date.datepicker
 import com.vanpra.composematerialdialogs.rememberMaterialDialogState
 import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Destination
@@ -64,12 +55,8 @@ import java.time.format.DateTimeFormatter
 fun EggScreen() {
 
     val eggViewModel = hiltViewModel<EggScreenViewModel>()
-    val dateDialogState = rememberMaterialDialogState()
     val listOfBlocks = eggViewModel.myInputBlocks
     val context = LocalContext.current
-    //val listOfBlocksDB = eggViewModel.getAllBlocks.collectAsState()
-
-    CircularProgressBar(isLoading = eggViewModel.isLoading.value)
 
     Surface(
         modifier = Modifier
@@ -83,65 +70,22 @@ fun EggScreen() {
                 .fillMaxSize()
         ) {
             //Defining the datePicker first
-            Row(
+
+            MyDatePicker(
                 modifier = Modifier
                     .fillMaxWidth(),
-                horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = "Date: ",
-                    fontSize = 20.sp
-                )
-                Text(
-                    text = DateTimeFormatter
-                        .ofPattern("dd MMM yyyy")
-                        .format(eggViewModel.selectedDate.value),
-                    fontSize = 20.sp
-                )
-
-                IconButton(
-                    onClick = {
-                        dateDialogState.show()
-                    }
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.DateRange,
-                        contentDescription = "Calender"
-                    )
-                }
-            }
-            MaterialDialog(
-                dialogState = dateDialogState,
-                properties = DialogProperties(
-                    dismissOnBackPress = true,
-                    dismissOnClickOutside = false,
-                ),
-                buttons = {
-                    positiveButton(text = "Ok")
-                    negativeButton(text = "Cancel")
-                }
-            ) {
-                datepicker(
-                    colors = DatePickerDefaults.colors(
-                        headerBackgroundColor = MaterialTheme.colorScheme.onPrimary,
-                        headerTextColor = MaterialTheme.colorScheme.primary,
-                        dateActiveBackgroundColor = MaterialTheme.colorScheme.tertiary,
-                        dateActiveTextColor = MaterialTheme.colorScheme.primary,
-
-                        ),
-                    initialDate = eggViewModel.selectedDate.value,
-                    title = "Select Date",
-                    allowedDateValidator = {
-                        it < LocalDate.now() || it == LocalDate.now()
-                    }
-                ) { chosenDate ->
+                dateDialogState = rememberMaterialDialogState(),
+                label = "Date",
+                positiveButtonOnClick = { chosenDate ->
                     eggViewModel.setChosenDateValue(chosenDate)
                     eggViewModel.setSelectedDate(chosenDate)
+                },
+                negativeButton = {},
+                allowedDateValidate = {
+                    it < LocalDate.now() || it == LocalDate.now()
                 }
 
-            }
-
+            )
 
             //Blocks and cells UI begins here
             LazyColumn { //Column of Blocks
@@ -240,17 +184,20 @@ fun EggScreen() {
                             NormButton(
                                 onButtonClick = {
                                     eggViewModel.isLoading.value = true
-                                   // eggViewModel.delayApp(2000)
+                                    // eggViewModel.delayApp(2000)
 
-                                    eggViewModel.onSaveRecord(block = blockIndex, cellsInput = listOfBlocks[blockIndex].cells)
+                                    eggViewModel.onSaveRecord(
+                                        block = blockIndex,
+                                        cellsInput = listOfBlocks[blockIndex].cells
+                                    )
                                     //eggViewModel.updateEggCount(blockIndex,)
-                                    if (eggViewModel.insertStatus.value){
+                                    if (eggViewModel.insertStatus.value) {
                                         Toast.makeText(
                                             context,
                                             "records for Block: ${listOfBlocks[blockIndex].blockNum} saved successfully",
                                             Toast.LENGTH_SHORT
                                         ).show()
-                                    }else{
+                                    } else {
                                         Toast.makeText(
                                             context,
                                             "Failed! Records for Block: ${listOfBlocks[blockIndex].blockNum} for date: ${eggViewModel.selectedDate.value} already exist",
@@ -279,6 +226,6 @@ fun EggScreen() {
 @Composable
 fun PrevEgg() {
     SmartPoultryTheme {
-       // EggScreen()
+        // EggScreen()
     }
 }
