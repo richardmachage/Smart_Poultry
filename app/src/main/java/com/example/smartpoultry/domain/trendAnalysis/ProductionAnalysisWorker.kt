@@ -9,7 +9,6 @@ class ProductionAnalysisWorker (
    private  val params: WorkerParameters
     ) : CoroutineWorker(appContext, params) {
     override suspend fun doWork(): Result {
-        analyseTrends()
         return Result.success()
     }
 
