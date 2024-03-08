@@ -44,7 +44,11 @@ class ProductionAnalysisWorker @AssistedInject constructor(
             //then for each cell we perform the analysis
         if (listOfAllCells.isNotEmpty()) {
             for (cell in listOfAllCells) {
+                try {
                 if (flagCell(cell.cellId)) listOfFlaggedCells.add(cell)
+                }catch (e : Exception){
+                    return Result.failure()
+                }
             }
         }
             if (listOfFlaggedCells.isNotEmpty()) {
