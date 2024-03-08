@@ -45,7 +45,9 @@ class ProductionAnalysisWorker @AssistedInject constructor(
             }
 
             //then for each cell we perform the analysis
-
+            for(cell in listOfCells){
+                flagCell(cell.cellId)
+            }
         }
         return Result.success()
     }
@@ -73,8 +75,8 @@ class ProductionAnalysisWorker @AssistedInject constructor(
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    suspend fun flagCell(cellId : Int ) : List<Int>{
-        var flaggedCells = mutableListOf<Int>()
+    suspend fun flagCell(cellId : Int ) : Boolean{
+        var isUnderPerforming = false
         val cellRecordsForPastDays = eggCollectionRepository.getCellEggCollectionForPastDays(
             cellId = cellId,
             startDate = Date(
@@ -84,17 +86,16 @@ class ProductionAnalysisWorker @AssistedInject constructor(
             )
         )
         cellRecordsForPastDays.collect{ records->
-            val isUnderPerforming = checkConsecutiveUnderPerformance(
+            isUnderPerforming = checkConsecutiveUnderPerformance(
                 eggRecords =  records,
                 thresholdRatio = THRESHOLD_RATIO,
                 consecutiveDays = CONSUCUTIVE_DAYS
             )
 
-            if(isUnderPerforming) flaggedCells.add(cellId) //add the cell to flagged
 
         }
 
-        return flaggedCells
+        return isUnderPerforming
 
     }
 
