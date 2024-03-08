@@ -38,6 +38,13 @@ class ProductionAnalysisWorker @AssistedInject constructor(
     @RequiresApi(Build.VERSION_CODES.O)
     override fun doWork(): Result {
         CoroutineScope(Dispatchers.IO).launch {
+            //we first get the list of all cells
+            var listOfCells = mutableListOf<Cells>()
+            cellsRepository.getAllCells().collect{
+                listOfCells.addAll(it)
+            }
+
+            //then for each cell we perform the analysis
 
         }
         return Result.success()
