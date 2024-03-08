@@ -36,12 +36,13 @@ import com.example.smartpoultry.presentation.composables.MyInputDialog
 import com.example.smartpoultry.presentation.composables.MyOutlineTextFiled
 import com.example.smartpoultry.presentation.composables.MyVerticalSpacer
 import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Destination
 @Composable
 fun SettingsScreen(
-    // navigator:DestinationsNavigator
+    navigator: DestinationsNavigator
 ) {
 
     val settingsViewModel = hiltViewModel<SettingsViewModel>()
@@ -55,7 +56,7 @@ fun SettingsScreen(
                 scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(),
                 navigationIcon = {
                     IconButton(onClick = {
-                        // navigator.navigateUp()
+                        navigator.navigateUp()
                     }) {
                         Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Back")
                     }
@@ -143,6 +144,10 @@ fun SettingsScreen(
                     title = "Log Out",
                     onConfirm = {
                         settingsViewModel.onLogOut()
+                        showLogOutDialog = false
+                    },
+                    onDismiss = {
+                        showLogOutDialog = false
                     }
                 ) {
                     Text(text = "Are you sure you want to log out?")
@@ -151,7 +156,7 @@ fun SettingsScreen(
                 Button(
                     modifier = Modifier.fillMaxWidth(),
                     onClick = {
-
+                        showLogOutDialog = true
                     }) {
                     Text(text = "Log Out")
                 }
@@ -164,5 +169,5 @@ fun SettingsScreen(
 @Preview(showSystemUi = true, showBackground = true)
 @Composable
 fun PrevSettings() {
-    SettingsScreen()
+    //SettingsScreen()
 }
