@@ -92,7 +92,7 @@ class AnalyticsViewModel @Inject constructor(
         )
     }
 
-    fun getBlockEggCollection():Flow<List<DailyEggCollection>>{
+    /*fun getBlockEggCollection():Flow<List<DailyEggCollection>>{
         return eggCollectionRepository.getBlockEggCollection(
             blockId = selectedBlockId.intValue
         ).stateIn(
@@ -100,7 +100,7 @@ class AnalyticsViewModel @Inject constructor(
                 started = SharingStarted.WhileSubscribed(),
                 initialValue = emptyList(),
             )
-    }
+    }*/
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun getBlockEggCollectionBetweenDates():Flow<List<DailyEggCollection>>{

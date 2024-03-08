@@ -29,6 +29,7 @@ class FeedsViewModel @Inject constructor(
     @RequiresApi(Build.VERSION_CODES.O)
     var recordSelectedDate = mutableStateOf(LocalDate.now())
 
+    @RequiresApi(Build.VERSION_CODES.O)
     var feedTrackSelectedDate = mutableStateOf(LocalDate.now())
 
     @RequiresApi(Build.VERSION_CODES.O)
