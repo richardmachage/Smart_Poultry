@@ -1,13 +1,18 @@
 package com.example.smartpoultry.domain.trendAnalysis
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.core.app.NotificationCompat
 import androidx.hilt.work.HiltWorker
 import androidx.work.Worker
 import androidx.work.WorkerParameters
+import com.example.smartpoultry.R
 import com.example.smartpoultry.data.dataSource.room.entities.cells.Cells
 import com.example.smartpoultry.data.dataSource.room.entities.eggCollection.EggCollection
+import com.example.smartpoultry.domain.repository.CellsRepository
 import com.example.smartpoultry.domain.repository.EggCollectionRepository
 import com.example.smartpoultry.utils.localDateToJavaDate
 import dagger.assisted.Assisted
@@ -22,7 +27,8 @@ import java.time.LocalDate
 class ProductionAnalysisWorker @AssistedInject constructor(
     @Assisted appContext : Context,
    @Assisted params: WorkerParameters,
-    private val eggCollectionRepository: EggCollectionRepository
+    private val eggCollectionRepository: EggCollectionRepository,
+    private val cellsRepository: CellsRepository,
     ) : Worker(appContext, params) {
     var flaggedCells = mutableListOf<Cells>()
     val  THRESHOLD_RATIO  : Double = 0.5
@@ -37,11 +43,33 @@ class ProductionAnalysisWorker @AssistedInject constructor(
         return Result.success()
     }
 
+    private fun sendNotification(flaggedCells : List<Cells>){
+        val notificationManager = applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+        // Create a NotificationChannel for API 26+
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            val channel = NotificationChannel( "flaggedCellsChannel", "Flagged Cells Alerts", NotificationManager.IMPORTANCE_HIGH).apply {
+                description = "Alerts for cells with downward egg production trend"
+            }
+
+            notificationManager.createNotificationChannel(channel)
+        }
+
+        val notification = NotificationCompat.Builder(applicationContext,"flaggedCellsChannel")
+            .setContentTitle("Low production")
+            .setContentText("Cells With low production detected")
+            .setSmallIcon(R.drawable.chicken)
+            .build()
+
+        notificationManager.notify(1, notification)
+
+    }
+
     @RequiresApi(Build.VERSION_CODES.O)
-    suspend fun flagCell(cell : Cells) : List<Cells>{
-        var flaggedCells = mutableListOf<Cells>()
+    suspend fun flagCell(cellId : Int ) : List<Int>{
+        var flaggedCells = mutableListOf<Int>()
         val cellRecordsForPastDays = eggCollectionRepository.getCellEggCollectionForPastDays(
-            cellId = cell.cellId,
+            cellId = cellId,
             startDate = Date(
                 localDateToJavaDate(
                     getDateDaysAgo(10)
@@ -55,14 +83,13 @@ class ProductionAnalysisWorker @AssistedInject constructor(
                 consecutiveDays = CONSUCUTIVE_DAYS
             )
 
-            if(isUnderPerforming) flaggedCells.add(cell) //add the cell to flagged
+            if(isUnderPerforming) flaggedCells.add(cellId) //add the cell to flagged
 
         }
 
         return flaggedCells
 
     }
-
 
     private fun checkConsecutiveUnderPerformance(
         eggRecords: List<EggCollection>, //This list should always be for like the past number of X days specified
