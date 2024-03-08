@@ -7,10 +7,14 @@ import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.example.smartpoultry.data.dataSource.room.entities.cells.Cells
+import com.example.smartpoultry.data.dataSource.room.entities.eggCollection.EggCollection
 import com.example.smartpoultry.domain.repository.EggCollectionRepository
 import com.example.smartpoultry.utils.localDateToJavaDate
 import dagger.assisted.Assisted
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.sql.Date
+import java.time.LocalDate
 
 @HiltWorker
 class ProductionAnalysisWorker (
@@ -23,10 +27,11 @@ class ProductionAnalysisWorker (
     val CONSUCUTIVE_DAYS : Int = 5
 
     override suspend fun doWork(): Result {
+        return withContext(Dispatchers.IO){
+            
 
-
-
-        return Result.success()
+            Result.success()
+        }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -53,5 +58,37 @@ class ProductionAnalysisWorker (
 
         return flaggedCells
 
+    }
+
+
+    private fun checkConsecutiveUnderPerformance(
+        eggRecords: List<EggCollection>, //This list should always be for like the past number of X days specified
+        thresholdRatio: Double,
+        consecutiveDays: Int
+    ): Boolean {
+        if (eggRecords.isEmpty() || consecutiveDays <= 0) return false
+
+        // Calculate the ratio of henCount to eggCount for each record
+        val ratios = eggRecords.map { record ->
+            if (record.eggCount > 0) record.henCount.toDouble() / record.eggCount else 0.0
+        }
+
+        // Check for underPerformance over consecutive days
+        var count = 0
+        for (ratio in ratios) {
+            if (ratio < thresholdRatio) {
+                count++
+                if (count >= consecutiveDays) return true // Found underPerformance for the required consecutive days
+            } else {
+                count = 0 // Reset count if the performance is above the threshold
+            }
+        }
+
+        return false // No underPerformance found for the specified consecutive days
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun getDateDaysAgo(numberOfDays: Int): LocalDate {
+        return LocalDate.now().minusDays(numberOfDays.toLong())
     }
 } 
