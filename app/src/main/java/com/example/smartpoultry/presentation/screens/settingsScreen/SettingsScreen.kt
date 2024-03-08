@@ -2,6 +2,7 @@ package com.example.smartpoultry.presentation.screens.settingsScreen
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -10,6 +11,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -25,6 +27,7 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.smartpoultry.presentation.composables.MyBorderedColumn
 import com.example.smartpoultry.presentation.composables.MyOutlineTextFiled
 import com.example.smartpoultry.presentation.composables.MyVerticalSpacer
 import com.ramcosta.composedestinations.annotation.Destination
@@ -65,6 +68,14 @@ fun SettingsScreen(
                     .padding(6.dp)
                     .verticalScroll(rememberScrollState())
             ) {
+
+                MyBorderedColumn {
+                    Row {
+                        Text(text = "")
+                    }
+                }
+
+                MyVerticalSpacer(height = 10)
 
                 Column ( //Past Days
                     Modifier
@@ -108,6 +119,25 @@ fun SettingsScreen(
                         keyboardType = KeyboardType.Number,
                         onValueChange = {}
                     )
+                }
+
+                MyVerticalSpacer(height = 10)
+
+                MyBorderedColumn {
+                    Text(text = "Threshold Ratio for trend analysis (What should be the minimum henCount to EggCount ration in determining poor egg production?)")
+                    MyOutlineTextFiled(
+                        modifier = Modifier.fillMaxWidth(),
+                        label = "Threshold Ratio",
+                        keyboardType = KeyboardType.Decimal,
+                        onValueChange = {}
+                    )
+                }
+                MyVerticalSpacer(height = 10)
+
+                Button(
+                    modifier = Modifier.fillMaxWidth(),
+                    onClick = { /*TODO*/ }) {
+                    Text(text = "Log Out")
                 }
             }
         }
