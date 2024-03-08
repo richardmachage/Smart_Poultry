@@ -17,22 +17,18 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.smartpoultry.presentation.composables.MyBorderedColumn
-import com.example.smartpoultry.presentation.composables.MyBorderedRow
+import com.example.smartpoultry.presentation.composables.MyInputDialog
 import com.example.smartpoultry.presentation.composables.MyOutlineTextFiled
 import com.example.smartpoultry.presentation.composables.MyVerticalSpacer
 import com.ramcosta.composedestinations.annotation.Destination
@@ -41,8 +37,11 @@ import com.ramcosta.composedestinations.annotation.Destination
 @Destination
 @Composable
 fun SettingsScreen(
-   // navigator:DestinationsNavigator
+    // navigator:DestinationsNavigator
 ) {
+
+    val settingsViewModel = hiltViewModel<SettingsViewModel>()
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -52,7 +51,7 @@ fun SettingsScreen(
                 scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(),
                 navigationIcon = {
                     IconButton(onClick = {
-                       // navigator.navigateUp()
+                        // navigator.navigateUp()
                     }) {
                         Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Back")
                     }
@@ -73,20 +72,10 @@ fun SettingsScreen(
                     .padding(6.dp)
                     .verticalScroll(rememberScrollState())
             ) {
-
-                MyBorderedRow(
-
-                ) {
-                    var isDarkMode by remember{ mutableStateOf(false) }
-                    Text(text = if (isDarkMode) "Switch to light mode" else "Switch to dark mode")
-                    Switch(checked = !isDarkMode, onCheckedChange =  {
-                        isDarkMode = !isDarkMode
-                    })
-                }
-
                 MyVerticalSpacer(height = 10)
 
-                Column ( //Past Days
+                Column(
+                    //Past Days
                     Modifier
                         .border(
                             width = 1.dp,
@@ -97,7 +86,7 @@ fun SettingsScreen(
                         )
                         .fillMaxWidth()
                         .padding(6.dp),
-                ){
+                ) {
                     Text(text = "Past Days Summary in Home Screen: ")
                     MyOutlineTextFiled(
                         modifier = Modifier.fillMaxWidth(),
@@ -143,9 +132,20 @@ fun SettingsScreen(
                 }
                 MyVerticalSpacer(height = 10)
 
+                //confirm log out dialog
+                MyInputDialog(
+                    title = "Log Out",
+                    onConfirm = {
+
+                    }
+                ) {
+
+                }
                 Button(
                     modifier = Modifier.fillMaxWidth(),
-                    onClick = { /*TODO*/ }) {
+                    onClick = {
+
+                    }) {
                     Text(text = "Log Out")
                 }
             }
