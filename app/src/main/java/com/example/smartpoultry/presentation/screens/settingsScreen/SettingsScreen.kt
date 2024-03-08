@@ -21,6 +21,10 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.input.KeyboardType
@@ -133,12 +137,15 @@ fun SettingsScreen(
                 MyVerticalSpacer(height = 10)
 
                 //confirm log out dialog
+                var showLogOutDialog by remember{ mutableStateOf(false) }
                 MyInputDialog(
+                    showDialog = showLogOutDialog,
                     title = "Log Out",
                     onConfirm = {
-
+                        settingsViewModel.onLogOut()
                     }
                 ) {
+                    Text(text = "Are you sure you want to log out?")
 
                 }
                 Button(
