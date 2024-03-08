@@ -42,10 +42,11 @@ class ProductionAnalysisWorker @AssistedInject constructor(
             }
 
             //then for each cell we perform the analysis
-            for(cell in listOfAllCells){
-               if (flagCell(cell.cellId)) listOfFlaggedCells.add(cell)
+        if (listOfAllCells.isNotEmpty()) {
+            for (cell in listOfAllCells) {
+                if (flagCell(cell.cellId)) listOfFlaggedCells.add(cell)
             }
-
+        }
             if (listOfFlaggedCells.isNotEmpty()) {
                 sendNotification(listOfFlaggedCells)
             }
@@ -72,7 +73,7 @@ class ProductionAnalysisWorker @AssistedInject constructor(
             .setSmallIcon(R.drawable.chicken)
             .build()
 
-        notificationManager.notify(1, notification)
+        notificationManager.notify((System.currentTimeMillis() % Int.MAX_VALUE).toInt(), notification)
 
     }
 
