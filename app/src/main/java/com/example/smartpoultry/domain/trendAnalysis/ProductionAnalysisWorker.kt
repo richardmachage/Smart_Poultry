@@ -7,7 +7,7 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.hilt.work.HiltWorker
-import androidx.work.Worker
+import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.example.smartpoultry.R
 import com.example.smartpoultry.data.dataSource.room.entities.cells.Cells
@@ -17,9 +17,6 @@ import com.example.smartpoultry.domain.repository.EggCollectionRepository
 import com.example.smartpoultry.utils.localDateToJavaDate
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import java.sql.Date
 import java.time.LocalDate
 
@@ -29,26 +26,31 @@ class ProductionAnalysisWorker @AssistedInject constructor(
    @Assisted params: WorkerParameters,
     private val eggCollectionRepository: EggCollectionRepository,
     private val cellsRepository: CellsRepository,
-    ) : Worker(appContext, params) {
-    var flaggedCells = mutableListOf<Cells>()
+    ) : CoroutineWorker(appContext, params) {
     val  THRESHOLD_RATIO  : Double = 0.5
     val CONSUCUTIVE_DAYS : Int = 5
 
 
     @RequiresApi(Build.VERSION_CODES.O)
-    override fun doWork(): Result {
-        CoroutineScope(Dispatchers.IO).launch {
+    override suspend fun doWork(): Result {
+        //CoroutineScope(Dispatchers.IO).launch {
             //we first get the list of all cells
-            var listOfCells = mutableListOf<Cells>()
+            var listOfAllCells = mutableListOf<Cells>()
+            var listOfFlaggedCells = mutableListOf<Cells>()
             cellsRepository.getAllCells().collect{
-                listOfCells.addAll(it)
+                listOfAllCells.addAll(it)
             }
 
             //then for each cell we perform the analysis
-            for(cell in listOfCells){
-                flagCell(cell.cellId)
+            for(cell in listOfAllCells){
+               if (flagCell(cell.cellId)) listOfFlaggedCells.add(cell)
             }
-        }
+
+            if (listOfFlaggedCells.isNotEmpty()) {
+                sendNotification(listOfFlaggedCells)
+            }
+
+        //}
         return Result.success()
     }
 
