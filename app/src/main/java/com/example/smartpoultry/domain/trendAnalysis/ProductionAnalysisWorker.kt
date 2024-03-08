@@ -4,34 +4,37 @@ import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.hilt.work.HiltWorker
-import androidx.work.CoroutineWorker
+import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.example.smartpoultry.data.dataSource.room.entities.cells.Cells
 import com.example.smartpoultry.data.dataSource.room.entities.eggCollection.EggCollection
 import com.example.smartpoultry.domain.repository.EggCollectionRepository
 import com.example.smartpoultry.utils.localDateToJavaDate
 import dagger.assisted.Assisted
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
+import dagger.assisted.AssistedInject
 import java.sql.Date
 import java.time.LocalDate
 
 @HiltWorker
-class ProductionAnalysisWorker (
+class ProductionAnalysisWorker @AssistedInject constructor(
     @Assisted appContext : Context,
    @Assisted params: WorkerParameters,
     private val eggCollectionRepository: EggCollectionRepository
-    ) : CoroutineWorker(appContext, params) {
+    ) : Worker(appContext, params) {
 
     val  THRESHOLD_RATIO  : Double = 0.5
     val CONSUCUTIVE_DAYS : Int = 5
 
-    override suspend fun doWork(): Result {
+    /*override suspend fun doWork(): Result {
         return withContext(Dispatchers.IO){
-            
+
 
             Result.success()
         }
+    }*/
+
+    override fun doWork(): Result {
+        TODO("Not yet implemented")
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
