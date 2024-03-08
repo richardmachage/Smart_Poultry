@@ -12,6 +12,9 @@ import com.example.smartpoultry.domain.repository.EggCollectionRepository
 import com.example.smartpoultry.utils.localDateToJavaDate
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.sql.Date
 import java.time.LocalDate
 
@@ -21,20 +24,17 @@ class ProductionAnalysisWorker @AssistedInject constructor(
    @Assisted params: WorkerParameters,
     private val eggCollectionRepository: EggCollectionRepository
     ) : Worker(appContext, params) {
-
+    var flaggedCells = mutableListOf<Cells>()
     val  THRESHOLD_RATIO  : Double = 0.5
     val CONSUCUTIVE_DAYS : Int = 5
 
-    /*override suspend fun doWork(): Result {
-        return withContext(Dispatchers.IO){
 
-
-            Result.success()
-        }
-    }*/
-
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun doWork(): Result {
-        TODO("Not yet implemented")
+        CoroutineScope(Dispatchers.IO).launch {
+
+        }
+        return Result.success()
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
