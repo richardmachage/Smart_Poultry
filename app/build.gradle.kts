@@ -104,6 +104,7 @@ dependencies {
     kapt("com.google.dagger:hilt-android-compiler:2.50")
     implementation ("androidx.hilt:hilt-navigation-compose:1.1.0") // For hiltViewModel()
     kapt ("androidx.hilt:hilt-compiler:1.1.0") // Or a newer stable version
+    implementation ("androidx.hilt:hilt-work:1.2.0") // for work manager
 
 
     //Room database
