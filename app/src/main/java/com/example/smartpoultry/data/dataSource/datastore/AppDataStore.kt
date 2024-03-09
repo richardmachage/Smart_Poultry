@@ -24,7 +24,15 @@ class AppDataStore @Inject constructor(
         val dataStoreKey = stringPreferencesKey(key)
 
         return dataStore.data.map {preferences->
-            preferences[dataStoreKey] ?: "0"
+            preferences[dataStoreKey] ?: ""
         }
     }
+
+    /*If you need a single snapshot of the data instead of an ongoing observation,
+    consider accessing the Flow at the point of use, where you can handle the asynchronous nature more appropriately,
+    for example:
+    lifecycleScope.launch {
+        val singleSnapshot = appDataStore.readData("myKey").first()
+        // Use singleSnapshot here
+    }*/
 }
