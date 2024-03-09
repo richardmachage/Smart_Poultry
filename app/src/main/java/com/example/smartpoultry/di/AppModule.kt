@@ -1,6 +1,11 @@
 package com.example.smartpoultry.di
 
 import android.app.Application
+import android.content.Context
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.PreferenceDataStoreFactory
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.preferencesDataStoreFile
 import com.example.smartpoultry.data.dataSource.room.database.SmartPoultryDatabase
 import com.example.smartpoultry.data.repositoryImpl.BlocksRepositoryImpl
 import com.example.smartpoultry.data.repositoryImpl.CellsRepositoryImpl
@@ -14,6 +19,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
@@ -55,4 +61,12 @@ object AppModule {
         return FeedsRepositoryImpl(database.feedsDao())
     }
 
+    //dataStore
+    @Provides
+    @Singleton
+    fun providePreferenceDataStore(@ApplicationContext context : Context) : DataStore<Preferences>{
+        return PreferenceDataStoreFactory.create {
+            context.preferencesDataStoreFile("my_preferences")
+        }
+    }
 }
