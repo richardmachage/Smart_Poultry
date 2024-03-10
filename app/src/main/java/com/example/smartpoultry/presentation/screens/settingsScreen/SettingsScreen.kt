@@ -79,26 +79,14 @@ fun SettingsScreen(
             ) {
                 MyVerticalSpacer(height = 10)
 
-                Column(
-                    //Past Days
-                    Modifier
-                        .border(
-                            width = 1.dp,
-                            color = MaterialTheme.colorScheme.primary,
-                            shape = RoundedCornerShape(
-                                (0.03 * LocalConfiguration.current.screenWidthDp).dp
-                            )
-                        )
-                        .fillMaxWidth()
-                        .padding(6.dp),
-                ) {
+                MyBorderedColumn {
                     Text(text = "Past Days Summary in Home Screen: ")
                     MyOutlineTextFiled(
                         modifier = Modifier.fillMaxWidth(),
                         label = "Days",
                         keyboardType = KeyboardType.Number,
-                        onValueChange = {
-
+                        onValueChange = { newText->
+                            settingsViewModel.pastDays.value
                         }
                     )
                 }
