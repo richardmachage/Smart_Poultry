@@ -86,6 +86,7 @@ fun FeedsScreen() {
             MyOutlineTextFiled(
                 label = "Number of Sacks Added",
                 keyboardType = KeyboardType.Number,
+                initialText = "" ,
                 onValueChange = {
                     feedsViewModel.feedTrackNumOfSacks.intValue = it.toIntOrNull() ?:0
                 }
@@ -163,6 +164,7 @@ fun FeedsScreen() {
                         modifier = Modifier.fillMaxWidth(),
                         label = "Sacks used",
                         keyboardType = KeyboardType.Number,
+                        initialText = "",
                         onValueChange = {
                             feedsViewModel.recordsNumOfSacks.intValue = it.toIntOrNull() ?: 0
                         }
@@ -183,38 +185,6 @@ fun FeedsScreen() {
                 }
 
                 MyVerticalSpacer(height = 10)
-
-                /*Column(
-                    Modifier
-                        .border(
-                            width = 1.dp,
-                            color = MaterialTheme.colorScheme.tertiary,
-                            shape = RoundedCornerShape(
-                                (0.03 * LocalConfiguration.current.screenWidthDp).dp
-                            )
-                        )
-                        .fillMaxWidth()
-                        .padding(6.dp)
-                ){
-                    NormText(text = "Search Records:")
-
-                    MySearchByDate(
-                        onSearch = {
-                            feedsViewModel.searchClicked.value = true
-                        }
-                    )
-
-                    if (feedsViewModel.searchClicked.value){
-                        val searchReturn by remember {
-                            feedsViewModel.onSearchFeedRecord()
-                        }.collectAsState(initial = emptyList())
-
-                        if(searchReturn.isNotEmpty()){
-                            Text(text = "Date : ${searchReturn[0].date}  Sacks Used: ${searchReturn[0].numOfSacks}")
-                        }
-                    }
-
-                }*/
             }
         }
     }
