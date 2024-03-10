@@ -43,9 +43,9 @@ class SettingsViewModel @Inject constructor (
 
     private fun loadInitialValues() {
         viewModelScope.launch {
-            _pastDays.value = getFromDataStore(PAST_DAYS_KEY)
-            _thresholdRatio.value = getFromDataStore(THRESHOLD_RATIO_KEY)
-            _consucutiveNumberOfDays.value = getFromDataStore(CONSUCUTIVE_DAYS_KEY)
+            _pastDays.value = getFromDataStore(PAST_DAYS_KEY).ifBlank { "0" }
+            _thresholdRatio.value = getFromDataStore(THRESHOLD_RATIO_KEY).ifBlank { "0" }
+            _consucutiveNumberOfDays.value = getFromDataStore(CONSUCUTIVE_DAYS_KEY).ifBlank { "0" }
         }
     }
 
