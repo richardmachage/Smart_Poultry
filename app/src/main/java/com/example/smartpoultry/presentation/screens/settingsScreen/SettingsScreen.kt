@@ -1,6 +1,9 @@
 package com.example.smartpoultry.presentation.screens.settingsScreen
 
+import android.widget.Toast
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -8,6 +11,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -24,7 +28,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -43,10 +49,12 @@ fun SettingsScreen(
     navigator: DestinationsNavigator
 ) {
 
+    val context = LocalContext.current
     val settingsViewModel = hiltViewModel<SettingsViewModel>()
-    val pastDays by settingsViewModel.pastDays.collectAsState()
-    val consucutiveDays by settingsViewModel.consucutiveNumberOfDays.collectAsState()
-    val thresholdRatio by settingsViewModel.thresholdRatio.collectAsState()
+    val pastDays = remember{ settingsViewModel.myDataStore.readData(PAST_DAYS_KEY) }.collectAsState(initial = "0")
+    //val pastDays = remember {settingsViewModel.myPastDays.value}//getFromDataStore(PAST_DAYS_KEY).ifBlank { "0" }}//.pastDays.collectAsState()
+    val consucutiveDays = remember { settingsViewModel.myDataStore.readData(CONSUCUTIVE_DAYS_KEY)}.collectAsState(initial = "0")
+    val thresholdRatio = remember {settingsViewModel.myDataStore.readData(THRESHOLD_RATIO_KEY)}.collectAsState(initial = "0")
 
     Scaffold(
         topBar = {
@@ -83,41 +91,144 @@ fun SettingsScreen(
                 //past days
                 MyBorderedColumn {
                     Text(text = "Past Days Summary in Home Screen: ")
-                    MyOutlineTextFiled(
-                        modifier = Modifier.fillMaxWidth(),
-                        label = "Days",
-                        keyboardType = KeyboardType.Number,
-                        initialText = pastDays,
-                        onValueChange = { newText ->
-                            //settingsViewModel.pastDays.value
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(6.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        var showDialog by remember {
+                            mutableStateOf(false)
                         }
-                    )
+                        var newPastDays by remember {
+                            mutableStateOf(pastDays.value)
+                        }
+                        MyInputDialog(
+                            showDialog = showDialog,
+                            title = "Consucutive Days to Consider",
+                            onConfirm = {
+                                settingsViewModel.saveToDataStore(
+                                    PAST_DAYS_KEY,
+                                    newPastDays
+                                )
+                                showDialog = false
+                                //Log.i(PAST_DAYS_KEY + "on dialog click",newPastDays)
+                            },
+                            onDismiss = { showDialog = false }
+                        ) {
+                            MyOutlineTextFiled(
+                                modifier = Modifier.fillMaxWidth(),
+                                label = "Default Past Days",
+                                keyboardType = KeyboardType.Number,
+                                initialText = pastDays.value,
+                                onValueChange = {
+                                    newPastDays = it
+                                }
+                            )
+                        }
+                        Text(text = pastDays.value)
+                        IconButton(onClick = { showDialog = true }) {
+                            Icon(imageVector = Icons.Default.Edit, contentDescription = "edit")
+                        }
+                    }
                 }
                 MyVerticalSpacer(height = 10)
 
                 //consucutive days
                 MyBorderedColumn {
                     Text(text = "Number of Day for trend analysis (Consucutive days of low production to be considered before flagging a cell?)")
-                    MyOutlineTextFiled(
-                        modifier = Modifier.fillMaxWidth(),
-                        label = "Days",
-                        keyboardType = KeyboardType.Number,
-                        initialText = consucutiveDays,
-                        onValueChange = {}
-                    )
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(6.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        var showDialog by remember {
+                            mutableStateOf(false)
+                        }
+                        var newConsucutiveDays by remember {
+                            mutableStateOf(consucutiveDays.value)
+                        }
+                        MyInputDialog(
+                            showDialog = showDialog,
+                            title = "Consucutive Days to Consider",
+                            onConfirm = {
+                                showDialog = false
+                                settingsViewModel.saveToDataStore(
+                                    CONSUCUTIVE_DAYS_KEY,
+                                    newConsucutiveDays
+                                )
+                            },
+                            onDismiss = { showDialog = false }
+                        ) {
+                            MyOutlineTextFiled(
+                                modifier = Modifier.fillMaxWidth(),
+                                label = "Consucutive Days",
+                                keyboardType = KeyboardType.Number,
+                                initialText = consucutiveDays.value,
+                                onValueChange = {
+                                    newConsucutiveDays = it
+                                }
+                            )
+                        }
+                        Text(text = consucutiveDays.value)
+                        IconButton(onClick = { showDialog = true }) {
+                            Icon(imageVector = Icons.Default.Edit, contentDescription = "edit")
+                        }
+                    }
                 }
                 MyVerticalSpacer(height = 10)
 
                 //threshold ratio
                 MyBorderedColumn {
                     Text(text = "Threshold Ratio for trend analysis (What should be the minimum henCount to EggCount ration in determining poor egg production?)")
-                    MyOutlineTextFiled(
-                        modifier = Modifier.fillMaxWidth(),
-                        label = "Threshold Ratio",
-                        keyboardType = KeyboardType.Decimal,
-                        initialText = thresholdRatio,
-                        onValueChange = {}
-                    )
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(6.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        var showDialog by remember {
+                            mutableStateOf(false)
+                        }
+                        var newThreshold by remember {
+                            mutableStateOf(thresholdRatio.value)
+                        }
+                        MyInputDialog(
+                            showDialog = showDialog,
+                            title = "Threshold Ratio",
+                            onConfirm = {
+                                if(validateThresholdInput(newThreshold)){
+                                showDialog = false
+                                settingsViewModel.saveToDataStore(
+                                    THRESHOLD_RATIO_KEY,
+                                    newThreshold
+                                ) }
+                                else
+                                {
+                                    Toast.makeText(context, "Threshold Ratio can only be decimal between 0 and 1", Toast.LENGTH_LONG).show()
+                                }
+                            },
+                            onDismiss = { showDialog = false }
+                        ) {
+                            MyOutlineTextFiled(
+                                modifier = Modifier.fillMaxWidth(),
+                                label = "Threshold Ratio",
+                                keyboardType = KeyboardType.Decimal,
+                                initialText = thresholdRatio.value,
+                                onValueChange = {
+                                    newThreshold = it
+                                }
+                            )
+                        }
+                        Text(text = thresholdRatio.value)
+                        IconButton(onClick = { showDialog = true }) {
+                            Icon(imageVector = Icons.Default.Edit, contentDescription = "edit")
+                        }
+                    }
                 }
                 MyVerticalSpacer(height = 10)
 
@@ -148,6 +259,15 @@ fun SettingsScreen(
         }
     }
 
+}
+
+fun validateThresholdInput(str: String): Boolean {
+    return try {
+        val number = str.toDouble()
+        number in 0.0..1.0
+    } catch (e: NumberFormatException) {
+        false // Parsing failed or number is out of range
+    }
 }
 
 @Preview(showSystemUi = true, showBackground = true)

@@ -20,7 +20,7 @@ class AppDataStore @Inject constructor(
         }
     }
 
-    suspend fun readData(key : String) : Flow<String>{
+    fun readData(key : String) : Flow<String>{
         val dataStoreKey = stringPreferencesKey(key)
 
         return dataStore.data.map {preferences->

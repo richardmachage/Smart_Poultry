@@ -20,6 +20,7 @@ class SettingsViewModel @Inject constructor (
     private val dataStore: AppDataStore
 ): ViewModel() {
 
+    val myDataStore = dataStore
     // Initialize StateFlows with default values
     private val _pastDays = MutableStateFlow("")
     val pastDays: StateFlow<String> = _pastDays
@@ -29,12 +30,9 @@ class SettingsViewModel @Inject constructor (
 
     private val _thresholdRatio = MutableStateFlow("")
     val thresholdRatio: StateFlow<String> = _thresholdRatio
-    /*
-    lateinit var pastDays : MutableState<String>
-    lateinit var consucutiveNumberOfDays : MutableState<String>
-    lateinit var thresholdRatio : MutableState<String>
-*/
+
     init {
+        //getPastDays()
         loadInitialValues()
         Log.i(THRESHOLD_RATIO_KEY, thresholdRatio.value)
         Log.i(CONSUCUTIVE_DAYS_KEY, consucutiveNumberOfDays.value)
@@ -51,7 +49,13 @@ class SettingsViewModel @Inject constructor (
 
     fun saveToDataStore(key: String, value : String){
         viewModelScope.launch {
+            Log.i("Saving to Datastore from viewmodel:", value)
             dataStore.saveData(key, value)
+
+            Log.i("Load values from datastore", value)
+            //loadInitialValues()
+            Log.i("new pastDays", getFromDataStore(PAST_DAYS_KEY))
+            Log.i("stateFlow pastDays", pastDays.value)
         }
     }
 
@@ -64,6 +68,15 @@ class SettingsViewModel @Inject constructor (
         }
         return data
     }
+
+    /*fun getPastDays() {
+        viewModelScope.launch{
+            dataStore.readData(PAST_DAYS_KEY).collect{
+                pastDays.value = it
+            }
+        }
+    }*/
+
     fun onLogOut() : Boolean{
         return true
     }
