@@ -21,6 +21,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -46,6 +47,9 @@ fun SettingsScreen(
 ) {
 
     val settingsViewModel = hiltViewModel<SettingsViewModel>()
+    val pastDays by settingsViewModel.pastDays.collectAsState()
+    val consucutiveDays by settingsViewModel.consucutiveNumberOfDays.collectAsState()
+    val thresholdRatio by settingsViewModel.thresholdRatio.collectAsState()
 
     Scaffold(
         topBar = {
@@ -79,12 +83,14 @@ fun SettingsScreen(
             ) {
                 MyVerticalSpacer(height = 10)
 
+                //past days
                 MyBorderedColumn {
                     Text(text = "Past Days Summary in Home Screen: ")
                     MyOutlineTextFiled(
                         modifier = Modifier.fillMaxWidth(),
                         label = "Days",
                         keyboardType = KeyboardType.Number,
+                        initialText = pastDays,
                         onValueChange = { newText ->
                             //settingsViewModel.pastDays.value
                         }

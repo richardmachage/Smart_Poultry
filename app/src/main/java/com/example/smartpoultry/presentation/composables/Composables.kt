@@ -67,10 +67,11 @@ fun MyOutlineTextFiled(
     label: String ,
     keyboardType: KeyboardType,
     maxLines : Int = 1,
+    initialText: String,
     onValueChange : (String) -> Unit,
 ){
     var text by remember {
-        mutableStateOf("")
+        mutableStateOf(initialText)
     }
     OutlinedTextField(
         modifier = modifier,
