@@ -85,8 +85,8 @@ fun SettingsScreen(
                         modifier = Modifier.fillMaxWidth(),
                         label = "Days",
                         keyboardType = KeyboardType.Number,
-                        onValueChange = { newText->
-                            settingsViewModel.pastDays.value
+                        onValueChange = { newText ->
+                            //settingsViewModel.pastDays.value
                         }
                     )
                 }
@@ -126,7 +126,7 @@ fun SettingsScreen(
                 MyVerticalSpacer(height = 10)
 
                 //confirm log out dialog
-                var showLogOutDialog by remember{ mutableStateOf(false) }
+                var showLogOutDialog by remember { mutableStateOf(false) }
                 MyInputDialog(
                     showDialog = showLogOutDialog,
                     title = "Log Out",
