@@ -1,5 +1,6 @@
 package com.example.smartpoultry.presentation.screens.settingsScreen
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.smartpoultry.data.dataSource.datastore.AppDataStore
@@ -35,7 +36,9 @@ class SettingsViewModel @Inject constructor (
 */
     init {
         loadInitialValues()
-
+        Log.i(THRESHOLD_RATIO_KEY, thresholdRatio.value)
+        Log.i(CONSUCUTIVE_DAYS_KEY, consucutiveNumberOfDays.value)
+        Log.i(PAST_DAYS_KEY, pastDays.value)
     }
 
     private fun loadInitialValues() {
