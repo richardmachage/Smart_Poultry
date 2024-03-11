@@ -37,4 +37,13 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
             .addOnSuccessListener { isSuccess = true }
         return isSuccess
     }
+
+    override fun resetPassword(email: String): Boolean {
+        var isSuccessful = false
+        firebaseAuth.sendPasswordResetEmail(email)
+            .addOnSuccessListener {
+                isSuccessful = true
+            }
+        return isSuccessful
+    }
 }

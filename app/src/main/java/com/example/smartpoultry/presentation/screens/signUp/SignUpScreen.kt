@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.MaterialTheme
@@ -20,6 +19,7 @@ import com.example.smartpoultry.presentation.composables.MyPasswordEditText
 import com.example.smartpoultry.presentation.composables.MyVerticalSpacer
 import com.example.smartpoultry.presentation.composables.NormButton
 import com.example.smartpoultry.presentation.composables.NormText
+import com.example.smartpoultry.presentation.composables.UserTypeDropDownMenu
 import com.example.smartpoultry.presentation.destinations.LogInScreenDestination
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -42,12 +42,8 @@ fun SignUpScreen(
             Column(
                 verticalArrangement = Arrangement.Center
             ) {
-                MyEditTextClear( //Input User name
-                    label = "User Name",
-                    keyboardType = KeyboardType.Text,
-                    iconLeading = Icons.Default.AccountCircle,
-                    iconLeadingDescription = "User",
-                    hint = "Enter name"
+                UserTypeDropDownMenu(
+                    onItemClick = {},
                 )
 
                 MyEditTextClear( // Input Email address
