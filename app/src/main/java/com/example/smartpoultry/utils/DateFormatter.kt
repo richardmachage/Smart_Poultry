@@ -14,6 +14,10 @@ fun myDateFormatter(date: LocalDate): String {
     return DateTimeFormatter.ofPattern("dd/mm/yyyy").format(date)
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
+fun getDateDaysAgo(numberOfDays: Int): LocalDate {
+    return LocalDate.now().minusDays(numberOfDays.toLong())
+}
 
 @RequiresApi(Build.VERSION_CODES.O)
 fun localDateToJavaDate(localDate: LocalDate): Long {

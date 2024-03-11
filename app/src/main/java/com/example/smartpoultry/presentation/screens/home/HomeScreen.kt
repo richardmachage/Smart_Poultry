@@ -281,30 +281,7 @@ fun HomeScreen(
                     .padding(6.dp),
             ) {
                 Text(text = "Recent Production Trends:")
-                /*
-
-                                MyVerticalSpacer(height = 10)
-
-                                Chart(
-                                    //line chart
-                                    chart = lineChart(),
-                                    //model = homeViewModel.chartEntryModel,
-                                    chartModelProducer = homeViewModel.chartEntryModelProducer,
-                                    startAxis = rememberStartAxis(
-                                       // valueFormatter = homeViewModel.verticalAxisValueFormatter,
-                                        titleComponent = textComponent(),
-                                        title = "Eggs Produced"
-                                    ),
-                                    bottomAxis = rememberBottomAxis(
-                                       valueFormatter = homeViewModel.horizontalAxisValueFormatter,
-                                   //   titleComponent = textComponent(),
-                                        title = "Date"
-                                    ),
-                                )
-                */
-
                 MyVerticalSpacer(height = 10)
-
                 //Create graph
                 if (dailyEggCollections.isNotEmpty()) RecentEggsLineChart(dailyEggCollections = dailyEggCollections)
 
