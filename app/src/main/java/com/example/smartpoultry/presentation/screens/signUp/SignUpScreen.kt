@@ -29,17 +29,14 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.smartpoultry.presentation.NavGraphs
 import com.example.smartpoultry.presentation.composables.MyCircularProgressBar
 import com.example.smartpoultry.presentation.composables.MyEditTextClear
 import com.example.smartpoultry.presentation.composables.MyPasswordEditText
 import com.example.smartpoultry.presentation.composables.MyVerticalSpacer
 import com.example.smartpoultry.presentation.composables.NormButton
 import com.example.smartpoultry.presentation.composables.UserTypeDropDownMenu
-import com.example.smartpoultry.presentation.destinations.LogInScreenDestination
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
-import com.ramcosta.composedestinations.navigation.popUpTo
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Destination
@@ -49,6 +46,10 @@ fun SignUpScreen(
 ) {
     val singUpViewModel = hiltViewModel<SignUpViewModel>()
     val context = LocalContext.current
+
+    var isLoading by remember {
+        mutableStateOf(false)
+    }
 
     Scaffold(
         topBar = {
@@ -68,9 +69,7 @@ fun SignUpScreen(
             )
         }
     ) { paddingValues ->
-        var isLoading by remember {
-            mutableStateOf(false)
-        }
+
         Surface(
             modifier = Modifier
                 .padding(paddingValues)
@@ -131,18 +130,25 @@ fun SignUpScreen(
 
                 MyVerticalSpacer(height = 30)
 
+                //NormButton(onButtonClick = { isLoading = true }, btnName = "Show Loading")
+
                 NormButton( //The sign up Button
                     onButtonClick = {
                         isLoading = true
 
                         if (!singUpViewModel.checkEmptyFields()) {
                             if (singUpViewModel.onSignUp()) {
-                                navigator.navigate(LogInScreenDestination) {
+                                Toast.makeText(
+                                    context,
+                                    "Success: Account created successfully, proceed to login page",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                               /* navigator.navigate(LogInScreenDestination) {
                                     popUpTo(NavGraphs.root.startRoute) { inclusive = true }
-                                }
+                                }*/
                                 isLoading = false
                             } else {
-                                isLoading = false
+                               // isLoading = false
                                 Toast.makeText(
                                     context,
                                     "Failed; ${singUpViewModel.validationError.value}",
@@ -150,14 +156,14 @@ fun SignUpScreen(
                                 ).show()
                             }
                         }else{
-                            isLoading = false
+                           // isLoading = false
                             Toast.makeText(
                                 context,
                                 "Fill in all fields to register",
                                 Toast.LENGTH_SHORT
                             ).show()
                         }
-                        //isLoading = false
+                        isLoading = false
                     },
                     btnName = "Sign Up",
                     modifier = Modifier.fillMaxWidth()
