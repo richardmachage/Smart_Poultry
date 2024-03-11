@@ -15,6 +15,7 @@ import com.example.smartpoultry.domain.repository.BlocksRepository
 import com.example.smartpoultry.domain.repository.CellsRepository
 import com.example.smartpoultry.domain.repository.EggCollectionRepository
 import com.example.smartpoultry.domain.repository.FeedsRepository
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import dagger.Module
 import dagger.Provides
@@ -70,4 +71,7 @@ object AppModule {
         }
     }
 
+    @Provides
+    @Singleton
+    fun provideFirebaseAuth() : FirebaseAuth = FirebaseAuth.getInstance()
 }
