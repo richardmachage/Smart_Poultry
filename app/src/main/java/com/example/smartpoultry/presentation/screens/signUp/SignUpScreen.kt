@@ -1,5 +1,6 @@
 package com.example.smartpoultry.presentation.screens.signUp
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -19,11 +20,17 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.smartpoultry.presentation.NavGraphs
+import com.example.smartpoultry.presentation.composables.MyCircularProgressBar
 import com.example.smartpoultry.presentation.composables.MyEditTextClear
 import com.example.smartpoultry.presentation.composables.MyPasswordEditText
 import com.example.smartpoultry.presentation.composables.MyVerticalSpacer
@@ -40,8 +47,8 @@ import com.ramcosta.composedestinations.navigation.popUpTo
 fun SignUpScreen(
     navigator: DestinationsNavigator
 ) {
-
     val singUpViewModel = hiltViewModel<SignUpViewModel>()
+    val context = LocalContext.current
 
     Scaffold(
         topBar = {
@@ -61,13 +68,17 @@ fun SignUpScreen(
             )
         }
     ) { paddingValues ->
-
+        var isLoading by remember {
+            mutableStateOf(false)
+        }
         Surface(
             modifier = Modifier
                 .padding(paddingValues)
                 .fillMaxSize(),
             color = MaterialTheme.colorScheme.background
         ) {
+            MyCircularProgressBar(isLoading = isLoading)
+
             Column {
 /*
                 NormText(text = "Sign Up")
@@ -79,7 +90,9 @@ fun SignUpScreen(
                     verticalArrangement = Arrangement.Center
                 ) {
                     UserTypeDropDownMenu(
-                        onItemClick = {},
+                        onItemClick = { userType ->
+                            singUpViewModel.userType.value = userType
+                        },
                     )
 
                     MyEditTextClear( // Input Email address
@@ -120,10 +133,18 @@ fun SignUpScreen(
 
                 NormButton( //The sign up Button
                     onButtonClick = {
-                        navigator.navigate(LogInScreenDestination) {
-                            popUpTo(NavGraphs.root.startRoute) { inclusive = true }
-                        }
+                        isLoading = true
 
+                        if (singUpViewModel.onSignUp()) {
+                            navigator.navigate(LogInScreenDestination) {
+                                popUpTo(NavGraphs.root.startRoute) { inclusive = true }
+                            }
+                            isLoading = false
+                        }else{
+                            isLoading = false
+                            Toast.makeText(context,"Failed; ${singUpViewModel.validationError.value}",Toast.LENGTH_SHORT).show()
+                        }
+                        //isLoading = false
                     },
                     btnName = "Sign Up",
                     modifier = Modifier.fillMaxWidth()
