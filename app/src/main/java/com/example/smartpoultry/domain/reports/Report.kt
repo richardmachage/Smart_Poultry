@@ -4,6 +4,7 @@ import android.content.ContentValues
 import android.content.Context
 import android.graphics.Color
 import android.graphics.Paint
+import android.graphics.Typeface
 import android.graphics.pdf.PdfDocument
 import android.os.Environment
 import android.provider.MediaStore
@@ -16,9 +17,18 @@ class Report @Inject constructor(
     @ApplicationContext private val context : Context
 ) {
 
+    private fun addTextToPage(page: PdfDocument.Page, text: String, startX: Float, startY: Float, paint: Paint) {
+        val lines = text.split("\n")
+        var y = startY
+
+        for (line in lines) {
+            page.canvas.drawText(line, startX, y, paint)
+            y += paint.descent() - paint.ascent()
+        }
+    }
     fun createAndSavePDF(name : String) {
         val pdfDocument = PdfDocument()
-        val pageInfo = PdfDocument.PageInfo.Builder(300, 600, 1).create()
+        val pageInfo = PdfDocument.PageInfo.Builder(595, 842, 1).create() //A4 size
         val page = pdfDocument.startPage(pageInfo)
 
         //adding text to doc
@@ -26,6 +36,7 @@ class Report @Inject constructor(
         val paint = Paint().apply {
             color = Color.BLACK
             textSize = 12f
+            typeface = Typeface.create(Typeface.DEFAULT, Typeface.NORMAL)
         }
         canvas.drawText("Hello, PDF World!", 50f, 50f, paint)
         pdfDocument.finishPage(page)

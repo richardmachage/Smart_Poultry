@@ -1,6 +1,7 @@
 package com.example.smartpoultry.presentation.screens.home
 
 import android.os.Build
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.border
 import androidx.compose.foundation.horizontalScroll
@@ -24,6 +25,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -43,6 +45,7 @@ fun HomeScreen(
     //modifier: Modifier
 ) {
 
+    val context = LocalContext.current
     //viewmodel initialization
     val homeViewModel: HomeViewModel = hiltViewModel()
     val totalBlocks = homeViewModel.totalBlocks.collectAsState()
@@ -125,26 +128,25 @@ fun HomeScreen(
                                 .padding(6.dp)
                                 .align(Alignment.Start)
                         )
-
-                        /*Text(
-                            text = "16",
-                            modifier = Modifier
-                                .padding(6.dp)
-                                .align(Alignment.Start)
-                            // textAlign = TextAlign.Center
-
-                        )*/
                     }
 
                 }
 
-
+                NormButton(
+                    modifier = Modifier.fillMaxWidth(),
+                    onButtonClick = {
+                        homeViewModel.onCreateReport()
+                        Toast.makeText(
+                            context,
+                            "File exported successfully, view in downloads",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    },
+                    btnName = "Export inventory summary as PDF>"
+                )
             }
 
-            NormButton(
-                onButtonClick = { homeViewModel.onCreateReport() },
-                btnName = "Get Report"
-            )
+
             MyVerticalSpacer(height = 20)
 
             Column(
@@ -313,26 +315,26 @@ fun HomeScreen(
             ) {
                 Text(text = "Recent Feeding Trends:")
                 MyVerticalSpacer(height = 10)
-               /* Chart(
-                    chart = lineChart(),
-                    model = ,
-                    startAxis = rememberStartAxis(
-                        //titleComponent = textComponent(),
-                        //title = "Sacks of Feeds"
-                    ),
-                    bottomAxis = rememberBottomAxis(
-                        titleComponent = textComponent(),
-                        title = "Date"
-                    )
-                )
-*/
+                /* Chart(
+                     chart = lineChart(),
+                     model = ,
+                     startAxis = rememberStartAxis(
+                         //titleComponent = textComponent(),
+                         //title = "Sacks of Feeds"
+                     ),
+                     bottomAxis = rememberBottomAxis(
+                         titleComponent = textComponent(),
+                         title = "Date"
+                     )
+                 )
+ */
             }
         }
     }
 }
 
-    @Preview(showSystemUi = true, showBackground = true)
-    @Composable
-    fun HomeScreenPrev() {
-        //HomeScreen()
-    }
+@Preview(showSystemUi = true, showBackground = true)
+@Composable
+fun HomeScreenPrev() {
+    //HomeScreen()
+}

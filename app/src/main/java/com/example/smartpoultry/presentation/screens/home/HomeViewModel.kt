@@ -8,6 +8,7 @@ import com.example.smartpoultry.domain.reports.Report
 import com.example.smartpoultry.domain.repository.BlocksRepository
 import com.example.smartpoultry.domain.repository.CellsRepository
 import com.example.smartpoultry.domain.repository.EggCollectionRepository
+import com.example.smartpoultry.utils.myDateFormatter
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
@@ -43,7 +44,7 @@ class HomeViewModel @Inject constructor(
     )
 
     fun onCreateReport( ){
-        report.createAndSavePDF("Smart Poultry report")
+        report.createAndSavePDF("Inventory ${myDateFormatter(LocalDate.now())}")
     }
 
 
