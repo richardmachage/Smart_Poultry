@@ -50,7 +50,8 @@ fun NormText(text: String) {
 fun NormButton(
     onButtonClick: () -> Unit,
     btnName: String,
-    modifier: Modifier = Modifier) {
+    modifier: Modifier = Modifier
+) {
     Button(
         onClick = onButtonClick,
         modifier = modifier
@@ -64,12 +65,12 @@ fun NormButton(
 @Composable
 fun MyOutlineTextFiled(
     modifier: Modifier = Modifier,
-    label: String ,
+    label: String,
     keyboardType: KeyboardType,
-    maxLines : Int = 1,
+    maxLines: Int = 1,
     initialText: String,
-    onValueChange : (String) -> Unit,
-){
+    onValueChange: (String) -> Unit,
+) {
     var text by remember {
         mutableStateOf(initialText)
     }
@@ -87,11 +88,12 @@ fun MyOutlineTextFiled(
 }
 
 @Composable
-fun MyTextButton(onButtonClick : () -> Unit, btnText : String, modifier:Modifier){
+fun MyTextButton(onButtonClick: () -> Unit, btnText: String, modifier: Modifier) {
     TextButton(onClick = onButtonClick) {
         NormText(text = btnText)
     }
 }
+
 @Composable
 fun MyEditText(
     label: String,
@@ -126,12 +128,11 @@ fun MySimpleEditText(
     iconLeading: ImageVector,
     iconLeadingDescription: String,
     modifier: Modifier
-    ) {
+) {
     var text by remember { mutableStateOf(TextFieldValue("")) }
     OutlinedTextField(
         modifier = modifier
-            .fillMaxSize()
-        ,
+            .fillMaxSize(),
         value = text,
         onValueChange = { newText -> text = newText },
         keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
@@ -151,7 +152,8 @@ fun MyEditTextClear(
     hint: String,
     iconLeading: ImageVector,
     iconLeadingDescription: String,
-    keyboardType: KeyboardType
+    keyboardType: KeyboardType,
+    onValueChange: (String) -> Unit = {}
 ) {
     var text by remember { mutableStateOf(TextFieldValue("")) }
     OutlinedTextField(
@@ -161,7 +163,10 @@ fun MyEditTextClear(
         value = text,
         label = { Text(text = label) },
         placeholder = { Text(text = hint) },
-        onValueChange = { newText -> text = newText },
+        onValueChange = { newText ->
+            text = newText
+            onValueChange(newText.text)
+        },
         keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
         leadingIcon = {
             Icon(
@@ -184,7 +189,8 @@ fun MyPasswordEditText(
     hint: String,
     iconLeading: ImageVector,
     iconLeadingDescription: String,
-    keyboardType: KeyboardType
+    keyboardType: KeyboardType,
+    onValueChange: (String) -> Unit = {}
 ) {
     var text by remember { mutableStateOf(TextFieldValue("")) }
     var showPassword by remember { mutableStateOf(value = false) }
@@ -195,7 +201,10 @@ fun MyPasswordEditText(
         value = text,
         label = { Text(label) },
         placeholder = { Text(hint) },
-        onValueChange = { newText -> text = newText },
+        onValueChange = { newText ->
+            text = newText
+            onValueChange(newText.text)
+        },
         keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
         leadingIcon = {
             Icon(
@@ -230,26 +239,29 @@ fun MyPasswordEditText(
 }
 
 
-
 @Composable
-fun MyVerticalSpacer(height : Int){
-    Spacer(modifier = Modifier
-        .height(height.dp))
+fun MyVerticalSpacer(height: Int) {
+    Spacer(
+        modifier = Modifier
+            .height(height.dp)
+    )
 }
 
 @Composable
-fun MyHorizontalSpacer(width : Int){
-    Spacer(modifier = Modifier
-        .width(width.dp))
+fun MyHorizontalSpacer(width: Int) {
+    Spacer(
+        modifier = Modifier
+            .width(width.dp)
+    )
 }
 
 @Composable
 fun MyCardInventory(
-    item : String,
-    number : Int,
+    item: String,
+    number: Int,
     //modifier: Modifier
-){
-    Card (
+) {
+    Card(
         modifier = Modifier
             .padding(8.dp)
             .shadow(
@@ -260,22 +272,22 @@ fun MyCardInventory(
             .width(
                 (LocalConfiguration.current.screenWidthDp / 4).dp
             )
-            //.height(100.dp)
+        //.height(100.dp)
 
-    ){
+    ) {
         Text(
             text = item,
             modifier = Modifier
                 .padding(6.dp)
                 .align(Alignment.CenterHorizontally)
-            )
+        )
 
         Text(
             text = number.toString(),
             modifier = Modifier
                 .padding(6.dp)
                 .align(Alignment.CenterHorizontally)
-           // textAlign = TextAlign.Center
+            // textAlign = TextAlign.Center
 
         )
     }
