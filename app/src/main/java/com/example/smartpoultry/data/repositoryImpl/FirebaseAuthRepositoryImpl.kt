@@ -11,7 +11,7 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
     private val firebaseFirestore: FirebaseFirestore
 ) : FirebaseAuthRepository{
     override fun registerUser(email: String, password: String, role:String): Boolean {
-        var result = false
+        var isSuccess = false
         firebaseAuth.createUserWithEmailAndPassword(email, password)
             .addOnSuccessListener {authResult ->
                 val firebaseUser = authResult.user
@@ -23,15 +23,18 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
                         .document(it.uid)
                         .set(user)
                         .addOnSuccessListener {
-                            result = true
+                            isSuccess = true
                         }
                 }
             }
 
-        return result
+        return isSuccess
     }
 
     override fun logIn(email: String, password: String): Boolean {
-        TODO("Not yet implemented")
+        var isSuccess = false
+        firebaseAuth.signInWithEmailAndPassword(email,password)
+            .addOnSuccessListener { isSuccess = true }
+        return isSuccess
     }
 }
