@@ -1,5 +1,6 @@
 package com.example.smartpoultry.data.repositoryImpl
 
+import android.util.Log
 import com.example.smartpoultry.data.dataSource.remote.firebase.models.User
 import com.example.smartpoultry.domain.repository.FirebaseAuthRepository
 import com.google.firebase.auth.FirebaseAuth
@@ -26,6 +27,10 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
                             isSuccess = true
                         }
                 }
+
+            }
+            .addOnFailureListener {
+                Log.i("Error firebaseAuth: ", it.message.toString())
             }
 
         return isSuccess

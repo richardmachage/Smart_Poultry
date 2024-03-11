@@ -135,14 +135,27 @@ fun SignUpScreen(
                     onButtonClick = {
                         isLoading = true
 
-                        if (singUpViewModel.onSignUp()) {
-                            navigator.navigate(LogInScreenDestination) {
-                                popUpTo(NavGraphs.root.startRoute) { inclusive = true }
+                        if (!singUpViewModel.checkEmptyFields()) {
+                            if (singUpViewModel.onSignUp()) {
+                                navigator.navigate(LogInScreenDestination) {
+                                    popUpTo(NavGraphs.root.startRoute) { inclusive = true }
+                                }
+                                isLoading = false
+                            } else {
+                                isLoading = false
+                                Toast.makeText(
+                                    context,
+                                    "Failed; ${singUpViewModel.validationError.value}",
+                                    Toast.LENGTH_SHORT
+                                ).show()
                             }
-                            isLoading = false
                         }else{
                             isLoading = false
-                            Toast.makeText(context,"Failed; ${singUpViewModel.validationError.value}",Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                context,
+                                "Fill in all fields to register",
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
                         //isLoading = false
                     },

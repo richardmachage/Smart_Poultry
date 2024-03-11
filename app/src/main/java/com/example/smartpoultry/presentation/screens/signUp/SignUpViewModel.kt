@@ -43,4 +43,8 @@ class SignUpViewModel @Inject constructor(
             return false
         }
     }
+
+    fun checkEmptyFields() : Boolean{
+        return  userType.value.isEmpty() || email.value.isBlank() || password.value.isBlank() || confirmPassword.value.isBlank()
+    }
 }

@@ -5,5 +5,7 @@ fun isValidEmail(email: String): Boolean {
     return email.matches(emailRegex)
 }
 
-
+fun checkPasswordLength(password: String) : Boolean{
+    return password.length >=6
+}
 fun isPasswordSame(password: String, confirmPassword : String) : Boolean = password == confirmPassword
