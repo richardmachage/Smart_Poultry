@@ -1,11 +1,14 @@
 package com.example.smartpoultry.domain.reports
 
+import android.app.Activity
 import android.content.Context
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.pdf.PdfDocument
 import android.os.Build
+import androidx.core.content.ContextCompat
 import java.io.IOException
+import java.util.jar.Manifest
 import javax.inject.Inject
 
 
@@ -36,7 +39,12 @@ class Report @Inject constructor(
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             savePdfToInternalStorage(pdfDocument, "example.pdf")
         } else {
-
+            if (ContextCompat.checkSelfPermission(context, com.example.smartpoultry.Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(context as Activity, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE)
+                // Permission request result is handled elsewhere, e.g., onRequestPermissionsResult
+            } else {
+                savePdfToExternalStorage(pdfDocument, "example.pdf")
+            }
         }
 
 
