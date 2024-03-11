@@ -1,5 +1,6 @@
 package com.example.smartpoultry.data.repositoryImpl
 
+import com.example.smartpoultry.data.dataSource.remote.firebase.models.User
 import com.example.smartpoultry.domain.repository.FirebaseAuthRepository
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -9,14 +10,23 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
     private val firebaseAuth: FirebaseAuth,
     private val firebaseFirestore: FirebaseFirestore
 ) : FirebaseAuthRepository{
-    override fun registerUser(email: String, password: String): Boolean {
+    override fun registerUser(email: String, password: String, role:String): Boolean {
         var result = false
-
         firebaseAuth.createUserWithEmailAndPassword(email, password)
-            .addOnSuccessListener {
-                val firebaseUser = it.user
-            }
+            .addOnSuccessListener {authResult ->
+                val firebaseUser = authResult.user
+                val user = User(email, role)
 
+                //add the user info to fireStore Users collection
+                firebaseUser?.let {
+                    firebaseFirestore.collection("Users")
+                        .document(it.uid)
+                        .set(user)
+                        .addOnSuccessListener {
+                            result = true
+                        }
+                }
+            }
 
         return result
     }
