@@ -30,7 +30,6 @@ import com.example.smartpoultry.presentation.composables.MyVerticalSpacer
 import com.example.smartpoultry.presentation.composables.NormButton
 import com.example.smartpoultry.presentation.composables.UserTypeDropDownMenu
 import com.example.smartpoultry.presentation.destinations.LogInScreenDestination
-import com.example.smartpoultry.presentation.screens.settingsScreen.SettingsViewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.navigation.popUpTo
@@ -42,7 +41,7 @@ fun SignUpScreen(
     navigator: DestinationsNavigator
 ) {
 
-    val settingsViewModel = hiltViewModel<SettingsViewModel>()
+    val singUpViewModel = hiltViewModel<SignUpViewModel>()
 
     Scaffold(
         topBar = {
@@ -53,12 +52,15 @@ fun SignUpScreen(
                     IconButton(onClick = {
                         navigator.navigateUp()
                     }) {
-                        Icon(imageVector = Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = "Back"
+                        )
                     }
                 }
             )
         }
-    ) {paddingValues->
+    ) { paddingValues ->
 
         Surface(
             modifier = Modifier
@@ -87,6 +89,7 @@ fun SignUpScreen(
                         iconLeadingDescription = "Email",
                         keyboardType = KeyboardType.Email,
                         onValueChange = { text ->
+                            singUpViewModel.email.value = text
                         }
                     )
 
@@ -95,7 +98,10 @@ fun SignUpScreen(
                         hint = "New Password",
                         iconLeading = Icons.Default.Lock,
                         iconLeadingDescription = "Password",
-                        keyboardType = KeyboardType.Password
+                        keyboardType = KeyboardType.Password,
+                        onValueChange = { text ->
+                            singUpViewModel.password.value = text
+                        }
                     )
 
                     MyPasswordEditText( // Confirm Password
@@ -103,7 +109,10 @@ fun SignUpScreen(
                         hint = "Confirm Password",
                         iconLeading = Icons.Default.Lock,
                         iconLeadingDescription = "Password",
-                        keyboardType = KeyboardType.Password
+                        keyboardType = KeyboardType.Password,
+                        onValueChange = { text ->
+                            singUpViewModel.confirmPassword.value = text
+                        }
                     )
                 }
 
@@ -127,6 +136,6 @@ fun SignUpScreen(
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
-fun SignUpPreview(){
+fun SignUpPreview() {
     //SignUpScreen()
 }
