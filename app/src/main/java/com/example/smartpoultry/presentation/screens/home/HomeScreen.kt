@@ -36,6 +36,7 @@ import com.example.smartpoultry.presentation.composables.MyVerticalSpacer
 import com.example.smartpoultry.presentation.composables.NormButton
 import com.example.smartpoultry.presentation.composables.RecentEggsLineChart
 import com.ramcosta.composedestinations.annotation.Destination
+import java.text.SimpleDateFormat
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Destination
@@ -135,7 +136,16 @@ fun HomeScreen(
                 NormButton(
                     modifier = Modifier.fillMaxWidth(),
                     onButtonClick = {
-                        homeViewModel.onCreateReport()
+                        homeViewModel.onCreateReport(
+                            name = "Inventory ${SimpleDateFormat("dd/mm/yyyy").format(System.currentTimeMillis())}",
+                            content = "SMART POULTRY INVENTORY " +
+                                    "\nDate : ${SimpleDateFormat("dd/mm/yyyy").format(System.currentTimeMillis())}" +
+                                    "\n  " +
+                                    "\n  " +
+                                    "\nTotal Blocks : ${totalBlocks.value}" +
+                                    "\nTotal Cells: ${totalCells.value}" +
+                                    "\nTotal Chicken: ${totalCells.value.sumOf { cell: Cells -> cell.henCount }}"
+                        )
                         Toast.makeText(
                             context,
                             "File exported successfully, view in downloads",

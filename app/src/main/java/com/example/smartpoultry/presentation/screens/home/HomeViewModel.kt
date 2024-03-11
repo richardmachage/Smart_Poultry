@@ -5,7 +5,6 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.smartpoultry.data.dataSource.room.entities.cells.Cells
 import com.example.smartpoultry.domain.reports.Report
 import com.example.smartpoultry.domain.repository.BlocksRepository
 import com.example.smartpoultry.domain.repository.CellsRepository
@@ -13,9 +12,7 @@ import com.example.smartpoultry.domain.repository.EggCollectionRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.launch
 import java.sql.Date
-import java.text.SimpleDateFormat
 import java.time.LocalDate
 import javax.inject.Inject
 
@@ -47,29 +44,8 @@ class HomeViewModel @Inject constructor(
     )
 
     @SuppressLint("SimpleDateFormat")
-    fun onCreateReport( ){
-        var totalCells = 0
-        var totalBlocks = 0
-        var totalHen = 0
-        viewModelScope.launch {
-            cellsRepository.getAllCells().collect{
-                totalCells = it.size
-                totalHen = it.sumOf { cell: Cells -> cell.henCount }
-            }
-            blocksRepository.getAllBlocks().collect{
-                totalBlocks = it.size
-            }
-        }
-        report.createAndSavePDF(
-            name = "Inventory ${SimpleDateFormat("dd/mm/yyyy").format(System.currentTimeMillis())}",
-            content = "SMART POULTRY INVENTORY " +
-                    "\nDate : ${SimpleDateFormat("dd/mm/yyyy").format(System.currentTimeMillis())}" +
-                    "\n  " +
-                    "\n  " +
-                    "\nTotal Blocks : $totalBlocks" +
-                    "\nTotal Cells: $totalCells" +
-                    "\nTotal Chicken: $totalHen"
-        )
+    fun onCreateReport(name : String, content: String ){
+        report.createAndSavePDF(name,content)
     }
 
 
