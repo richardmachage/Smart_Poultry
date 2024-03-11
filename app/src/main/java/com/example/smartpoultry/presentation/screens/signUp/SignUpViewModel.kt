@@ -2,11 +2,13 @@ package com.example.smartpoultry.presentation.screens.signUp
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.smartpoultry.domain.repository.FirebaseAuthRepository
 import com.example.smartpoultry.utils.checkPasswordLength
 import com.example.smartpoultry.utils.isPasswordSame
 import com.example.smartpoultry.utils.isValidEmail
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -19,40 +21,57 @@ class SignUpViewModel @Inject constructor(
     var password = mutableStateOf("")
     var confirmPassword = mutableStateOf("")
     var validationError = mutableStateOf("")
+    var isLoading = mutableStateOf(false)
+        private set
 
 
-    fun onSignUp(): Boolean {
-        if (isValidEmail(email.value)) {
-            if (isPasswordSame(password.value, confirmPassword.value)) {
-                return if (checkPasswordLength(password = password.value)) {
-
-                    val isSignUp = firebaseAuthRepository.registerUser(
-                        email = email.value,
-                        password = password.value,
-                        role = userType.value
-                    )
-                    if (isSignUp) {
-                        true
-                    } else {
-                        validationError.value = "Failed to sign up, try again later"
-                        false
-                    }
-                } else {
-                    validationError.value = "Passwords must be more than 6 characters"
-                    false
+    fun onSignUp() {
+        isLoading.value = true
+        viewModelScope.launch {
+            val result =
+                firebaseAuthRepository.registerUser(email.value, password.value, userType.value)
+            result.onSuccess {
+                validationError.value = "Account created successfully"
+                isLoading.value = false
+            }
+                .onFailure {
+                    validationError.value = "Failed to sign up : ${it.message.toString()}"
+                    isLoading.value = false
                 }
-            }else{
-                validationError.value = "Passwords do not match"
-                return false
-            }
         }
-            else {
-                validationError.value = "Invalid Email address"
-                return false
-            }
+    }
+
+    fun validateSignUp(): Boolean {
+        //check empty fields
+        if (checkEmptyFields()){
+            validationError.value = "You must fill in all fields to Sign Up"
         }
 
-    fun checkEmptyFields() : Boolean{
+        // Validate Email
+        if (!isValidEmail(email.value)) {
+            validationError.value = "Invalid Email address"
+            return false
+        }
+
+        // Check if Passwords Match
+        if (!isPasswordSame(password.value, confirmPassword.value)) {
+            validationError.value = "Passwords do not match"
+            return false
+        }
+
+        // Check Password Length
+        if (!checkPasswordLength(password.value)) {
+            validationError.value = "Passwords must be more than 6 characters"
+            return false
+        }
+
+        // At this point, all validations have passed
+        // Here you would normally proceed with the registration process
+        // Since we're focusing on validation only, we'll simulate a successful validation
+        return true
+    }
+
+    private fun checkEmptyFields() : Boolean{
         return  userType.value.isEmpty() || email.value.isBlank() || password.value.isBlank() || confirmPassword.value.isBlank()
     }
 }

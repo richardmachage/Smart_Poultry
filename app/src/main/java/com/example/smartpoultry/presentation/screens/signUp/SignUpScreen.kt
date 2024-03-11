@@ -20,10 +20,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
@@ -47,9 +43,7 @@ fun SignUpScreen(
     val singUpViewModel = hiltViewModel<SignUpViewModel>()
     val context = LocalContext.current
 
-    var isLoading by remember {
-        mutableStateOf(false)
-    }
+    var isLoading = singUpViewModel.isLoading.value
 
     Scaffold(
         topBar = {
@@ -134,36 +128,12 @@ fun SignUpScreen(
 
                 NormButton( //The sign up Button
                     onButtonClick = {
-                        isLoading = true
-
-                        if (!singUpViewModel.checkEmptyFields()) {
-                            if (singUpViewModel.onSignUp()) {
-                                Toast.makeText(
-                                    context,
-                                    "Success: Account created successfully, proceed to login page",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                               /* navigator.navigate(LogInScreenDestination) {
-                                    popUpTo(NavGraphs.root.startRoute) { inclusive = true }
-                                }*/
-                                isLoading = false
-                            } else {
-                               // isLoading = false
-                                Toast.makeText(
-                                    context,
-                                    "Failed; ${singUpViewModel.validationError.value}",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            }
-                        }else{
-                           // isLoading = false
-                            Toast.makeText(
-                                context,
-                                "Fill in all fields to register",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
-                        isLoading = false
+                                    if (singUpViewModel.validateSignUp()) {
+                                        singUpViewModel.onSignUp()
+                                        Toast.makeText(context,singUpViewModel.validationError.value,Toast.LENGTH_LONG).show()
+                                    }else{
+                                        Toast.makeText(context,"Failed: ${singUpViewModel.validationError.value}",Toast.LENGTH_LONG).show()
+                                    }
                     },
                     btnName = "Sign Up",
                     modifier = Modifier.fillMaxWidth()
