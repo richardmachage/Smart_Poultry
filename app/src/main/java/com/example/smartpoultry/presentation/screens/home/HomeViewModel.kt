@@ -1,5 +1,6 @@
 package com.example.smartpoultry.presentation.screens.home
 
+import android.annotation.SuppressLint
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
@@ -9,12 +10,12 @@ import com.example.smartpoultry.domain.reports.Report
 import com.example.smartpoultry.domain.repository.BlocksRepository
 import com.example.smartpoultry.domain.repository.CellsRepository
 import com.example.smartpoultry.domain.repository.EggCollectionRepository
-import com.example.smartpoultry.utils.myDateFormatter
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import java.sql.Date
+import java.text.SimpleDateFormat
 import java.time.LocalDate
 import javax.inject.Inject
 
@@ -45,6 +46,7 @@ class HomeViewModel @Inject constructor(
             initialValue = emptyList(),
     )
 
+    @SuppressLint("SimpleDateFormat")
     fun onCreateReport( ){
         var totalCells = 0
         var totalBlocks = 0
@@ -59,9 +61,9 @@ class HomeViewModel @Inject constructor(
             }
         }
         report.createAndSavePDF(
-            name = "Inventory ${myDateFormatter(LocalDate.now())}",
+            name = "Inventory ${SimpleDateFormat("dd/mm/yyyy").format(System.currentTimeMillis())}",
             content = "SMART POULTRY INVENTORY " +
-                    "\nDate : ${myDateFormatter(LocalDate.now())}" +
+                    "\nDate : ${SimpleDateFormat("dd/mm/yyyy").format(System.currentTimeMillis())}" +
                     "\n  " +
                     "\n  " +
                     "\nTotal Blocks : $totalBlocks" +
