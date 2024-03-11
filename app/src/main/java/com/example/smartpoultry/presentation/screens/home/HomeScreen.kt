@@ -139,11 +139,12 @@ fun HomeScreen(
                         homeViewModel.onCreateReport(
                             name = "Inventory ${SimpleDateFormat("dd/mm/yyyy").format(System.currentTimeMillis())}",
                             content = "SMART POULTRY INVENTORY " +
+                                    "\n"+
                                     "\nDate : ${SimpleDateFormat("dd/mm/yyyy").format(System.currentTimeMillis())}" +
                                     "\n  " +
                                     "\n  " +
-                                    "\nTotal Blocks : ${totalBlocks.value}" +
-                                    "\nTotal Cells: ${totalCells.value}" +
+                                    "\nTotal Blocks : ${totalBlocks.value.size}" +
+                                    "\nTotal Cells: ${totalCells.value.size}" +
                                     "\nTotal Chicken: ${totalCells.value.sumOf { cell: Cells -> cell.henCount }}"
                         )
                         Toast.makeText(
