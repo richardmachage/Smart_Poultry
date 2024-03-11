@@ -1,11 +1,13 @@
 package com.example.smartpoultry.presentation.screens.accountScreen
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import com.example.smartpoultry.presentation.composables.MyCircularProgressBar
 import com.ramcosta.composedestinations.annotation.Destination
 
 @Destination
@@ -16,6 +18,10 @@ fun AccountScreen(){
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background
     ) {
-        Text(text = "Account Details Screen")
+        Column {
+            Text(text = "Account Details Screen")
+
+            MyCircularProgressBar(isLoading = true)
+        }
     }
 }

@@ -10,7 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.window.Dialog
 
 @Composable
-fun CircularProgressBar(isLoading: Boolean) {
+fun MyCircularProgressBar(isLoading: Boolean) {
     if (isLoading) {
         Dialog(onDismissRequest = {}) {
             Box(
