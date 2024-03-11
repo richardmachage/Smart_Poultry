@@ -4,6 +4,7 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.smartpoultry.data.dataSource.room.entities.cells.Cells
 import com.example.smartpoultry.domain.reports.Report
 import com.example.smartpoultry.domain.repository.BlocksRepository
 import com.example.smartpoultry.domain.repository.CellsRepository
@@ -12,6 +13,7 @@ import com.example.smartpoultry.utils.myDateFormatter
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 import java.sql.Date
 import java.time.LocalDate
 import javax.inject.Inject
@@ -19,9 +21,9 @@ import javax.inject.Inject
 @RequiresApi(Build.VERSION_CODES.O)
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    blocksRepository: BlocksRepository,
-    cellsRepository: CellsRepository,
-    eggCollectionRepository: EggCollectionRepository,
+    val blocksRepository: BlocksRepository,
+    val cellsRepository: CellsRepository,
+    val eggCollectionRepository: EggCollectionRepository,
     val report: Report
     ) : ViewModel() {
 
@@ -44,7 +46,28 @@ class HomeViewModel @Inject constructor(
     )
 
     fun onCreateReport( ){
-        report.createAndSavePDF("Inventory ${myDateFormatter(LocalDate.now())}")
+        var totalCells = 0
+        var totalBlocks = 0
+        var totalHen = 0
+        viewModelScope.launch {
+            cellsRepository.getAllCells().collect{
+                totalCells = it.size
+                totalHen = it.sumOf { cell: Cells -> cell.henCount }
+            }
+            blocksRepository.getAllBlocks().collect{
+                totalBlocks = it.size
+            }
+        }
+        report.createAndSavePDF(
+            name = "Inventory ${myDateFormatter(LocalDate.now())}",
+            content = "SMART POULTRY INVENTORY " +
+                    "\nDate : ${myDateFormatter(LocalDate.now())}" +
+                    "\n  " +
+                    "\n  " +
+                    "\nTotal Blocks : $totalBlocks" +
+                    "\nTotal Cells: $totalCells" +
+                    "\nTotal Chicken: $totalHen"
+        )
     }
 
 

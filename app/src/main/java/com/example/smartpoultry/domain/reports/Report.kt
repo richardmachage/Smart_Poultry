@@ -26,7 +26,7 @@ class Report @Inject constructor(
             y += paint.descent() - paint.ascent()
         }
     }
-    fun createAndSavePDF(name : String) {
+    fun createAndSavePDF(name : String, content: String) {
         val pdfDocument = PdfDocument()
         val pageInfo = PdfDocument.PageInfo.Builder(595, 842, 1).create() //A4 size
         val page = pdfDocument.startPage(pageInfo)
@@ -38,7 +38,10 @@ class Report @Inject constructor(
             textSize = 12f
             typeface = Typeface.create(Typeface.DEFAULT, Typeface.NORMAL)
         }
-        canvas.drawText("Hello, PDF World!", 50f, 50f, paint)
+        //canvas.drawText("Hello, PDF World!", 50f, 50f, paint)
+
+        addTextToPage(page = page, text = content, startX = 50f, startY = 50f, paint)
+
         pdfDocument.finishPage(page)
 
         //save pdf file
