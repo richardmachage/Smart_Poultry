@@ -4,6 +4,7 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.smartpoultry.domain.reports.Report
 import com.example.smartpoultry.domain.repository.BlocksRepository
 import com.example.smartpoultry.domain.repository.CellsRepository
 import com.example.smartpoultry.domain.repository.EggCollectionRepository
@@ -20,6 +21,7 @@ class HomeViewModel @Inject constructor(
     blocksRepository: BlocksRepository,
     cellsRepository: CellsRepository,
     eggCollectionRepository: EggCollectionRepository,
+    val report: Report
     ) : ViewModel() {
 
     val totalBlocks = blocksRepository.getAllBlocks().stateIn(
@@ -40,6 +42,9 @@ class HomeViewModel @Inject constructor(
             initialValue = emptyList(),
     )
 
+    fun onCreateReport( ){
+        report.createAndSavePDF("Smart Poultry report")
+    }
 
 
 }

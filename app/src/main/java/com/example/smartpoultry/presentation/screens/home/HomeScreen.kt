@@ -31,6 +31,7 @@ import com.example.smartpoultry.data.dataSource.room.entities.cells.Cells
 import com.example.smartpoultry.presentation.composables.MyCardInventory
 import com.example.smartpoultry.presentation.composables.MyHorizontalSpacer
 import com.example.smartpoultry.presentation.composables.MyVerticalSpacer
+import com.example.smartpoultry.presentation.composables.NormButton
 import com.example.smartpoultry.presentation.composables.RecentEggsLineChart
 import com.ramcosta.composedestinations.annotation.Destination
 
@@ -140,6 +141,10 @@ fun HomeScreen(
 
             }
 
+            NormButton(
+                onButtonClick = { homeViewModel.onCreateReport() },
+                btnName = "Get Report"
+            )
             MyVerticalSpacer(height = 20)
 
             Column(
