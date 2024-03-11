@@ -11,10 +11,12 @@ import com.example.smartpoultry.data.repositoryImpl.BlocksRepositoryImpl
 import com.example.smartpoultry.data.repositoryImpl.CellsRepositoryImpl
 import com.example.smartpoultry.data.repositoryImpl.EggCollectionRepositoryImpl
 import com.example.smartpoultry.data.repositoryImpl.FeedsRepositoryImpl
+import com.example.smartpoultry.data.repositoryImpl.FirebaseAuthRepositoryImpl
 import com.example.smartpoultry.domain.repository.BlocksRepository
 import com.example.smartpoultry.domain.repository.CellsRepository
 import com.example.smartpoultry.domain.repository.EggCollectionRepository
 import com.example.smartpoultry.domain.repository.FeedsRepository
+import com.example.smartpoultry.domain.repository.FirebaseAuthRepository
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import dagger.Module
@@ -74,4 +76,10 @@ object AppModule {
     @Provides
     @Singleton
     fun provideFirebaseAuth() : FirebaseAuth = FirebaseAuth.getInstance()
+
+    @Provides
+    @Singleton
+    fun providesFirebaseAuthRepository(firebaseAuth: FirebaseAuth, fireStoreDb: FirebaseFirestore) : FirebaseAuthRepository{
+        return FirebaseAuthRepositoryImpl(firebaseAuth = firebaseAuth, firebaseFirestore = fireStoreDb)
+    }
 }

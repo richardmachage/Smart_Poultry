@@ -7,7 +7,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.example.smartpoultry.presentation.composables.MyCircularProgressBar
 import com.ramcosta.composedestinations.annotation.Destination
 
 @Destination
@@ -20,8 +19,6 @@ fun AccountScreen(){
     ) {
         Column {
             Text(text = "Account Details Screen")
-
-            MyCircularProgressBar(isLoading = true)
         }
     }
 }
