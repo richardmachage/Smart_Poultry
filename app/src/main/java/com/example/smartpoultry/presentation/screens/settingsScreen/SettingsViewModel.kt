@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.smartpoultry.data.dataSource.datastore.AppDataStore
+import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -17,7 +18,8 @@ const val THRESHOLD_RATIO_KEY = "threshold_ratio"
 
 @HiltViewModel
 class SettingsViewModel @Inject constructor (
-    private val dataStore: AppDataStore
+    private val dataStore: AppDataStore,
+    private val firebaseAuth: FirebaseAuth
 ): ViewModel() {
 
     val myDataStore = dataStore
@@ -69,15 +71,8 @@ class SettingsViewModel @Inject constructor (
         return data
     }
 
-    /*fun getPastDays() {
-        viewModelScope.launch{
-            dataStore.readData(PAST_DAYS_KEY).collect{
-                pastDays.value = it
-            }
-        }
-    }*/
 
-    fun onLogOut() : Boolean{
-        return true
+    fun onLogOut(){
+        firebaseAuth.signOut()
     }
 }

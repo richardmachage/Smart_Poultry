@@ -14,6 +14,7 @@ import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -46,6 +47,28 @@ fun LogInScreen(
 
     val logInViewModel = hiltViewModel<LogInViewModel>()
     val context = LocalContext.current
+
+    //observing the viewmodel state and show toast when validation error message changes
+    LaunchedEffect(key1 = logInViewModel.validateError.value){
+        logInViewModel.validateError.value.let {toastMessage->
+            if (toastMessage.isNotBlank()){
+                Toast.makeText(context,toastMessage,Toast.LENGTH_SHORT).show()
+                // Reset the error message in the ViewModel if needed to prevent repeated toasts
+                logInViewModel.validateError.value = ""
+            }
+        }
+    }
+
+    //observing the viewmodel state and show toast when validation error message changes
+    LaunchedEffect(key1 = logInViewModel.isLogInSuccess){
+       if (logInViewModel.isLogInSuccess){
+           navigator.navigate(MainScreenDestination){
+               popUpTo(NavGraphs.root.startRoute){inclusive=true}
+           }
+           // Reset the login success state in the ViewModel if needed to prevent repeated navigation
+           logInViewModel.isLogInSuccess = false
+       }
+    }
 
     Surface(
         modifier = Modifier
@@ -117,12 +140,6 @@ fun LogInScreen(
                 NormButton( // Log in Button
                     onButtonClick = {
                         logInViewModel.onLogIn()
-                        Toast.makeText(context, logInViewModel.validateError.value, Toast.LENGTH_SHORT).show()
-                        if (logInViewModel.isLogInSuccess) {
-                            navigator.navigate(MainScreenDestination) {
-                                popUpTo(NavGraphs.root.startRoute) { inclusive = true }
-                            }
-                        }
                     },
                     btnName = "Log In",
                     modifier = Modifier.fillMaxWidth()
