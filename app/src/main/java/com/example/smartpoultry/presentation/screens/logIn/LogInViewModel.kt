@@ -52,6 +52,8 @@ class LogInViewModel @Inject constructor(
                     validateError.value = "Failed : ${it.message.toString()} "
                 }
             }
+        }else{
+            validateError.value = "Invalid email address"
         }
     }
 
