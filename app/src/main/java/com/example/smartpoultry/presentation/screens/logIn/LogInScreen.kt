@@ -1,5 +1,6 @@
 package com.example.smartpoultry.presentation.screens.logIn
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -16,6 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
@@ -42,6 +44,7 @@ fun LogInScreen(
 ) {
 
     val logInViewModel = hiltViewModel<LogInViewModel>()
+    val context = LocalContext.current
 
     Surface(
         modifier = Modifier
@@ -83,8 +86,8 @@ fun LogInScreen(
                         iconLeading = Icons.Default.Email,
                         iconLeadingDescription = "Email",
                         hint = "Enter Email",
-                        onValueChange = {text->
-
+                        onValueChange = {newText->
+                            logInViewModel.email.value = newText
                         }
                     )
                     MyPasswordEditText( //input Password
@@ -92,7 +95,10 @@ fun LogInScreen(
                         hint = "Enter Password",
                         iconLeading = Icons.Default.Lock,
                         iconLeadingDescription = "Password",
-                        keyboardType = KeyboardType.Password
+                        keyboardType = KeyboardType.Password,
+                        onValueChange = { newText->
+                            logInViewModel.password.value = newText
+                        }
                     )
 
 
@@ -107,8 +113,12 @@ fun LogInScreen(
 
                 NormButton( // Log in Button
                     onButtonClick = {
-                        navigator.navigate(MainScreenDestination) {
-                            popUpTo(NavGraphs.root.startRoute) { inclusive = true }
+                        logInViewModel.onLogIn()
+                        Toast.makeText(context, logInViewModel.validateError.value, Toast.LENGTH_SHORT).show()
+                        if (logInViewModel.isLogInSuccess) {
+                            navigator.navigate(MainScreenDestination) {
+                                popUpTo(NavGraphs.root.startRoute) { inclusive = true }
+                            }
                         }
                     },
                     btnName = "Log In",

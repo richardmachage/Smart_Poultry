@@ -1,6 +1,8 @@
 package com.example.smartpoultry.presentation.screens.logIn
 
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.smartpoultry.domain.repository.FirebaseAuthRepository
@@ -16,6 +18,7 @@ class LogInViewModel (
     var password = mutableStateOf("")
     var validateError = mutableStateOf("")
     var isLoading = mutableStateOf(false)
+    var isLogInSuccess by mutableStateOf(false)
 
     fun onLogIn(){
         isLoading.value = true
@@ -24,6 +27,7 @@ class LogInViewModel (
                 val result = firebaseAuthRepository.logIn(email.value, password = password.value)
                 result.onSuccess {
                     validateError.value = "Log In successsful"
+                    isLogInSuccess = true
                 }
                 result.onFailure {
                     validateError.value = "Log in failed: ${it.message.toString()}"
