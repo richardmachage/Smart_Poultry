@@ -86,13 +86,14 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
         return isSuccess
     }*/
 
-    override fun resetPassword(email: String): Boolean {
-        var isSuccessful = false
-        firebaseAuth.sendPasswordResetEmail(email)
-            .addOnSuccessListener {
-                isSuccessful = true
-            }
-        return isSuccessful
+    override suspend fun resetPassword(email: String) : Result<Boolean> = coroutineScope {
+        try {
+            // Await the completion of the password reset email sending
+            firebaseAuth.sendPasswordResetEmail(email).await()
+            Result.success(true)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
     }
 
     override fun logOut() {
