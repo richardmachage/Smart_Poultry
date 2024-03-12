@@ -40,7 +40,7 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.navigation.popUpTo
 
-@Destination(start = true)
+@Destination
 @Composable
 fun LogInScreen(
     navigator: DestinationsNavigator
