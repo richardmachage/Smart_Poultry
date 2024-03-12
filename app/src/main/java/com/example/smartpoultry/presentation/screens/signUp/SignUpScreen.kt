@@ -20,6 +20,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
@@ -45,6 +46,15 @@ fun SignUpScreen(
 
     var isLoading = singUpViewModel.isLoading.value
 
+    //validation error toast
+    LaunchedEffect(key1 = singUpViewModel.validationError.value){
+        singUpViewModel.validationError.value.let {toastMessage->
+            if (toastMessage.isNotBlank()){
+                Toast.makeText(context,singUpViewModel.validationError.value,Toast.LENGTH_LONG).show()
+                singUpViewModel.validationError.value = ""
+            }
+        }
+    }
     Scaffold(
         topBar = {
             TopAppBar(
@@ -130,7 +140,6 @@ fun SignUpScreen(
                     onButtonClick = {
                                     if (singUpViewModel.validateSignUp()) {
                                         singUpViewModel.onSignUp()
-                                        Toast.makeText(context,singUpViewModel.validationError.value,Toast.LENGTH_LONG).show()
                                     }else{
                                         Toast.makeText(context,"Failed: ${singUpViewModel.validationError.value}",Toast.LENGTH_LONG).show()
                                     }

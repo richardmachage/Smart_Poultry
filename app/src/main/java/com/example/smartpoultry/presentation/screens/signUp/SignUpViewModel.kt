@@ -26,8 +26,8 @@ class SignUpViewModel @Inject constructor(
 
 
     fun onSignUp() {
-        isLoading.value = true
         viewModelScope.launch {
+            isLoading.value = true
             val result =
                 firebaseAuthRepository.registerUser(email.value, password.value, userType.value)
             result.onSuccess {
