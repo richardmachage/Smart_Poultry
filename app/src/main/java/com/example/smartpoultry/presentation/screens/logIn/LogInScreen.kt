@@ -2,6 +2,7 @@ package com.example.smartpoultry.presentation.screens.logIn
 
 import android.widget.Toast
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -83,16 +84,16 @@ fun LogInScreen(
             ) {
 
             Column(
-                verticalArrangement = Arrangement.Center,
+                verticalArrangement = Arrangement.SpaceBetween,
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-                MyVerticalSpacer(height = 50)
+                MyVerticalSpacer(height = 70)
                 Image(
                     modifier = Modifier
                         .width(100.dp)
                         .height(100.dp),
                     //.padding(8.dp),
-                    painter = painterResource(id = R.drawable.chicken),
+                    painter = painterResource(id = (if (isSystemInDarkTheme())R.drawable.chicken_white else R.drawable.chicken)),
                     contentDescription = "chicken",
                     contentScale = ContentScale.Fit
                 )
