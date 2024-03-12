@@ -9,10 +9,12 @@ import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 import javax.inject.Singleton
 
+const val USER_ROLE_KEY = "user_role"
 @Singleton
 class AppDataStore @Inject constructor(
     private val dataStore: DataStore<Preferences>
 ) {
+
     suspend fun saveData (key : String , value : String){
         val dataStoreKey = stringPreferencesKey(key)
         dataStore.edit {myPreferences->
