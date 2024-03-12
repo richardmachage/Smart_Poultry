@@ -47,14 +47,24 @@ fun SignUpScreen(
     var isLoading = singUpViewModel.isLoading.value
 
     //validation error toast
-    LaunchedEffect(key1 = singUpViewModel.validationError.value){
-        singUpViewModel.validationError.value.let {toastMessage->
-            if (toastMessage.isNotBlank()){
-                Toast.makeText(context,singUpViewModel.validationError.value,Toast.LENGTH_LONG).show()
+    LaunchedEffect(key1 = singUpViewModel.validationError.value) {
+        singUpViewModel.validationError.value.let { toastMessage ->
+            if (toastMessage.isNotBlank()) {
+                Toast.makeText(context, singUpViewModel.validationError.value, Toast.LENGTH_LONG)
+                    .show()
                 singUpViewModel.validationError.value = ""
             }
         }
     }
+
+    LaunchedEffect(key1 = singUpViewModel.isCreateAccountSuccess) {
+        if (singUpViewModel.isCreateAccountSuccess) {
+            navigator.navigateUp()
+
+            singUpViewModel.isCreateAccountSuccess = false
+        }
+    }
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -137,13 +147,7 @@ fun SignUpScreen(
                 //NormButton(onButtonClick = { isLoading = true }, btnName = "Show Loading")
 
                 NormButton( //The sign up Button
-                    onButtonClick = {
-                                    if (singUpViewModel.validateSignUp()) {
-                                        singUpViewModel.onSignUp()
-                                    }else{
-                                        Toast.makeText(context,"Failed: ${singUpViewModel.validationError.value}",Toast.LENGTH_LONG).show()
-                                    }
-                    },
+                    onButtonClick = { singUpViewModel.onSignUp() },
                     btnName = "Sign Up",
                     modifier = Modifier.fillMaxWidth()
                 )

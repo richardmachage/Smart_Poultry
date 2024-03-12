@@ -1,6 +1,8 @@
 package com.example.smartpoultry.presentation.screens.signUp
 
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.smartpoultry.domain.repository.FirebaseAuthRepository
@@ -21,27 +23,31 @@ class SignUpViewModel @Inject constructor(
     var password = mutableStateOf("")
     var confirmPassword = mutableStateOf("")
     var validationError = mutableStateOf("")
+    var isCreateAccountSuccess by mutableStateOf(false)
     var isLoading = mutableStateOf(false)
         private set
 
 
     fun onSignUp() {
         viewModelScope.launch {
-            isLoading.value = true
-            val result =
-                firebaseAuthRepository.registerUser(email.value, password.value, userType.value)
-            result.onSuccess {
-                validationError.value = "Account created successfully"
-                isLoading.value = false
-            }
-                .onFailure {
-                    validationError.value = "Failed to sign up : ${it.message.toString()}"
+            if (validateSignUp()) {
+                isLoading.value = true
+                val result =
+                    firebaseAuthRepository.registerUser(email.value, password.value, userType.value)
+                result.onSuccess {
+                    validationError.value = "Account created successfully, proceed to log in"
                     isLoading.value = false
+                    isCreateAccountSuccess = true
                 }
+                    .onFailure {
+                        validationError.value = "Failed to sign up : ${it.message.toString()}"
+                        isLoading.value = false
+                    }
+            }
         }
     }
 
-    fun validateSignUp(): Boolean {
+    private fun validateSignUp(): Boolean {
         //check empty fields
         if (checkEmptyFields()){
             validationError.value = "You must fill in all fields to Sign Up"
@@ -72,6 +78,6 @@ class SignUpViewModel @Inject constructor(
     }
 
     private fun checkEmptyFields() : Boolean{
-        return  userType.value.isEmpty() || email.value.isBlank() || password.value.isBlank() || confirmPassword.value.isBlank()
+        return  userType.value.isBlank() || email.value.isBlank() || password.value.isBlank() || confirmPassword.value.isBlank()
     }
 }
