@@ -20,6 +20,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.smartpoultry.R
 import com.example.smartpoultry.presentation.NavGraphs
 import com.example.smartpoultry.presentation.composables.MyEditTextClear
@@ -28,7 +29,6 @@ import com.example.smartpoultry.presentation.composables.MyTextButton
 import com.example.smartpoultry.presentation.composables.MyVerticalSpacer
 import com.example.smartpoultry.presentation.composables.NormButton
 import com.example.smartpoultry.presentation.composables.NormText
-import com.example.smartpoultry.presentation.composables.UserTypeDropDownMenu
 import com.example.smartpoultry.presentation.destinations.MainScreenDestination
 import com.example.smartpoultry.presentation.destinations.SignUpScreenDestination
 import com.ramcosta.composedestinations.annotation.Destination
@@ -40,6 +40,9 @@ import com.ramcosta.composedestinations.navigation.popUpTo
 fun LogInScreen(
     navigator: DestinationsNavigator
 ) {
+
+    val logInViewModel = hiltViewModel<LogInViewModel>()
+
     Surface(
         modifier = Modifier
             .fillMaxSize(),
@@ -69,24 +72,20 @@ fun LogInScreen(
                 MyVerticalSpacer(height = 50)
 
                 Column {
-                    /*MyEditTextClear( //Input User type
-                        label = "User type",
-                        keyboardType = KeyboardType.Email,
-                        iconLeading = Icons.Default.AccountCircle,
-                        iconLeadingDescription = "AccountType",
-                        hint = "User type"
-                    )*/
-                    
+                   /*
                     UserTypeDropDownMenu(
                         onItemClick = {},
-                    )
+                    )*/
                     
                     MyEditTextClear( //Input email address
                         label = "Email",
                         keyboardType = KeyboardType.Email,
                         iconLeading = Icons.Default.Email,
                         iconLeadingDescription = "Email",
-                        hint = "Enter Email"
+                        hint = "Enter Email",
+                        onValueChange = {text->
+
+                        }
                     )
                     MyPasswordEditText( //input Password
                         label = "Password",
