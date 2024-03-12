@@ -25,8 +25,10 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.smartpoultry.NavGraphs
 import com.example.smartpoultry.R
-import com.example.smartpoultry.presentation.NavGraphs
+import com.example.smartpoultry.destinations.MainScreenDestination
+import com.example.smartpoultry.destinations.SignUpScreenDestination
 import com.example.smartpoultry.presentation.composables.MyCircularProgressBar
 import com.example.smartpoultry.presentation.composables.MyEditTextClear
 import com.example.smartpoultry.presentation.composables.MyPasswordEditText
@@ -34,8 +36,6 @@ import com.example.smartpoultry.presentation.composables.MyTextButton
 import com.example.smartpoultry.presentation.composables.MyVerticalSpacer
 import com.example.smartpoultry.presentation.composables.NormButton
 import com.example.smartpoultry.presentation.composables.NormText
-import com.example.smartpoultry.presentation.destinations.MainScreenDestination
-import com.example.smartpoultry.presentation.destinations.SignUpScreenDestination
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.navigation.popUpTo

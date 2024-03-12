@@ -17,10 +17,10 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.smartpoultry.R
-import com.example.smartpoultry.presentation.destinations.AnalyticsScreenDestination
-import com.example.smartpoultry.presentation.destinations.BlockCellScreenDestination
-import com.example.smartpoultry.presentation.destinations.EggScreenDestination
-import com.example.smartpoultry.presentation.destinations.HomeScreenDestination
+import com.example.smartpoultry.destinations.AnalyticsScreenDestination
+import com.example.smartpoultry.destinations.BlockCellScreenDestination
+import com.example.smartpoultry.destinations.EggScreenDestination
+import com.example.smartpoultry.destinations.HomeScreenDestination
 import com.example.smartpoultry.presentation.uiModels.BottomNavigationItem
 
 @Composable
