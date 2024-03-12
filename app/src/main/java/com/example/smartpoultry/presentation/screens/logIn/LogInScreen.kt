@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.smartpoultry.R
 import com.example.smartpoultry.presentation.NavGraphs
+import com.example.smartpoultry.presentation.composables.MyCircularProgressBar
 import com.example.smartpoultry.presentation.composables.MyEditTextClear
 import com.example.smartpoultry.presentation.composables.MyPasswordEditText
 import com.example.smartpoultry.presentation.composables.MyTextButton
@@ -51,6 +52,8 @@ fun LogInScreen(
             .fillMaxSize(),
         color = MaterialTheme.colorScheme.background
     ) {
+        MyCircularProgressBar(isLoading = logInViewModel.isLoading.value)
+        
         Column(
             verticalArrangement = Arrangement.SpaceBetween,
 
