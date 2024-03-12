@@ -47,9 +47,12 @@ class LogInViewModel @Inject constructor(
                 val result = firebaseAuthRepository.resetPassword(email.value)
                 result.onSuccess {
                     validateError.value = "Password reset link sent to email"
+                    isLoading.value = false
                 }
                 result.onFailure {
                     validateError.value = "Failed : ${it.message.toString()} "
+                    isLoading.value = false
+
                 }
             }
         }else{

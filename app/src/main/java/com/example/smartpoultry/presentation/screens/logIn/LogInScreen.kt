@@ -129,7 +129,7 @@ fun LogInScreen(
 
 
                     MyTextButton(
-                        onButtonClick = { /*TODO*/ },
+                        onButtonClick = { logInViewModel.onPasswordReset() },
                         btnText = "Forgotten Password?",
                         modifier = Modifier
                     )
