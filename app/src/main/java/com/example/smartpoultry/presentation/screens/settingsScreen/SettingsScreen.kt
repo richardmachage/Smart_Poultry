@@ -35,12 +35,12 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.smartpoultry.presentation.NavGraphs
 import com.example.smartpoultry.presentation.composables.MyBorderedColumn
 import com.example.smartpoultry.presentation.composables.MyInputDialog
 import com.example.smartpoultry.presentation.composables.MyOutlineTextFiled
 import com.example.smartpoultry.presentation.composables.MyVerticalSpacer
 import com.example.smartpoultry.presentation.destinations.LogInScreenDestination
+import com.example.smartpoultry.presentation.destinations.SettingsScreenDestination
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.navigation.popUpTo
@@ -54,10 +54,17 @@ fun SettingsScreen(
 
     val context = LocalContext.current
     val settingsViewModel = hiltViewModel<SettingsViewModel>()
-    val pastDays = remember{ settingsViewModel.myDataStore.readData(PAST_DAYS_KEY) }.collectAsState(initial = "0")
+    val pastDays =
+        remember { settingsViewModel.myDataStore.readData(PAST_DAYS_KEY) }.collectAsState(initial = "0")
     //val pastDays = remember {settingsViewModel.myPastDays.value}//getFromDataStore(PAST_DAYS_KEY).ifBlank { "0" }}//.pastDays.collectAsState()
-    val consucutiveDays = remember { settingsViewModel.myDataStore.readData(CONSUCUTIVE_DAYS_KEY)}.collectAsState(initial = "0")
-    val thresholdRatio = remember {settingsViewModel.myDataStore.readData(THRESHOLD_RATIO_KEY)}.collectAsState(initial = "0")
+    val consucutiveDays =
+        remember { settingsViewModel.myDataStore.readData(CONSUCUTIVE_DAYS_KEY) }.collectAsState(
+            initial = "0"
+        )
+    val thresholdRatio =
+        remember { settingsViewModel.myDataStore.readData(THRESHOLD_RATIO_KEY) }.collectAsState(
+            initial = "0"
+        )
 
     Scaffold(
         topBar = {
@@ -204,15 +211,18 @@ fun SettingsScreen(
                             showDialog = showDialog,
                             title = "Threshold Ratio",
                             onConfirm = {
-                                if(validateThresholdInput(newThreshold)){
-                                showDialog = false
-                                settingsViewModel.saveToDataStore(
-                                    THRESHOLD_RATIO_KEY,
-                                    newThreshold
-                                ) }
-                                else
-                                {
-                                    Toast.makeText(context, "Threshold Ratio can only be decimal between 0 and 1", Toast.LENGTH_LONG).show()
+                                if (validateThresholdInput(newThreshold)) {
+                                    showDialog = false
+                                    settingsViewModel.saveToDataStore(
+                                        THRESHOLD_RATIO_KEY,
+                                        newThreshold
+                                    )
+                                } else {
+                                    Toast.makeText(
+                                        context,
+                                        "Threshold Ratio can only be decimal between 0 and 1",
+                                        Toast.LENGTH_LONG
+                                    ).show()
                                 }
                             },
                             onDismiss = { showDialog = false }
@@ -243,9 +253,11 @@ fun SettingsScreen(
                     onConfirm = {
                         settingsViewModel.onLogOut()
                         showLogOutDialog = false
+
                         navigator.navigate(LogInScreenDestination) {
-                            popUpTo(NavGraphs.root.startRoute) { inclusive = true }
-                        }                    },
+                            popUpTo(SettingsScreenDestination) { inclusive = true }
+                        }
+                    },
                     onDismiss = {
                         showLogOutDialog = false
                     }
