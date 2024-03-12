@@ -1,6 +1,5 @@
 package com.example.smartpoultry.presentation.screens.logIn
 
-import android.content.Context
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -9,14 +8,12 @@ import androidx.lifecycle.viewModelScope
 import com.example.smartpoultry.domain.repository.FirebaseAuthRepository
 import com.example.smartpoultry.utils.isValidEmail
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class LogInViewModel @Inject constructor(
-    private val firebaseAuthRepository: FirebaseAuthRepository,
-    @ApplicationContext val context: Context
+    private val firebaseAuthRepository: FirebaseAuthRepository
 ): ViewModel() {
     var email = mutableStateOf("")
     var password = mutableStateOf("")
@@ -40,6 +37,21 @@ class LogInViewModel @Inject constructor(
                 }
             }
             isLoading.value = false
+        }
+    }
+
+    fun onPasswordReset(){
+        if (email.value.isNotBlank() && isValidEmail(email.value)){
+            viewModelScope.launch {
+                isLoading.value = true
+                val result = firebaseAuthRepository.resetPassword(email.value)
+                result.onSuccess {
+                    validateError.value = "Password reset link sent to email"
+                }
+                result.onFailure {
+                    validateError.value = "Failed : ${it.message.toString()} "
+                }
+            }
         }
     }
 
