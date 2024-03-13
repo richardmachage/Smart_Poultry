@@ -82,7 +82,13 @@ fun MyTopAppBar(
                 Icon(imageVector = Icons.Default.AccountCircle, contentDescription = "Account Icon")
             }
 
-            IconButton(onClick = { navigator.navigate(SettingsScreenDestination) })
+            IconButton(onClick = {
+                navigator.navigate(SettingsScreenDestination) {
+                    launchSingleTop = true
+
+                }
+            })
+
             {
                 Icon(imageVector = Icons.Default.Settings, contentDescription = "Settings Icon")
             }

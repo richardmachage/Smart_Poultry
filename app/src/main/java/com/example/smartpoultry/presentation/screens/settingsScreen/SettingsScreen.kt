@@ -35,8 +35,8 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.compose.rememberNavController
 import com.example.smartpoultry.NavGraphs
-import com.example.smartpoultry.destinations.LaunchScreenDestination
 import com.example.smartpoultry.destinations.LogInScreenDestination
 import com.example.smartpoultry.presentation.composables.MyBorderedColumn
 import com.example.smartpoultry.presentation.composables.MyInputDialog
@@ -52,7 +52,7 @@ import com.ramcosta.composedestinations.navigation.popUpTo
 fun SettingsScreen(
     navigator: DestinationsNavigator
 ) {
-
+    val navController = rememberNavController()
     val context = LocalContext.current
     val settingsViewModel = hiltViewModel<SettingsViewModel>()
     val pastDays =
@@ -254,8 +254,8 @@ fun SettingsScreen(
                     onConfirm = {
                         settingsViewModel.onLogOut()
                         showLogOutDialog = false
-                        navigator.navigate(LaunchScreenDestination) {
-                            popUpTo(NavGraphs.root.startRoute) { inclusive = true }
+                        navigator.navigate(LogInScreenDestination) {
+                            popUpTo(NavGraphs.root) { inclusive = true }
                         }
                     },
                     onDismiss = {
@@ -268,12 +268,7 @@ fun SettingsScreen(
                 Button(
                     modifier = Modifier.fillMaxWidth(),
                     onClick = {
-                        //showLogOutDialog = true
-                        settingsViewModel.onLogOut()
-                        navigator.navigate(LogInScreenDestination) {
-                            popUpTo(NavGraphs.root.startRoute) { inclusive = true }
-                            launchSingleTop = true
-                        }
+                        showLogOutDialog = true
                     }) {
                     Text(text = "Log Out")
                 }
