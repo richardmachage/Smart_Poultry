@@ -1,5 +1,6 @@
 package com.example.smartpoultry.presentation.screens.analytics
 
+import android.annotation.SuppressLint
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
@@ -39,10 +40,13 @@ import com.example.smartpoultry.presentation.composables.NormButton
 import com.example.smartpoultry.presentation.composables.RadioButtonGroup
 import com.example.smartpoultry.presentation.composables.YearsDropDownMenu
 import com.example.smartpoultry.presentation.uiModels.ChartClass
+import com.example.smartpoultry.utils.localDateToJavaDate
 import com.example.smartpoultry.utils.toGraphDate
 import com.ramcosta.composedestinations.annotation.Destination
 import com.vanpra.composematerialdialogs.rememberMaterialDialogState
+import java.text.SimpleDateFormat
 
+@SuppressLint("SimpleDateFormat")
 @RequiresApi(Build.VERSION_CODES.O)
 @Destination
 @Composable
@@ -55,6 +59,8 @@ fun AnalyticsScreen(
     var width by remember {
         mutableFloatStateOf(0.5f)
     }
+
+    var reportType by remember { mutableStateOf("") }
 
     Surface(
         modifier = Modifier
@@ -141,7 +147,7 @@ fun AnalyticsScreen(
                                     analyticsViewModel.plotChart.value = false
                                 },
                                 width = width,
-                                )
+                            )
 
                             //toggle to show cells drop down list only when analysis level is by cell
                             if (analyticsViewModel.levelOfAnalysis.value == "Cell") {
@@ -159,7 +165,6 @@ fun AnalyticsScreen(
 
                 if (analyticsViewModel.isPastXDaysAnalysis.value) {
                     //MyVerticalSpacer(height = 3)
-
                     Text(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -249,36 +254,94 @@ fun AnalyticsScreen(
                     //here, come up with algo to select dataset depending on type of analysis and level of analysis
                     val listOfRecords by remember {
                         if (analyticsViewModel.levelOfAnalysis.value == "Cell") {
-                            if (analyticsViewModel.isPastXDaysAnalysis.value) return@remember analyticsViewModel.getCellEggCollectionForPastDays()
-                            else if (analyticsViewModel.isCustomRangeAnalysis.value) return@remember analyticsViewModel.getCellCollectionBetweenDates()
-                            else return@remember analyticsViewModel.getCellMonthlyRecords()
-                        }
-                        else if(analyticsViewModel.levelOfAnalysis.value == "Block"){
-                            if (analyticsViewModel.isPastXDaysAnalysis.value) return@remember analyticsViewModel.getBlockCollectionsForPastDays()
-                            else if (analyticsViewModel.isCustomRangeAnalysis.value) return@remember analyticsViewModel.getBlockEggCollectionBetweenDates()
-                            else return@remember analyticsViewModel.getMonthlyBlockCollections()
-                        }
-                        else{ //meaning the level is just overall
-                            if (analyticsViewModel.isPastXDaysAnalysis.value) return@remember analyticsViewModel.getOverallCollectionsForPastDays()
-                            else if (analyticsViewModel.isCustomRangeAnalysis.value) return@remember analyticsViewModel.getOverallCollectionBetweenDays()
-                            else return@remember analyticsViewModel.getMonthlyOverallCollections()
+                            if (analyticsViewModel.isPastXDaysAnalysis.value) {
+                                reportType = "Collections of cell ${analyticsViewModel.selectedCellID.intValue} in Block ${analyticsViewModel.selectedBlockId.intValue } for duration of Past ${analyticsViewModel.pastDays.value} days"
+                                return@remember analyticsViewModel.getCellEggCollectionForPastDays()
+                            }
+                            else if (analyticsViewModel.isCustomRangeAnalysis.value) {
+                                reportType = "Collections of " +
+                                        "cell ${analyticsViewModel.selectedCellID.intValue} in " +
+                                        "Block ${analyticsViewModel.selectedBlockId.intValue } " +
+                                        "from ${SimpleDateFormat("dd MMM,yyyy").format(
+                                            localDateToJavaDate(analyticsViewModel.startDate.value)
+                                        )} "+
+                                        "to ${SimpleDateFormat("dd MMM,yyyy").format(
+                                            localDateToJavaDate(analyticsViewModel.endDate.value)
+                                        )} "
+                                return@remember analyticsViewModel.getCellCollectionBetweenDates()
+                            }
+                            else {  //meaning analysis is just monthly
+                                reportType = "Collections of " +
+                                        "cell ${analyticsViewModel.selectedCellID.intValue} in " +
+                                        "Block ${analyticsViewModel.selectedBlockId.intValue } " +
+                                        "for ${analyticsViewModel.selectedMonth.value}," +
+                                        "${analyticsViewModel.selectedYear}"
+
+                                return@remember analyticsViewModel.getCellMonthlyRecords()
+                            }
+                        } else if (analyticsViewModel.levelOfAnalysis.value == "Block") {
+                            if (analyticsViewModel.isPastXDaysAnalysis.value){
+                                reportType = "Block ${analyticsViewModel.selectedBlockId.intValue } " +
+                                        "for duration of Past ${analyticsViewModel.pastDays.value} days"
+                                return@remember analyticsViewModel.getBlockCollectionsForPastDays()
+                            }
+                            else if (analyticsViewModel.isCustomRangeAnalysis.value) {
+                                reportType = "Collections of " +
+                                        "Block ${analyticsViewModel.selectedBlockId.intValue } " +
+                                        "from ${SimpleDateFormat("dd MMM,yyyy").format(
+                                            localDateToJavaDate(analyticsViewModel.startDate.value)
+                                        )} "+
+                                        "to ${SimpleDateFormat("dd MMM,yyyy").format(
+                                            localDateToJavaDate(analyticsViewModel.endDate.value)
+                                        )} "
+                                return@remember analyticsViewModel.getBlockEggCollectionBetweenDates()
+                            }
+                            else { //monthly
+                                reportType = "Collections of " +
+                                        "Block ${analyticsViewModel.selectedBlockId.intValue } " +
+                                        "for ${analyticsViewModel.selectedMonth.value}, " +
+                                        "${analyticsViewModel.selectedYear}"
+                                return@remember analyticsViewModel.getMonthlyBlockCollections()
+                            }
+                        } else { //meaning the level is just overall
+                            if (analyticsViewModel.isPastXDaysAnalysis.value) {
+                                reportType = "Total Egg Collections "+
+                                        "for duration of Past ${analyticsViewModel.pastDays.value} days"
+                                return@remember analyticsViewModel.getOverallCollectionsForPastDays()
+                            }
+                            else if (analyticsViewModel.isCustomRangeAnalysis.value){
+                                reportType = "Total Egg Collections " +
+                                        "from ${SimpleDateFormat("dd MMM,yyyy").format(
+                                            localDateToJavaDate(analyticsViewModel.startDate.value)
+                                        )} "+
+                                        "to ${SimpleDateFormat("dd MMM,yyyy").format(
+                                            localDateToJavaDate(analyticsViewModel.endDate.value)
+                                        )} "
+                                return@remember analyticsViewModel.getOverallCollectionBetweenDays()
+                            }
+                            else { //monthly
+                                reportType = "Total Egg Collections " +
+                                        "for ${analyticsViewModel.selectedMonth.value}, " +
+                                        "${analyticsViewModel.selectedYear}"
+                                return@remember analyticsViewModel.getMonthlyOverallCollections()}
                         }
 
                     }.collectAsState(
-                            initial = emptyList()
-                        )
+                        initial = emptyList()
+                    )
 
 
                     if (listOfRecords.isNotEmpty()) {
                         //plot the chart
                         val itemPlacerCount = 0
-                        val turnToChartData = listOfRecords.map { record->
-                            when (record){
+                        val turnToChartData = listOfRecords.map { record ->
+                            when (record) {
                                 is EggCollection -> ChartClass(
                                     xDateValue = toGraphDate(record.date),
                                     yNumOfEggs = record.eggCount
 
                                 )
+
                                 is DailyEggCollection -> ChartClass(
                                     xDateValue = toGraphDate(record.date),
                                     yNumOfEggs = record.totalEggs
@@ -292,7 +355,7 @@ fun AnalyticsScreen(
                             isGraphPlotted = analyticsViewModel.plotChart.value,
                             listOfRecords = turnToChartData.map { it as ChartClass },
                             itemPlacerCount =
-                            (turnToChartData.maxOf { chartClass: ChartClass ->  chartClass.yNumOfEggs })+1,
+                            (turnToChartData.maxOf { chartClass: ChartClass -> chartClass.yNumOfEggs }) + 1,
                             startAxisTitle = "Num of Eggs",
                             bottomAxisTitle = "Date",
                         )
