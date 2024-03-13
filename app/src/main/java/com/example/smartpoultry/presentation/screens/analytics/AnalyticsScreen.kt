@@ -24,7 +24,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -52,13 +51,10 @@ fun AnalyticsScreen(
 ) {
     val analyticsViewModel = hiltViewModel<AnalyticsViewModel>()
     val listOfBlocksWithCells by remember { analyticsViewModel.listOfBlocksWithCells }.collectAsState()
-    val context = LocalContext.current
+    //val context = LocalContext.current
     var width by remember {
         mutableFloatStateOf(0.5f)
     }
-
-
-    //simple logic  for graph of egg collection between dates
 
     Surface(
         modifier = Modifier

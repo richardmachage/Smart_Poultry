@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.smartpoultry.presentation.composables.MyVerticalSpacer
 import com.example.smartpoultry.presentation.composables.NormButton
 import com.example.smartpoultry.presentation.uiModels.ChartClass
@@ -38,6 +39,7 @@ fun CellAnalysisGraph(
 
     ) {
 
+    val graphsViewModel = hiltViewModel<GraphsViewModel>()
 
     if (isGraphPlotted) {
         //convert the input data into chartData for plotting
@@ -126,7 +128,11 @@ fun CellAnalysisGraph(
             NormButton(
                 modifier = Modifier.fillMaxWidth(),
                 onButtonClick = {
-
+                                /*graphsViewModel.onExportToPdf(
+                                    name = ,
+                                    content = ,
+                                    reportType = "Egg Collection" ,
+                                )*/
                 },
                 btnName = "Export Data to PDF>>>"
             )
