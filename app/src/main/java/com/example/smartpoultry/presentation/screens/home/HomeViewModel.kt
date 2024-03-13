@@ -65,8 +65,8 @@ class HomeViewModel @Inject constructor(
     )
 
     @SuppressLint("SimpleDateFormat")
-    fun onCreateReport(name : String, content: String ){
-        report.createAndSavePDF(name,content)
+    fun onCreateReport(name : String, content: String, reportType:String ){
+        report.createAndSavePDF(name,content, reportType)
     }
 
 

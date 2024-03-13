@@ -138,15 +138,12 @@ fun HomeScreen(
                     modifier = Modifier.fillMaxWidth(),
                     onButtonClick = {
                         homeViewModel.onCreateReport(
-                            name = "Inventory ${SimpleDateFormat("dd/mm/yyyy").format(System.currentTimeMillis())}",
-                            content = "SMART POULTRY INVENTORY " +
-                                    "\n"+
-                                    "\nDate : ${SimpleDateFormat("dd/mm/yyyy").format(System.currentTimeMillis())}" +
-                                    "\n  " +
-                                    "\n  " +
+                            name = "Inventory ${SimpleDateFormat("dd/MMM/yyyy").format(System.currentTimeMillis())}",
+                            content =
                                     "\nTotal Blocks : ${totalBlocks.value.size}" +
                                     "\nTotal Cells: ${totalCells.value.size}" +
-                                    "\nTotal Chicken: ${totalCells.value.sumOf { cell: Cells -> cell.henCount }}"
+                                    "\nTotal Chicken: ${totalCells.value.sumOf { cell: Cells -> cell.henCount }}",
+                            reportType = "Farm Inventory Status"
                         )
                         Toast.makeText(
                             context,
