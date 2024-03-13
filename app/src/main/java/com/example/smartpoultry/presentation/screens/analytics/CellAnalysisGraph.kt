@@ -1,5 +1,6 @@
 package com.example.smartpoultry.presentation.screens.analytics
 
+import android.widget.Toast
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -11,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.smartpoultry.presentation.composables.MyVerticalSpacer
@@ -27,6 +29,7 @@ import com.patrykandpatrick.vico.core.axis.formatter.AxisValueFormatter
 import com.patrykandpatrick.vico.core.component.text.textComponent
 import com.patrykandpatrick.vico.core.entry.entryModelOf
 import com.patrykandpatrick.vico.core.entry.entryOf
+import java.text.SimpleDateFormat
 import kotlin.math.roundToInt
 
 @Composable
@@ -36,9 +39,10 @@ fun CellAnalysisGraph(
     itemPlacerCount: Int,
     startAxisTitle : String,
     bottomAxisTitle: String,
-
+    reportType : String
     ) {
 
+    val context = LocalContext.current
     val graphsViewModel = hiltViewModel<GraphsViewModel>()
 
     if (isGraphPlotted) {
@@ -128,11 +132,12 @@ fun CellAnalysisGraph(
             NormButton(
                 modifier = Modifier.fillMaxWidth(),
                 onButtonClick = {
-                                /*graphsViewModel.onExportToPdf(
-                                    name = ,
-                                    content = ,
-                                    reportType = "Egg Collection" ,
-                                )*/
+                                graphsViewModel.onExportToPdf(
+                                    name = "${SimpleDateFormat("dd MMM yyyy").format(System.currentTimeMillis())} $reportType",
+                                    content = listOfRecords,
+                                    reportType = reportType ,
+                                )
+                    Toast.makeText(context, "PDF exported successfully, check in downloads", Toast.LENGTH_LONG).show()
                 },
                 btnName = "Export Data to PDF>>>"
             )

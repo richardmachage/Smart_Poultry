@@ -358,6 +358,7 @@ fun AnalyticsScreen(
                             (turnToChartData.maxOf { chartClass: ChartClass -> chartClass.yNumOfEggs }) + 1,
                             startAxisTitle = "Num of Eggs",
                             bottomAxisTitle = "Date",
+                            reportType = reportType
                         )
 
                     } else {
