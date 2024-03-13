@@ -6,6 +6,7 @@ import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.smartpoultry.data.dataSource.datastore.AppDataStore
+import com.example.smartpoultry.data.dataSource.datastore.USER_ROLE_KEY
 import com.example.smartpoultry.domain.reports.Report
 import com.example.smartpoultry.domain.repository.BlocksRepository
 import com.example.smartpoultry.domain.repository.CellsRepository
@@ -39,6 +40,13 @@ class HomeViewModel @Inject constructor(
             }
             return num
         }
+
+    val userRole = dataStore.readData(USER_ROLE_KEY).stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.Eagerly,
+        initialValue = ""
+    )
+
     val totalBlocks = blocksRepository.getAllBlocks().stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(),
@@ -63,6 +71,8 @@ class HomeViewModel @Inject constructor(
             started = SharingStarted.Eagerly,
             initialValue = emptyList(),
     )
+
+
 
     @SuppressLint("SimpleDateFormat")
     fun onCreateReport(name : String, content: String, reportType:String ){

@@ -1,6 +1,7 @@
 package com.example.smartpoultry.presentation.screens.home
 
 import android.os.Build
+import android.util.Log
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.border
@@ -19,6 +20,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -52,6 +54,11 @@ fun HomeScreen(
     val totalBlocks = homeViewModel.totalBlocks.collectAsState()
     val totalCells = homeViewModel.totalCells.collectAsState()
     val dailyEggCollections by homeViewModel.eggCollectionRecords.collectAsState()
+    val userRole by homeViewModel.userRole.collectAsState()
+
+    LaunchedEffect(homeViewModel.userRole.collectAsState()){
+        if (homeViewModel.userRole.value.isNotBlank()) Toast.makeText(context, "User role is ${homeViewModel.userRole.value}", Toast.LENGTH_LONG).show()
+    }
 
     Surface(
         modifier = Modifier
@@ -118,13 +125,10 @@ fun HomeScreen(
 
                             )
                             .fillMaxWidth()
-                        // .height(100.dp)
-
                     ) {
-
-
+                        Log.i("UserRole card", "recomposed")
                         Text(
-                            text = "Sacks of Feeds : 16",
+                            text = "User role: $userRole",
                             modifier = Modifier
                                 .padding(6.dp)
                                 .align(Alignment.Start)

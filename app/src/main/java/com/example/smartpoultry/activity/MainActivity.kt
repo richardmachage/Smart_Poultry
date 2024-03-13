@@ -49,7 +49,6 @@ class MainActivity (): ComponentActivity() {
         }
     }
 
-
 }
 
 @Destination(start = true)
