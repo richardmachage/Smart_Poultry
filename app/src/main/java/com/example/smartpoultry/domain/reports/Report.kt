@@ -8,6 +8,7 @@ import android.graphics.Typeface
 import android.graphics.pdf.PdfDocument
 import android.os.Environment
 import android.provider.MediaStore
+import com.example.smartpoultry.presentation.uiModels.ChartClass
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.io.IOException
 import java.text.SimpleDateFormat
@@ -18,7 +19,7 @@ class Report @Inject constructor(
     @ApplicationContext private val context : Context
 ) {
 
-    private fun addTextToPage(page: PdfDocument.Page, listOfRecords : List<String>, startX: Float,startY: Float, paint: Paint, reportType: String){
+    private fun addTextToPage(page: PdfDocument.Page, listOfRecords : List<ChartClass>, startX: Float,startY: Float, paint: Paint, reportType: String){
         //default title settings
         val title = "ABUYA POULTRY FARM"
         val titlePaint = Paint(paint)
@@ -27,10 +28,8 @@ class Report @Inject constructor(
         titlePaint.textSize = 20f
         //center of the page
         val centerX = page.info.pageWidth / 2f
-
         //drawing title at center top
         page.canvas.drawText(title,centerX,startY,titlePaint)
-
 
         //report type
         val reportTypePaint = Paint(paint).apply {
@@ -39,11 +38,8 @@ class Report @Inject constructor(
             typeface = Typeface.create(Typeface.DEFAULT, Typeface.NORMAL)
             textAlign = Paint.Align.LEFT
         }
-        // Adjust y-coordinate for the report type (below the title with some padding)
         var y = startY + titlePaint.descent() - titlePaint.ascent() + 20
-
         page.canvas.drawText(reportType,startX,y, reportTypePaint)
-
 
         //default date
         val currentDate = "Date : "+ SimpleDateFormat("dd MMMM, yyyy").format(System.currentTimeMillis())
@@ -62,8 +58,10 @@ class Report @Inject constructor(
         y+= datePaint.descent() - titlePaint.ascent() + 10
         //pdf content
         paint.textAlign = Paint.Align.LEFT
-        for (line in lines){
-            page.canvas.drawText(line,startX,y,paint)
+        //iterate over records and draw them
+        for (record in listOfRecords){
+            val text = "${record.xDateValue} - ${record.yNumOfEggs} eggs"
+            page.canvas.drawText(text,startX,y,paint)
             y += paint.descent() - paint.ascent()
         }
 
@@ -121,6 +119,31 @@ class Report @Inject constructor(
         }
 
     }
+
+    fun createAndSavePDF(name : String, content: List<ChartClass>, reportType: String) {
+        val pdfDocument = PdfDocument()
+        val pageInfo = PdfDocument.PageInfo.Builder(595, 842, 1).create() //A4 size
+        val page = pdfDocument.startPage(pageInfo)
+
+        //adding text to doc
+        //  val canvas = page.canvas
+        val paint = Paint().apply {
+            color = Color.BLACK
+            textSize = 14f
+            typeface = Typeface.create(Typeface.DEFAULT, Typeface.NORMAL)
+        }
+        //canvas.drawText("Hello, PDF World!", 50f, 50f, paint)
+
+        addTextToPage(page = page, listOfRecords = content, startX = 50f, startY = 50f, paint, reportType)
+
+        pdfDocument.finishPage(page)
+
+        //save pdf file
+        savePdfWithMediaStore(pdfDocument, name)
+
+
+    }
+
     fun createAndSavePDF(name : String, content: String, reportType: String) {
         val pdfDocument = PdfDocument()
         val pageInfo = PdfDocument.PageInfo.Builder(595, 842, 1).create() //A4 size
@@ -176,12 +199,12 @@ class Report @Inject constructor(
         val dateHeight = datePaint.descent() - datePaint.ascent()
 
         // Sum the heights and add some padding between title, report type, and date
-        return titleHeight + reportTypeHeight + dateHeight + 60 // 60 is the total padding
+        return titleHeight + reportTypeHeight + dateHeight + 32 // 60 is the total padding
     }
 
     private fun calculateLineHeight(paint: Paint): Float {
         // The line height is the distance from the descent of one line of text to the ascent of the next line.
-        return paint.descent() - paint.ascent() + 10 // 10 is the padding between lines
+        return paint.descent() - paint.ascent()
     }
 
 
