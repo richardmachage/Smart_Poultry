@@ -35,6 +35,7 @@ import com.example.smartpoultry.presentation.composables.MyHorizontalSpacer
 import com.example.smartpoultry.presentation.composables.MyVerticalSpacer
 import com.example.smartpoultry.presentation.composables.NormButton
 import com.example.smartpoultry.presentation.composables.RecentEggsLineChart
+import com.example.smartpoultry.presentation.uiModels.ChartClass
 import com.ramcosta.composedestinations.annotation.Destination
 import java.text.SimpleDateFormat
 
@@ -137,13 +138,25 @@ fun HomeScreen(
                 NormButton(
                     modifier = Modifier.fillMaxWidth(),
                     onButtonClick = {
+                        val reportType = "Farm Inventory Status"
                         homeViewModel.onCreateReport(
-                            name = "Inventory ${SimpleDateFormat("dd/MMM/yyyy").format(System.currentTimeMillis())}",
-                            content =
-                                    "\nTotal Blocks : ${totalBlocks.value.size}" +
+                            name = "$reportType ${SimpleDateFormat("dd/MMM/yyyy").format(System.currentTimeMillis())}",
+                            content = listOf(
+                                ChartClass("01/02/2024" , 30),
+                                ChartClass("02/02/2024" , 430),
+                                ChartClass("03/02/2024" , 780),
+                                ChartClass("04/02/2024" , 50),
+                                ChartClass("05/02/2024" , 909),
+                                ChartClass("06/02/2024" , 504),
+                                ChartClass("07/02/2024" , 589),
+                                ChartClass("08/02/2024" , 123),
+                                ChartClass("09/02/2024" , 147),
+                                ChartClass("10/02/2024" , 188),
+                            )
+                                    /*"\nTotal Blocks : ${totalBlocks.value.size}" +
                                     "\nTotal Cells: ${totalCells.value.size}" +
-                                    "\nTotal Chicken: ${totalCells.value.sumOf { cell: Cells -> cell.henCount }}",
-                            reportType = "Farm Inventory Status"
+                                    "\nTotal Chicken: ${totalCells.value.sumOf { cell: Cells -> cell.henCount }}"*/,
+                            reportType = reportType
                         )
                         Toast.makeText(
                             context,

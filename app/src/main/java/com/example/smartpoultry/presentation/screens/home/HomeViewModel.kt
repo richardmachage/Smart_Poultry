@@ -70,5 +70,4 @@ class HomeViewModel @Inject constructor(
         report.createAndSavePDF(name,content, reportType)
     }
 
-
 }
