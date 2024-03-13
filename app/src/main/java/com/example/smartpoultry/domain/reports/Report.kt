@@ -18,13 +18,40 @@ class Report @Inject constructor(
 ) {
 
     private fun addTextToPage(page: PdfDocument.Page, text: String, startX: Float, startY: Float, paint: Paint) {
+
+        //default title settings
+        val title = "ABUYA POULTRY FARM"
+        val titlePaint = Paint(paint)
+        titlePaint.textAlign = Paint.Align.CENTER
+        titlePaint.typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
+        titlePaint.textSize = 16f
+
+        //center of the page
+        val centerX = page.info.pageWidth / 2f
+
+        //drawing title at center top
+        page.canvas.drawText(title,centerX,startY,titlePaint)
+
+        //for content below tittle
+        val adjustedStartY = startY + titlePaint.descent() - titlePaint.ascent() + 20
+
+        //pdf content
+        paint.textAlign = Paint.Align.LEFT
+        var y = adjustedStartY
         val lines = text.split("\n")
+
+        for (line in lines){
+            page.canvas.drawText(line,startX,y,paint)
+            y += paint.descent() - paint.ascent()
+        }
+
+        /*val lines = text.split("\n")
         var y = startY
 
         for (line in lines) {
             page.canvas.drawText(line, startX, y, paint)
             y += paint.descent() - paint.ascent()
-        }
+        }*/
     }
     fun createAndSavePDF(name : String, content: String) {
         val pdfDocument = PdfDocument()
