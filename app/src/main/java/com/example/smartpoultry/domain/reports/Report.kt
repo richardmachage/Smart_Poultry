@@ -16,10 +16,20 @@ import javax.inject.Inject
 
 
 class Report @Inject constructor(
-    @ApplicationContext private val context : Context
+    @ApplicationContext private val context: Context
 ) {
+    // private fun addTextToPage(document: PdfDocument, pageInfo: PdfDocument.PageInfo, listOfRecords : List<ChartClass>, startX: Float, startY: Float, titlePaint: Paint, reportTypePaint: Paint, datePaint: Paint, reportType: String){
+    private fun addTextToPage(
+        pdfDocument: PdfDocument,
+        listOfRecords: List<ChartClass>,
+        startX: Float,
+        startY: Float,
+        paint: Paint,
+        reportType: String
+    ) {
+        var y = startY
+        var page = pdfDocument.startPage(PdfDocument.PageInfo.Builder(595, 842, 1).create())
 
-    private fun addTextToPage(page: PdfDocument.Page, listOfRecords : List<ChartClass>, startX: Float,startY: Float, paint: Paint, reportType: String){
         //default title settings
         val title = "ABUYA POULTRY FARM"
         val titlePaint = Paint(paint)
@@ -29,7 +39,7 @@ class Report @Inject constructor(
         //center of the page
         val centerX = page.info.pageWidth / 2f
         //drawing title at center top
-        page.canvas.drawText(title,centerX,startY,titlePaint)
+        page.canvas.drawText(title, centerX, startY, titlePaint)
 
         //report type
         val reportTypePaint = Paint(paint).apply {
@@ -38,35 +48,56 @@ class Report @Inject constructor(
             typeface = Typeface.create(Typeface.DEFAULT, Typeface.NORMAL)
             textAlign = Paint.Align.LEFT
         }
-        var y = startY + titlePaint.descent() - titlePaint.ascent() + 20
-        page.canvas.drawText(reportType,startX,y, reportTypePaint)
+        y = startY + titlePaint.descent() - titlePaint.ascent() + 20
+        page.canvas.drawText(reportType, startX, y, reportTypePaint)
 
         //default date
-        val currentDate = "Date : "+ SimpleDateFormat("dd MMMM, yyyy").format(System.currentTimeMillis())
+        val currentDate =
+            "Date : " + SimpleDateFormat("dd MMMM, yyyy").format(System.currentTimeMillis())
         val datePaint = Paint(paint).apply {
             textSize = 14f
-            typeface = Typeface.create(Typeface.DEFAULT,Typeface.NORMAL)
+            typeface = Typeface.create(Typeface.DEFAULT, Typeface.NORMAL)
             textAlign = Paint.Align.LEFT
         }
         //adjust y-coordinate as usual
-        y+= reportTypePaint.descent() - titlePaint.ascent() + 2
-        page.canvas.drawText(currentDate,startX,y,datePaint)
-
+        y += reportTypePaint.descent() - titlePaint.ascent() + 2
+        page.canvas.drawText(currentDate, startX, y, datePaint)
 
 
         //for rest of the content
-        y+= datePaint.descent() - titlePaint.ascent() + 10
+        y += datePaint.descent() - titlePaint.ascent() + 10
         //pdf content
         paint.textAlign = Paint.Align.LEFT
+
         //iterate over records and draw them
-        for (record in listOfRecords){
+        for (record in listOfRecords) {
+            if (y > page.info.pageHeight - 50){
+                pdfDocument.finishPage(page) //finish the current page
+
+                //start new page
+                page= pdfDocument.startPage(
+                    PdfDocument.PageInfo.Builder(595,842, pdfDocument.pages.size + 1).create()
+                )
+                //then reset y to top of the following page
+                y = 50f
+            }
+            //continue drawing the records
             val text = "${record.xDateValue} - ${record.yNumOfEggs} eggs"
-            page.canvas.drawText(text,startX,y,paint)
+            page.canvas.drawText(text, startX, y, paint)
             y += paint.descent() - paint.ascent()
         }
 
+        pdfDocument.finishPage(page)
     }
-    private fun addTextToPage(page: PdfDocument.Page, text: String, startX: Float, startY: Float, paint: Paint, reportType: String) {
+
+    private fun addTextToPage(
+        page: PdfDocument.Page,
+        text: String,
+        startX: Float,
+        startY: Float,
+        paint: Paint,
+        reportType: String
+    ) {
 
         //default title settings
         val title = "ABUYA POULTRY FARM"
@@ -78,7 +109,7 @@ class Report @Inject constructor(
         val centerX = page.info.pageWidth / 2f
 
         //drawing title at center top
-        page.canvas.drawText(title,centerX,startY,titlePaint)
+        page.canvas.drawText(title, centerX, startY, titlePaint)
 
 
         //report type
@@ -91,39 +122,39 @@ class Report @Inject constructor(
         // Adjust y-coordinate for the report type (below the title with some padding)
         var y = startY + titlePaint.descent() - titlePaint.ascent() + 20
 
-        page.canvas.drawText(reportType,startX,y, reportTypePaint)
+        page.canvas.drawText(reportType, startX, y, reportTypePaint)
 
 
         //default date
-        val currentDate = "Date : "+ SimpleDateFormat("dd MMMM, yyyy").format(System.currentTimeMillis())
+        val currentDate =
+            "Date : " + SimpleDateFormat("dd MMMM, yyyy").format(System.currentTimeMillis())
         val datePaint = Paint(paint).apply {
             textSize = 14f
-            typeface = Typeface.create(Typeface.DEFAULT,Typeface.NORMAL)
+            typeface = Typeface.create(Typeface.DEFAULT, Typeface.NORMAL)
             textAlign = Paint.Align.LEFT
         }
         //adjust y-coordinate as usual
-        y+= reportTypePaint.descent() - titlePaint.ascent() + 2
-        page.canvas.drawText(currentDate,startX,y,datePaint)
-
+        y += reportTypePaint.descent() - titlePaint.ascent() + 2
+        page.canvas.drawText(currentDate, startX, y, datePaint)
 
 
         //for rest of the content
-        y+= datePaint.descent() - titlePaint.ascent() + 10
+        y += datePaint.descent() - titlePaint.ascent() + 10
         //pdf content
         paint.textAlign = Paint.Align.LEFT
         val lines = text.split("\n")
 
-        for (line in lines){
-            page.canvas.drawText(line,startX,y,paint)
+        for (line in lines) {
+            page.canvas.drawText(line, startX, y, paint)
             y += paint.descent() - paint.ascent()
         }
 
     }
 
-    fun createAndSavePDF(name : String, content: List<ChartClass>, reportType: String) {
+    fun createAndSavePDF(name: String, content: List<ChartClass>, reportType: String) {
         val pdfDocument = PdfDocument()
-        val pageInfo = PdfDocument.PageInfo.Builder(595, 842, 1).create() //A4 size
-        val page = pdfDocument.startPage(pageInfo)
+        // val pageInfo = PdfDocument.PageInfo.Builder(595, 842, 1).create() //A4 size
+        //  val page = pdfDocument.startPage(pageInfo)
 
         //adding text to doc
         //  val canvas = page.canvas
@@ -134,9 +165,16 @@ class Report @Inject constructor(
         }
         //canvas.drawText("Hello, PDF World!", 50f, 50f, paint)
 
-        addTextToPage(page = page, listOfRecords = content, startX = 50f, startY = 50f, paint, reportType)
+        addTextToPage(
+            pdfDocument = pdfDocument,
+            listOfRecords = content,
+            startX = 50f,
+            startY = 50f,
+            paint,
+            reportType
+        )
 
-        pdfDocument.finishPage(page)
+        // pdfDocument.finishPage(page)
 
         //save pdf file
         savePdfWithMediaStore(pdfDocument, name)
@@ -144,13 +182,13 @@ class Report @Inject constructor(
 
     }
 
-    fun createAndSavePDF(name : String, content: String, reportType: String) {
+    fun createAndSavePDF(name: String, content: String, reportType: String) {
         val pdfDocument = PdfDocument()
         val pageInfo = PdfDocument.PageInfo.Builder(595, 842, 1).create() //A4 size
         val page = pdfDocument.startPage(pageInfo)
 
         //adding text to doc
-      //  val canvas = page.canvas
+        //  val canvas = page.canvas
         val paint = Paint().apply {
             color = Color.BLACK
             textSize = 14f
@@ -193,7 +231,11 @@ class Report @Inject constructor(
     }
 
 
-    private fun calculateOffsetForTitleAndReportType(titlePaint: Paint, reportTypePaint: Paint, datePaint: Paint): Float {
+    private fun calculateOffsetForTitleAndReportType(
+        titlePaint: Paint,
+        reportTypePaint: Paint,
+        datePaint: Paint
+    ): Float {
         val titleHeight = titlePaint.descent() - titlePaint.ascent()
         val reportTypeHeight = reportTypePaint.descent() - reportTypePaint.ascent()
         val dateHeight = datePaint.descent() - datePaint.ascent()
