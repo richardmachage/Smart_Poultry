@@ -1,11 +1,9 @@
 package com.example.smartpoultry.presentation.screens.home
 
 import android.os.Build
-import android.util.Log
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.border
-import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -20,7 +18,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -33,7 +30,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.smartpoultry.data.dataSource.room.entities.cells.Cells
 import com.example.smartpoultry.presentation.composables.MyCardInventory
-import com.example.smartpoultry.presentation.composables.MyHorizontalSpacer
 import com.example.smartpoultry.presentation.composables.MyVerticalSpacer
 import com.example.smartpoultry.presentation.composables.NormButton
 import com.example.smartpoultry.presentation.composables.RecentEggsLineChart
@@ -56,10 +52,6 @@ fun HomeScreen(
     val dailyEggCollections by homeViewModel.eggCollectionRecords.collectAsState()
     val userRole by homeViewModel.userRole.collectAsState()
 
-    LaunchedEffect(homeViewModel.userRole.collectAsState()){
-        if (homeViewModel.userRole.value.isNotBlank()) Toast.makeText(context, "User role is ${homeViewModel.userRole.value}", Toast.LENGTH_LONG).show()
-    }
-
     Surface(
         modifier = Modifier
             .fillMaxSize(),
@@ -73,9 +65,27 @@ fun HomeScreen(
                 .verticalScroll(rememberScrollState())
         ) {
 
+            //Type of role card
+            Card(
+                modifier = Modifier
+                    .padding(bottom = 10.dp)
+                    .shadow(
+                        elevation = 10.dp,
+                        shape = RoundedCornerShape(10.dp)
+
+                    )
+                    .fillMaxWidth()
+            ) {
+                Text(
+                    text = "Logged in as: $userRole",
+                    modifier = Modifier
+                        .padding(6.dp)
+                        .align(Alignment.Start)
+                )
+            }
+
             Column(
                 //Inventory block
-
                 modifier = Modifier
                     .border(
                         width = 1.dp,
@@ -91,7 +101,8 @@ fun HomeScreen(
                 Text(text = "Inventory Status :")
                 MyVerticalSpacer(height = 10)
 
-                Column {
+
+
                     Row( //inventory cards
                         modifier = Modifier
                             .fillMaxWidth(),
@@ -115,27 +126,6 @@ fun HomeScreen(
 
                     }
 
-                    //The Sacks of feeds Card
-                    Card(
-                        modifier = Modifier
-                            .padding(12.dp)
-                            .shadow(
-                                elevation = 10.dp,
-                                shape = RoundedCornerShape(10.dp)
-
-                            )
-                            .fillMaxWidth()
-                    ) {
-                        Log.i("UserRole card", "recomposed")
-                        Text(
-                            text = "User role: $userRole",
-                            modifier = Modifier
-                                .padding(6.dp)
-                                .align(Alignment.Start)
-                        )
-                    }
-
-                }
 
 
                 NormButton(
@@ -161,7 +151,7 @@ fun HomeScreen(
             }
 
 
-            MyVerticalSpacer(height = 20)
+           /* MyVerticalSpacer(height = 20)
 
             Column(
                 //Alerts Block
@@ -267,7 +257,7 @@ fun HomeScreen(
                     }
                 }
             }
-
+*/
             MyVerticalSpacer(height = 20)
 
             Column(

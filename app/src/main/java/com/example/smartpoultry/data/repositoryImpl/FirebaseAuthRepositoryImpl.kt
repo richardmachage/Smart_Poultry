@@ -6,6 +6,7 @@ import com.example.smartpoultry.data.dataSource.remote.firebase.models.User
 import com.example.smartpoultry.domain.repository.FirebaseAuthRepository
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
@@ -59,8 +60,10 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
                             val user = documentSnapshot.toObject(User::class.java)
 
                             //save user role to datastore
-                            this.launch {
-                                dataStore.saveData(USER_ROLE_KEY, user!!.role)
+                            CoroutineScope(Dispatchers.IO).launch {
+                                user?.let { user->
+                                    dataStore.saveData(USER_ROLE_KEY, user.role)
+                                }
                             }
 
                         }
