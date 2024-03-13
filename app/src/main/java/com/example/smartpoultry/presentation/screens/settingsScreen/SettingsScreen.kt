@@ -35,8 +35,9 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.smartpoultry.NavGraphs
+import com.example.smartpoultry.destinations.LaunchScreenDestination
 import com.example.smartpoultry.destinations.LogInScreenDestination
-import com.example.smartpoultry.destinations.SettingsScreenDestination
 import com.example.smartpoultry.presentation.composables.MyBorderedColumn
 import com.example.smartpoultry.presentation.composables.MyInputDialog
 import com.example.smartpoultry.presentation.composables.MyOutlineTextFiled
@@ -253,9 +254,8 @@ fun SettingsScreen(
                     onConfirm = {
                         settingsViewModel.onLogOut()
                         showLogOutDialog = false
-
-                        navigator.navigate(LogInScreenDestination) {
-                            popUpTo(SettingsScreenDestination) { inclusive = true }
+                        navigator.navigate(LaunchScreenDestination) {
+                            popUpTo(NavGraphs.root.startRoute) { inclusive = true }
                         }
                     },
                     onDismiss = {
@@ -268,7 +268,12 @@ fun SettingsScreen(
                 Button(
                     modifier = Modifier.fillMaxWidth(),
                     onClick = {
-                        showLogOutDialog = true
+                        //showLogOutDialog = true
+                        settingsViewModel.onLogOut()
+                        navigator.navigate(LogInScreenDestination) {
+                            popUpTo(NavGraphs.root.startRoute) { inclusive = true }
+                            launchSingleTop = true
+                        }
                     }) {
                     Text(text = "Log Out")
                 }
