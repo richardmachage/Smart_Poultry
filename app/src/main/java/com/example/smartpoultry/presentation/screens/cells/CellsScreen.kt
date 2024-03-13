@@ -13,6 +13,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.AlertDialog
@@ -25,6 +26,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -41,14 +43,17 @@ import com.example.smartpoultry.data.dataSource.room.entities.cells.Cells
 import com.example.smartpoultry.presentation.composables.MyInputDialog
 import com.example.smartpoultry.presentation.composables.MyVerticalSpacer
 import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Destination
 @Composable
 fun CellsScreen(
+    navigator: DestinationsNavigator,
     blockId: Int
 ) {
     val cellsViewModel = hiltViewModel<CellsViewModel>()
+    val userRole by cellsViewModel.userRole.collectAsState()
     val listOfCells by remember {
         cellsViewModel.getCellsForBLock(blockId)
     }.collectAsState()
@@ -139,16 +144,27 @@ fun CellsScreen(
     }
 
     Scaffold (
-        floatingActionButton = {
-            IconButton(
-                onClick = {
-                 showAddCellDialog = true   
+        topBar = {
+            TopAppBar(
+                title = { Text(text = "Cells") },
+                navigationIcon = {
+                    IconButton(onClick = { navigator.navigateUp() }) {
+                        Icon(imageVector = Icons.AutoMirrored.Filled.ArrowBack, contentDescription ="Back" )
+                    }
                 }
-            ) {
-                Icon(
-                    imageVector = Icons.Default.AddCircle,
-                    contentDescription = "Add"
-                )
+            )},
+        floatingActionButton = {
+            if(userRole != "Collector") {
+                IconButton(
+                    onClick = {
+                        showAddCellDialog = true
+                    }
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.AddCircle,
+                        contentDescription = "Add"
+                    )
+                }
             }
         }
     ){ paddingValues->
@@ -239,15 +255,19 @@ fun CellsScreen(
                                     Text(text = "Are you sure you want to delete?")
                                 }
                             }
-                            IconButton(
-                                onClick = {
-                                    //On delete cell
-                                    showDeleteDialog = true
-                                }) {
-                                Icon(
-                                    imageVector = Icons.Default.Delete,
-                                    contentDescription = "delete"
-                                )
+
+                            if(userRole != "Collector") {
+
+                                IconButton(
+                                    onClick = {
+                                        //On delete cell
+                                        showDeleteDialog = true
+                                    }) {
+                                    Icon(
+                                        imageVector = Icons.Default.Delete,
+                                        contentDescription = "delete"
+                                    )
+                                }
                             }
                         }
 
