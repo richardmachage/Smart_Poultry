@@ -11,7 +11,6 @@ import com.example.smartpoultry.domain.repository.BlocksRepository
 import com.example.smartpoultry.domain.repository.CellsRepository
 import com.example.smartpoultry.domain.repository.EggCollectionRepository
 import com.example.smartpoultry.presentation.screens.settingsScreen.PAST_DAYS_KEY
-import com.example.smartpoultry.presentation.uiModels.ChartClass
 import com.example.smartpoultry.utils.getDateDaysAgo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
@@ -66,7 +65,7 @@ class HomeViewModel @Inject constructor(
     )
 
     @SuppressLint("SimpleDateFormat")
-    fun onCreateReport(name : String, content: List<ChartClass>, reportType:String ){
+    fun onCreateReport(name : String, content: String, reportType:String ){
         report.createAndSavePDF(name,content, reportType)
     }
 
