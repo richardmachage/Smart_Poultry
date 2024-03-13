@@ -79,7 +79,7 @@ fun CellAnalysisGraph(
                 chart = columnChart(),
                 model = chartEntryModel,
                 startAxis = rememberStartAxis(
-                   // valueFormatter = verticalAxisValueFormatter,
+                    valueFormatter = verticalAxisValueFormatter,
                     titleComponent = textComponent().apply {
                         color = MaterialTheme.colorScheme.primary.toArgb()
                     },
@@ -101,7 +101,7 @@ fun CellAnalysisGraph(
                 chart = lineChart(),
                 model = chartEntryModel,
                 startAxis = rememberStartAxis(
-                    // valueFormatter = verticalAxisValueFormatter,
+                    valueFormatter = verticalAxisValueFormatter,
                     titleComponent = textComponent().apply {
                         color = MaterialTheme.colorScheme.primary.toArgb()
                     },
@@ -118,7 +118,15 @@ fun CellAnalysisGraph(
                 isZoomEnabled = true,
             )
 
+            MyVerticalSpacer(height = 10)
 
+            NormButton(
+                modifier = Modifier.fillMaxWidth(),
+                onButtonClick = {
+
+                },
+                btnName = "Export Data to PDF>>>"
+            )
         }
     }
 }
