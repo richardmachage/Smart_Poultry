@@ -3,6 +3,8 @@ package com.example.smartpoultry.presentation.screens.blockCellScreen
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.smartpoultry.data.dataSource.datastore.AppDataStore
+import com.example.smartpoultry.data.dataSource.datastore.USER_ROLE_KEY
 import com.example.smartpoultry.data.dataSource.room.entities.blocks.Blocks
 import com.example.smartpoultry.data.dataSource.room.entities.cells.Cells
 import com.example.smartpoultry.domain.repository.BlocksRepository
@@ -17,9 +19,15 @@ import javax.inject.Inject
 @HiltViewModel //Hey we wanna inject dependencies using dagger hilt
 class BlockCellViewModel @Inject constructor(
     private val blocksRepository: BlocksRepository,
-    private val cellsRepository: CellsRepository
+    private val cellsRepository: CellsRepository,
+    private val dataStore: AppDataStore
 ) : ViewModel() {
 
+    val userRole = dataStore.readData(USER_ROLE_KEY).stateIn(
+        viewModelScope,
+        started = SharingStarted.Eagerly,
+        initialValue = ""
+    )
     //exposing flow as state
     val listOfBlocks = blocksRepository.getAllBlocks().stateIn(
         scope = viewModelScope,

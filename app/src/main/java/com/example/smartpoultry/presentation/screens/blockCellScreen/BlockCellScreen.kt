@@ -52,17 +52,10 @@ import kotlinx.coroutines.launch
 fun BlockCellScreen(
     navigator: DestinationsNavigator
 ) {
-    /*val viewModel = viewModel<BlockCellViewModel>(
-        factory = object : ViewModelProvider.Factory{
-            override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                return BlockCellViewModel(blocksRepository = BlocksRepositoryImpl.create()) as T
-            }
-        }
-    )*/
     val context = LocalContext.current
     val blockCellViewModel: BlockCellViewModel = hiltViewModel()
-
-    val listOfBlocks by blockCellViewModel.listOfBlocks.collectAsState()
+    val userRole by blockCellViewModel.userRole.collectAsState()
+    //val listOfBlocks by blockCellViewModel.listOfBlocks.collectAsState()
     val listOfBlocksWithCells by blockCellViewModel.listOfBlocksWithCells.collectAsState()
 
     val showDialog = blockCellViewModel.showDialog.value
@@ -123,18 +116,21 @@ fun BlockCellScreen(
     }
 
     Scaffold(
+        //if (userRole != "Collector")
         floatingActionButton = {
-            IconButton(
-                onClick = {
-                    //I want the dialog to show when this button is clicked
-                    blockCellViewModel.showDialog.value = true
-                    //   Toast.makeText(context,"new block added", Toast.LENGTH_SHORT).show()
+            if(userRole != "Collector") {
+                IconButton(
+                    onClick = {
+                        //I want the dialog to show when this button is clicked
+                        blockCellViewModel.showDialog.value = true
+                        //   Toast.makeText(context,"new block added", Toast.LENGTH_SHORT).show()
+                    }
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.AddCircle,
+                        contentDescription = "Add"
+                    )
                 }
-            ) {
-                Icon(
-                    imageVector = Icons.Default.AddCircle,
-                    contentDescription = "Add"
-                )
             }
         }
     ) { paddingValues ->
@@ -165,7 +161,13 @@ fun BlockCellScreen(
                     ) {
                         Column(
                             Modifier
-                                .clickable { navigator.navigate(CellsScreenDestination(blockWithCells.block.blockId)) }
+                                .clickable {
+                                    navigator.navigate(
+                                        CellsScreenDestination(
+                                            blockWithCells.block.blockId
+                                        )
+                                    )
+                                }
                                 .fillMaxWidth(0.9f)
                                 .padding(6.dp)
                         ) {
@@ -175,6 +177,7 @@ fun BlockCellScreen(
                         }
 
                         // MyHorizontalSpacer(width = 5)
+
 
                         var showDeleteDialog by remember { mutableStateOf(false) }
                         MyInputDialog(
@@ -203,12 +206,18 @@ fun BlockCellScreen(
                                 Text(text = "Are you sure you want to delete?")
                             }
                         }
-                        IconButton(onClick = {
-                            //show confirm delete dialog
-                            showDeleteDialog = true
+                        if(userRole != "Collector") {
 
-                        }) {
-                            Icon(imageVector = Icons.Default.Delete, contentDescription = "delete")
+                            IconButton(onClick = {
+                                //show confirm delete dialog
+                                showDeleteDialog = true
+
+                            }) {
+                                Icon(
+                                    imageVector = Icons.Default.Delete,
+                                    contentDescription = "delete"
+                                )
+                            }
                         }
                     }
 
