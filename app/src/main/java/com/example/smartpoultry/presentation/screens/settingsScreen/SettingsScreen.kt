@@ -117,7 +117,7 @@ fun SettingsScreen(
                         }
                         MyInputDialog(
                             showDialog = showDialog,
-                            title = "Consucutive Days to Consider",
+                            title = "Consecutive Days to Consider",
                             onConfirm = {
                                 settingsViewModel.saveToDataStore(
                                     PAST_DAYS_KEY,
@@ -148,7 +148,7 @@ fun SettingsScreen(
 
                 //consucutive days
                 MyBorderedColumn {
-                    Text(text = "Number of Day for trend analysis (Consucutive days of low production to be considered before flagging a cell?)")
+                    Text(text = "Number of Day for trend analysis (Consecutive days of low production to be considered before flagging a cell?)")
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -164,7 +164,7 @@ fun SettingsScreen(
                         }
                         MyInputDialog(
                             showDialog = showDialog,
-                            title = "Consucutive Days to Consider",
+                            title = "Consecutive Days to Consider",
                             onConfirm = {
                                 showDialog = false
                                 settingsViewModel.saveToDataStore(
@@ -176,7 +176,7 @@ fun SettingsScreen(
                         ) {
                             MyOutlineTextFiled(
                                 modifier = Modifier.fillMaxWidth(),
-                                label = "Consucutive Days",
+                                label = "Consecutive Days",
                                 keyboardType = KeyboardType.Number,
                                 initialText = consucutiveDays.value,
                                 onValueChange = {
