@@ -35,7 +35,7 @@ class HomeViewModel @Inject constructor(
             var num = 0
             viewModelScope.launch {
                 dataStore.readData(PAST_DAYS_KEY).collect{
-                    num = it.toInt()
+                    num = it.toIntOrNull() ?: 0
                 }
             }
             return num
