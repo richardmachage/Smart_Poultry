@@ -7,6 +7,7 @@ import com.example.smartpoultry.data.dataSource.room.entities.cells.CellsDao
 import com.example.smartpoultry.domain.repository.CellsRepository
 import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.SetOptions
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -25,7 +26,7 @@ class CellsRepositoryImpl @Inject constructor(
     private fun listenForFireStoreChanges() {
         fireStoreDb.collection("Cells")
             .addSnapshotListener { querySnapshot, exception ->
-                if (exception != null) { //f an error exists, it logs the error and returns early from the listener.
+                if (exception != null) { //if an error exists, it logs the error and returns early from the listener.
                     Log.w("Error", "Listen failed.", exception)
                     return@addSnapshotListener
                 }
@@ -132,5 +133,9 @@ class CellsRepositoryImpl @Inject constructor(
 
     override suspend fun updateCellInfo(cell: Cells) {
         cellsDao.updateCellInfo(cell)
+        fireStoreDb.collection("Cells")
+            .document(cell.cellId.toString())
+            .set(cell, SetOptions.merge())
+
     }
 }
