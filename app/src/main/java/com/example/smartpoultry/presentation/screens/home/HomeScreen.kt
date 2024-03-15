@@ -77,7 +77,7 @@ fun HomeScreen(
                     .fillMaxWidth()
             ) {
                 Text(
-                    text = "Logged in as: $userRole",
+                    text = "Past days fom datastore: ${homeViewModel.numOfPastDays}" ,//"Logged in as: $userRole",
                     modifier = Modifier
                         .padding(6.dp)
                         .align(Alignment.Start)
@@ -126,8 +126,6 @@ fun HomeScreen(
 
                     }
 
-
-
                 NormButton(
                     modifier = Modifier.fillMaxWidth(),
                     onButtonClick = {
@@ -150,114 +148,6 @@ fun HomeScreen(
                 )
             }
 
-
-           /* MyVerticalSpacer(height = 20)
-
-            Column(
-                //Alerts Block
-                modifier = Modifier
-                    .border(
-                        width = 1.dp,
-                        color = MaterialTheme.colorScheme.primary,
-                        shape = RoundedCornerShape(
-                            (0.03 * LocalConfiguration.current.screenWidthDp).dp
-                        )
-                    )
-                    .fillMaxWidth()
-                    .padding(6.dp)
-            ) {
-                Text(text = "Alerts:")
-                Row(
-                    modifier = Modifier
-                        .padding(6.dp)
-                        .fillMaxWidth()
-                        .horizontalScroll(rememberScrollState()),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-
-                    ) {
-                    Card {
-                        Text(
-                            text = "cell 1",
-
-                            modifier = Modifier
-                                .padding(3.dp)
-                        )
-                    }
-
-                    MyHorizontalSpacer(width = 10)
-
-                    Card {
-                        Text(
-                            text = "cell 12",
-
-                            modifier = Modifier
-                                .padding(3.dp)
-                        )
-                    }
-
-                    MyHorizontalSpacer(width = 10)
-
-                    Card {
-                        Text(
-                            text = "cell 11",
-
-                            modifier = Modifier
-                                .padding(3.dp)
-                        )
-                    }
-                    MyHorizontalSpacer(width = 10)
-
-                    Card {
-                        Text(
-                            text = "cell 4",
-
-                            modifier = Modifier
-                                .padding(3.dp)
-                        )
-                    }
-                    MyHorizontalSpacer(width = 10)
-
-                    Card {
-                        Text(
-                            text = "cell 3",
-
-                            modifier = Modifier
-                                .padding(3.dp)
-                        )
-                    }
-                    MyHorizontalSpacer(width = 10)
-
-                    Card {
-                        Text(
-                            text = "cell 6",
-
-                            modifier = Modifier
-                                .padding(3.dp)
-                        )
-                    }
-                    MyHorizontalSpacer(width = 10)
-
-                    Card {
-                        Text(
-                            text = "cell 17",
-
-                            modifier = Modifier
-                                .padding(3.dp)
-                        )
-                    }
-                    MyHorizontalSpacer(width = 10)
-
-                    Card {
-                        Text(
-                            text = "cell 16",
-
-                            modifier = Modifier
-                                .padding(3.dp)
-                        )
-                    }
-                }
-            }
-*/
             MyVerticalSpacer(height = 20)
 
             Column(
@@ -276,7 +166,7 @@ fun HomeScreen(
                 Text(text = "Recent Production Trends:")
                 MyVerticalSpacer(height = 10)
                 //Create graph
-                if (dailyEggCollections.isNotEmpty()) RecentEggsLineChart(dailyEggCollections = dailyEggCollections)
+               if (dailyEggCollections.isNotEmpty()) RecentEggsLineChart(dailyEggCollections = dailyEggCollections)
 
             }
 

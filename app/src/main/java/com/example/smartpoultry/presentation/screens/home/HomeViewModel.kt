@@ -3,6 +3,9 @@ package com.example.smartpoultry.presentation.screens.home
 import android.annotation.SuppressLint
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.smartpoultry.data.dataSource.datastore.AppDataStore
@@ -30,8 +33,16 @@ class HomeViewModel @Inject constructor(
     val dataStore: AppDataStore
     ) : ViewModel() {
 
-        var numOfPastDays = getPastDays()
-        private fun getPastDays() : Int{
+        var numOfPastDays by mutableIntStateOf(0)
+
+    init {
+        viewModelScope.launch {
+            dataStore.readData(PAST_DAYS_KEY).collect{
+                numOfPastDays = it.toIntOrNull() ?:0
+            }
+        }
+    }
+        /*private fun getPastDays() : Int{
             var num = 0
             viewModelScope.launch {
                 dataStore.readData(PAST_DAYS_KEY).collect{
@@ -39,7 +50,7 @@ class HomeViewModel @Inject constructor(
                 }
             }
             return num
-        }
+        }*/
 
     val userRole = dataStore.readData(USER_ROLE_KEY).stateIn(
         scope = viewModelScope,
@@ -62,7 +73,7 @@ class HomeViewModel @Inject constructor(
     val eggCollectionRecords = eggCollectionRepository.getRecentEggCollectionRecords(
         //Date(LocalDate.now().toEpochDay())
         Date(getDateDaysAgo(
-            numOfPastDays
+            5//numOfPastDays
         ).toEpochDay()
     )
     )
@@ -71,7 +82,6 @@ class HomeViewModel @Inject constructor(
             started = SharingStarted.Eagerly,
             initialValue = emptyList(),
     )
-
 
 
     @SuppressLint("SimpleDateFormat")
