@@ -55,7 +55,6 @@ fun HomeScreen(
     val homeViewModel: HomeViewModel = hiltViewModel()
     val totalBlocks = homeViewModel.totalBlocks.collectAsState()
     val totalCells = homeViewModel.totalCells.collectAsState()
-    //val dailyEggCollections by homeViewModel.eggCollectionRecords.collectAsState()
     val userRole by homeViewModel.userRole.collectAsState()
 
     val pastDaysState = remember { homeViewModel.dataStore.readData(PAST_DAYS_KEY) }.collectAsState(initial = "0")
@@ -94,7 +93,7 @@ fun HomeScreen(
                     .fillMaxWidth()
             ) {
                 Text(
-                    text = "Past days fom datastore: $pastDays and daily records: ${dailyEggsForPastDays.value.size}" ,//"Logged in as: $userRole",
+                    text = "Logged in as: $userRole",
                     modifier = Modifier
                         .padding(6.dp)
                         .align(Alignment.Start)
