@@ -183,7 +183,6 @@ fun HomeScreen(
                 MyVerticalSpacer(height = 10)
                 //Create graph
                if (dailyEggsForPastDays.value.isNotEmpty()) RecentEggsLineChart(dailyEggCollections = dailyEggsForPastDays.value)
-               //if (dailyEggForPastDays.isNotEmpty()) RecentEggsLineChart(dailyEggCollections = dailyEggForPastDays)
 
             }
 

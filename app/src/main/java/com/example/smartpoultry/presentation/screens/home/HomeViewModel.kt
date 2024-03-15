@@ -78,19 +78,6 @@ class HomeViewModel @Inject constructor(
             initialValue = emptyList(),
         )
 
-
-    val eggCollectionRecordsPastDays = eggCollectionRepository.getOverallCollectionForPAstDays(
-        Date(
-            getDateDaysAgo(
-                numOfPastDays
-            ).toEpochDay()
-        )
-    ).stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.Eagerly,
-        initialValue = emptyList()
-    )
-
     @RequiresApi(Build.VERSION_CODES.O)
     fun getOverallCollectionsForPastDays(days : Int): Flow<List<DailyEggCollection>> {
         return eggCollectionRepository.getOverallCollectionForPAstDays(
