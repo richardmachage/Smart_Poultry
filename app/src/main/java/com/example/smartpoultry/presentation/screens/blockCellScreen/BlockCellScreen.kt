@@ -42,6 +42,7 @@ import com.example.smartpoultry.presentation.composables.MyInputDialog
 import com.example.smartpoultry.presentation.composables.MyOutlineTextFiled
 import com.example.smartpoultry.presentation.composables.MyVerticalSpacer
 import com.example.smartpoultry.presentation.uiModels.BlockItem
+import com.example.smartpoultry.presentation.uiModels.BlockParse
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -176,7 +177,11 @@ fun BlockCellScreen(
                                 .clickable {
                                     navigator.navigate(
                                         CellsScreenDestination(
-                                          blockWithCells.block
+                                            BlockParse(
+                                                blockId = blockWithCells.block.blockId,
+                                                blockNum = blockWithCells.block.blockNum,
+                                                totalCells = blockWithCells.cell.size
+                                            )
                                         )
                                     )
                                 }
