@@ -73,7 +73,7 @@ fun CellsScreen(
                     Text(text = "Cell ID : ${cell.cellId}")
 
                     MyOutlineTextFiled(
-                        label = cellsViewModel.cellNumText.value,
+                        label = "Cell Number",
                         keyboardType = KeyboardType.Number ,
                         initialText = cellsViewModel.cellNumText.value,
                         onValueChange = {
@@ -91,12 +91,11 @@ fun CellsScreen(
                     MyVerticalSpacer(height = 5)
 
                     MyOutlineTextFiled(
-                        label = "Number of Hen",
+                        label = "Number of Chicken",
                         keyboardType = KeyboardType.Number ,
                         initialText = cellsViewModel.henCountText.value,
                         onValueChange = {
                             cellsViewModel.henCountText.value = it
-
                         }
                     )
                     /*TextField(
