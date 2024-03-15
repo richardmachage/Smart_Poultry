@@ -30,6 +30,7 @@ class AnalyticsViewModel @Inject constructor(
     var plotChart = mutableStateOf(false)
     var selectedBlockId = mutableIntStateOf(0)
     var selectedBlockNum = mutableIntStateOf(0)
+    //var selectedBlockNum = mutableIntStateOf(0)
     var selectedCellID = mutableIntStateOf(0)
     var selectedCellNum = mutableIntStateOf(0)
     var selectedYear = mutableStateOf("")

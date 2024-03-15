@@ -25,6 +25,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -53,6 +54,8 @@ import java.text.SimpleDateFormat
 fun AnalyticsScreen(
     //modifier : Modifier
 ) {
+    var exa = 0
+    val context = LocalContext.current
     val analyticsViewModel = hiltViewModel<AnalyticsViewModel>()
     val listOfBlocksWithCells by remember { analyticsViewModel.listOfBlocksWithCells }.collectAsState()
     //var selectedCellNum = listOfBlocksWithCells.
@@ -142,11 +145,12 @@ fun AnalyticsScreen(
                         if (analyticsViewModel.levelOfAnalysis.value != "Overall") {
                             BlocksDropDownMenu(
                                 listOfItems = listOfBlocksWithCells,
-                                onItemClick = { block, cells ->
+                                onItemClick = { blockId,blockNum, cells ->
                                     listOfCells = cells
-                                    analyticsViewModel.selectedBlockId.intValue = block.blockId
-                                    analyticsViewModel.selectedCellNum.intValue = block.blockNum
+                                    analyticsViewModel.selectedBlockId.intValue = blockId
+                                    analyticsViewModel.selectedBlockNum.intValue = blockNum
                                     analyticsViewModel.plotChart.value = false
+                                   // Toast.makeText(context, "Selected block num: ${analyticsViewModel.selectedBlockNum.intValue}", Toast.LENGTH_SHORT).show()
                                 },
                                 width = width,
                             )

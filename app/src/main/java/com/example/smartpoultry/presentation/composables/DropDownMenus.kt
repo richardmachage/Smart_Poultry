@@ -20,7 +20,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.smartpoultry.data.dataSource.room.entities.blocks.Blocks
 import com.example.smartpoultry.data.dataSource.room.entities.cells.Cells
 import com.example.smartpoultry.data.dataSource.room.relations.BlocksWithCells
 
@@ -28,7 +27,7 @@ import com.example.smartpoultry.data.dataSource.room.relations.BlocksWithCells
 @Composable
 fun BlocksDropDownMenu( //for Blocks
     listOfItems: List<BlocksWithCells>,
-    onItemClick: ( blockId: Blocks, cells : List<Cells>) -> Unit,
+    onItemClick: ( blockId: Int, blockNum: Int, cells : List<Cells>) -> Unit,
     modifier: Modifier = Modifier,
     width : Float = 0.4f
 ) {
@@ -66,7 +65,7 @@ fun BlocksDropDownMenu( //for Blocks
                     text = { Text(text = "Block ${block.block.blockNum}") },
                     onClick = {
                         selectedText = block.block.blockNum.toString()
-                        onItemClick(block.block,block.cell)
+                        onItemClick(block.block.blockId, block.block.blockNum, block.cell)
                         expanded = false
                     }
                 )
