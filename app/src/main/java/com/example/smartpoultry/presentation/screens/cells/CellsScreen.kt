@@ -203,7 +203,7 @@ fun CellsScreen(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceEvenly
                 ) {
-                    Text(text = "Block : ${block.blockId}")
+                    Text(text = "Block : ${block.blockNum}")
                     Text(text = "Number of cells is : ${listOfCells.size}")
                 }
 

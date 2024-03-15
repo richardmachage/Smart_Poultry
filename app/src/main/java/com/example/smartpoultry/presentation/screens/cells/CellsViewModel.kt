@@ -27,15 +27,14 @@ class CellsViewModel @Inject constructor(
         SharingStarted.Eagerly,
         ""
     )
+
     var showDialog = mutableStateOf(false)
     lateinit var selectedCell: Cells
-
 
     //dialog inputs
     var cellNumText = mutableStateOf("")
     var henCountText = mutableStateOf("")
     fun getCellsForBLock(blockId: Int): StateFlow<List<Cells>> {
-
         return cellsRepository.getCellsForBlock(blockId).stateIn(
             viewModelScope,
             SharingStarted.WhileSubscribed(),
