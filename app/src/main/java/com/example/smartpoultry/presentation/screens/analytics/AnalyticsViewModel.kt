@@ -23,13 +23,15 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AnalyticsViewModel @Inject constructor(
-    private val cellsRepository: CellsRepository,
+     val cellsRepository: CellsRepository,
     private val blocksRepository: BlocksRepository,
     private val eggCollectionRepository: EggCollectionRepository,
 ) : ViewModel() {
     var plotChart = mutableStateOf(false)
     var selectedBlockId = mutableIntStateOf(0)
+    var selectedBlockNum = mutableIntStateOf(0)
     var selectedCellID = mutableIntStateOf(0)
+    var selectedCellNum = mutableIntStateOf(0)
     var selectedYear = mutableStateOf("")
     var selectedMonth = mutableStateOf("")
     var levelOfAnalysis = mutableStateOf("Cell")
@@ -171,6 +173,5 @@ class AnalyticsViewModel @Inject constructor(
     fun getDateDaysAgo(numberOfDays: Int): LocalDate {
         return LocalDate.now().minusDays(numberOfDays.toLong())
     }
-
 
 }

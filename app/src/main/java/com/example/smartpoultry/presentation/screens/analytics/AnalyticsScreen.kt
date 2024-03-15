@@ -55,6 +55,7 @@ fun AnalyticsScreen(
 ) {
     val analyticsViewModel = hiltViewModel<AnalyticsViewModel>()
     val listOfBlocksWithCells by remember { analyticsViewModel.listOfBlocksWithCells }.collectAsState()
+    //var selectedCellNum = listOfBlocksWithCells.
     //val context = LocalContext.current
     var width by remember {
         mutableFloatStateOf(0.5f)
@@ -141,9 +142,10 @@ fun AnalyticsScreen(
                         if (analyticsViewModel.levelOfAnalysis.value != "Overall") {
                             BlocksDropDownMenu(
                                 listOfItems = listOfBlocksWithCells,
-                                onItemClick = { blockId, cells ->
+                                onItemClick = { block, cells ->
                                     listOfCells = cells
-                                    analyticsViewModel.selectedBlockId.intValue = blockId
+                                    analyticsViewModel.selectedBlockId.intValue = block.blockId
+                                    analyticsViewModel.selectedCellNum.intValue = block.blockNum
                                     analyticsViewModel.plotChart.value = false
                                 },
                                 width = width,
@@ -155,6 +157,7 @@ fun AnalyticsScreen(
                                     listOfItems = listOfCells,
                                     onItemClick = { cell ->
                                         analyticsViewModel.selectedCellID.intValue = cell.cellId
+                                        analyticsViewModel.selectedCellNum.intValue = cell.cellNum
                                         analyticsViewModel.plotChart.value = false
                                     }
                                 )
@@ -255,13 +258,13 @@ fun AnalyticsScreen(
                     val listOfRecords by remember {
                         if (analyticsViewModel.levelOfAnalysis.value == "Cell") {
                             if (analyticsViewModel.isPastXDaysAnalysis.value) {
-                                reportType = "Collections of cell ${analyticsViewModel.selectedCellID.intValue} in Block ${analyticsViewModel.selectedBlockId.intValue } for duration of Past ${analyticsViewModel.pastDays.value} days"
+                                reportType = "Collections of cell ${analyticsViewModel.selectedCellNum.intValue} in Block ${analyticsViewModel.selectedBlockNum.intValue } for duration of Past ${analyticsViewModel.pastDays.value} days"
                                 return@remember analyticsViewModel.getCellEggCollectionForPastDays()
                             }
                             else if (analyticsViewModel.isCustomRangeAnalysis.value) {
                                 reportType = "Collections of " +
-                                        "cell ${analyticsViewModel.selectedCellID.intValue} in " +
-                                        "Block ${analyticsViewModel.selectedBlockId.intValue } " +
+                                        "cell ${analyticsViewModel.selectedCellNum.intValue} in " +
+                                        "Block ${analyticsViewModel.selectedBlockNum.intValue } " +
                                         "from ${SimpleDateFormat("dd MMM,yyyy").format(
                                             localDateToJavaDate(analyticsViewModel.startDate.value)
                                         )} "+
@@ -272,8 +275,8 @@ fun AnalyticsScreen(
                             }
                             else {  //meaning analysis is just monthly
                                 reportType = "Collections of " +
-                                        "cell ${analyticsViewModel.selectedCellID.intValue} in " +
-                                        "Block ${analyticsViewModel.selectedBlockId.intValue } " +
+                                        "cell ${analyticsViewModel.selectedCellNum.intValue} in " +
+                                        "Block ${analyticsViewModel.selectedCellNum.intValue } " +
                                         "for ${analyticsViewModel.selectedMonth.value}," +
                                         "${analyticsViewModel.selectedYear}"
 
@@ -281,13 +284,13 @@ fun AnalyticsScreen(
                             }
                         } else if (analyticsViewModel.levelOfAnalysis.value == "Block") {
                             if (analyticsViewModel.isPastXDaysAnalysis.value){
-                                reportType = "Block ${analyticsViewModel.selectedBlockId.intValue } " +
+                                reportType = "Block ${analyticsViewModel.selectedBlockNum.intValue } " +
                                         "for duration of Past ${analyticsViewModel.pastDays.value} days"
                                 return@remember analyticsViewModel.getBlockCollectionsForPastDays()
                             }
                             else if (analyticsViewModel.isCustomRangeAnalysis.value) {
                                 reportType = "Collections of " +
-                                        "Block ${analyticsViewModel.selectedBlockId.intValue } " +
+                                        "Block ${analyticsViewModel.selectedBlockNum.intValue } " +
                                         "from ${SimpleDateFormat("dd MMM,yyyy").format(
                                             localDateToJavaDate(analyticsViewModel.startDate.value)
                                         )} "+
@@ -298,7 +301,7 @@ fun AnalyticsScreen(
                             }
                             else { //monthly
                                 reportType = "Collections of " +
-                                        "Block ${analyticsViewModel.selectedBlockId.intValue } " +
+                                        "Block ${analyticsViewModel.selectedBlockNum.intValue } " +
                                         "for ${analyticsViewModel.selectedMonth.value}, " +
                                         "${analyticsViewModel.selectedYear}"
                                 return@remember analyticsViewModel.getMonthlyBlockCollections()
