@@ -18,8 +18,11 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.produceState
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
@@ -28,13 +31,16 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.smartpoultry.data.dataModels.DailyEggCollection
 import com.example.smartpoultry.data.dataSource.room.entities.cells.Cells
 import com.example.smartpoultry.presentation.composables.MyCardInventory
 import com.example.smartpoultry.presentation.composables.MyVerticalSpacer
 import com.example.smartpoultry.presentation.composables.NormButton
 import com.example.smartpoultry.presentation.composables.RecentEggsLineChart
+import com.example.smartpoultry.presentation.screens.settingsScreen.PAST_DAYS_KEY
 import com.ramcosta.composedestinations.annotation.Destination
 import java.text.SimpleDateFormat
+
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Destination
@@ -49,8 +55,19 @@ fun HomeScreen(
     val homeViewModel: HomeViewModel = hiltViewModel()
     val totalBlocks = homeViewModel.totalBlocks.collectAsState()
     val totalCells = homeViewModel.totalCells.collectAsState()
-    val dailyEggCollections by homeViewModel.eggCollectionRecords.collectAsState()
+    //val dailyEggCollections by homeViewModel.eggCollectionRecords.collectAsState()
     val userRole by homeViewModel.userRole.collectAsState()
+
+    val pastDaysState = remember { homeViewModel.dataStore.readData(PAST_DAYS_KEY) }.collectAsState(initial = "0")
+    val pastDays = pastDaysState.value.toIntOrNull() ?: 0
+
+    val dailyEggsForPastDays: State<List<DailyEggCollection>> = produceState(initialValue = emptyList(), key1 = pastDays) {
+        if (pastDays > 0) {
+            homeViewModel.getOverallCollectionsForPastDays(pastDays).collect {
+                value = it
+            }
+        }
+    }
 
     Surface(
         modifier = Modifier
@@ -77,7 +94,7 @@ fun HomeScreen(
                     .fillMaxWidth()
             ) {
                 Text(
-                    text = "Past days fom datastore: ${homeViewModel.numOfPastDays}" ,//"Logged in as: $userRole",
+                    text = "Past days fom datastore: $pastDays and daily records: ${dailyEggsForPastDays.value.size}" ,//"Logged in as: $userRole",
                     modifier = Modifier
                         .padding(6.dp)
                         .align(Alignment.Start)
@@ -166,7 +183,8 @@ fun HomeScreen(
                 Text(text = "Recent Production Trends:")
                 MyVerticalSpacer(height = 10)
                 //Create graph
-               if (dailyEggCollections.isNotEmpty()) RecentEggsLineChart(dailyEggCollections = dailyEggCollections)
+               if (dailyEggsForPastDays.value.isNotEmpty()) RecentEggsLineChart(dailyEggCollections = dailyEggsForPastDays.value)
+               //if (dailyEggForPastDays.isNotEmpty()) RecentEggsLineChart(dailyEggCollections = dailyEggForPastDays)
 
             }
 
