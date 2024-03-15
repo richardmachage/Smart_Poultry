@@ -37,13 +37,11 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.smartpoultry.R
 import com.example.smartpoultry.presentation.composables.MyDatePicker
 import com.example.smartpoultry.presentation.composables.NormButton
-import com.example.smartpoultry.presentation.theme.SmartPoultryTheme
 import com.example.smartpoultry.presentation.uiModels.CellEggCollection
 import com.ramcosta.composedestinations.annotation.Destination
 import com.vanpra.composematerialdialogs.rememberMaterialDialogState
@@ -137,17 +135,22 @@ fun EggScreen() {
                                                 shape = RoundedCornerShape(10.dp)
                                             )
                                             .width(
-                                                (LocalConfiguration.current.screenWidthDp / 4).dp
+                                                (LocalConfiguration.current.screenWidthDp / 3).dp
                                             )
 
                                     ) {
                                         Text(
-                                            text = "Cell: ${listOfBlocks[blockIndex].cells[cellIndex].cellNum}",
+                                            text = "Cell Num: ${cell.cellNum}",//${listOfBlocks[blockIndex].cells[cellIndex].cellNum}",
                                             modifier = Modifier
                                                 .padding(6.dp)
                                                 .align(Alignment.CenterHorizontally)
                                         )
-
+                                        Text(
+                                            text = "Chicken: ${cell.henCount}",//${listOfBlocks[blockIndex].cells[cellIndex].cellNum}",
+                                            modifier = Modifier
+                                                .padding(6.dp)
+                                                .align(Alignment.CenterHorizontally)
+                                        )
                                         var textFieldValueState by remember {
                                             mutableStateOf(TextFieldValue(text = listOfBlocks[blockIndex].cells[cellIndex].eggCount.toString()))
                                         }
@@ -219,13 +222,5 @@ fun EggScreen() {
 
             //MyBlocks(numOfBlocks = 20)
         }
-    }
-}
-
-@Preview(showSystemUi = true, showBackground = true)
-@Composable
-fun PrevEgg() {
-    SmartPoultryTheme {
-        // EggScreen()
     }
 }
