@@ -39,6 +39,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.smartpoultry.data.dataSource.room.entities.blocks.Blocks
 import com.example.smartpoultry.data.dataSource.room.entities.cells.Cells
 import com.example.smartpoultry.presentation.composables.MyInputDialog
 import com.example.smartpoultry.presentation.composables.MyOutlineTextFiled
@@ -51,12 +52,13 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 @Composable
 fun CellsScreen(
     navigator: DestinationsNavigator,
-    blockId: Int
+    //blockId: Int
+    block : Blocks
 ) {
     val cellsViewModel = hiltViewModel<CellsViewModel>()
     val userRole by cellsViewModel.userRole.collectAsState()
     val listOfCells by remember {
-        cellsViewModel.getCellsForBLock(blockId)
+        cellsViewModel.getCellsForBLock(block.blockId)
     }.collectAsState()
     val context = LocalContext.current
 
@@ -147,7 +149,7 @@ fun CellsScreen(
         title = "Create New Cell",
         onConfirm = { 
                     cellsViewModel.onAddNewCell(Cells(
-                        blockId = blockId,
+                        blockId = block.blockId,
                         cellNum = if (listOfCells.isNotEmpty()) listOfCells.size + 1 else 1
                     ))
             showAddCellDialog = false
@@ -201,7 +203,7 @@ fun CellsScreen(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceEvenly
                 ) {
-                    Text(text = "Block : $blockId")
+                    Text(text = "Block : ${block.blockId}")
                     Text(text = "Number of cells is : ${listOfCells.size}")
                 }
 

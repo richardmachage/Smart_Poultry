@@ -176,7 +176,7 @@ fun BlockCellScreen(
                                 .clickable {
                                     navigator.navigate(
                                         CellsScreenDestination(
-                                            blockWithCells.block.blockId
+                                          blockWithCells.block
                                         )
                                     )
                                 }
