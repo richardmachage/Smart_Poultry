@@ -25,7 +25,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -37,10 +36,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.smartpoultry.data.dataSource.room.entities.cells.Cells
 import com.example.smartpoultry.presentation.composables.MyInputDialog
+import com.example.smartpoultry.presentation.composables.MyOutlineTextFiled
 import com.example.smartpoultry.presentation.composables.MyVerticalSpacer
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -71,16 +72,34 @@ fun CellsScreen(
                 Column {
                     Text(text = "Cell ID : ${cell.cellId}")
 
-                    TextField( //shows cell num
+                    MyOutlineTextFiled(
+                        label = cellsViewModel.cellNumText.value,
+                        keyboardType = KeyboardType.Number ,
+                        initialText = cellsViewModel.cellNumText.value,
+                        onValueChange = {
+                            cellsViewModel.cellNumText.value = it
+                        }
+                    )
+                    /*TextField( //shows cell num
                         value = cellsViewModel.cellNumText.value,
                         onValueChange = {
                             cellsViewModel.cellNumText.value = it
                         },
                         label = { Text(text = "Cell Number") }
-                    )
+                    )*/
+
                     MyVerticalSpacer(height = 5)
 
-                    TextField(
+                    MyOutlineTextFiled(
+                        label = "Number of Hen",
+                        keyboardType = KeyboardType.Number ,
+                        initialText = cellsViewModel.henCountText.value,
+                        onValueChange = {
+                            cellsViewModel.henCountText.value = it
+
+                        }
+                    )
+                    /*TextField(
                         //shows hen count
                         value = cellsViewModel.henCountText.value,
                         onValueChange = {
@@ -88,7 +107,7 @@ fun CellsScreen(
                         },
                         label = { Text(text = "Hen Count") },
 
-                        )
+                        )*/
                 }
             },
             confirmButton = {
