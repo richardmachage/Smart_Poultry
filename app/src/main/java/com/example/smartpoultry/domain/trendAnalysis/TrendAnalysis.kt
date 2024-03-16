@@ -1,6 +1,7 @@
 package com.example.smartpoultry.domain.trendAnalysis
 
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import com.example.smartpoultry.data.dataSource.datastore.AppDataStore
 import com.example.smartpoultry.data.dataSource.room.entities.cells.Cells
@@ -35,6 +36,9 @@ class TrendAnalysis @Inject constructor(
                 THRESHOLD_RATIO = (it.toIntOrNull() ?: 0).toDouble()
             }
 
+        }
+
+        CoroutineScope(Dispatchers.IO).launch {
             dataStore.readData(CONSUCUTIVE_DAYS_KEY).collect(){
                 CONSUCUTIVE_DAYS = it.toIntOrNull() ?: 0
             }
@@ -59,35 +63,49 @@ class TrendAnalysis @Inject constructor(
     //perfom analyis for each cell
     @RequiresApi(Build.VERSION_CODES.O)
     suspend fun performAnalysis() : Result<List<Cells>>{
+        Log.d("cell analysis", "Started...")
         if (listOfAllCells.isNotEmpty()){
             for (cell in listOfAllCells){
+                Log.d("Analyzing:","cellID: ${cell.cellId}")
                 try {
-                    if (flagCell(cell.cellId)) listOfFlaggedCells.add(cell)
+                    CoroutineScope(Dispatchers.Default).launch {
+                        if (flagCell(cell.cellId)) listOfFlaggedCells.add(cell)
+                    }
+
                 }catch (e : Exception){
+                    Log.d("E exception:","while analyzing cellID: ${cell.cellId}")
                     return Result.failure(e)
                 }
             }
+         //   return Result.success(listOfFlaggedCells)
+        }else{
+            Log.d("cell analysis:","list is empty")
         }
-        return Result.success(listOfAllCells)
+        Log.d("cell analysis", "Ended here...")
+        return Result.success(listOfFlaggedCells)
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
     suspend fun flagCell(cellId : Int ) : Boolean{
         var isUnderPerforming = false
-        val cellRecordsForPastDays = eggCollectionRepository.getCellEggCollectionForPastDays(
-            cellId = cellId,
-            startDate = Date(
-                localDateToJavaDate(
-                    getDateDaysAgo(10)
+        CoroutineScope(Dispatchers.IO).launch{
+            val cellRecordsForPastDays = eggCollectionRepository.getCellEggCollectionForPastDays(
+                cellId = cellId,
+                startDate = Date(
+                    localDateToJavaDate(
+                        getDateDaysAgo(10)
+                    )
                 )
             )
-        )
-        cellRecordsForPastDays.collect{ records->
-            isUnderPerforming = checkConsecutiveUnderPerformance(
-                eggRecords =  records,
-                thresholdRatio = THRESHOLD_RATIO,
-                consecutiveDays = CONSUCUTIVE_DAYS
-            )
+            CoroutineScope(Dispatchers.IO).launch {
+                cellRecordsForPastDays.collect{ records->
+                    isUnderPerforming = checkConsecutiveUnderPerformance(
+                        eggRecords =  records,
+                        thresholdRatio = 0.7,
+                        consecutiveDays = CONSUCUTIVE_DAYS
+                    )
+                }
+            }
 
 
         }

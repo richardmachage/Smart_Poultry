@@ -12,12 +12,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.work.OneTimeWorkRequestBuilder
-import androidx.work.WorkManager
 import com.example.smartpoultry.NavGraphs
 import com.example.smartpoultry.destinations.LogInScreenDestination
 import com.example.smartpoultry.destinations.MainScreenDestination
-import com.example.smartpoultry.domain.workers.DemoWorker
 import com.example.smartpoultry.presentation.theme.SmartPoultryTheme
 import com.ramcosta.composedestinations.DestinationsNavHost
 import com.ramcosta.composedestinations.annotation.Destination
@@ -34,8 +31,6 @@ class MainActivity (): ComponentActivity() {
 
         WorkManager.getInstance(applicationContext).enqueue(workRequest)*/
 
-        val request = OneTimeWorkRequestBuilder<DemoWorker>().build()
-        WorkManager.getInstance(applicationContext).enqueue(request)
         super.onCreate(savedInstanceState)
 
         installSplashScreen().apply {

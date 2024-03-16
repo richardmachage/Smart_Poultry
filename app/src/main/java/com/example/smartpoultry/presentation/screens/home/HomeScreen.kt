@@ -185,6 +185,13 @@ fun HomeScreen(
 
             }
 
+            MyVerticalSpacer(height = 10)
+
+            NormButton(
+                modifier = Modifier.fillMaxWidth(),
+                onButtonClick = { homeViewModel.fireWorker(context) },
+                btnName = "Perform Analysis"
+            )
             /*MyVerticalSpacer(height = 20)
 
             Column(//Recent feeds Block
