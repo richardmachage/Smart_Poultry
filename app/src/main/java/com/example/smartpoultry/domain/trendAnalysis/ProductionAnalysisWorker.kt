@@ -23,10 +23,10 @@ import java.time.LocalDate
 @HiltWorker
 class ProductionAnalysisWorker @AssistedInject constructor(
     @Assisted appContext : Context,
-   @Assisted params: WorkerParameters,
+   @Assisted workerParams: WorkerParameters,
     private val eggCollectionRepository: EggCollectionRepository,
     private val cellsRepository: CellsRepository,
-    ) : CoroutineWorker(appContext, params) {
+    ) : CoroutineWorker(appContext, workerParams) {
     val  THRESHOLD_RATIO  : Double = 0.5
     val CONSUCUTIVE_DAYS : Int = 5
 

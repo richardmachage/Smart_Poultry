@@ -49,7 +49,6 @@ import java.text.SimpleDateFormat
 fun HomeScreen(
     //modifier: Modifier
 ) {
-
     val context = LocalContext.current
     //viewmodel initialization
     val homeViewModel: HomeViewModel = hiltViewModel()
@@ -186,7 +185,7 @@ fun HomeScreen(
 
             }
 
-            MyVerticalSpacer(height = 20)
+            /*MyVerticalSpacer(height = 20)
 
             Column(//Recent feeds Block
                 modifier = Modifier
@@ -202,7 +201,7 @@ fun HomeScreen(
             ) {
                 Text(text = "Recent Feeding Trends:")
                 MyVerticalSpacer(height = 10)
-                /* Chart(
+                *//* Chart(
                      chart = lineChart(),
                      model = ,
                      startAxis = rememberStartAxis(
@@ -214,8 +213,8 @@ fun HomeScreen(
                          title = "Date"
                      )
                  )
- */
-            }
+ *//*
+            }*/
         }
     }
 }
