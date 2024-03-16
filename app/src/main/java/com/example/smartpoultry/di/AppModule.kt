@@ -18,6 +18,7 @@ import com.example.smartpoultry.domain.repository.CellsRepository
 import com.example.smartpoultry.domain.repository.EggCollectionRepository
 import com.example.smartpoultry.domain.repository.FeedsRepository
 import com.example.smartpoultry.domain.repository.FirebaseAuthRepository
+import com.example.smartpoultry.domain.trendAnalysis.TrendAnalysis
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import dagger.Module
@@ -82,5 +83,11 @@ object AppModule {
     @Singleton
     fun providesFirebaseAuthRepository(firebaseAuth: FirebaseAuth, fireStoreDb: FirebaseFirestore, dataStore: AppDataStore) : FirebaseAuthRepository{
         return FirebaseAuthRepositoryImpl(firebaseAuth = firebaseAuth, firebaseFirestore = fireStoreDb, dataStore= dataStore)
+    }
+
+    @Provides
+    @Singleton
+    fun providesTrendAnalysis(eggCollectionRepository: EggCollectionRepository, cellsRepository: CellsRepository,dataStore: AppDataStore) : TrendAnalysis{
+        return TrendAnalysis(eggCollectionRepository,cellsRepository, dataStore)
     }
 }
