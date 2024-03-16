@@ -7,7 +7,8 @@ import com.example.smartpoultry.data.dataSource.room.entities.cells.Cells
 import com.example.smartpoultry.data.dataSource.room.entities.eggCollection.EggCollection
 import com.example.smartpoultry.domain.repository.CellsRepository
 import com.example.smartpoultry.domain.repository.EggCollectionRepository
-import com.example.smartpoultry.utils.getDateDaysAgo
+import com.example.smartpoultry.presentation.screens.settingsScreen.CONSUCUTIVE_DAYS_KEY
+import com.example.smartpoultry.presentation.screens.settingsScreen.THRESHOLD_RATIO_KEY
 import com.example.smartpoultry.utils.localDateToJavaDate
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -15,12 +16,33 @@ import kotlinx.coroutines.launch
 import java.sql.Date
 import java.time.LocalDate
 import javax.inject.Inject
+import kotlin.properties.Delegates
 
 class TrendAnalysis @Inject constructor(
     private val eggCollectionRepository: EggCollectionRepository,
     private val cellsRepository: CellsRepository,
     private val dataStore: AppDataStore,
 ){
+    //val    : Double = 0.5
+    //val CONSUCUTIVE_DAYS : Int = 5
+
+     var THRESHOLD_RATIO by Delegates.notNull<Double>()
+     var CONSUCUTIVE_DAYS by Delegates.notNull<Int>()
+
+    init {
+        CoroutineScope(Dispatchers.IO).launch {
+            dataStore.readData(THRESHOLD_RATIO_KEY).collect{
+                THRESHOLD_RATIO = (it.toIntOrNull() ?: 0).toDouble()
+            }
+
+            dataStore.readData(CONSUCUTIVE_DAYS_KEY).collect(){
+                CONSUCUTIVE_DAYS = it.toIntOrNull() ?: 0
+            }
+        }
+
+        getAllCells()
+    }
+
     //first get all cells
     var listOfAllCells = mutableListOf<Cells>()
     var listOfFlaggedCells = mutableListOf<Cells>()
