@@ -114,35 +114,9 @@ class TrendAnalysis @Inject constructor(
             }
 
         }
-      //  Log.d("Analysis", "finished for cell $cellId")
         return isUnderPerforming
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    suspend fun flagCell(cellId: Int): Deferred<Boolean> = coroutineScope {
-        // Initialize CompletableDeferred<Boolean>
-        var isUnderPerforming = CompletableDeferred<Boolean>()
-
-        // Launch a coroutine for collecting and processing the flow
-        launch(Dispatchers.IO) {
-            var result: Boolean
-            eggCollectionRepository.getCellEggCollectionForPastDays(
-                cellId= cellId,
-                startDate = Date(localDateToJavaDate(getDateDaysAgo(10)))
-            )
-                .collect { records ->
-                    // Process records to determine underperformance
-                    result = checkConsecutiveUnderPerformance(
-                        eggRecords = records,
-                        thresholdRatio = THRESHOLD_RATIO,
-                        consecutiveDays = CONSUCUTIVE_DAYS
-                    )
-                    isUnderPerforming.complete(result)
-                }
-        }
-        isUnderPerforming
-
-    }
 
     private fun checkConsecutiveUnderPerformance(
         eggRecords: List<EggCollection>, //This list should always be for like the past number of X days specified
