@@ -27,13 +27,14 @@ class TrendAnalysis @Inject constructor(
     //val    : Double = 0.5
     //val CONSUCUTIVE_DAYS : Int = 5
 
-     var THRESHOLD_RATIO by Delegates.notNull<Double>()
+     var THRESHOLD_RATIO by Delegates.notNull<Float>()
      var CONSUCUTIVE_DAYS by Delegates.notNull<Int>()
 
     init {
         CoroutineScope(Dispatchers.IO).launch {
             dataStore.readData(THRESHOLD_RATIO_KEY).collect{
-                THRESHOLD_RATIO = (it.toIntOrNull() ?: 0).toDouble()
+                THRESHOLD_RATIO = it.toFloatOrNull() ?: 0.0f
+                Log.d("ratio from datastore", THRESHOLD_RATIO.toString())
             }
 
         }
@@ -49,9 +50,9 @@ class TrendAnalysis @Inject constructor(
 
     //first get all cells
     var listOfAllCells = mutableListOf<Cells>()
-    var listOfFlaggedCells = mutableListOf<Cells>()
+    private var listOfFlaggedCells = mutableListOf<Cells>()
 
-    fun getAllCells(){
+    private fun getAllCells(){
         CoroutineScope(Dispatchers.IO).launch {
             cellsRepository.getAllCells().collect {
                 listOfAllCells.addAll(it)
@@ -62,20 +63,28 @@ class TrendAnalysis @Inject constructor(
 
     //perfom analyis for each cell
     @RequiresApi(Build.VERSION_CODES.O)
-    suspend fun performAnalysis() : Result<List<Cells>>{
+    fun performAnalysis() : Result<List<Cells>>{
         Log.d("cell analysis", "Started...")
         if (listOfAllCells.isNotEmpty()){
             for (cell in listOfAllCells){
-                Log.d("Analyzing:","cellID: ${cell.cellId}")
+                Log.d("Now Analyzing:","cell: ${cell.cellNum} in Block: ${cell.blockId}")
                 try {
                     CoroutineScope(Dispatchers.Default).launch {
-                        if (flagCell(cell.cellId)) listOfFlaggedCells.add(cell)
+                        if (flagCell(cell.cellId)) {
+                            listOfFlaggedCells.add(cell)
+                            Log.d("Flagged state:","cell ${cell.cellNum} in Block: ${cell.blockId} flagged")
+
+                        }else{
+                            Log.d("Flagged state:","cell ${cell.cellNum} in Block: ${cell.blockId} Not flagged")
+                        }
                     }
 
                 }catch (e : Exception){
                     Log.d("E exception:","while analyzing cellID: ${cell.cellId}")
                     return Result.failure(e)
                 }
+                Log.d("Finished Analyzing:","cell: ${cell.cellNum} in Block: ${cell.blockId}")
+
             }
          //   return Result.success(listOfFlaggedCells)
         }else{
@@ -89,15 +98,23 @@ class TrendAnalysis @Inject constructor(
     suspend fun flagCell(cellId : Int ) : Boolean{
         var isUnderPerforming = false
         CoroutineScope(Dispatchers.IO).launch{
-            val cellRecordsForPastDays = eggCollectionRepository.getCellEggCollectionForPastDays(
+            eggCollectionRepository.getCellEggCollectionForPastDays(
                 cellId = cellId,
                 startDate = Date(
                     localDateToJavaDate(
                         getDateDaysAgo(10)
                     )
                 )
-            )
-            CoroutineScope(Dispatchers.IO).launch {
+            ).collect{records->
+                CoroutineScope(Dispatchers.Default).launch {
+                    isUnderPerforming = checkConsecutiveUnderPerformance(
+                        eggRecords =  records,
+                        thresholdRatio = THRESHOLD_RATIO,
+                        consecutiveDays = CONSUCUTIVE_DAYS
+                    )
+                }
+            }
+           /* CoroutineScope(Dispatchers.IO).launch {
                 cellRecordsForPastDays.collect{ records->
                     isUnderPerforming = checkConsecutiveUnderPerformance(
                         eggRecords =  records,
@@ -106,8 +123,7 @@ class TrendAnalysis @Inject constructor(
                     )
                 }
             }
-
-
+*/
         }
 
         return isUnderPerforming
@@ -116,7 +132,7 @@ class TrendAnalysis @Inject constructor(
 
     private fun checkConsecutiveUnderPerformance(
         eggRecords: List<EggCollection>, //This list should always be for like the past number of X days specified
-        thresholdRatio: Double,
+        thresholdRatio: Float,
         consecutiveDays: Int
     ): Boolean {
         if (eggRecords.isEmpty() || consecutiveDays <= 0) return false
