@@ -13,6 +13,8 @@ import com.example.smartpoultry.presentation.screens.settingsScreen.THRESHOLD_RA
 import com.example.smartpoultry.utils.localDateToJavaDate
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import java.sql.Date
 import java.time.LocalDate
@@ -23,16 +25,14 @@ class TrendAnalysis @Inject constructor(
     private val eggCollectionRepository: EggCollectionRepository,
     private val cellsRepository: CellsRepository,
     private val dataStore: AppDataStore,
-){
-    //val    : Double = 0.5
-    //val CONSUCUTIVE_DAYS : Int = 5
+) {
 
-     var THRESHOLD_RATIO by Delegates.notNull<Float>()
-     var CONSUCUTIVE_DAYS by Delegates.notNull<Int>()
+    var THRESHOLD_RATIO by Delegates.notNull<Float>()
+    var CONSUCUTIVE_DAYS by Delegates.notNull<Int>()
 
     init {
         CoroutineScope(Dispatchers.IO).launch {
-            dataStore.readData(THRESHOLD_RATIO_KEY).collect{
+            dataStore.readData(THRESHOLD_RATIO_KEY).collect {
                 THRESHOLD_RATIO = it.toFloatOrNull() ?: 0.0f
                 Log.d("ratio from datastore", THRESHOLD_RATIO.toString())
             }
@@ -40,7 +40,7 @@ class TrendAnalysis @Inject constructor(
         }
 
         CoroutineScope(Dispatchers.IO).launch {
-            dataStore.readData(CONSUCUTIVE_DAYS_KEY).collect(){
+            dataStore.readData(CONSUCUTIVE_DAYS_KEY).collect() {
                 CONSUCUTIVE_DAYS = it.toIntOrNull() ?: 0
             }
         }
@@ -52,7 +52,7 @@ class TrendAnalysis @Inject constructor(
     var listOfAllCells = mutableListOf<Cells>()
     private var listOfFlaggedCells = mutableListOf<Cells>()
 
-    private fun getAllCells(){
+    private fun getAllCells() {
         CoroutineScope(Dispatchers.IO).launch {
             cellsRepository.getAllCells().collect {
                 listOfAllCells.addAll(it)
@@ -61,43 +61,53 @@ class TrendAnalysis @Inject constructor(
     }
 
 
-    //perfom analyis for each cell
+    //perform analysis for each cell
     @RequiresApi(Build.VERSION_CODES.O)
-    fun performAnalysis() : Result<List<Cells>>{
-        Log.d("cell analysis", "Started...")
-        if (listOfAllCells.isNotEmpty()){
-            for (cell in listOfAllCells){
-                Log.d("Now Analyzing:","cell: ${cell.cellNum} in Block: ${cell.blockId}")
-                try {
-                    CoroutineScope(Dispatchers.Default).launch {
-                        if (flagCell(cell.cellId)) {
+    suspend fun performAnalysis(): Result<List<Cells>> = coroutineScope {
+        val deferred = async(Dispatchers.Default) {
+            Log.d("cell analysis", "Started...")
+            if (listOfAllCells.isNotEmpty()) {
+                for (cell in listOfAllCells) {
+                    Log.d("Now Analyzing:", "cell: ${cell.cellNum} in Block: ${cell.blockId}")
+                    try {
+                        val deferred2 = async {
+                            /* }
+                             CoroutineScope(Dispatchers.Default).launch {
+                            */     if (!flagCell(cell.cellId)) {
                             listOfFlaggedCells.add(cell)
-                            Log.d("Flagged state:","cell ${cell.cellNum} in Block: ${cell.blockId} flagged")
+                            Log.d(
+                                "Flagged state:",
+                                "cell ${cell.cellNum} in Block: ${cell.blockId} flagged"
+                            )
 
-                        }else{
-                            Log.d("Flagged state:","cell ${cell.cellNum} in Block: ${cell.blockId} Not flagged")
+                        } else {
+                            Log.d(
+                                "Flagged state:",
+                                "cell ${cell.cellNum} in Block: ${cell.blockId} Not flagged"
+                            )
                         }
+                        }.await()
+
+                    } catch (e: Exception) {
+                        Log.d("E exception:", "while analyzing cellID: ${cell.cellId}")
+                        //return@async Result.failure(e)
                     }
-
-                }catch (e : Exception){
-                    Log.d("E exception:","while analyzing cellID: ${cell.cellId}")
-                    return Result.failure(e)
+                    Log.d("Finished Analyzing:", "cell: ${cell.cellNum} in Block: ${cell.blockId}")
                 }
-                Log.d("Finished Analyzing:","cell: ${cell.cellNum} in Block: ${cell.blockId}")
-
+                return@async Result.success(listOfFlaggedCells)
+            } else {
+                Log.d("cell analysis:", "list is empty")
             }
-         //   return Result.success(listOfFlaggedCells)
-        }else{
-            Log.d("cell analysis:","list is empty")
+            Log.d("cell analysis", "Ended here...")
+            return@async Result.success(listOfFlaggedCells)
         }
-        Log.d("cell analysis", "Ended here...")
-        return Result.success(listOfFlaggedCells)
+        deferred.await()
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    suspend fun flagCell(cellId : Int ) : Boolean{
+    suspend fun flagCell(cellId: Int): Boolean {
         var isUnderPerforming = false
-        CoroutineScope(Dispatchers.IO).launch{
+        CoroutineScope(Dispatchers.IO).launch {
             eggCollectionRepository.getCellEggCollectionForPastDays(
                 cellId = cellId,
                 startDate = Date(
@@ -105,25 +115,25 @@ class TrendAnalysis @Inject constructor(
                         getDateDaysAgo(10)
                     )
                 )
-            ).collect{records->
+            ).collect { records ->
                 CoroutineScope(Dispatchers.Default).launch {
                     isUnderPerforming = checkConsecutiveUnderPerformance(
-                        eggRecords =  records,
+                        eggRecords = records,
                         thresholdRatio = THRESHOLD_RATIO,
                         consecutiveDays = CONSUCUTIVE_DAYS
                     )
                 }
             }
-           /* CoroutineScope(Dispatchers.IO).launch {
-                cellRecordsForPastDays.collect{ records->
-                    isUnderPerforming = checkConsecutiveUnderPerformance(
-                        eggRecords =  records,
-                        thresholdRatio = 0.7,
-                        consecutiveDays = CONSUCUTIVE_DAYS
-                    )
-                }
-            }
-*/
+            /* CoroutineScope(Dispatchers.IO).launch {
+                 cellRecordsForPastDays.collect{ records->
+                     isUnderPerforming = checkConsecutiveUnderPerformance(
+                         eggRecords =  records,
+                         thresholdRatio = 0.7,
+                         consecutiveDays = CONSUCUTIVE_DAYS
+                     )
+                 }
+             }
+ */
         }
 
         return isUnderPerforming

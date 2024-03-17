@@ -24,7 +24,7 @@ class AnalysisWorker @AssistedInject constructor(
         Log.d("ConsucutiveDays: ", trendAnalysis.CONSUCUTIVE_DAYS.toString())
         Log.d("Cells ", trendAnalysis.listOfAllCells.size.toString())
 
-        var result = trendAnalysis.performAnalysis()
+        val result = trendAnalysis.performAnalysis()
         result.onSuccess {
             Log.d("on success:","Flagged cells ${it.size}")
         }
