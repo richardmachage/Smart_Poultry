@@ -72,10 +72,7 @@ class TrendAnalysis @Inject constructor(
                 for (cell in listOfAllCells) {
                     Log.d("Now Analyzing:", "cell: ${cell.cellNum} in Block: ${cell.blockId}")
                     try {
-                       // val deferred2 = async {
-                            /* }
-                             CoroutineScope(Dispatchers.Default).launch {
-                            */     if (flagCell(cell.cellId)) {
+                        if (flagCell(cell.cellId)) {
                             listOfFlaggedCells.add(cell)
                             Log.d(
                                 "Flagged state:",
@@ -88,7 +85,7 @@ class TrendAnalysis @Inject constructor(
                                 "cell ${cell.cellNum} in Block: ${cell.blockId} Not flagged"
                             )
                         }
-                      //  }.await()
+                        //  }.await()
 
                     } catch (e: Exception) {
                         Log.d("E exception:", "while analyzing cellID: ${cell.cellId}")
@@ -107,7 +104,7 @@ class TrendAnalysis @Inject constructor(
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    suspend fun flagCell(cellId: Int): Boolean {
+    fun flagCell(cellId: Int): Boolean {
         var isUnderPerforming = false
         CoroutineScope(Dispatchers.IO).launch {
             eggCollectionRepository.getCellEggCollectionForPastDays(
@@ -157,9 +154,9 @@ class TrendAnalysis @Inject constructor(
         var count = 0
         for (record in eggRecords) {
             // Calculate the ratio of eggCount to hen count
-            Log.d("eggs",record.eggCount.toString())
+            Log.d("eggs", record.eggCount.toString())
             Log.d("hencount", record.henCount.toString())
-          //  val ratio = record.henCount.toFloat() / record.eggCount.toFloat()
+            //  val ratio = record.henCount.toFloat() / record.eggCount.toFloat()
             val ratio = record.eggCount.toFloat() / record.henCount.toFloat()
 
             if (ratio < thresholdRatio) {
