@@ -13,12 +13,16 @@ import dagger.assisted.AssistedInject
 
 @HiltWorker
 class AnalysisWorker @AssistedInject constructor(
-    @Assisted context : Context,
+    @Assisted val context : Context,
     @Assisted workerParameters: WorkerParameters,
     private val trendAnalysis: TrendAnalysis
 ) : CoroutineWorker(context, workerParameters){
+
+    //private val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager?
+
     @RequiresApi(Build.VERSION_CODES.O)
     override suspend fun doWork(): Result {
+        //makeStatusNotification("Analysis started: ", context)
         Log.d("Analysis worker: ", "started")
         Log.d("Threshold ratio: ", trendAnalysis.THRESHOLD_RATIO.toString())
         Log.d("ConsucutiveDays: ", trendAnalysis.CONSUCUTIVE_DAYS.toString())
@@ -35,6 +39,7 @@ class AnalysisWorker @AssistedInject constructor(
         Log.d("Analysis worker: ", "ended")
 
 
+        //notificationManager?.cancel(NOTIFICATION_ID)
         return Result.success()
     }
 

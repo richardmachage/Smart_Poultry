@@ -15,6 +15,7 @@ import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
@@ -70,63 +71,66 @@ class TrendAnalysis @Inject constructor(
     @RequiresApi(Build.VERSION_CODES.O)
     suspend fun performAnalysis(): Result<List<Cells>> = coroutineScope {
 
-        val deferredResults = listOfAllCells.map { cell->
-            async (Dispatchers.Default){
-                if (flagCell(cell.cellId).await()){
+        val deferredResults = listOfAllCells.map { cell ->
+            async(Dispatchers.Default) {
+               // if (flagCell(cell.cellId).await())
+                if(myFlagCell(cell.cellId).await())
+                {
                     cell
-                }else null
+                } else null
             }
         }
 
         val flaggedCells = deferredResults.awaitAll().filterNotNull()
         Result.success(flaggedCells)
-      /*  val deferred = async(Dispatchers.Default) {
-            Log.d("cell analysis", "Started...")
-            if (listOfAllCells.isNotEmpty()) {
-                for (cell in listOfAllCells) {
-                    Log.d("Now Analyzing:", "cell: ${cell.cellNum} in Block: ${cell.blockId}")
-                    try {
-                        if (flagCell(cell.cellId)) {
-                            listOfFlaggedCells.add(cell)
-                            Log.d(
-                                "Flagged state:",
-                                "cell ${cell.cellNum} in Block: ${cell.blockId} flagged"
-                            )
+    }
 
-                        } else {
-                            Log.d(
-                                "Flagged state:",
-                                "cell ${cell.cellNum} in Block: ${cell.blockId} Not flagged"
-                            )
-                        }
-                        //  }.await()
-
-                    } catch (e: Exception) {
-                        Log.d("E exception:", "while analyzing cellID: ${cell.cellId}")
-                        //return@async Result.failure(e)
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun myFlagCell(cellId: Int): Deferred<Boolean> {
+        val isUnderPerforming = CompletableDeferred<Boolean>()
+        CoroutineScope(Dispatchers.IO).launch {
+            var result = false
+            Log.d("Analysis", "started cell $cellId")
+            eggCollectionRepository.getCellEggCollectionForPastDays(
+                cellId= cellId,
+                startDate = Date(
+                    localDateToJavaDate(getDateDaysAgo(10))
+                )
+            ).collect{records->
+                var count = 0
+                for (record in records){
+                    val ratio = record.eggCount.toFloat() / record.henCount.toFloat()
+                    Log.d("Compare", "is $ratio < $THRESHOLD_RATIO")
+                    if (ratio <= THRESHOLD_RATIO){
+                        count++
+                        if (count >= CONSUCUTIVE_DAYS) result = true
+                    }else{
+                        count = 0
                     }
-                    Log.d("Finished Analyzing:", "cell: ${cell.cellNum} in Block: ${cell.blockId}")
                 }
-                return@async Result.success(listOfFlaggedCells)
-            } else {
-                Log.d("cell analysis:", "list is empty")
+                Log.d("Flag status", "isFlagged $result")
+                isUnderPerforming.complete(result)
             }
-            Log.d("cell analysis", "Ended here...")
-            return@async Result.success(listOfFlaggedCells)
+
         }
-        deferred.await()*/
+      //  Log.d("Analysis", "finished for cell $cellId")
+        return isUnderPerforming
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    suspend fun flagCell(cellId: Int): Deferred<Boolean> = coroutineScope{
+    suspend fun flagCell(cellId: Int): Deferred<Boolean> = coroutineScope {
         // Initialize CompletableDeferred<Boolean>
         var isUnderPerforming = CompletableDeferred<Boolean>()
 
         // Launch a coroutine for collecting and processing the flow
         launch(Dispatchers.IO) {
-            var  result: Boolean
-            eggCollectionRepository.getCellEggCollectionForPastDays(10, startDate = Date(localDateToJavaDate(getDateDaysAgo(10))))
-                .collect{records->
+            var result: Boolean
+            eggCollectionRepository.getCellEggCollectionForPastDays(
+                cellId= cellId,
+                startDate = Date(localDateToJavaDate(getDateDaysAgo(10)))
+            )
+                .collect { records ->
                     // Process records to determine underperformance
                     result = checkConsecutiveUnderPerformance(
                         eggRecords = records,
@@ -137,31 +141,7 @@ class TrendAnalysis @Inject constructor(
                 }
         }
         isUnderPerforming
-       /* async {
-          //  var isUnderPerforming = false
-            CoroutineScope(Dispatchers.IO).launch {
-                eggCollectionRepository.getCellEggCollectionForPastDays(
-                    cellId = cellId,
-                    startDate = Date(
-                        localDateToJavaDate(
-                            getDateDaysAgo(10)
-                        )
-                    )
-                ).collect { records ->
-                    CoroutineScope(Dispatchers.Default).launch {
-                        isUnderPerforming = checkConsecutiveUnderPerformance(
-                            eggRecords = records,
-                            thresholdRatio = THRESHOLD_RATIO,
-                            consecutiveDays = CONSUCUTIVE_DAYS
-                        )
-                    }
-                }
 
-            }
-
-            return@async isUnderPerforming
-
-        }*/
     }
 
     private fun checkConsecutiveUnderPerformance(

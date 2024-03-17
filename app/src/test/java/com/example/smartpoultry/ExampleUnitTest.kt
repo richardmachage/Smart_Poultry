@@ -1,6 +1,6 @@
 package com.example.smartpoultry
 
-import org.junit.Assert.assertEquals
+import junit.framework.TestCase.assertTrue
 import org.junit.Test
 
 /**
@@ -9,9 +9,17 @@ import org.junit.Test
  * See [testing documentation](http://d.android.com/tools/testing).
  */
 class ExampleUnitTest {
+
     @Test
-    fun addition_isCorrect() {
-        assertEquals(4, 2 + 2)
+    fun myFlagCell_ThresholdMet_ReturnsTrue() {
+       val myTests = MyTests()
+
+        // Action
+        val result = myTests.myFlagCell(1)
+
+        // Assertion
+        assertTrue(result)
+
     }
 
 }
