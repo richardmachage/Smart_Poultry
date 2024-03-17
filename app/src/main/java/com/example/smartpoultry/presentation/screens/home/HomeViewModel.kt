@@ -6,6 +6,7 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.work.ExistingWorkPolicy
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import com.example.smartpoultry.data.dataModels.DailyEggCollection
@@ -82,8 +83,13 @@ class HomeViewModel @Inject constructor(
     }
 
     fun fireWorker(context: Context){
-        val request = OneTimeWorkRequestBuilder<AnalysisWorker>().build()
-        WorkManager.getInstance(context).enqueue(request)
+        val workRequest = OneTimeWorkRequestBuilder<AnalysisWorker>().build()
+        WorkManager.getInstance(context).enqueueUniqueWork(
+            "unique_analysis_work",
+            ExistingWorkPolicy.KEEP ,
+            workRequest
+        )
+
     }
 
 }

@@ -11,6 +11,7 @@ import com.example.smartpoultry.domain.repository.EggCollectionRepository
 import com.example.smartpoultry.presentation.screens.settingsScreen.CONSUCUTIVE_DAYS_KEY
 import com.example.smartpoultry.presentation.screens.settingsScreen.THRESHOLD_RATIO_KEY
 import com.example.smartpoultry.utils.localDateToJavaDate
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
@@ -118,8 +119,26 @@ class TrendAnalysis @Inject constructor(
 
     @RequiresApi(Build.VERSION_CODES.O)
     suspend fun flagCell(cellId: Int): Deferred<Boolean> = coroutineScope{
-        async {
-            var isUnderPerforming = false
+        // Initialize CompletableDeferred<Boolean>
+        var isUnderPerforming = CompletableDeferred<Boolean>()
+
+        // Launch a coroutine for collecting and processing the flow
+        launch(Dispatchers.IO) {
+            var  result: Boolean
+            eggCollectionRepository.getCellEggCollectionForPastDays(10, startDate = Date(localDateToJavaDate(getDateDaysAgo(10))))
+                .collect{records->
+                    // Process records to determine underperformance
+                    result = checkConsecutiveUnderPerformance(
+                        eggRecords = records,
+                        thresholdRatio = THRESHOLD_RATIO,
+                        consecutiveDays = CONSUCUTIVE_DAYS
+                    )
+                    isUnderPerforming.complete(result)
+                }
+        }
+        isUnderPerforming
+       /* async {
+          //  var isUnderPerforming = false
             CoroutineScope(Dispatchers.IO).launch {
                 eggCollectionRepository.getCellEggCollectionForPastDays(
                     cellId = cellId,
@@ -142,7 +161,7 @@ class TrendAnalysis @Inject constructor(
 
             return@async isUnderPerforming
 
-        }
+        }*/
     }
 
     private fun checkConsecutiveUnderPerformance(

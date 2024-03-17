@@ -33,6 +33,8 @@ class AnalysisWorker @AssistedInject constructor(
         }
 
         Log.d("Analysis worker: ", "ended")
+
+
         return Result.success()
     }
 
