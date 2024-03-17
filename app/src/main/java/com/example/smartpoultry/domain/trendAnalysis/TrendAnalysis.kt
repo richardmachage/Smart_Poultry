@@ -30,6 +30,11 @@ class TrendAnalysis @Inject constructor(
     var THRESHOLD_RATIO by Delegates.notNull<Float>()
     var CONSUCUTIVE_DAYS by Delegates.notNull<Int>()
 
+    //first get all cells
+    var listOfAllCells = mutableListOf<Cells>()
+    private var listOfFlaggedCells = mutableListOf<Cells>()
+
+
     init {
         CoroutineScope(Dispatchers.IO).launch {
             dataStore.readData(THRESHOLD_RATIO_KEY).collect {
@@ -48,9 +53,6 @@ class TrendAnalysis @Inject constructor(
         getAllCells()
     }
 
-    //first get all cells
-    var listOfAllCells = mutableListOf<Cells>()
-    private var listOfFlaggedCells = mutableListOf<Cells>()
 
     private fun getAllCells() {
         CoroutineScope(Dispatchers.IO).launch {
