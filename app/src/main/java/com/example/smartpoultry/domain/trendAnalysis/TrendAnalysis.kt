@@ -73,7 +73,7 @@ class TrendAnalysis @Inject constructor(
                        // val deferred2 = async {
                             /* }
                              CoroutineScope(Dispatchers.Default).launch {
-                            */     if (!flagCell(cell.cellId)) {
+                            */     if (flagCell(cell.cellId)) {
                             listOfFlaggedCells.add(cell)
                             Log.d(
                                 "Flagged state:",
