@@ -15,6 +15,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import java.sql.Date
@@ -67,7 +68,18 @@ class TrendAnalysis @Inject constructor(
     //perform analysis for each cell
     @RequiresApi(Build.VERSION_CODES.O)
     suspend fun performAnalysis(): Result<List<Cells>> = coroutineScope {
-        val deferred = async(Dispatchers.Default) {
+
+        val deferredResults = listOfAllCells.map { cell->
+            async (Dispatchers.Default){
+                if (flagCell(cell.cellId).await()){
+                    cell
+                }else null
+            }
+        }
+
+        val flaggedCells = deferredResults.awaitAll().filterNotNull()
+        Result.success(flaggedCells)
+      /*  val deferred = async(Dispatchers.Default) {
             Log.d("cell analysis", "Started...")
             if (listOfAllCells.isNotEmpty()) {
                 for (cell in listOfAllCells) {
@@ -101,43 +113,36 @@ class TrendAnalysis @Inject constructor(
             Log.d("cell analysis", "Ended here...")
             return@async Result.success(listOfFlaggedCells)
         }
-        deferred.await()
+        deferred.await()*/
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    suspend fun flagCell(cellId: Int): Deferred<Boolean> {
-        var isUnderPerforming = false
-        CoroutineScope(Dispatchers.IO).launch {
-            eggCollectionRepository.getCellEggCollectionForPastDays(
-                cellId = cellId,
-                startDate = Date(
-                    localDateToJavaDate(
-                        getDateDaysAgo(10)
+    suspend fun flagCell(cellId: Int): Deferred<Boolean> = coroutineScope{
+        async {
+            var isUnderPerforming = false
+            CoroutineScope(Dispatchers.IO).launch {
+                eggCollectionRepository.getCellEggCollectionForPastDays(
+                    cellId = cellId,
+                    startDate = Date(
+                        localDateToJavaDate(
+                            getDateDaysAgo(10)
+                        )
                     )
-                )
-            ).collect { records ->
-                CoroutineScope(Dispatchers.Default).launch {
-                    isUnderPerforming = checkConsecutiveUnderPerformance(
-                        eggRecords = records,
-                        thresholdRatio = THRESHOLD_RATIO,
-                        consecutiveDays = CONSUCUTIVE_DAYS
-                    )
+                ).collect { records ->
+                    CoroutineScope(Dispatchers.Default).launch {
+                        isUnderPerforming = checkConsecutiveUnderPerformance(
+                            eggRecords = records,
+                            thresholdRatio = THRESHOLD_RATIO,
+                            consecutiveDays = CONSUCUTIVE_DAYS
+                        )
+                    }
                 }
+
             }
-            /* CoroutineScope(Dispatchers.IO).launch {
-                 cellRecordsForPastDays.collect{ records->
-                     isUnderPerforming = checkConsecutiveUnderPerformance(
-                         eggRecords =  records,
-                         thresholdRatio = 0.7,
-                         consecutiveDays = CONSUCUTIVE_DAYS
-                     )
-                 }
-             }
- */
+
+            return@async isUnderPerforming
+
         }
-
-        return isUnderPerforming
-
     }
 
     private fun checkConsecutiveUnderPerformance(
