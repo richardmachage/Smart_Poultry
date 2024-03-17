@@ -105,7 +105,7 @@ class TrendAnalysis @Inject constructor(
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    fun flagCell(cellId: Int): Deferred<Boolean> {
+    suspend fun flagCell(cellId: Int): Deferred<Boolean> {
         var isUnderPerforming = false
         CoroutineScope(Dispatchers.IO).launch {
             eggCollectionRepository.getCellEggCollectionForPastDays(
