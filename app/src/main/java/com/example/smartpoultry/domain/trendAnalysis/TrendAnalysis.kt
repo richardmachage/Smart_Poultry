@@ -70,7 +70,7 @@ class TrendAnalysis @Inject constructor(
                 for (cell in listOfAllCells) {
                     Log.d("Now Analyzing:", "cell: ${cell.cellNum} in Block: ${cell.blockId}")
                     try {
-                        val deferred2 = async {
+                       // val deferred2 = async {
                             /* }
                              CoroutineScope(Dispatchers.Default).launch {
                             */     if (!flagCell(cell.cellId)) {
@@ -86,7 +86,7 @@ class TrendAnalysis @Inject constructor(
                                 "cell ${cell.cellNum} in Block: ${cell.blockId} Not flagged"
                             )
                         }
-                        }.await()
+                      //  }.await()
 
                     } catch (e: Exception) {
                         Log.d("E exception:", "while analyzing cellID: ${cell.cellId}")
