@@ -35,7 +35,7 @@ class TrendAnalysis @Inject constructor(
 
     //first get all cells
     var listOfAllCells = mutableListOf<Cells>()
-    private var listOfFlaggedCells = mutableListOf<Cells>()
+    //private var listOfFlaggedCells = mutableListOf<Cells>()
 
 
     init {

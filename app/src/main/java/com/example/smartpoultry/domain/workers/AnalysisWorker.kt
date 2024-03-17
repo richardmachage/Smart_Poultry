@@ -30,14 +30,13 @@ class AnalysisWorker @AssistedInject constructor(
 
         val result = trendAnalysis.performAnalysis()
         result.onSuccess {
+            //TODO save the flagged to database, call for notification
             Log.d("on success:","Flagged cells ${it.size}")
         }
         result.onFailure {
             Log.d("on Failure:", "${it.message}")
         }
-
         Log.d("Analysis worker: ", "ended")
-
 
         //notificationManager?.cancel(NOTIFICATION_ID)
         return Result.success()
