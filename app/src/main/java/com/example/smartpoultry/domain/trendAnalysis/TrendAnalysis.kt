@@ -12,6 +12,7 @@ import com.example.smartpoultry.presentation.screens.settingsScreen.CONSUCUTIVE_
 import com.example.smartpoultry.presentation.screens.settingsScreen.THRESHOLD_RATIO_KEY
 import com.example.smartpoultry.utils.localDateToJavaDate
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
@@ -104,7 +105,7 @@ class TrendAnalysis @Inject constructor(
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    fun flagCell(cellId: Int): Boolean {
+    fun flagCell(cellId: Int): Deferred<Boolean> {
         var isUnderPerforming = false
         CoroutineScope(Dispatchers.IO).launch {
             eggCollectionRepository.getCellEggCollectionForPastDays(
