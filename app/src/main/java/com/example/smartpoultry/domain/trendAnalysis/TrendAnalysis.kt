@@ -5,7 +5,6 @@ import android.util.Log
 import androidx.annotation.RequiresApi
 import com.example.smartpoultry.data.dataSource.datastore.AppDataStore
 import com.example.smartpoultry.data.dataSource.room.entities.cells.Cells
-import com.example.smartpoultry.data.dataSource.room.entities.eggCollection.EggCollection
 import com.example.smartpoultry.domain.repository.CellsRepository
 import com.example.smartpoultry.domain.repository.EggCollectionRepository
 import com.example.smartpoultry.presentation.screens.settingsScreen.CONSUCUTIVE_DAYS_KEY
@@ -117,38 +116,6 @@ class TrendAnalysis @Inject constructor(
         return isUnderPerforming
     }
 
-
-    private fun checkConsecutiveUnderPerformance(
-        eggRecords: List<EggCollection>, //This list should always be for like the past number of X days specified
-        thresholdRatio: Float,
-        consecutiveDays: Int
-    ): Boolean {
-        if (eggRecords.isEmpty() || consecutiveDays <= 0) return false
-
-        /*val ratios = eggRecords.map { record ->
-            if (record.eggCount > 0) record.henCount.toDouble() / record.eggCount else 0.0
-        }
-*/
-        // Check for underPerformance over consecutive days
-        var count = 0
-        for (record in eggRecords) {
-            // Calculate the ratio of eggCount to hen count
-            Log.d("eggs", record.eggCount.toString())
-            Log.d("hencount", record.henCount.toString())
-            //  val ratio = record.henCount.toFloat() / record.eggCount.toFloat()
-            val ratio = record.eggCount.toFloat() / record.henCount.toFloat()
-
-            if (ratio < thresholdRatio) {
-                Log.d("Compare", "is $ratio < $thresholdRatio")
-                count++
-                if (count >= consecutiveDays) return true // Found underPerformance for the required consecutive days
-            } else {
-                count = 0 // Reset count if the performance is above the threshold
-            }
-        }
-
-        return false // No underPerformance found for the specified consecutive days
-    }
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun getDateDaysAgo(numberOfDays: Int): LocalDate {
