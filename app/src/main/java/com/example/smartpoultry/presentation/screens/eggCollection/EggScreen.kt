@@ -112,7 +112,7 @@ fun EggScreen() {
                                 Text(
                                     modifier = Modifier
                                         .padding(6.dp),
-                                    text = "Block : ${listOfBlocks[blockIndex].blockId}"
+                                    text = "Block : ${listOfBlocks[blockIndex].blockNum}"
                                 )
 
                                 Text(
