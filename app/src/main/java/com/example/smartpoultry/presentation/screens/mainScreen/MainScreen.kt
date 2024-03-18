@@ -28,7 +28,7 @@ fun MainScreen(
     val mainViewModel = hiltViewModel<MainScreenViewModel>()
     val navController = rememberNavController()
     val userRole by remember{ mainViewModel.myDataStore.readData(USER_ROLE_KEY)}.collectAsState(
-        initial = " "
+        initial = ""
     )
     SmartPoultryTheme {
 
