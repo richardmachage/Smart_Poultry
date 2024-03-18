@@ -1,5 +1,6 @@
 package com.example.smartpoultry.domain.workers
 
+import android.app.NotificationManager
 import android.content.Context
 import android.os.Build
 import android.util.Log
@@ -13,16 +14,17 @@ import dagger.assisted.AssistedInject
 
 @HiltWorker
 class AnalysisWorker @AssistedInject constructor(
-    @Assisted val context : Context,
+    @Assisted val context: Context,
     @Assisted workerParameters: WorkerParameters,
     private val trendAnalysis: TrendAnalysis
-) : CoroutineWorker(context, workerParameters){
+) : CoroutineWorker(context, workerParameters) {
 
-    //private val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager?
+    private val notificationManager =
+        context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager?
 
     @RequiresApi(Build.VERSION_CODES.O)
     override suspend fun doWork(): Result {
-        //makeStatusNotification("Analysis started: ", context)
+       // makeStatusNotification("Analysis started: ", context)
         Log.d("Analysis worker: ", "started")
         Log.d("Threshold ratio: ", trendAnalysis.THRESHOLD_RATIO.toString())
         Log.d("ConsucutiveDays: ", trendAnalysis.CONSUCUTIVE_DAYS.toString())
@@ -31,7 +33,7 @@ class AnalysisWorker @AssistedInject constructor(
         val result = trendAnalysis.performAnalysis()
         result.onSuccess {
             //TODO save the flagged to database, call for notification
-            Log.d("on success:","Flagged cells ${it.size}")
+            Log.d("on success:", "Flagged cells ${it.size}")
         }
         result.onFailure {
             Log.d("on Failure:", "${it.message}")
