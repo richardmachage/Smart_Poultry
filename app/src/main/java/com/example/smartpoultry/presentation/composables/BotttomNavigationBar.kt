@@ -25,9 +25,10 @@ import com.example.smartpoultry.presentation.uiModels.BottomNavigationItem
 
 @Composable
 fun MyBottomNavBar(
-    navController: NavController
+    navController: NavController,
+    userRole : String
 ) {
-    val items = listOf<BottomNavigationItem>(
+    val items = if (userRole == "Collector" || userRole == "Manager")listOf<BottomNavigationItem>(
         BottomNavigationItem(
             route = HomeScreenDestination.route,
             title = "Home",
@@ -46,13 +47,34 @@ fun MyBottomNavBar(
             selectedIcon = Icons.Filled.Edit,//ImageVector.vectorResource(R.drawable.notification_filled),
             unselectedIcon = Icons.Outlined.Edit,//.vectorResource(R.drawable.notification_outline)
         ),
+
         BottomNavigationItem(
             route = EggScreenDestination.route,
             title = "Eggs",
             selectedIcon = ImageVector.vectorResource(R.drawable.egg_filled),
             unselectedIcon = ImageVector.vectorResource(R.drawable.egg_outline),
         )
-    )
+    ) else listOf<BottomNavigationItem>(
+        BottomNavigationItem(
+            route = HomeScreenDestination.route,
+            title = "Home",
+            selectedIcon = Icons.Filled.Home,
+            unselectedIcon = Icons.Outlined.Home
+        ),
+        BottomNavigationItem(
+            route = AnalyticsScreenDestination.route,
+            title = "Analytics",
+            selectedIcon = ImageVector.vectorResource(R.drawable.analytics_filled),
+            unselectedIcon = ImageVector.vectorResource(R.drawable.analytics_outlined)
+        ),
+        BottomNavigationItem(
+            route = BlockCellScreenDestination.route,
+            title = "Blocks & Cells ",//"Alerts",
+            selectedIcon = Icons.Filled.Edit,//ImageVector.vectorResource(R.drawable.notification_filled),
+            unselectedIcon = Icons.Outlined.Edit,//.vectorResource(R.drawable.notification_outline)
+        ),
+
+        )
 
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
