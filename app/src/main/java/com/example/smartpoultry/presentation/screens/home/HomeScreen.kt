@@ -1,5 +1,6 @@
 package com.example.smartpoultry.presentation.screens.home
 
+import android.annotation.SuppressLint
 import android.os.Build
 import android.widget.Toast
 import androidx.annotation.RequiresApi
@@ -33,6 +34,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.smartpoultry.data.dataModels.DailyEggCollection
 import com.example.smartpoultry.data.dataSource.room.entities.cells.Cells
+import com.example.smartpoultry.domain.notifications.showNotification
 import com.example.smartpoultry.presentation.composables.MyCardInventory
 import com.example.smartpoultry.presentation.composables.MyVerticalSpacer
 import com.example.smartpoultry.presentation.composables.NormButton
@@ -42,6 +44,7 @@ import com.ramcosta.composedestinations.annotation.Destination
 import java.text.SimpleDateFormat
 
 
+@SuppressLint("MissingPermission")
 @RequiresApi(Build.VERSION_CODES.O)
 @Destination
 //@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -56,16 +59,18 @@ fun HomeScreen(
     val totalCells = homeViewModel.totalCells.collectAsState()
     val userRole by homeViewModel.userRole.collectAsState()
 
-    val pastDaysState = remember { homeViewModel.dataStore.readData(PAST_DAYS_KEY) }.collectAsState(initial = "0")
+    val pastDaysState =
+        remember { homeViewModel.dataStore.readData(PAST_DAYS_KEY) }.collectAsState(initial = "0")
     val pastDays = pastDaysState.value.toIntOrNull() ?: 0
 
-    val dailyEggsForPastDays: State<List<DailyEggCollection>> = produceState(initialValue = emptyList(), key1 = pastDays) {
-        if (pastDays > 0) {
-            homeViewModel.getOverallCollectionsForPastDays(pastDays).collect {
-                value = it
+    val dailyEggsForPastDays: State<List<DailyEggCollection>> =
+        produceState(initialValue = emptyList(), key1 = pastDays) {
+            if (pastDays > 0) {
+                homeViewModel.getOverallCollectionsForPastDays(pastDays).collect {
+                    value = it
+                }
             }
         }
-    }
 
     Surface(
         modifier = Modifier
@@ -80,6 +85,18 @@ fun HomeScreen(
                 .verticalScroll(rememberScrollState())
         ) {
 
+
+            NormButton(
+                modifier = Modifier.fillMaxWidth(),
+                onButtonClick = {
+                showNotification(
+                    context = context,
+                    notificationId = 1,
+                    channelID = "1",
+                    title = "Flagged Cell",
+                    contentText = "Downward trend detected in some cells"
+                )
+            }, btnName = "Notify")
             //Type of role card
             Card(
                 modifier = Modifier
@@ -118,28 +135,28 @@ fun HomeScreen(
 
 
 
-                    Row( //inventory cards
-                        modifier = Modifier
-                            .fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceEvenly
-                    ) {
+                Row( //inventory cards
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceEvenly
+                ) {
 
-                        MyCardInventory(
-                            item = "Chicken",
-                            number = totalCells.value.sumOf { cell: Cells -> cell.henCount }
-                        )
+                    MyCardInventory(
+                        item = "Chicken",
+                        number = totalCells.value.sumOf { cell: Cells -> cell.henCount }
+                    )
 
-                        MyCardInventory(
-                            item = "Blocks",
-                            number = totalBlocks.value.size
-                        )
+                    MyCardInventory(
+                        item = "Blocks",
+                        number = totalBlocks.value.size
+                    )
 
-                        MyCardInventory(
-                            item = "Cells",
-                            number = totalCells.value.size
-                        )
+                    MyCardInventory(
+                        item = "Cells",
+                        number = totalCells.value.size
+                    )
 
-                    }
+                }
 
                 NormButton(
                     modifier = Modifier.fillMaxWidth(),
@@ -148,7 +165,7 @@ fun HomeScreen(
                         homeViewModel.onCreateReport(
                             name = "$reportType ${SimpleDateFormat("dd/MMM/yyyy").format(System.currentTimeMillis())}",
                             content =
-                                    "\nTotal Blocks : ${totalBlocks.value.size}" +
+                            "\nTotal Blocks : ${totalBlocks.value.size}" +
                                     "\nTotal Cells: ${totalCells.value.size}" +
                                     "\nTotal Chicken: ${totalCells.value.sumOf { cell: Cells -> cell.henCount }}",
                             reportType = reportType
@@ -181,7 +198,7 @@ fun HomeScreen(
                 Text(text = "Recent Production Trends:")
                 MyVerticalSpacer(height = 10)
                 //Create graph
-               if (dailyEggsForPastDays.value.isNotEmpty()) RecentEggsLineChart(dailyEggCollections = dailyEggsForPastDays.value)
+                if (dailyEggsForPastDays.value.isNotEmpty()) RecentEggsLineChart(dailyEggCollections = dailyEggsForPastDays.value)
 
             }
 
