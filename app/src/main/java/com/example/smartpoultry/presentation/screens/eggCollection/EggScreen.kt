@@ -40,17 +40,21 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.smartpoultry.R
+import com.example.smartpoultry.destinations.ViewRecordsScreenDestination
 import com.example.smartpoultry.presentation.composables.MyDatePicker
 import com.example.smartpoultry.presentation.composables.NormButton
 import com.example.smartpoultry.presentation.uiModels.CellEggCollection
 import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.vanpra.composematerialdialogs.rememberMaterialDialogState
 import java.time.LocalDate
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Destination
 @Composable
-fun EggScreen() {
+fun EggScreen(
+    navigator: DestinationsNavigator
+) {
 
     val eggViewModel = hiltViewModel<EggScreenViewModel>()
     val listOfBlocks = eggViewModel.myInputBlocks
@@ -69,6 +73,9 @@ fun EggScreen() {
         ) {
             //Defining the datePicker first
 
+            NormButton(onButtonClick = {
+                                navigator.navigate(ViewRecordsScreenDestination)
+            }, btnName = "View All records")
             MyDatePicker(
                 modifier = Modifier
                     .fillMaxWidth(),
@@ -82,7 +89,6 @@ fun EggScreen() {
                 allowedDateValidate = {
                     it < LocalDate.now() || it == LocalDate.now()
                 }
-
             )
 
             //Blocks and cells UI begins here
@@ -140,7 +146,7 @@ fun EggScreen() {
 
                                     ) {
                                         Text(
-                                            text = "Cell Num: ${cell.cellNum}",//${listOfBlocks[blockIndex].cells[cellIndex].cellNum}",
+                                            text = "Cell Num: ${cell.cellNum}",
                                             modifier = Modifier
                                                 .padding(6.dp)
                                                 .align(Alignment.CenterHorizontally)
