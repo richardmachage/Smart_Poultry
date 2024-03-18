@@ -2,6 +2,7 @@ package com.example.smartpoultry.presentation.screens.viewRecordsScreen
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.smartpoultry.data.dataSource.room.entities.cells.Cells
 import com.example.smartpoultry.data.dataSource.room.entities.eggCollection.EggCollection
 import com.example.smartpoultry.domain.repository.CellsRepository
 import com.example.smartpoultry.domain.repository.EggCollectionRepository
@@ -19,6 +20,15 @@ class ViewRecordsViewModel @Inject constructor(
 
     fun getAllRecords (): Flow<List<EggCollection>> {
         return eggCollectionRepository.getAllRecords()
+            .stateIn(
+                scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(),
+                initialValue = emptyList()
+            )
+    }
+
+    fun getAllCells(): Flow<List<Cells>> {
+        return  cellsRepository.getAllCells()
             .stateIn(
                 scope = viewModelScope,
                 started = SharingStarted.WhileSubscribed(),

@@ -30,6 +30,7 @@ fun ViewRecordsScreen(
 ){
     val recordsViewModel = hiltViewModel<ViewRecordsViewModel>()
     val listOfRecords = recordsViewModel.getAllRecords().collectAsState(initial = emptyList())
+    val listOfCells = recordsViewModel.getAllCells().collectAsState(initial = emptyList())
 
     Scaffold (
         topBar = { TopAppBar(
@@ -54,7 +55,7 @@ fun ViewRecordsScreen(
                         modifier = Modifier.fillMaxWidth()
                     ){
                         Text(text = "Date: ${item.date}")
-                        Text(text = "Date: ${item.cellId}")
+                        Text(text = "Cell ID: ${item.cellId}")
                         Text(text = "Eggs collected: ${item.eggCount}")
                         Text(text = "Chicken on this day: ${item.henCount}")
                     }
@@ -63,3 +64,4 @@ fun ViewRecordsScreen(
         }
     }
 }
+
