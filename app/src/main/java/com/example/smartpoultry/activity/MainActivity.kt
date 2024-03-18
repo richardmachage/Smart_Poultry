@@ -15,6 +15,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.smartpoultry.NavGraphs
 import com.example.smartpoultry.destinations.LogInScreenDestination
 import com.example.smartpoultry.destinations.MainScreenDestination
+import com.example.smartpoultry.domain.notifications.createNotificationChannel
 import com.example.smartpoultry.presentation.theme.SmartPoultryTheme
 import com.ramcosta.composedestinations.DestinationsNavHost
 import com.ramcosta.composedestinations.annotation.Destination
@@ -30,6 +31,13 @@ class MainActivity (): ComponentActivity() {
             PeriodicWorkRequestBuilder<ProductionAnalysisWorker>(24, TimeUnit.HOURS).build()
 
         WorkManager.getInstance(applicationContext).enqueue(workRequest)*/
+
+        createNotificationChannel(
+            context = applicationContext,
+            channelName = "Flagged cells alerts",
+            descriptionText = "Alerts for cells detected with downward trend",
+            channelID = "1"
+            )
 
         super.onCreate(savedInstanceState)
 
