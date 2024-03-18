@@ -30,7 +30,6 @@ fun ViewRecordsScreen(
 ){
     val recordsViewModel = hiltViewModel<ViewRecordsViewModel>()
     val listOfRecords = recordsViewModel.getAllRecords().collectAsState(initial = emptyList())
-    val listOfCells = recordsViewModel.getAllCells().collectAsState(initial = emptyList())
 
     Scaffold (
         topBar = { TopAppBar(
@@ -48,14 +47,15 @@ fun ViewRecordsScreen(
             modifier = Modifier.padding(paddingValues)
         ){
             LazyColumn(){
-                itemsIndexed(listOfRecords.value){index, item ->  
+                itemsIndexed(listOfRecords.value){_, item ->
                     MyVerticalSpacer(height = 10)
-                    
+                    val cell = recordsViewModel.getCell(item.cellId)
                     MyBorderedColumn (
                         modifier = Modifier.fillMaxWidth()
                     ){
                         Text(text = "Date: ${item.date}")
-                        Text(text = "Cell ID: ${item.cellId}")
+                        Text(text = "BlockID: ${cell?.blockId}")
+                        Text(text = "Cell num: ${cell?.cellNum}")
                         Text(text = "Eggs collected: ${item.eggCount}")
                         Text(text = "Chicken on this day: ${item.henCount}")
                     }

@@ -10,6 +10,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -18,6 +19,16 @@ class ViewRecordsViewModel @Inject constructor(
     private val cellsRepository: CellsRepository
 ) : ViewModel() {
 
+    lateinit var cellsMap : Map<Int,Cells>
+
+    init {
+        viewModelScope.launch {
+            cellsRepository.getAllCells().collect{
+                cellsMap = it.associateBy {  it.cellId}
+            }
+        }
+
+    }
     fun getAllRecords (): Flow<List<EggCollection>> {
         return eggCollectionRepository.getAllRecords()
             .stateIn(
@@ -27,13 +38,7 @@ class ViewRecordsViewModel @Inject constructor(
             )
     }
 
-    fun getAllCells(): Flow<List<Cells>> {
-        return  cellsRepository.getAllCells()
-            .stateIn(
-                scope = viewModelScope,
-                started = SharingStarted.WhileSubscribed(),
-                initialValue = emptyList()
-            )
+    fun getCell(cellId : Int): Cells?{
+        return cellsMap[cellId]
     }
-
 }
