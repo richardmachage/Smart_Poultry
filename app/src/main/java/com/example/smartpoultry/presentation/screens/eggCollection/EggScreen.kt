@@ -73,7 +73,9 @@ fun EggScreen(
         ) {
             //Defining the datePicker first
 
-            NormButton(onButtonClick = {
+            NormButton(
+                modifier = Modifier.fillMaxWidth(),
+                onButtonClick = {
                                 navigator.navigate(ViewRecordsScreenDestination)
             }, btnName = "View All records")
             MyDatePicker(
