@@ -351,15 +351,27 @@ fun AnalyticsScreen(
                             }
                         } as List<ChartClass>
 
-                        AnalysisGraph(
-                            isGraphPlotted = analyticsViewModel.plotChart.value,
-                            myListOfRecords = turnToChartData.map { it as ChartClass },
-                            itemPlacerCount =
-                            (turnToChartData.maxOf { chartClass: ChartClass -> chartClass.yNumOfEggs }) + 1,
-                            startAxisTitle = "Num of Eggs",
-                            bottomAxisTitle = "Date",
-                            reportType = reportType
-                        )
+                        if (analyticsViewModel.levelOfAnalysis.value == "Cell"){
+                            CellAnalysisGraph(
+                                isGraphPlotted = analyticsViewModel.plotChart.value ,
+                                myListOfRecords =  turnToChartData.map { it as ChartClass },
+                                itemPlacerCount =  (turnToChartData.maxOf { chartClass: ChartClass -> chartClass.yNumOfEggs }) + 1,
+                                startAxisTitle = "Num of eggs/chicken",
+                                bottomAxisTitle ="Date" ,
+                                reportType = reportType
+                            )
+                        }else{
+                            AnalysisGraph(
+                                isGraphPlotted = analyticsViewModel.plotChart.value,
+                                myListOfRecords = turnToChartData.map { it as ChartClass },
+                                itemPlacerCount =
+                                (turnToChartData.maxOf { chartClass: ChartClass -> chartClass.yNumOfEggs }) + 1,
+                                startAxisTitle = "Num of Eggs",
+                                bottomAxisTitle = "Date",
+                                reportType = reportType
+                            )
+                        }
+
 
                     } else {
                         // analyticsViewModel.plotChart.value = false
