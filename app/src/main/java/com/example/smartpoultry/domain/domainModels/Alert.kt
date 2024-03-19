@@ -5,5 +5,5 @@ import java.sql.Date
 
 data class Alert(
     val date : Date,
-    val flaggedCells : List<Cells>
+    val flaggedCell : Cells
 )
