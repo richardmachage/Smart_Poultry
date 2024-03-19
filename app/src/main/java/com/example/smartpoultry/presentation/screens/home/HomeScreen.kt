@@ -83,7 +83,7 @@ fun HomeScreen(
                 .padding(8.dp)
                 .verticalScroll(rememberScrollState())
         ) {
-
+            MyVerticalSpacer(height = 5)
             //Type of role card
             Card(
                 modifier = Modifier
