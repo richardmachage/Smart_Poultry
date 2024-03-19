@@ -13,7 +13,6 @@ interface BlocksDao{
     @Upsert
     suspend fun addNewBlock(block : Blocks) : Long
 
-
     @Delete
     suspend fun deleteBlock(block : Blocks)
 
