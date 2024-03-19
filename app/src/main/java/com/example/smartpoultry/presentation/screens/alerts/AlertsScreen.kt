@@ -9,6 +9,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -72,9 +73,16 @@ fun AlertScreen(
                             Text(text = "Cell : ${alert.cellNum}")
                             Text(text = "Block : ${alert.blockNum}")
                         }
-                            // IconButton(onClick = { alertsViewModel.onMarkAttended(!alert.attended, alert.) }) {
+                        if (!alert.attended){
+                            IconButton(onClick = { alertsViewModel.onMarkAttended(true, alert.alertId) }) {
+                                Icon(imageVector = Icons.Default.Check, contentDescription = "Check" )
+                            }
+                        }
 
-                        //}
+                        IconButton(onClick = { alertsViewModel.onDeleteAlert(alert) }) {
+
+                        }
+
                     }
                 }
             }

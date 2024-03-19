@@ -1,7 +1,6 @@
 package com.example.smartpoultry.data.dataSource.room.entities.alerts
 
 import androidx.room.Dao
-import androidx.room.Delete
 import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Upsert
@@ -13,8 +12,8 @@ import java.sql.Date
 interface AlertsDao {
     @Upsert
     suspend fun addAlert(alert : Alerts) : Long
-    @Delete
-    suspend fun deleteAlert(alert: Alerts)
+    @Query("DELETE FROM alerts_tbl WHERE alertId = :alertId")
+    suspend fun deleteAlert(alertId: Int)
 
     @Query("SELECT * FROM alerts_tbl ORDER BY date DESC")
     fun getAllAlerts() : Flow<List<Alerts>>
