@@ -167,14 +167,12 @@ fun CellAnalysisGraph(
                 chartClass.yNumOfEggs.toFloat()
             )
         }
-
         val chartDataHen = listOfRecords.mapIndexed{index, chartClass ->
             entryOf(
                 index.toFloat(),
                 chartClass.numOfChicken
             )
         }
-
         val chartDataRatio = listOfRecords.mapIndexed{index, chartClass ->
             entryOf(
                 index.toFloat(),
@@ -182,5 +180,11 @@ fun CellAnalysisGraph(
                 //record.eggCount.toFloat() / record.henCount.toFloat()
             )
         }
+
+        //Build the chartEntryModels
+       // val chartEntryModel = entryModelOf(*chartData.map { it.x to it.y }.toTypedArray())
+        val chartEntryModelEggs = entryModelOf(*chartDataEggs.map{it.x to it.y}.toTypedArray())
+        val chartEntryModelHen = entryModelOf(*chartDataHen.map{it.x to it.y}.toTypedArray())
+        val chartEntryModelRatio = entryModelOf(*chartDataRatio.map{it.x to it.y}.toTypedArray())
     }
 }
