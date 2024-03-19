@@ -79,7 +79,7 @@ fun AlertScreen(
                             }
                         }
 
-                        IconButton(onClick = { alertsViewModel.onDeleteAlert(alert) }) {
+                        IconButton(onClick = { alertsViewModel.onDeleteAlert(alert.alertId) }) {
 
                         }
 

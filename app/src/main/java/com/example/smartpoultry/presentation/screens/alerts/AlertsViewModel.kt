@@ -25,9 +25,9 @@ class AlertsViewModel @Inject constructor(
         )
     }
 
-    fun onDeleteAlert(alert : Alerts){
+    fun onDeleteAlert(alertId : Int){
         viewModelScope.launch {
-            alertsRepository.deleteAlert(alert)
+            alertsRepository.deleteAlert(alertId)
         }
     }
 

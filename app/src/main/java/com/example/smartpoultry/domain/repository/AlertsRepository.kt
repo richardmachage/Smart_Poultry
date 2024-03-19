@@ -7,7 +7,7 @@ import java.sql.Date
 
 interface AlertsRepository {
     suspend fun addAlert (alerts: Alerts) : Long
-    suspend fun deleteAlert (alerts: Alerts)
+    suspend fun deleteAlert (alertId: Int)
 
     fun getFlaggedCells(): Flow<List<AlertFull>>
     suspend fun updateAttendedStatus(status : Boolean, alertId:Int)

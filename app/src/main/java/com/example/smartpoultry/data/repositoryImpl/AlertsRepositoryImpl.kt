@@ -15,8 +15,8 @@ class AlertsRepositoryImpl @Inject constructor(
         return alertsDao.addAlert(alerts)
     }
 
-    override suspend fun deleteAlert(alerts: Alerts) {
-        alertsDao.deleteAlert(alerts)
+    override suspend fun deleteAlert(alertId: Int) {
+        alertsDao.deleteAlert(alertId = alertId)
     }
 
     override fun getFlaggedCells(): Flow<List<AlertFull>> {
