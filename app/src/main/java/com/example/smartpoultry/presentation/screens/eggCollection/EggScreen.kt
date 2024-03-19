@@ -23,6 +23,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -42,6 +43,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.smartpoultry.R
 import com.example.smartpoultry.destinations.ViewRecordsScreenDestination
 import com.example.smartpoultry.presentation.composables.MyBorderedColumn
+import com.example.smartpoultry.presentation.composables.MyCircularProgressBar
 import com.example.smartpoultry.presentation.composables.MyDatePicker
 import com.example.smartpoultry.presentation.composables.NormButton
 import com.example.smartpoultry.presentation.uiModels.CellEggCollection
@@ -61,6 +63,14 @@ fun EggScreen(
     val eggViewModel = hiltViewModel<EggScreenViewModel>()
     val listOfBlocks = eggViewModel.myInputBlocks
     val context = LocalContext.current
+
+    LaunchedEffect(eggViewModel.toastMessage.value){
+        if (eggViewModel.toastMessage.value.isNotBlank()){
+            Toast.makeText(context, eggViewModel.toastMessage.value, Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    MyCircularProgressBar(isLoading = eggViewModel.isLoading.value)
 
     Surface(
         modifier = Modifier
@@ -197,15 +207,13 @@ fun EggScreen(
 
                             NormButton(
                                 onButtonClick = {
-                                    eggViewModel.isLoading.value = true
-                                    // eggViewModel.delayApp(2000)
-
                                     eggViewModel.onSaveRecord(
                                         block = blockIndex,
                                         cellsInput = listOfBlocks[blockIndex].cells
                                     )
                                     //eggViewModel.updateEggCount(blockIndex,)
-                                    if (eggViewModel.insertStatus.value) {
+                                   /* if (eggViewModel.insertStatus.value) {
+
                                         Toast.makeText(
                                             context,
                                             "records for Block: ${listOfBlocks[blockIndex].blockNum} saved successfully",
@@ -217,9 +225,9 @@ fun EggScreen(
                                             "Failed! Records for Block: ${listOfBlocks[blockIndex].blockNum} for date: ${eggViewModel.selectedDate.value} already exist",
                                             Toast.LENGTH_SHORT
                                         ).show()
-                                    }
+                                    }*/
 
-                                    eggViewModel.isLoading.value = false
+                                   // eggViewModel.isLoading.value = false
 
                                 },
                                 btnName = "Save",

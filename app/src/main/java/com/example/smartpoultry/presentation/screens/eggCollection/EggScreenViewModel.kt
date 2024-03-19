@@ -38,6 +38,7 @@ class EggScreenViewModel @Inject constructor(
 
     var isLoading = mutableStateOf(false)
     var insertStatus = mutableStateOf(true)
+    var toastMessage = mutableStateOf("")
     var myInputBlocks = mutableStateListOf<BlockEggCollection>()
         private set
 
@@ -103,7 +104,7 @@ class EggScreenViewModel @Inject constructor(
     @RequiresApi(Build.VERSION_CODES.O)
     fun onSaveRecord(block:Int, cellsInput : List<CellEggCollection>){
         viewModelScope.launch {
-
+            isLoading.value = true
             run loop@{
                 cellsInput.forEach{ record ->
                     if(
@@ -119,8 +120,12 @@ class EggScreenViewModel @Inject constructor(
                         return@loop
                     }
                 }
-            }
 
+            }
+           // delay(Duration.ofSeconds(2))
+            isLoading.value = false
+            if (insertStatus.value) toastMessage.value = "records for block $block saved successfully"
+            else toastMessage.value = "Failed! Records for Block: $block for date: ${selectedDate.value} already exist"
         }
     }
 
