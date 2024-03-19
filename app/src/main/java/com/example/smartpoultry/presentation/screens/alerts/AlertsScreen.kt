@@ -1,6 +1,7 @@
 package com.example.smartpoultry.presentation.screens.alerts
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -74,9 +75,19 @@ fun AlertScreen(
                             Text(text = "Cell : ${alert.cellNum}")
                             Text(text = "Block : ${alert.blockNum}")
                         }
-                        if (!alert.attended){
-                            IconButton(onClick = { alertsViewModel.onMarkAttended(true, alert.alertId) }) {
-                                Icon(imageVector = Icons.Default.Check, contentDescription = "Check" )
+                        Column(
+                            Modifier.background(color = MaterialTheme.colorScheme.tertiary)
+                        ) {
+                            if (!alert.attended){
+                                Text(text = "Mark Unattended")
+                                IconButton(onClick = { alertsViewModel.onMarkAttended(true, alert.alertId) }) {
+                                    Icon(imageVector = Icons.Default.Check, contentDescription = "Check" )
+                                }
+                            }else{
+                                Text(text = "Mark attended")
+                                IconButton(onClick = { alertsViewModel.onMarkAttended(false, alert.alertId) }) {
+                                    Icon(imageVector = Icons.Default.Check, contentDescription = "Check" )
+                                }
                             }
                         }
 
