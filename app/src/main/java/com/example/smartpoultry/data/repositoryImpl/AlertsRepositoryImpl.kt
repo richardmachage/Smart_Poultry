@@ -12,22 +12,22 @@ class AlertsRepositoryImpl @Inject constructor(
     private val alertsDao: AlertsDao
 ) : AlertsRepository {
     override suspend fun addAlert(alerts: Alerts): Long {
-        TODO("Not yet implemented")
+        return alertsDao.addAlert(alerts)
     }
 
     override suspend fun deleteAlert(alerts: Alerts) {
-        TODO("Not yet implemented")
+        alertsDao.deleteAlert(alerts)
     }
 
     override fun getFlaggedCells(): Flow<List<AlertFull>> {
-        TODO("Not yet implemented")
+        return alertsDao.getFlaggedCellsFull()
     }
 
     override suspend fun updateAttendedStatus(status: Boolean, alertId: Int) {
-        TODO("Not yet implemented")
+        alertsDao.updateAttendedStatus(status,alertId)
     }
 
     override fun getAlertsForDate(date: Date): Flow<List<Alerts>> {
-        TODO("Not yet implemented")
+        return alertsDao.getAlertsForDate(date)
     }
 }

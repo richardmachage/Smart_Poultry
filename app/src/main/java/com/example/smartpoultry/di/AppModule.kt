@@ -8,11 +8,13 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStoreFile
 import com.example.smartpoultry.data.dataSource.datastore.AppDataStore
 import com.example.smartpoultry.data.dataSource.room.database.SmartPoultryDatabase
+import com.example.smartpoultry.data.repositoryImpl.AlertsRepositoryImpl
 import com.example.smartpoultry.data.repositoryImpl.BlocksRepositoryImpl
 import com.example.smartpoultry.data.repositoryImpl.CellsRepositoryImpl
 import com.example.smartpoultry.data.repositoryImpl.EggCollectionRepositoryImpl
 import com.example.smartpoultry.data.repositoryImpl.FeedsRepositoryImpl
 import com.example.smartpoultry.data.repositoryImpl.FirebaseAuthRepositoryImpl
+import com.example.smartpoultry.domain.repository.AlertsRepository
 import com.example.smartpoultry.domain.repository.BlocksRepository
 import com.example.smartpoultry.domain.repository.CellsRepository
 import com.example.smartpoultry.domain.repository.EggCollectionRepository
@@ -64,6 +66,10 @@ object AppModule {
     @Singleton
     fun provideFeedsRepository(database: SmartPoultryDatabase): FeedsRepository{
         return FeedsRepositoryImpl(database.feedsDao())
+    }
+
+    fun provideAlertsRepository(database: SmartPoultryDatabase): AlertsRepository{
+        return AlertsRepositoryImpl(database.alertsDao())
     }
 
     //dataStore
