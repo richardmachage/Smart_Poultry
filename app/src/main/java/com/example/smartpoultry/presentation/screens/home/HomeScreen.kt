@@ -196,36 +196,7 @@ fun HomeScreen(
                 onButtonClick = { homeViewModel.fireWorker(context) },
                 btnName = "Perform Analysis"
             )
-            /*MyVerticalSpacer(height = 20)
 
-            Column(//Recent feeds Block
-                modifier = Modifier
-                    .border(
-                        width = 1.dp,
-                        color = MaterialTheme.colorScheme.primary,
-                        shape = RoundedCornerShape(
-                            (0.03 * LocalConfiguration.current.screenWidthDp).dp
-                        )
-                    )
-                    .fillMaxWidth()
-                    .padding(6.dp)
-            ) {
-                Text(text = "Recent Feeding Trends:")
-                MyVerticalSpacer(height = 10)
-                *//* Chart(
-                     chart = lineChart(),
-                     model = ,
-                     startAxis = rememberStartAxis(
-                         //titleComponent = textComponent(),
-                         //title = "Sacks of Feeds"
-                     ),
-                     bottomAxis = rememberBottomAxis(
-                         titleComponent = textComponent(),
-                         title = "Date"
-                     )
-                 )
- *//*
-            }*/
         }
     }
 }
