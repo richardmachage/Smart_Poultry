@@ -1,9 +1,11 @@
 package com.example.smartpoultry.presentation.screens.alerts
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.smartpoultry.data.dataModels.AlertFull
-import com.example.smartpoultry.data.dataSource.room.entities.alerts.Alerts
 import com.example.smartpoultry.domain.repository.AlertsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
@@ -17,6 +19,7 @@ class AlertsViewModel @Inject constructor(
     private val alertsRepository: AlertsRepository
 ) : ViewModel() {
 
+    var selectedAlertId by mutableIntStateOf(0)
     fun getFlaggedCells(): Flow<List<AlertFull>>{
         return alertsRepository.getFlaggedCells().stateIn(
             scope = viewModelScope,
