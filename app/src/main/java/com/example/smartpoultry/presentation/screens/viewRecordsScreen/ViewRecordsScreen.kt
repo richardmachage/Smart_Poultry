@@ -17,6 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.smartpoultry.presentation.composables.MyBorderedColumn
 import com.example.smartpoultry.presentation.composables.MyVerticalSpacer
@@ -50,7 +51,8 @@ fun ViewRecordsScreen(
     ) { paddingValues ->
         Surface(
             modifier = Modifier.padding(paddingValues)
-        ) {/*
+        ) {
+            /*
             SearchBar(
                 query = "",
                 onQueryChange = {},
@@ -66,8 +68,7 @@ fun ViewRecordsScreen(
                 }
             ) {*/
 
-
-            LazyColumn() {
+            LazyColumn(modifier = Modifier.padding(6.dp)) {
                 itemsIndexed(listOfRecords.value) { _, item ->
                     MyVerticalSpacer(height = 10)
                     val cell = recordsViewModel.getCell(item.cellId)
