@@ -7,7 +7,7 @@ import java.sql.Date
 @Entity(tableName = "alerts_tbl")
 data class Alerts (
     @PrimaryKey(autoGenerate = true)
-    val alertId : Int,
+    val alertId : Int = 0,
     val date : Date,
     val flaggedCellId : Int,
     val attended : Boolean = false
