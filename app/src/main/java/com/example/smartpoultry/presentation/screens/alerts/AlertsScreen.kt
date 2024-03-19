@@ -2,6 +2,7 @@ package com.example.smartpoultry.presentation.screens.alerts
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -12,6 +13,7 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.ThumbUp
 import androidx.compose.material.icons.outlined.ThumbUp
+import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -43,7 +45,7 @@ import java.text.SimpleDateFormat
 fun AlertScreen(
     //modifier:Modifier
     navigator: DestinationsNavigator
-){
+) {
     val alertsViewModel = hiltViewModel<AlertsViewModel>()
     val listOfAlerts by remember { alertsViewModel.getFlaggedCells() }.collectAsState(initial = emptyList())
 
@@ -55,66 +57,103 @@ fun AlertScreen(
             alertsViewModel.onDeleteAlert(alertsViewModel.selectedAlertId)
             showDeleteDialog = false
         },
-        onDismiss = {showDeleteDialog = false}
+        onDismiss = { showDeleteDialog = false }
     )
     {
-     Text(text = "Alert will be deleted from history, confirm to proceed")
+        Text(text = "Alert will be deleted from history, confirm to proceed")
     }
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(text = "Alerts")},
+                title = { Text(text = "Alerts") },
                 navigationIcon = {
                     IconButton(onClick = { navigator.navigateUp() }) {
-                        Icon(imageVector = Icons.AutoMirrored.Filled.ArrowBack, contentDescription ="back" )
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = "back"
+                        )
                     }
                 }
             )
         }
-    ) {paddingValues ->
-        Surface (
+    ) { paddingValues ->
+        Surface(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues),
             color = MaterialTheme.colorScheme.background,
-            ){
-            LazyColumn(){
-                itemsIndexed(listOfAlerts){index, alert ->  
-                    MyVerticalSpacer(height = 5)
-                    MyBorderedRow(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(6.dp),
-                    ) {
-                        Column {
-                            Text(text = "Date : ${SimpleDateFormat("dd MMM, yyyy").format(alert.date)}")
-                            Text(text = "Cell : ${alert.cellNum}")
-                            Text(text = "Block : ${alert.blockNum}")
-                        }
+        ) {
+            Column {
 
-                            if (!alert.attended){
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(6.dp)
+                       // .height(10.dp)
+                ) {
+                    Row (
+                        modifier = Modifier.padding(6.dp)
+                    ){
+                        Text(text = "Alerts not yet attended to : ${listOfAlerts.filter { alertFull -> !alertFull.attended   }.size}")
+                    }
+                }
+
+                LazyColumn() {
+                    itemsIndexed(listOfAlerts) { index, alert ->
+                        MyVerticalSpacer(height = 5)
+                        MyBorderedRow(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(6.dp),
+                        ) {
+                            Column {
+                                Text(text = "Date : ${SimpleDateFormat("dd MMM, yyyy").format(alert.date)}")
+                                Text(text = "Cell : ${alert.cellNum}")
+                                Text(text = "Block : ${alert.blockNum}")
+                            }
+
+                            if (!alert.attended) {
                                 //Text(text = "Mark attended")
-                                IconButton(onClick = { alertsViewModel.onMarkAttended(true, alert.alertId) }) {
-                                    Icon(imageVector = Icons.Outlined.ThumbUp, contentDescription = "Check" )
+                                IconButton(onClick = {
+                                    alertsViewModel.onMarkAttended(
+                                        true,
+                                        alert.alertId
+                                    )
+                                }) {
+                                    Icon(
+                                        imageVector = Icons.Outlined.ThumbUp,
+                                        contentDescription = "Check"
+                                    )
                                 }
-                            }else{
-                                IconButton(onClick = { alertsViewModel.onMarkAttended(false, alert.alertId) }) {
-                                    Icon(imageVector = Icons.Filled.ThumbUp, contentDescription = "Check" )
+                            } else {
+                                IconButton(onClick = {
+                                    alertsViewModel.onMarkAttended(
+                                        false,
+                                        alert.alertId
+                                    )
+                                }) {
+                                    Icon(
+                                        imageVector = Icons.Filled.ThumbUp,
+                                        contentDescription = "Check"
+                                    )
                                 }
                             }
 
+                            IconButton(onClick = {
+                                alertsViewModel.selectedAlertId = alert.alertId
+                                showDeleteDialog = true
+                            }) {
+                                Icon(
+                                    imageVector = Icons.Default.Delete,
+                                    contentDescription = "delete"
+                                )
+                            }
 
-                        IconButton(onClick = {
-                            alertsViewModel.selectedAlertId = alert.alertId
-                            showDeleteDialog = true
-                        }) {
-                            Icon(imageVector = Icons.Default.Delete, contentDescription = "delete" )
                         }
-
                     }
                 }
             }
         }
-    }
 
+    }
 }
