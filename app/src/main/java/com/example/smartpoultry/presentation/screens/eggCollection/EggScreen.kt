@@ -21,7 +21,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.SearchBar
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -69,18 +68,18 @@ fun EggScreen(
         color = MaterialTheme.colorScheme.background
     ) {
 
-
         Column(
             modifier = Modifier
                 .fillMaxSize()
         ) {
-            //Defining the datePicker first
-
+            //view all records button
             NormButton(
                 modifier = Modifier.fillMaxWidth(),
                 onButtonClick = {
                                 navigator.navigate(ViewRecordsScreenDestination)
             }, btnName = "View All records")
+
+            //Defining the datePicker
             MyDatePicker(
                 modifier = Modifier
                     .fillMaxWidth(),
