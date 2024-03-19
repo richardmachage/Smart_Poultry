@@ -7,6 +7,8 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.example.smartpoultry.data.dataSource.room.entities.PopulationChange.PopChange
 import com.example.smartpoultry.data.dataSource.room.entities.PopulationChange.PopChangeDao
+import com.example.smartpoultry.data.dataSource.room.entities.alerts.Alerts
+import com.example.smartpoultry.data.dataSource.room.entities.alerts.AlertsDao
 import com.example.smartpoultry.data.dataSource.room.entities.blocks.Blocks
 import com.example.smartpoultry.data.dataSource.room.entities.blocks.BlocksDao
 import com.example.smartpoultry.data.dataSource.room.entities.cells.Cells
@@ -19,8 +21,8 @@ import com.example.smartpoultry.data.dataSource.room.entities.feeds.FeedsDao
 import com.example.smartpoultry.utils.DbConverters
 
 @Database(
-    entities = [EggCollection::class, Blocks::class, Cells::class, Feeds::class, PopChange::class, FeedTrack::class],
-    version = 5,
+    entities = [EggCollection::class, Blocks::class, Cells::class, Feeds::class, PopChange::class, FeedTrack::class, Alerts::class],
+    version = 6,
     exportSchema = false
 )
 
@@ -31,6 +33,7 @@ abstract class SmartPoultryDatabase : RoomDatabase() {
     abstract fun cellsDao() : CellsDao
     abstract fun feedsDao() : FeedsDao
     abstract fun popChangeDao() : PopChangeDao
+    abstract fun alertsDao() : AlertsDao
 
     companion object{
         private  var INSTANCE : SmartPoultryDatabase? = null
