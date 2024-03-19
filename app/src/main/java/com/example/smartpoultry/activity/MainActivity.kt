@@ -13,32 +13,27 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.work.ExistingPeriodicWorkPolicy
-import androidx.work.PeriodicWorkRequestBuilder
-import androidx.work.WorkManager
 import com.example.smartpoultry.NavGraphs
 import com.example.smartpoultry.destinations.LogInScreenDestination
 import com.example.smartpoultry.destinations.MainScreenDestination
 import com.example.smartpoultry.domain.notifications.createNotificationChannel
-import com.example.smartpoultry.domain.workers.AnalysisWorker
 import com.example.smartpoultry.presentation.theme.SmartPoultryTheme
 import com.ramcosta.composedestinations.DestinationsNavHost
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.navigation.popUpTo
 import dagger.hilt.android.AndroidEntryPoint
-import java.util.concurrent.TimeUnit
 
 @AndroidEntryPoint
 class MainActivity (): ComponentActivity() {
     val mainViewModel: MainViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
-        val periodicWorkRequest = PeriodicWorkRequestBuilder<AnalysisWorker>(15, TimeUnit.MINUTES).build()
+        /*val periodicWorkRequest = PeriodicWorkRequestBuilder<AnalysisWorker>(15, TimeUnit.MINUTES).build()
         WorkManager.getInstance(applicationContext).enqueueUniquePeriodicWork(
             "automated_analysis_work",
             ExistingPeriodicWorkPolicy.KEEP,
             periodicWorkRequest
-        )
+        )*/
 
         createNotificationChannel(
             context = applicationContext,
