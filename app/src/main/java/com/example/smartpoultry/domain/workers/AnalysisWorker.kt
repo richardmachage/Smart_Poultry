@@ -1,6 +1,5 @@
 package com.example.smartpoultry.domain.workers
 
-import android.app.NotificationManager
 import android.content.Context
 import android.os.Build
 import android.util.Log
@@ -8,6 +7,7 @@ import androidx.annotation.RequiresApi
 import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
+import com.example.smartpoultry.domain.notifications.showNotification
 import com.example.smartpoultry.domain.trendAnalysis.TrendAnalysis
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
@@ -19,12 +19,11 @@ class AnalysisWorker @AssistedInject constructor(
     private val trendAnalysis: TrendAnalysis
 ) : CoroutineWorker(context, workerParameters) {
 
-    private val notificationManager =
+   /* private val notificationManager =
         context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager?
-
+*/
     @RequiresApi(Build.VERSION_CODES.O)
     override suspend fun doWork(): Result {
-       // makeStatusNotification("Analysis started: ", context)
         Log.d("Analysis worker: ", "started")
         Log.d("Threshold ratio: ", trendAnalysis.THRESHOLD_RATIO.toString())
         Log.d("ConsucutiveDays: ", trendAnalysis.CONSUCUTIVE_DAYS.toString())
@@ -34,6 +33,14 @@ class AnalysisWorker @AssistedInject constructor(
         result.onSuccess {
             //TODO save the flagged to database, call for notification
             Log.d("on success:", "Flagged cells ${it.size}")
+
+            showNotification(
+                context = context,
+                notificationId = 1,
+                channelID = "1",
+                title = "Analysis Complete",
+                contentText = "Downward trend detected in ${it.size} cells"
+            )
         }
         result.onFailure {
             Log.d("on Failure:", "${it.message}")
