@@ -1,16 +1,21 @@
 package com.example.smartpoultry.presentation.screens.analytics
 
+import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.work.ExistingWorkPolicy
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
 import com.example.smartpoultry.data.dataModels.DailyEggCollection
 import com.example.smartpoultry.data.dataSource.room.entities.eggCollection.EggCollection
 import com.example.smartpoultry.domain.repository.BlocksRepository
 import com.example.smartpoultry.domain.repository.CellsRepository
 import com.example.smartpoultry.domain.repository.EggCollectionRepository
+import com.example.smartpoultry.domain.workers.AnalysisWorker
 import com.example.smartpoultry.utils.localDateToJavaDate
 import com.example.smartpoultry.utils.toYearMonth
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -175,4 +180,12 @@ class AnalyticsViewModel @Inject constructor(
         return LocalDate.now().minusDays(numberOfDays.toLong())
     }
 
+    fun fireWorker(context: Context){
+        val workRequest = OneTimeWorkRequestBuilder<AnalysisWorker>().build()
+        WorkManager.getInstance(context).enqueueUniqueWork(
+            "manual_analysis_work",
+            ExistingWorkPolicy.KEEP ,
+            workRequest
+        )
+    }
 }

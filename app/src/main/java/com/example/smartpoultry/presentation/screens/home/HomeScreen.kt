@@ -120,8 +120,6 @@ fun HomeScreen(
                 Text(text = "Inventory Status :")
                 MyVerticalSpacer(height = 10)
 
-
-
                 Row( //inventory cards
                     modifier = Modifier
                         .fillMaxWidth(),
@@ -186,17 +184,7 @@ fun HomeScreen(
                 MyVerticalSpacer(height = 10)
                 //Create graph
                 if (dailyEggsForPastDays.value.isNotEmpty()) RecentEggsLineChart(dailyEggCollections = dailyEggsForPastDays.value)
-
             }
-
-            MyVerticalSpacer(height = 10)
-
-            NormButton(
-                modifier = Modifier.fillMaxWidth(),
-                onButtonClick = { homeViewModel.fireWorker(context) },
-                btnName = "Perform Analysis"
-            )
-
         }
     }
 }

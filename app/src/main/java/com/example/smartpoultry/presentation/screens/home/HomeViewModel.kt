@@ -82,12 +82,5 @@ class HomeViewModel @Inject constructor(
         return LocalDate.now().minusDays(numberOfDays.toLong())
     }
 
-    fun fireWorker(context: Context){
-        val workRequest = OneTimeWorkRequestBuilder<AnalysisWorker>().build()
-        WorkManager.getInstance(context).enqueueUniqueWork(
-            "manual_analysis_work",
-            ExistingWorkPolicy.KEEP ,
-            workRequest
-        )
-    }
+
 }

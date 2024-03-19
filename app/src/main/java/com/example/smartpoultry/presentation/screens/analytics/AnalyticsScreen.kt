@@ -81,13 +81,6 @@ fun AnalyticsScreen(
             Column(
                 // Analysis by cell
                 modifier = Modifier
-                    /*.border(
-                        width = 1.dp,
-                        color = MaterialTheme.colorScheme.primary,
-                        shape = RoundedCornerShape(
-                            (0.03 * LocalConfiguration.current.screenWidthDp).dp
-                        )
-                    )*/
                     .fillMaxWidth()
                     .padding(6.dp),
             ) {
@@ -381,6 +374,14 @@ fun AnalyticsScreen(
 
 
             }
+
+            MyVerticalSpacer(height = 10)
+
+            NormButton(
+                modifier = Modifier.fillMaxWidth(),
+                onButtonClick = { analyticsViewModel.fireWorker(context) },
+                btnName = "Perform Analysis"
+            )
         }
     }
 }
