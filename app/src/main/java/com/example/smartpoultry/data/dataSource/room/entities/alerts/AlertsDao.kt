@@ -3,7 +3,9 @@ package com.example.smartpoultry.data.dataSource.room.entities.alerts
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Query
+import androidx.room.Transaction
 import androidx.room.Upsert
+import com.example.smartpoultry.data.dataModels.DailyEggCollection
 import kotlinx.coroutines.flow.Flow
 import java.sql.Date
 
@@ -23,4 +25,11 @@ interface AlertsDao {
     @Query("UPDATE alerts_tbl SET attended = :status WHERE alertId= :alertId ")
     suspend fun updateAttendedStatus(status:Boolean, alertId:Int)
 
+    @Transaction
+    @Query("SELECT date, SUM(eggCount) AS totalEggs FROM egg_collection_tbl INNER JOIN cells_tbl ON egg_collection_tbl.cellId = cells_tbl.cellId WHERE cells_tbl.blockId = :blockId GROUP BY date ORDER BY date DESC")
+    fun getBlockEggCollections(blockId: Int) : Flow<List<DailyEggCollection>>
+
+    @Transaction
+    @Query("SELECT alerts_tbl.date, alerts_tbl.attended, cells_tbl.cellNum, blocks_tbl.blockNum FROM alerts_tbl INNER JOIN cells_tbl ON alerts_tbl.flaggedCellId = cells_tbl.cellId INNER JOIN blocks_tbl ON cells_tbl.blockId = blocks_tbl.blockId")
+    fun getFlaggedCellsFull()
 }
