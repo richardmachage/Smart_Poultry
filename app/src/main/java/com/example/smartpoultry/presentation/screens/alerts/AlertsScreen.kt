@@ -1,6 +1,7 @@
 package com.example.smartpoultry.presentation.screens.alerts
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -29,6 +30,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.smartpoultry.presentation.composables.MyBorderedRow
@@ -86,15 +88,18 @@ fun AlertScreen(
             Column {
 
                 Card(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(6.dp)
-                       // .height(10.dp)
+                   modifier = Modifier.padding(6.dp)
                 ) {
                     Row (
-                        modifier = Modifier.padding(6.dp)
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(6.dp),
+                        horizontalArrangement = Arrangement.Center
                     ){
-                        Text(text = "Alerts not yet attended to : ${listOfAlerts.filter { alertFull -> !alertFull.attended   }.size}")
+                        Text(
+                            textAlign = TextAlign.Center,
+                            text = "Alerts not yet attended to : ${listOfAlerts.filter { alertFull -> !alertFull.attended   }.size}"
+                        )
                     }
                 }
 
