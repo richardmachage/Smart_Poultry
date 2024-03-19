@@ -5,6 +5,7 @@ import androidx.room.Delete
 import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Upsert
+import com.example.smartpoultry.data.dataModels.AlertFull
 import com.example.smartpoultry.data.dataModels.DailyEggCollection
 import kotlinx.coroutines.flow.Flow
 import java.sql.Date
@@ -30,6 +31,6 @@ interface AlertsDao {
     fun getBlockEggCollections(blockId: Int) : Flow<List<DailyEggCollection>>
 
     @Transaction
-    @Query("SELECT alerts_tbl.date, alerts_tbl.attended, cells_tbl.cellNum, blocks_tbl.blockNum FROM alerts_tbl INNER JOIN cells_tbl ON alerts_tbl.flaggedCellId = cells_tbl.cellId INNER JOIN blocks_tbl ON cells_tbl.blockId = blocks_tbl.blockId")
-    fun getFlaggedCellsFull()
+    @Query("SELECT alerts_tbl.date, alerts_tbl.attended, cells_tbl.cellNum, blocks_tbl.blockNum FROM alerts_tbl INNER JOIN cells_tbl ON alerts_tbl.flaggedCellId = cells_tbl.cellId INNER JOIN blocks_tbl ON cells_tbl.blockId = blocks_tbl.blockId ORDER BY date DESC")
+    fun getFlaggedCellsFull() : Flow<List<AlertFull>>
 }

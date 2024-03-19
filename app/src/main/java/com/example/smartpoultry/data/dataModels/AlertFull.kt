@@ -1,3 +1,10 @@
 package com.example.smartpoultry.data.dataModels
 
-data class AlertFull()
+import java.sql.Date
+
+data class AlertFull(
+    val date:Date,
+    val attended : Boolean,
+    val cellNum : Int,
+    val blockNum : Int
+)
