@@ -50,13 +50,15 @@ fun NormText(text: String) {
 fun NormButton(
     onButtonClick: () -> Unit,
     btnName: String,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    enabled : Boolean = true
 ) {
     Button(
         onClick = onButtonClick,
         modifier = modifier
             //.fillMaxWidth()
-            .padding(8.dp)
+            .padding(8.dp),
+        enabled = enabled
     ) {
         NormText(text = btnName)
     }

@@ -104,9 +104,7 @@ fun EggScreen(
                             .padding(4.dp)
 
                     ) {
-                        Column(
-
-                        ) {
+                        Column{
                             Row(
                                 modifier = Modifier
                                     .fillMaxWidth(),
@@ -153,9 +151,9 @@ fun EggScreen(
                                                 .padding(3.dp)
                                                 .align(Alignment.CenterHorizontally)
                                         )
-                                        var textFieldValueState by remember {
-                                            mutableStateOf(TextFieldValue(text = listOfBlocks[blockIndex].cells[cellIndex].eggCount.toString()))
-                                        }
+
+                                        var textFieldValueState by remember { mutableStateOf(TextFieldValue(text = listOfBlocks[blockIndex].cells[cellIndex].eggCount.toString())) }
+                                        var isErrorState by remember{ mutableStateOf(false) }
                                         OutlinedTextField(
                                             modifier = Modifier
                                                 .fillMaxSize(),
@@ -165,12 +163,19 @@ fun EggScreen(
                                                     text = newText.text,
                                                     selection = TextRange(newText.text.length)
                                                 )
+
                                                 val newEggCount = newText.text.toIntOrNull() ?: 0
-                                                eggViewModel.updateEggCount(
-                                                    blockIndex,
-                                                    cellIndex,
-                                                    newEggCount
-                                                )
+
+                                                if (newEggCount > cell.henCount){
+                                                    isErrorState = true
+                                                }else {
+                                                    isErrorState = false
+                                                    eggViewModel.updateEggCount(
+                                                        blockIndex,
+                                                        cellIndex,
+                                                        newEggCount
+                                                    )
+                                                }
                                             },
                                             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                                             leadingIcon = {
@@ -180,6 +185,7 @@ fun EggScreen(
                                                 )
                                             },
                                             singleLine = true,
+                                            isError = isErrorState
                                         )
                                     }
 
