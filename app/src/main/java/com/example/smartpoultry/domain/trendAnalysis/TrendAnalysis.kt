@@ -37,7 +37,6 @@ class TrendAnalysis @Inject constructor(
     var listOfAllCells = mutableListOf<Cells>()
     //private var listOfFlaggedCells = mutableListOf<Cells>()
 
-
     init {
         CoroutineScope(Dispatchers.IO).launch {
             dataStore.readData(THRESHOLD_RATIO_KEY).collect {
@@ -64,7 +63,6 @@ class TrendAnalysis @Inject constructor(
             }
         }
     }
-
 
     //perform analysis for each cell
     @RequiresApi(Build.VERSION_CODES.O)
@@ -94,7 +92,7 @@ class TrendAnalysis @Inject constructor(
             eggCollectionRepository.getCellEggCollectionForPastDays(
                 cellId= cellId,
                 startDate = Date(
-                    localDateToJavaDate(getDateDaysAgo(10))
+                    localDateToJavaDate(getDateDaysAgo(CONSUCUTIVE_DAYS))
                 )
             ).collect{records->
                 var count = 0
@@ -111,7 +109,6 @@ class TrendAnalysis @Inject constructor(
                 Log.d("Flag status", "isFlagged $result")
                 isUnderPerforming.complete(result)
             }
-
         }
         return isUnderPerforming
     }
