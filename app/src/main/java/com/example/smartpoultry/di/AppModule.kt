@@ -68,6 +68,8 @@ object AppModule {
         return FeedsRepositoryImpl(database.feedsDao())
     }
 
+    @Provides
+    @Singleton
     fun provideAlertsRepository(database: SmartPoultryDatabase): AlertsRepository{
         return AlertsRepositoryImpl(database.alertsDao())
     }
