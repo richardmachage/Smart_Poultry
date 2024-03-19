@@ -67,6 +67,7 @@ fun EggScreen(
     LaunchedEffect(eggViewModel.toastMessage.value){
         if (eggViewModel.toastMessage.value.isNotBlank()){
             Toast.makeText(context, eggViewModel.toastMessage.value, Toast.LENGTH_SHORT).show()
+            eggViewModel.toastMessage.value = ""
         }
     }
 
