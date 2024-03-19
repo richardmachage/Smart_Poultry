@@ -58,7 +58,6 @@ fun AlertScreen(
                 .fillMaxSize()
                 .padding(paddingValues),
             color = MaterialTheme.colorScheme.background,
-
             ){
             LazyColumn(){
                 itemsIndexed(listOfAlerts){index, alert ->  
@@ -66,13 +65,16 @@ fun AlertScreen(
                     MyBorderedRow(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(6.dp)
+                            .padding(6.dp),
                     ) {
                         Column {
                             Text(text = "Date : ${SimpleDateFormat("dd MMM, yyyy").format(alert.date)}")
                             Text(text = "Cell : ${alert.cellNum}")
                             Text(text = "Block : ${alert.blockNum}")
                         }
+                            // IconButton(onClick = { alertsViewModel.onMarkAttended(!alert.attended, alert.) }) {
+
+                        //}
                     }
                 }
             }

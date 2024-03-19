@@ -16,6 +16,8 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun MyBorderedRow(
     modifier: Modifier = Modifier,
+    horizontalArrangement : Arrangement.Horizontal = Arrangement.SpaceBetween,
+    verticalAlignment : Alignment.Vertical = Alignment.CenterVertically,
     content: @Composable () -> Unit
 ) {
     Row(
@@ -29,8 +31,8 @@ fun MyBorderedRow(
             )
             .fillMaxWidth()
             .padding(6.dp),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
+        horizontalArrangement = horizontalArrangement,
+        verticalAlignment = verticalAlignment
 
     ) {
         content()
