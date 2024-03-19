@@ -34,7 +34,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.smartpoultry.data.dataModels.DailyEggCollection
 import com.example.smartpoultry.data.dataSource.room.entities.cells.Cells
-import com.example.smartpoultry.domain.notifications.showNotification
 import com.example.smartpoultry.presentation.composables.MyCardInventory
 import com.example.smartpoultry.presentation.composables.MyVerticalSpacer
 import com.example.smartpoultry.presentation.composables.NormButton
@@ -85,18 +84,6 @@ fun HomeScreen(
                 .verticalScroll(rememberScrollState())
         ) {
 
-
-            NormButton(
-                modifier = Modifier.fillMaxWidth(),
-                onButtonClick = {
-                showNotification(
-                    context = context,
-                    notificationId = 1,
-                    channelID = "1",
-                    title = "Flagged Cell",
-                    contentText = "Downward trend detected in some cells"
-                )
-            }, btnName = "Notify")
             //Type of role card
             Card(
                 modifier = Modifier

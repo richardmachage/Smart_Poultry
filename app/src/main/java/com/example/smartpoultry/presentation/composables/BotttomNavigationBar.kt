@@ -43,7 +43,7 @@ fun MyBottomNavBar(
         ),
         BottomNavigationItem(
             route = BlockCellScreenDestination.route,
-            title = "Blocks & Cells ",//"Alerts",
+            title = "Blocks",//"Alerts",
             selectedIcon = Icons.Filled.Edit,//ImageVector.vectorResource(R.drawable.notification_filled),
             unselectedIcon = Icons.Outlined.Edit,//.vectorResource(R.drawable.notification_outline)
         ),
