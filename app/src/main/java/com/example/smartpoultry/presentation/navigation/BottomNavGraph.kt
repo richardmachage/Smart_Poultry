@@ -29,7 +29,7 @@ fun BottomNavGraph(
     NavHost(navController = navController, startDestination = HomeScreenDestination.route , modifier = modifier){
         composable(route = HomeScreenDestination.route){ HomeScreen() }
         composable(route = AnalyticsScreenDestination.route){ AnalyticsScreen() }
-        composable(route = AlertScreenDestination.route){ AlertScreen() }
+        composable(route = AlertScreenDestination.route){ AlertScreen(navigator) }
         composable(route = EggScreenDestination.route){ EggScreen(navigator) }
         composable(route = BlockCellScreenDestination.route){ BlockCellScreen(navigator)}
     }
