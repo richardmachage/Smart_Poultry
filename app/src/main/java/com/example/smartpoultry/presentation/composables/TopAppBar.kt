@@ -1,7 +1,6 @@
 package com.example.smartpoultry.presentation.composables
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -16,12 +15,10 @@ import androidx.compose.ui.res.vectorResource
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.smartpoultry.R
-import com.example.smartpoultry.destinations.AccountScreenDestination
 import com.example.smartpoultry.destinations.AlertScreenDestination
 import com.example.smartpoultry.destinations.AnalyticsScreenDestination
 import com.example.smartpoultry.destinations.BlockCellScreenDestination
 import com.example.smartpoultry.destinations.EggScreenDestination
-import com.example.smartpoultry.destinations.FeedsScreenDestination
 import com.example.smartpoultry.destinations.HomeScreenDestination
 import com.example.smartpoultry.destinations.SettingsScreenDestination
 import com.ramcosta.composedestinations.annotation.Destination
@@ -69,18 +66,18 @@ fun MyTopAppBar(
                 )
             }
 
-            IconButton(onClick = { navigator.navigate(FeedsScreenDestination) })
+            /*IconButton(onClick = { navigator.navigate(FeedsScreenDestination) })
             {
                 Icon(
                     imageVector = ImageVector.vectorResource(R.drawable.feeds_filled),
                     contentDescription = "Feeds"
                 )
-            }
+            }*/
 
-            IconButton(onClick = { navigator.navigate(AccountScreenDestination) })
+            /*IconButton(onClick = { navigator.navigate(AccountScreenDestination) })
             {
                 Icon(imageVector = Icons.Default.AccountCircle, contentDescription = "Account Icon")
-            }
+            }*/
 
             IconButton(onClick = {
                 navigator.navigate(SettingsScreenDestination) {
