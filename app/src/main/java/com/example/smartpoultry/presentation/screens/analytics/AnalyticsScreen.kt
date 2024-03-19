@@ -353,7 +353,7 @@ fun AnalyticsScreen(
 
                         CellAnalysisGraph(
                             isGraphPlotted = analyticsViewModel.plotChart.value,
-                            listOfRecords = turnToChartData.map { it as ChartClass },
+                            myListOfRecords = turnToChartData.map { it as ChartClass },
                             itemPlacerCount =
                             (turnToChartData.maxOf { chartClass: ChartClass -> chartClass.yNumOfEggs }) + 1,
                             startAxisTitle = "Num of Eggs",
@@ -380,7 +380,7 @@ fun AnalyticsScreen(
             NormButton(
                 modifier = Modifier.fillMaxWidth(),
                 onButtonClick = { analyticsViewModel.fireWorker(context) },
-                btnName = "Perform Analysis"
+                btnName = "Perform Automated Analysis >>>"
             )
         }
     }

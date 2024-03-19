@@ -35,13 +35,14 @@ import kotlin.math.roundToInt
 @Composable
 fun CellAnalysisGraph(
     isGraphPlotted : Boolean,
-    listOfRecords : List<ChartClass>,
+    myListOfRecords : List<ChartClass>,
     itemPlacerCount: Int,
     startAxisTitle : String,
     bottomAxisTitle: String,
     reportType : String
     ) {
 
+    val listOfRecords = myListOfRecords.reversed()
     val context = LocalContext.current
     val graphsViewModel = hiltViewModel<GraphsViewModel>()
 
