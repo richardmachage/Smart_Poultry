@@ -3,7 +3,6 @@ package com.example.smartpoultry.presentation.screens.eggCollection
 import android.os.Build
 import android.widget.Toast
 import androidx.annotation.RequiresApi
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -42,6 +41,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.smartpoultry.R
 import com.example.smartpoultry.destinations.ViewRecordsScreenDestination
+import com.example.smartpoultry.presentation.composables.MyBorderedColumn
 import com.example.smartpoultry.presentation.composables.MyDatePicker
 import com.example.smartpoultry.presentation.composables.NormButton
 import com.example.smartpoultry.presentation.uiModels.CellEggCollection
@@ -99,16 +99,10 @@ fun EggScreen(
             LazyColumn { //Column of Blocks
                 itemsIndexed(listOfBlocks) { blockIndex, block ->
 
-                    Column(
+                    MyBorderedColumn(
                         modifier = Modifier
                             .padding(4.dp)
-                            .border(
-                                width = 1.dp,
-                                color = MaterialTheme.colorScheme.primary,
-                                shape = RoundedCornerShape(
-                                    (0.03 * LocalConfiguration.current.screenWidthDp).dp
-                                )
-                            )
+
                     ) {
                         Column(
 
@@ -130,11 +124,9 @@ fun EggScreen(
                                         .padding(6.dp),
                                     text = "Total Eggs: ${listOfBlocks[blockIndex].cells.sumOf { cellEggCollection: CellEggCollection -> cellEggCollection.eggCount }}"
                                 )
-
                             }
 
-                            //This are the cell cards
-                            //MyCells(numOfCells = numberOfCells)
+                            //These are the cell cards
                             LazyRow {
                                 itemsIndexed(listOfBlocks[blockIndex].cells) { cellIndex, cell ->
                                     Card(
@@ -150,15 +142,15 @@ fun EggScreen(
 
                                     ) {
                                         Text(
-                                            text = "Cell Num: ${cell.cellNum}",
+                                            text = "Cell :${cell.cellNum}",
                                             modifier = Modifier
-                                                .padding(6.dp)
+                                                //.padding(6.dp)
                                                 .align(Alignment.CenterHorizontally)
                                         )
                                         Text(
                                             text = "Chicken: ${cell.henCount}",//${listOfBlocks[blockIndex].cells[cellIndex].cellNum}",
                                             modifier = Modifier
-                                                .padding(6.dp)
+                                                .padding(3.dp)
                                                 .align(Alignment.CenterHorizontally)
                                         )
                                         var textFieldValueState by remember {
