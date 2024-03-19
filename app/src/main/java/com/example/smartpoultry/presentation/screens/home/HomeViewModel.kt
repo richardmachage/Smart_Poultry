@@ -85,7 +85,7 @@ class HomeViewModel @Inject constructor(
     fun fireWorker(context: Context){
         val workRequest = OneTimeWorkRequestBuilder<AnalysisWorker>().build()
         WorkManager.getInstance(context).enqueueUniqueWork(
-            "unique_analysis_work",
+            "manual_analysis_work",
             ExistingWorkPolicy.KEEP ,
             workRequest
         )
