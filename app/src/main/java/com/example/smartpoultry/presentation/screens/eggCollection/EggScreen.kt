@@ -125,6 +125,7 @@ fun EggScreen(
                             }
 
                             //These are the cell cards
+                            var saveButtonState by remember{ mutableStateOf(true) }
                             LazyRow {
                                 itemsIndexed(listOfBlocks[blockIndex].cells) { cellIndex, cell ->
                                     Card(
@@ -168,8 +169,10 @@ fun EggScreen(
 
                                                 if (newEggCount > cell.henCount){
                                                     isErrorState = true
+                                                    saveButtonState = false
                                                 }else {
                                                     isErrorState = false
+                                                    saveButtonState = true
                                                     eggViewModel.updateEggCount(
                                                         blockIndex,
                                                         cellIndex,
@@ -220,7 +223,8 @@ fun EggScreen(
 
                                 },
                                 btnName = "Save",
-                                modifier = Modifier.fillMaxWidth()
+                                modifier = Modifier.fillMaxWidth(),
+                                enabled = saveButtonState
                             )
                         }
                     }
