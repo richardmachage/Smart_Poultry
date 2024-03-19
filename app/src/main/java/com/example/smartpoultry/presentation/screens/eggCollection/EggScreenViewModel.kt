@@ -16,6 +16,7 @@ import com.example.smartpoultry.presentation.uiModels.BlockEggCollection
 import com.example.smartpoultry.presentation.uiModels.CellEggCollection
 import com.example.smartpoultry.utils.localDateToJavaDate
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -45,15 +46,23 @@ class EggScreenViewModel @Inject constructor(
 
     init {
         setChosenDateValue(LocalDate.now())
-
-        viewModelScope.launch {
+        setMyInputBlocks()
+        /*viewModelScope.launch {
             getAllBlocks.collect {
+                myInputBlocks.clear()
+                myInputBlocks.addAll(transformBlocksIntoBlocksForInput(it))
+            }
+        }*/
+    }
+
+    private fun setMyInputBlocks(){
+        viewModelScope.async {
+            getAllBlocks.collect{
                 myInputBlocks.clear()
                 myInputBlocks.addAll(transformBlocksIntoBlocksForInput(it))
             }
         }
     }
-
 
     @RequiresApi(Build.VERSION_CODES.O)
     var selectedDate = mutableStateOf(LocalDate.now())
@@ -106,7 +115,7 @@ class EggScreenViewModel @Inject constructor(
         viewModelScope.launch {
             isLoading.value = true
             run loop@{
-                cellsInput.forEach{ record ->
+                cellsInput.forEachIndexed{ index,record ->
                     if(
                         eggCollectionRepository.addNewRecord(EggCollection(
                             date = chosenDateValue,  //Date.valueOf(selectedDate.value.toString()), //Date.valueOf(myDateFormatter(selectedDate.value)),
@@ -115,17 +124,25 @@ class EggScreenViewModel @Inject constructor(
                             henCount = record.henCount
                         ))){
                         insertStatus.value = true
+                        //updateEggCount(blockIndex = block, cellIndex = index, newEggCount = 0)
+
                     }else {
                         insertStatus.value = false
+                       // updateEggCount(blockIndex = block, cellIndex = index, newEggCount = 0)
                         return@loop
                     }
                 }
-
             }
-           // delay(Duration.ofSeconds(2))
+            setMyInputBlocks()
             isLoading.value = false
-            if (insertStatus.value) toastMessage.value = "records for block $block saved successfully"
-            else toastMessage.value = "Failed! Records for Block: $block for date: ${selectedDate.value} already exist"
+            if (insertStatus.value) toastMessage.value = "records for block ${block + 1} saved successfully"
+            else toastMessage.value = "Failed! Records for Block: ${block + 1} for date: ${selectedDate.value} already exist"
+        }
+    }
+
+    private fun resetEntries(block: Int, cellsInput: List<CellEggCollection>){
+        cellsInput.forEachIndexed{index, _ ->
+            updateEggCount(block, cellIndex = index, newEggCount = 0)
         }
     }
 

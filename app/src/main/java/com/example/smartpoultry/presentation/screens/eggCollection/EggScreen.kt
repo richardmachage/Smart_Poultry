@@ -61,7 +61,7 @@ fun EggScreen(
 ) {
 
     val eggViewModel = hiltViewModel<EggScreenViewModel>()
-    val listOfBlocks = eggViewModel.myInputBlocks
+    val listOfBlocks = remember{ eggViewModel.myInputBlocks}
     val context = LocalContext.current
 
     LaunchedEffect(eggViewModel.toastMessage.value){
@@ -69,6 +69,10 @@ fun EggScreen(
             Toast.makeText(context, eggViewModel.toastMessage.value, Toast.LENGTH_SHORT).show()
             eggViewModel.toastMessage.value = ""
         }
+    }
+
+    LaunchedEffect(eggViewModel.myInputBlocks){
+
     }
 
     MyCircularProgressBar(isLoading = eggViewModel.isLoading.value)
@@ -212,23 +216,6 @@ fun EggScreen(
                                         block = blockIndex,
                                         cellsInput = listOfBlocks[blockIndex].cells
                                     )
-                                    //eggViewModel.updateEggCount(blockIndex,)
-                                   /* if (eggViewModel.insertStatus.value) {
-
-                                        Toast.makeText(
-                                            context,
-                                            "records for Block: ${listOfBlocks[blockIndex].blockNum} saved successfully",
-                                            Toast.LENGTH_SHORT
-                                        ).show()
-                                    } else {
-                                        Toast.makeText(
-                                            context,
-                                            "Failed! Records for Block: ${listOfBlocks[blockIndex].blockNum} for date: ${eggViewModel.selectedDate.value} already exist",
-                                            Toast.LENGTH_SHORT
-                                        ).show()
-                                    }*/
-
-                                   // eggViewModel.isLoading.value = false
 
                                 },
                                 btnName = "Save",
