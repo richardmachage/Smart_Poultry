@@ -33,7 +33,7 @@ import java.text.SimpleDateFormat
 import kotlin.math.roundToInt
 
 @Composable
-fun CellAnalysisGraph(
+fun AnalysisGraph(
     isGraphPlotted : Boolean,
     myListOfRecords : List<ChartClass>,
     itemPlacerCount: Int,
@@ -141,6 +141,45 @@ fun CellAnalysisGraph(
                     Toast.makeText(context, "PDF exported successfully, check in downloads", Toast.LENGTH_LONG).show()
                 },
                 btnName = "Export Data to PDF>>>"
+            )
+        }
+    }
+}
+
+@Composable
+fun CellAnalysisGraph(
+    isGraphPlotted : Boolean,
+    myListOfRecords : List<ChartClass>,
+    itemPlacerCount: Int,
+    startAxisTitle : String,
+    bottomAxisTitle: String,
+    reportType : String
+){
+    val listOfRecords = myListOfRecords.reversed()
+    val context = LocalContext.current
+    val graphsViewModel = hiltViewModel<GraphsViewModel>()
+
+    if (isGraphPlotted){
+        //convert data to chartData for Plotting
+        val chartDataEggs = listOfRecords.mapIndexed{ index, chartClass ->
+            entryOf(
+                index.toFloat(),
+                chartClass.yNumOfEggs.toFloat()
+            )
+        }
+
+        val chartDataHen = listOfRecords.mapIndexed{index, chartClass ->
+            entryOf(
+                index.toFloat(),
+                chartClass.numOfChicken
+            )
+        }
+
+        val chartDataRatio = listOfRecords.mapIndexed{index, chartClass ->
+            entryOf(
+                index.toFloat(),
+                chartClass.yNumOfEggs.toFloat() / chartClass.numOfChicken.toFloat(),
+                //record.eggCount.toFloat() / record.henCount.toFloat()
             )
         }
     }

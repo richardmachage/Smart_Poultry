@@ -84,7 +84,6 @@ fun AnalyticsScreen(
                     .fillMaxWidth()
                     .padding(6.dp),
             ) {
-                Text("Trend analysis")
 
                 RadioButtonGroup(
                     title = "Select level of analysis:",
@@ -338,20 +337,21 @@ fun AnalyticsScreen(
                             when (record) {
                                 is EggCollection -> ChartClass(
                                     xDateValue = toGraphDate(record.date),
-                                    yNumOfEggs = record.eggCount
+                                    yNumOfEggs = record.eggCount,
+                                    numOfChicken = record.henCount
 
                                 )
 
                                 is DailyEggCollection -> ChartClass(
                                     xDateValue = toGraphDate(record.date),
-                                    yNumOfEggs = record.totalEggs
+                                    yNumOfEggs = record.totalEggs,
                                 )
 
                                 else -> {}
                             }
                         } as List<ChartClass>
 
-                        CellAnalysisGraph(
+                        AnalysisGraph(
                             isGraphPlotted = analyticsViewModel.plotChart.value,
                             myListOfRecords = turnToChartData.map { it as ChartClass },
                             itemPlacerCount =
