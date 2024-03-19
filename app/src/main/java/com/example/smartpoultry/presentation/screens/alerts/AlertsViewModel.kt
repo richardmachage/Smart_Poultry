@@ -25,9 +25,15 @@ class AlertsViewModel @Inject constructor(
         )
     }
 
-    fun deleteAlert(alert : Alerts){
+    fun onDeleteAlert(alert : Alerts){
         viewModelScope.launch {
             alertsRepository.deleteAlert(alert)
+        }
+    }
+
+    fun onMarkAttended(status:Boolean, alertId : Int){
+        viewModelScope.launch {
+            alertsRepository.updateAttendedStatus(status,alertId)
         }
     }
 }
