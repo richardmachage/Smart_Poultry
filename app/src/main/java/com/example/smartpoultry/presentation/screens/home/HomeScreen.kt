@@ -87,6 +87,7 @@ fun HomeScreen(
             MyCard(
                 modifier = Modifier
                     .fillMaxWidth()
+
             ) {
                 Text(
                     text = "Logged in as: $userRole",
