@@ -13,9 +13,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -30,7 +28,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
@@ -43,6 +40,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.smartpoultry.R
 import com.example.smartpoultry.destinations.ViewRecordsScreenDestination
 import com.example.smartpoultry.presentation.composables.MyBorderedColumn
+import com.example.smartpoultry.presentation.composables.MyCard
 import com.example.smartpoultry.presentation.composables.MyCircularProgressBar
 import com.example.smartpoultry.presentation.composables.MyDatePicker
 import com.example.smartpoultry.presentation.composables.NormButton
@@ -143,7 +141,7 @@ fun EggScreen(
                             var saveButtonState by remember{ mutableStateOf(true) }
                             LazyRow {
                                 itemsIndexed(listOfBlocks[blockIndex].cells) { cellIndex, cell ->
-                                    Card(
+                                    /*Card(
                                         modifier = Modifier
                                             .padding(6.dp)
                                             .shadow(
@@ -154,7 +152,12 @@ fun EggScreen(
                                                 (LocalConfiguration.current.screenWidthDp / 3).dp
                                             )
 
-                                    ) {
+                                    ) */
+                                    MyCard(
+                                        modifier = Modifier.width(
+                                            (LocalConfiguration.current.screenWidthDp/3).dp
+                                        )
+                                    ){
                                         Text(
                                             text = "Cell :${cell.cellNum}",
                                             modifier = Modifier
@@ -172,7 +175,8 @@ fun EggScreen(
                                         var isErrorState by remember{ mutableStateOf(false) }
                                         OutlinedTextField(
                                             modifier = Modifier
-                                                .fillMaxSize(),
+                                                .fillMaxSize()
+                                                .padding(5.dp),
                                             value = textFieldValueState,//TextFieldValue(listOfBlocks[blockIndex].cells[cellIndex].eggCount.toString()),//)cell.eggCount.toString()),
                                             onValueChange = { newText ->
                                                 textFieldValueState = newText.copy(
