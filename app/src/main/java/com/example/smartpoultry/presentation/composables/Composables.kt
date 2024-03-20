@@ -12,8 +12,10 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardColors
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -22,7 +24,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -32,6 +33,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.smartpoultry.R
@@ -263,8 +265,35 @@ fun MyCardInventory(
     number: Int,
     //modifier: Modifier
 ) {
+    MyCard{
+        Text(
+            text = item,
+            modifier = Modifier
+                .padding(6.dp)
+                .fillMaxWidth()
+               // .align(Alignment.CenterHorizontally),
+            ,
+            textAlign = TextAlign.Center
+        )
+
+        Text(
+            text = number.toString(),
+            modifier = Modifier
+                .padding(6.dp)
+                .fillMaxWidth(),
+            textAlign = TextAlign.Center
+
+        )
+    }
+}
+
+@Composable
+fun MyCard(
+    modifier: Modifier = Modifier,
+    content : @Composable () -> Unit
+){
     Card(
-        modifier = Modifier
+        modifier = modifier
             .padding(8.dp)
             .shadow(
                 elevation = 10.dp,
@@ -273,29 +302,19 @@ fun MyCardInventory(
             )
             .width(
                 (LocalConfiguration.current.screenWidthDp / 4).dp
-            )
-        //.height(100.dp)
+            ),
+        colors = CardColors(
+            containerColor = MaterialTheme.colorScheme.surfaceContainer,
+            contentColor = MaterialTheme.colorScheme.onSurface,
+            disabledContainerColor = MaterialTheme.colorScheme.surfaceContainerLow,
+            disabledContentColor = MaterialTheme.colorScheme.primaryContainer
+        ),
+        shape = RoundedCornerShape(20),
 
     ) {
-        Text(
-            text = item,
-            modifier = Modifier
-                .padding(6.dp)
-                .align(Alignment.CenterHorizontally)
-        )
-
-        Text(
-            text = number.toString(),
-            modifier = Modifier
-                .padding(6.dp)
-                .align(Alignment.CenterHorizontally)
-            // textAlign = TextAlign.Center
-
-        )
+        content()
     }
 }
-
-
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun MyPreview() {

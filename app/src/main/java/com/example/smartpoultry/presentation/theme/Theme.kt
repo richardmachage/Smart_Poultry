@@ -23,8 +23,7 @@ private val DarkColorScheme = darkColorScheme(
     background = Black,
     onPrimary = Black,
     onSecondary = White,
-
-
+    //surfaceContainer = MaterialTheme.colorScheme.surfaceContainerLow
     )
 
 private val LightColorScheme = lightColorScheme(
@@ -39,6 +38,7 @@ private val LightColorScheme = lightColorScheme(
     onTertiary = Color.White,
     onBackground = Color(0xFF1C1B1F),
     onSurface = Color(0xFF1C1B1F),
+    surfaceContainer = White,
 
 )
 
