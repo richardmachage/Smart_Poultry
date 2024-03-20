@@ -13,7 +13,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Color.Companion.Green
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
@@ -224,24 +223,116 @@ fun CellAnalysisGraph(
         ){
 
 
+
             MyVerticalSpacer(height = 5)
 
-            Text(text = "Line Chart: ")
+            Text(text = "Column Chart for egg produced")
+            Chart(
+                chart = columnChart(),
+                model = chartEntryModelEggs,
+                startAxis = rememberStartAxis(
+                    //valueFormatter = verticalAxisValueFormatter,
+                    titleComponent = textComponent().apply {
+                        color = MaterialTheme.colorScheme.primary.toArgb()
+                    },
+                    title = "num of eggs",
+                    itemPlacer = AxisItemPlacer.Vertical.default(maxItemCount = itemPlacerCount)
+                ),
+                bottomAxis = rememberBottomAxis(
+                    valueFormatter = horizontalAxisValueFormatter,
+                    titleComponent = textComponent().apply {
+                        color = MaterialTheme.colorScheme.primary.toArgb()
+                    },
+                    title = bottomAxisTitle
+                ),
+                isZoomEnabled = true,
+            )
+
+            Text(text = "Line Chart for eggs produced ")
+            Chart(
+                chart = lineChart(),
+                model = chartEntryModelEggs,
+                startAxis = rememberStartAxis(
+                    //valueFormatter = verticalAxisValueFormatter,
+                    titleComponent = textComponent().apply {
+                        color = MaterialTheme.colorScheme.primary.toArgb()
+                    },
+                    title = "num of eggs",
+                    itemPlacer = AxisItemPlacer.Vertical.default(maxItemCount = itemPlacerCount)
+                ),
+                bottomAxis = rememberBottomAxis(
+                    valueFormatter = horizontalAxisValueFormatter,
+                    titleComponent = textComponent().apply {
+                        color = MaterialTheme.colorScheme.primary.toArgb()
+                    },
+                    title = bottomAxisTitle
+                ),
+                isZoomEnabled = true,
+            )
+
+
+            Text(text = "Column chart for ratio of eggs to hen count")
+            Chart(
+                chart = columnChart(),
+                model = chartEntryModelRatio,
+                startAxis = rememberStartAxis(
+                    //valueFormatter = verticalAxisValueFormatter,
+                    titleComponent = textComponent().apply {
+                        color = MaterialTheme.colorScheme.primary.toArgb()
+                    },
+                    title = "eggs to hen count ratio",
+                    itemPlacer = AxisItemPlacer.Vertical.default(maxItemCount = itemPlacerCount)
+                ),
+                bottomAxis = rememberBottomAxis(
+                    valueFormatter = horizontalAxisValueFormatter,
+                    titleComponent = textComponent().apply {
+                        color = MaterialTheme.colorScheme.primary.toArgb()
+                    },
+                    title = bottomAxisTitle
+                ),
+                isZoomEnabled = true,
+            )
+
+            Text(text = "Line chart for ratio eggs to hen per day")
+            Chart(
+                chart = lineChart(),
+                model = chartEntryModelRatio,
+                startAxis = rememberStartAxis(
+                    //valueFormatter = verticalAxisValueFormatter,
+                    titleComponent = textComponent().apply {
+                        color = MaterialTheme.colorScheme.primary.toArgb()
+                    },
+                    title = "eggs to hen count ratio",
+                    itemPlacer = AxisItemPlacer.Vertical.default(maxItemCount = itemPlacerCount)
+                ),
+                bottomAxis = rememberBottomAxis(
+                    valueFormatter = horizontalAxisValueFormatter,
+                    titleComponent = textComponent().apply {
+                        color = MaterialTheme.colorScheme.primary.toArgb()
+                    },
+                    title = bottomAxisTitle
+                ),
+                isZoomEnabled = true,
+            )
+
+            MyVerticalSpacer(height = 5)
+            Text(text = "combined Line Chart for eggs and hen count")
             val datasetLineSpec = remember { arrayListOf<LineChart. LineSpec>()}
             datasetLineSpec.add(
                 LineChart. LineSpec(
-                    lineColor = Green.toArgb(),
+                    lineColor = Color.Green.toArgb(),
                     lineBackgroundShader = DynamicShaders. fromBrush(
                         brush = Brush.verticalGradient(
                             listOf(
-                                Green.copy(com.patrykandpatrick.vico.core.DefaultAlpha.LINE_BACKGROUND_SHADER_START),
-                                Green.copy(com.patrykandpatrick.vico.core.DefaultAlpha.LINE_BACKGROUND_SHADER_END)
+                                Color.Green.copy(com.patrykandpatrick.vico.core.DefaultAlpha.LINE_BACKGROUND_SHADER_START),
+                                Color.Green.copy(com.patrykandpatrick.vico.core.DefaultAlpha.LINE_BACKGROUND_SHADER_END)
                             )
                         )
                     ),
                 )
             )
-            datasetLineSpec.add(LineChart. LineSpec(
+            datasetLineSpec.add(
+                LineChart. LineSpec(
                 lineColor = MaterialTheme.colorScheme.primary.toArgb(),
                 lineBackgroundShader = DynamicShaders. fromBrush(
                     brush = Brush.verticalGradient(
@@ -253,13 +344,15 @@ fun CellAnalysisGraph(
                 ),
             ))
             var scrollState = rememberChartScrollState()
+
+            //eggs and hen, two line charts together
             ProvideChartStyle {
                 val marker = rememberMarker()//MarkerComponent(label = textComponent(), indicator = null, guideline = null)
                 Chart(
                     chart = lineChart(
                         lines = datasetLineSpec,
 
-                    ),
+                        ),
                     model = chartEntryModel,
                     chartScrollState = scrollState,
                     startAxis = rememberStartAxis(
@@ -282,11 +375,11 @@ fun CellAnalysisGraph(
                     legend = HorizontalLegend(
                         items = listOf(
                             LegendItem(
-                            icon = ShapeComponent(color = Color.Green.toArgb()),
-                            label = textComponent().apply {
-                                color = MaterialTheme.colorScheme.primary.toArgb()
-                            },
-                            labelText = "Eggs"),
+                                icon = ShapeComponent(color = Color.Green.toArgb()),
+                                label = textComponent().apply {
+                                    color = MaterialTheme.colorScheme.primary.toArgb()
+                                },
+                                labelText = "Eggs"),
                             LegendItem(
                                 icon = ShapeComponent(color = MaterialTheme.colorScheme.primary.toArgb()),
                                 label = textComponent().apply {
@@ -300,6 +393,8 @@ fun CellAnalysisGraph(
                     )
                 )
             }
+
+
             MyVerticalSpacer(height = 10)
 
             NormButton(
