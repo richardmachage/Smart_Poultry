@@ -296,9 +296,8 @@ fun MyCard(
         modifier = modifier
             .padding(8.dp)
             .shadow(
-                elevation = 10.dp,
-                shape = RoundedCornerShape(10.dp)
-
+                elevation = 20.dp,
+                shape = RoundedCornerShape(10.dp),
             )
             .width(
                 (LocalConfiguration.current.screenWidthDp / 4).dp
