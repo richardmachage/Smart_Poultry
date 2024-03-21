@@ -59,9 +59,8 @@ class ViewRecordsViewModel @Inject constructor(
         return cellsMap[cellId]
     }
 
-    fun searchRecord(searchQuery : String) : List<EggRecordFull> {
-
-        return if (searchQuery.isNotBlank()) listOfCollectionRecords.filter { record->
+    fun searchRecord(searchQuery : String, list : List<EggRecordFull>) : List<EggRecordFull> {
+        return if (searchQuery.isNotBlank()) list.filter { record->
             record.doesMatchSearchQuery(searchQuery)
         } else emptyList()
     }

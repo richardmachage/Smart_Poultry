@@ -20,7 +20,6 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -41,7 +40,8 @@ fun ViewRecordsScreen(
 ) {
     val recordsViewModel = hiltViewModel<ViewRecordsViewModel>()
     val listOfRecords = recordsViewModel.getAllRecords().collectAsState(initial = emptyList())
-    val listOfRecordsFull = recordsViewModel.getAllFullRecords().collectAsState(initial = emptyList())
+    val listOfRecordsFull =
+        recordsViewModel.getAllFullRecords().collectAsState(initial = emptyList())
     val context = LocalContext.current
     Scaffold(
         topBar = {
@@ -64,7 +64,7 @@ fun ViewRecordsScreen(
             Column {
                 var queryValue by remember { mutableStateOf("") }
                 var active by remember { mutableStateOf(false) }
-                var items = remember { mutableStateListOf(listOfRecords) }
+                //var items = remember { mutableStateListOf(listOfRecords) }
                 SearchBar(
                     modifier = Modifier.fillMaxWidth(),
                     query = queryValue,
@@ -73,7 +73,7 @@ fun ViewRecordsScreen(
                     },
                     onSearch = {
                         active = false
-                    } ,
+                    },
                     active = active,
                     onActiveChange = {
                         active = it
@@ -94,9 +94,29 @@ fun ViewRecordsScreen(
                         }
                     }
                 ) {
-
+                    //SearchBar Content
+                    LazyColumn(modifier = Modifier.padding(6.dp)) {
+                        itemsIndexed(
+                            recordsViewModel.searchRecord(
+                                queryValue,
+                                listOfRecordsFull.value
+                            )
+                        ) { _, item ->
+                            MyVerticalSpacer(height = 5)
+                            //val cell = recordsViewModel.getCell(item.cellId)
+                            MyBorderedColumn(
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                Text(text = "Date: ${item.date}")
+                                Text(text = "Block: ${item.blockNum}")
+                                Text(text = "Cell : ${item.cellNum}")
+                                Text(text = "Eggs collected on this day: ${item.eggCount}")
+                                Text(text = "Chicken on this day: ${item.henCount}")
+                            }
+                        }
+                    }
                 }
-
+                //General List
                 LazyColumn(modifier = Modifier.padding(6.dp)) {
                     itemsIndexed(listOfRecords.value) { _, item ->
                         MyVerticalSpacer(height = 10)
