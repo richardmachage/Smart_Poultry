@@ -76,6 +76,8 @@ class SettingsViewModel @Inject constructor (
 
     fun onLogOut(){
         firebaseAuth.signOut()
-
+        viewModelScope.launch {
+            dataStore.clearDataStore()
+        }
     }
 }
