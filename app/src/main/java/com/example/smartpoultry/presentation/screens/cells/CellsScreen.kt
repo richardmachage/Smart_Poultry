@@ -197,7 +197,7 @@ fun CellsScreen(
                 }
 
 
-                MyVerticalSpacer(height = 3)
+//                MyVerticalSpacer(height = 3)
 
                 LazyColumn(
                     modifier = Modifier.padding(3.dp)
