@@ -5,7 +5,7 @@ import java.sql.Date
 import java.text.SimpleDateFormat
 
 data class EggRecordFull(
-    val recordId : Int,
+    //val recordId : Int,
     val date: Date,
     val blockNum : Int,
     val cellNum : Int,
@@ -15,7 +15,7 @@ data class EggRecordFull(
     @SuppressLint("SimpleDateFormat")
     fun doesMatchSearchQuery(query: String): Boolean {
         val matchingCombinations = listOf(
-            recordId.toString(),
+           // recordId.toString(),
             "date ${SimpleDateFormat("dd MMMM yyyy").format(date)}",
             //"Date ${SimpleDateFormat("dd MMMM yyyy").format(date)}",
             "cell $cellNum",
