@@ -7,8 +7,8 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Update
-import com.example.smartpoultry.data.dataModels.AlertFull
 import com.example.smartpoultry.data.dataModels.DailyEggCollection
+import com.example.smartpoultry.data.dataModels.EggRecordFull
 import kotlinx.coroutines.flow.Flow
 import java.sql.Date
 
@@ -77,6 +77,6 @@ interface EggCollectionDao {
 
     @Transaction
     @Query("SELECT egg_collection_tbl.date, egg_collection_tbl.eggCount , egg_collection_tbl.henCount, cells_tbl.cellNum, blocks_tbl.blockNum FROM egg_collection_tbl INNER JOIN cells_tbl ON egg_collection_tbl.cellId = cells_tbl.cellId INNER JOIN blocks_tbl ON cells_tbl.blockId = blocks_tbl.blockId ORDER BY date ASC")
-    fun getEggRecordsFull() : Flow<List<AlertFull>>
+    fun getEggRecordsFull() : Flow<List<EggRecordFull>>
 
 }

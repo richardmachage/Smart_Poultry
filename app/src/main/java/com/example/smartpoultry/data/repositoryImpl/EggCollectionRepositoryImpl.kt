@@ -2,6 +2,7 @@ package com.example.smartpoultry.data.repositoryImpl
 
 import android.util.Log
 import com.example.smartpoultry.data.dataModels.DailyEggCollection
+import com.example.smartpoultry.data.dataModels.EggRecordFull
 import com.example.smartpoultry.data.dataSource.remote.firebase.models.EggCollectionFb
 import com.example.smartpoultry.data.dataSource.room.entities.eggCollection.EggCollection
 import com.example.smartpoultry.data.dataSource.room.entities.eggCollection.EggCollectionDao
@@ -192,6 +193,10 @@ class EggCollectionRepositoryImpl @Inject constructor(
 
     override fun getOverallCollectionForPAstDays(startDate: Date): Flow<List<DailyEggCollection>> {
         return eggCollectionDao.getOverallCollectionForPAstDays(startDate)
+    }
+
+    override fun getAllFullEggCollection(): Flow<List<EggRecordFull>> {
+        return eggCollectionDao.getEggRecordsFull()
     }
 
     override fun getOverallCollectionBetweenDates(
