@@ -264,15 +264,19 @@ fun SettingsScreen(
                         Text(text = "Repeat interval for automated analysis\n(Time in hours)")
                         ToggleButton(
                             modifier = Modifier.align(Alignment.CenterVertically),
-                            isChecked = false,
+                            isChecked = isAutomatedAnalysis.value == "1",
                             onCheckedChange = {
-
-                            },
-                            isEnabled = true
-                            )
+                                if (it) settingsViewModel.saveToDataStore(
+                                    IS_AUTOMATED_ANALYSIS_KEY,
+                                    "1"
+                                ) else settingsViewModel.saveToDataStore(
+                                    IS_AUTOMATED_ANALYSIS_KEY,
+                                    "0"
+                                )
+                            })
 
                     }
-
+                    //edit part
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
