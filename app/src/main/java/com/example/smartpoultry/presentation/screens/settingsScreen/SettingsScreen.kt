@@ -259,9 +259,11 @@ fun SettingsScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(6.dp),
-                        horizontalArrangement = Arrangement.SpaceBetween
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+
                     ) {
-                        Text(text = "Repeat interval for automated analysis\n(Time in hours)")
+                        Text(text = "Repeat interval for automated analysis")
                         ToggleButton(
                             modifier = Modifier.align(Alignment.CenterVertically),
                             isChecked = isAutomatedAnalysis.value == "1",
@@ -314,7 +316,7 @@ fun SettingsScreen(
                                     }
                                 )
                             }
-                            Text(text = repeatInterval.value)
+                            Text(text ="Time in hours: ${repeatInterval.value}")
                             IconButton(onClick = { showDialog = true }) {
                                 Icon(imageVector = Icons.Default.Edit, contentDescription = "edit")
                             }
