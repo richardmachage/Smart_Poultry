@@ -1,7 +1,9 @@
 package com.example.smartpoultry.presentation.screens.viewRecordsScreen
 
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.smartpoultry.data.dataModels.EggRecordFull
 import com.example.smartpoultry.data.dataSource.room.entities.cells.Cells
 import com.example.smartpoultry.data.dataSource.room.entities.eggCollection.EggCollection
 import com.example.smartpoultry.domain.repository.CellsRepository
@@ -20,6 +22,8 @@ class ViewRecordsViewModel @Inject constructor(
 ) : ViewModel() {
 
     lateinit var cellsMap : Map<Int,Cells>
+    var searchText = mutableStateOf("")
+    var listOfCollectionRecords = mutableListOf<EggRecordFull>()
 
     init {
         viewModelScope.launch {
@@ -28,6 +32,11 @@ class ViewRecordsViewModel @Inject constructor(
             }
         }
 
+        viewModelScope.launch {
+            eggCollectionRepository.getAllFullEggCollection().collect{
+                listOfCollectionRecords.addAll(it)
+            }
+        }
     }
     fun getAllRecords (): Flow<List<EggCollection>> {
         return eggCollectionRepository.getAllRecords()
@@ -42,5 +51,10 @@ class ViewRecordsViewModel @Inject constructor(
         return cellsMap[cellId]
     }
 
+    fun searchRecord(searchQuery : String) : List<EggRecordFull> {
 
+        return if (searchQuery.isNotBlank()) listOfCollectionRecords.filter { record->
+            record.doesMatchSearchQuery(searchQuery)
+        } else emptyList()
+    }
 }
