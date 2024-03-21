@@ -40,6 +40,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.smartpoultry.data.dataSource.room.entities.cells.Cells
+import com.example.smartpoultry.presentation.composables.MyCard
 import com.example.smartpoultry.presentation.composables.MyInputDialog
 import com.example.smartpoultry.presentation.composables.MyOutlineTextFiled
 import com.example.smartpoultry.presentation.composables.MyVerticalSpacer
@@ -184,13 +185,17 @@ fun CellsScreen(
                     .fillMaxSize()
             ) {
 
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceEvenly
-                ) {
-                    Text(text = "Block Number: ${block.blockNum}")
-                    Text(text = "Number of cells is : ${listOfCells.size}")
+                MyCard(modifier = Modifier.fillMaxWidth()
+                    .padding(6.dp)) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth().padding(6.dp),
+                        horizontalArrangement = Arrangement.SpaceEvenly
+                    ) {
+                        Text(text = "Block Number : ${block.blockNum}")
+                        Text(text = "Number of cells : ${listOfCells.size}")
+                    }
                 }
+
 
                 MyVerticalSpacer(height = 3)
 
