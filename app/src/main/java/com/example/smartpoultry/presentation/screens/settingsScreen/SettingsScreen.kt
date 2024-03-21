@@ -42,6 +42,7 @@ import com.example.smartpoultry.presentation.composables.MyBorderedColumn
 import com.example.smartpoultry.presentation.composables.MyInputDialog
 import com.example.smartpoultry.presentation.composables.MyOutlineTextFiled
 import com.example.smartpoultry.presentation.composables.MyVerticalSpacer
+import com.example.smartpoultry.presentation.composables.ToggleButton
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.navigation.popUpTo
@@ -57,13 +58,16 @@ fun SettingsScreen(
     val settingsViewModel = hiltViewModel<SettingsViewModel>()
     val pastDays =
         remember { settingsViewModel.myDataStore.readData(PAST_DAYS_KEY) }.collectAsState(initial = "0")
-    //val pastDays = remember {settingsViewModel.myPastDays.value}//getFromDataStore(PAST_DAYS_KEY).ifBlank { "0" }}//.pastDays.collectAsState()
     val consucutiveDays =
         remember { settingsViewModel.myDataStore.readData(CONSUCUTIVE_DAYS_KEY) }.collectAsState(
             initial = "0"
         )
     val thresholdRatio =
         remember { settingsViewModel.myDataStore.readData(THRESHOLD_RATIO_KEY) }.collectAsState(
+            initial = "0"
+        )
+    val repeatInterval =
+        remember { settingsViewModel.myDataStore.readData(REPEAT_INTERVAL_KEY) }.collectAsState(
             initial = "0"
         )
 
@@ -239,6 +243,67 @@ fun SettingsScreen(
                             )
                         }
                         Text(text = thresholdRatio.value)
+                        IconButton(onClick = { showDialog = true }) {
+                            Icon(imageVector = Icons.Default.Edit, contentDescription = "edit")
+                        }
+                    }
+                }
+                MyVerticalSpacer(height = 10)
+
+                //repeat analysis period
+                MyBorderedColumn {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(6.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Text(text = "Repeat interval for automated analysis (Time in hours)")
+                        ToggleButton(
+                            modifier = Modifier.align(Alignment.CenterVertically),
+                            isChecked = false,
+
+                            )
+
+                    }
+
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(6.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        var showDialog by remember {
+                            mutableStateOf(false)
+                        }
+                        var newRepeatInterval by remember {
+                            mutableStateOf(repeatInterval.value)
+                        }
+                        MyInputDialog(
+                            showDialog = showDialog,
+                            title = "Repeat Interval",
+                            onConfirm = {
+                                settingsViewModel.saveToDataStore(
+                                    REPEAT_INTERVAL_KEY,
+                                    newRepeatInterval
+                                )
+                                showDialog = false
+                                //Log.i(PAST_DAYS_KEY + "on dialog click",newPastDays)
+                            },
+                            onDismiss = { showDialog = false }
+                        ) {
+                            MyOutlineTextFiled(
+                                modifier = Modifier.fillMaxWidth(),
+                                label = "Repeat interval",
+                                keyboardType = KeyboardType.Number,
+                                initialText = repeatInterval.value,
+                                onValueChange = {
+                                    newRepeatInterval = it
+                                }
+                            )
+                        }
+                        Text(text = repeatInterval.value)
                         IconButton(onClick = { showDialog = true }) {
                             Icon(imageVector = Icons.Default.Edit, contentDescription = "edit")
                         }

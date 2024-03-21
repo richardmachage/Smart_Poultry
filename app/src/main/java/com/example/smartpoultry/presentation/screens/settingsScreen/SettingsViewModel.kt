@@ -1,6 +1,5 @@
 package com.example.smartpoultry.presentation.screens.settingsScreen
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.smartpoultry.data.dataSource.datastore.AppDataStore
@@ -15,6 +14,8 @@ import javax.inject.Inject
 const val PAST_DAYS_KEY = "past_days"
 const val CONSUCUTIVE_DAYS_KEY = "consucutive_days"
 const val THRESHOLD_RATIO_KEY = "threshold_ratio"
+const val REPEAT_INTERVAL_KEY = "repeat_interval"
+const val IS_AUTOMATED_ANALYSIS_KEY = "is_automated_analysis"
 
 @HiltViewModel
 class SettingsViewModel @Inject constructor (
@@ -33,12 +34,16 @@ class SettingsViewModel @Inject constructor (
     private val _thresholdRatio = MutableStateFlow("")
     val thresholdRatio: StateFlow<String> = _thresholdRatio
 
+    private val _repeatInterval = MutableStateFlow("")
+    val repeatInterval : StateFlow<String> = _repeatInterval
+
+    private val _isAutomatedAnalysis = MutableStateFlow("")
+    val isAutomatedAnalysis : StateFlow<String> = _isAutomatedAnalysis
+
     init {
         //getPastDays()
         loadInitialValues()
-        Log.i(THRESHOLD_RATIO_KEY, thresholdRatio.value)
-        Log.i(CONSUCUTIVE_DAYS_KEY, consucutiveNumberOfDays.value)
-        Log.i(PAST_DAYS_KEY, pastDays.value)
+
     }
 
     private fun loadInitialValues() {
@@ -46,18 +51,15 @@ class SettingsViewModel @Inject constructor (
             _pastDays.value = getFromDataStore(PAST_DAYS_KEY).ifBlank { "0" }
             _thresholdRatio.value = getFromDataStore(THRESHOLD_RATIO_KEY).ifBlank { "0" }
             _consucutiveNumberOfDays.value = getFromDataStore(CONSUCUTIVE_DAYS_KEY).ifBlank { "0" }
+            _repeatInterval.value = getFromDataStore(REPEAT_INTERVAL_KEY).ifBlank { "0" }
+            _isAutomatedAnalysis.value = getFromDataStore(IS_AUTOMATED_ANALYSIS_KEY).ifBlank { "0" }
         }
     }
 
     fun saveToDataStore(key: String, value : String){
         viewModelScope.launch {
-            Log.i("Saving to Datastore from viewmodel:", value)
             dataStore.saveData(key, value)
 
-            Log.i("Load values from datastore", value)
-            //loadInitialValues()
-            Log.i("new pastDays", getFromDataStore(PAST_DAYS_KEY))
-            Log.i("stateFlow pastDays", pastDays.value)
         }
     }
 
