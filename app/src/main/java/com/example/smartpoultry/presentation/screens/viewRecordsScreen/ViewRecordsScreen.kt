@@ -41,6 +41,7 @@ fun ViewRecordsScreen(
 ) {
     val recordsViewModel = hiltViewModel<ViewRecordsViewModel>()
     val listOfRecords = recordsViewModel.getAllRecords().collectAsState(initial = emptyList())
+    val listOfRecordsFull = recordsViewModel.getAllFullRecords().collectAsState(initial = emptyList())
     val context = LocalContext.current
     Scaffold(
         topBar = {

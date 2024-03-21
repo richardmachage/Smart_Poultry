@@ -47,6 +47,14 @@ class ViewRecordsViewModel @Inject constructor(
             )
     }
 
+    fun getAllFullRecords (): Flow<List<EggRecordFull>> {
+        return eggCollectionRepository.getAllFullEggCollection()
+            .stateIn(
+                scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(),
+                initialValue = emptyList()
+            )
+    }
     fun getCell(cellId : Int): Cells?{
         return cellsMap[cellId]
     }
