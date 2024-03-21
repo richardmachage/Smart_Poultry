@@ -8,4 +8,8 @@ data class AlertFull(
     val attended : Boolean,
     val cellNum : Int,
     val blockNum : Int
-)
+){
+    fun doesMatchSearchQuery(){
+
+    }
+}
