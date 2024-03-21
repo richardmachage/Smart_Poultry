@@ -70,6 +70,9 @@ fun SettingsScreen(
         remember { settingsViewModel.myDataStore.readData(REPEAT_INTERVAL_KEY) }.collectAsState(
             initial = "0"
         )
+    val isAutomatedAnalysis = remember {
+        settingsViewModel.myDataStore.readData(IS_AUTOMATED_ANALYSIS_KEY)
+    }.collectAsState(initial = "0")
 
     Scaffold(
         topBar = {
@@ -258,11 +261,14 @@ fun SettingsScreen(
                             .padding(6.dp),
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
-                        Text(text = "Repeat interval for automated analysis (Time in hours)")
+                        Text(text = "Repeat interval for automated analysis\n(Time in hours)")
                         ToggleButton(
                             modifier = Modifier.align(Alignment.CenterVertically),
                             isChecked = false,
+                            onCheckedChange = {
 
+                            },
+                            isEnabled = true
                             )
 
                     }
