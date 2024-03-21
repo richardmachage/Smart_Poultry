@@ -59,18 +59,14 @@ fun EggScreen(
 ) {
 
     val eggViewModel = hiltViewModel<EggScreenViewModel>()
-    val listOfBlocks = remember{ eggViewModel.myInputBlocks}
+    val listOfBlocks = remember { eggViewModel.myInputBlocks }
     val context = LocalContext.current
 
-    LaunchedEffect(eggViewModel.toastMessage.value){
-        if (eggViewModel.toastMessage.value.isNotBlank()){
+    LaunchedEffect(eggViewModel.toastMessage.value) {
+        if (eggViewModel.toastMessage.value.isNotBlank()) {
             Toast.makeText(context, eggViewModel.toastMessage.value, Toast.LENGTH_SHORT).show()
             eggViewModel.toastMessage.value = ""
         }
-    }
-
-    LaunchedEffect(eggViewModel.myInputBlocks){
-
     }
 
     MyCircularProgressBar(isLoading = eggViewModel.isLoading.value)
@@ -80,7 +76,6 @@ fun EggScreen(
             .fillMaxSize(),
         color = MaterialTheme.colorScheme.background
     ) {
-
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -89,9 +84,9 @@ fun EggScreen(
             NormButton(
                 modifier = Modifier.fillMaxWidth(),
                 onButtonClick = {
-                                navigator.navigate(ViewRecordsScreenDestination)
-            }, btnName = "View All records")
-
+                    navigator.navigate(ViewRecordsScreenDestination)
+                }, btnName = "View All records"
+            )
             //Defining the datePicker
             MyDatePicker(
                 modifier = Modifier
@@ -111,13 +106,12 @@ fun EggScreen(
             //Blocks and cells UI begins here
             LazyColumn { //Column of Blocks
                 itemsIndexed(listOfBlocks) { blockIndex, block ->
-
                     MyBorderedColumn(
                         modifier = Modifier
                             .padding(4.dp)
 
                     ) {
-                        Column{
+                        Column {
                             Row(
                                 modifier = Modifier
                                     .fillMaxWidth(),
@@ -138,7 +132,7 @@ fun EggScreen(
                             }
 
                             //These are the cell cards
-                            var saveButtonState by remember{ mutableStateOf(true) }
+                            var saveButtonState by remember { mutableStateOf(true) }
                             LazyRow {
                                 itemsIndexed(listOfBlocks[blockIndex].cells) { cellIndex, cell ->
                                     /*Card(
@@ -155,9 +149,9 @@ fun EggScreen(
                                     ) */
                                     MyCard(
                                         modifier = Modifier.width(
-                                            (LocalConfiguration.current.screenWidthDp/3).dp
+                                            (LocalConfiguration.current.screenWidthDp / 3).dp
                                         )
-                                    ){
+                                    ) {
                                         Text(
                                             text = "Cell :${cell.cellNum}",
                                             modifier = Modifier
@@ -171,8 +165,12 @@ fun EggScreen(
                                                 .align(Alignment.CenterHorizontally)
                                         )
 
-                                        var textFieldValueState by remember { mutableStateOf(TextFieldValue(text = listOfBlocks[blockIndex].cells[cellIndex].eggCount.toString())) }
-                                        var isErrorState by remember{ mutableStateOf(false) }
+                                        var textFieldValueState by remember {
+                                            mutableStateOf(
+                                                TextFieldValue(text = listOfBlocks[blockIndex].cells[cellIndex].eggCount.toString())
+                                            )
+                                        }
+                                        var isErrorState by remember { mutableStateOf(false) }
                                         OutlinedTextField(
                                             modifier = Modifier
                                                 .fillMaxSize()
@@ -186,10 +184,10 @@ fun EggScreen(
 
                                                 val newEggCount = newText.text.toIntOrNull() ?: 0
 
-                                                if (newEggCount > cell.henCount){
+                                                if (newEggCount > cell.henCount) {
                                                     isErrorState = true
                                                     saveButtonState = false
-                                                }else {
+                                                } else {
                                                     isErrorState = false
                                                     saveButtonState = true
                                                     eggViewModel.updateEggCount(
@@ -230,9 +228,9 @@ fun EggScreen(
                     }
 
                 }
+
             }
 
-            //MyBlocks(numOfBlocks = 20)
         }
     }
 }

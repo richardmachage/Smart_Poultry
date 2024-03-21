@@ -76,5 +76,6 @@ class SettingsViewModel @Inject constructor (
 
     fun onLogOut(){
         firebaseAuth.signOut()
+
     }
 }

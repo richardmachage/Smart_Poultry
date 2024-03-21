@@ -52,21 +52,6 @@ fun ViewRecordsScreen(
         Surface(
             modifier = Modifier.padding(paddingValues)
         ) {
-            /*
-            SearchBar(
-                query = "",
-                onQueryChange = {},
-                onSearch = {},
-                active = true,
-                onActiveChange = {
-                },
-                placeholder = { Text(text = "search")},
-                trailingIcon = {
-                    IconButton(onClick = { Toast.makeText(context, "Search clicked", Toast.LENGTH_SHORT).show() }) {
-                        Icon(imageVector = Icons.Default.Search, contentDescription ="search" )
-                    }
-                }
-            ) {*/
 
             LazyColumn(modifier = Modifier.padding(6.dp)) {
                 itemsIndexed(listOfRecords.value) { _, item ->
