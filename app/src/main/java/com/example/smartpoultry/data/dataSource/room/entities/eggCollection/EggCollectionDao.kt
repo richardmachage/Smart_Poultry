@@ -7,6 +7,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Update
+import com.example.smartpoultry.data.dataModels.AlertFull
 import com.example.smartpoultry.data.dataModels.DailyEggCollection
 import kotlinx.coroutines.flow.Flow
 import java.sql.Date
@@ -74,4 +75,7 @@ interface EggCollectionDao {
     @Query("SELECT date, SUM(eggcount) AS totalEggs FROM egg_collection_tbl WHERE date >= :startDate GROUP BY date ORDER BY date DESC")
     fun getOverallCollectionForPAstDays(startDate: Date) : Flow<List<DailyEggCollection>>
 
+    @Transaction
+    @Query("SELECT alerts_tbl.alertId, alerts_tbl.date, alerts_tbl.attended, cells_tbl.cellNum, blocks_tbl.blockNum FROM alerts_tbl INNER JOIN cells_tbl ON alerts_tbl.flaggedCellId = cells_tbl.cellId INNER JOIN blocks_tbl ON cells_tbl.blockId = blocks_tbl.blockId ORDER BY attended ASC, date ASC")
+    fun getFlaggedCellsFull() : Flow<List<AlertFull>>
 }

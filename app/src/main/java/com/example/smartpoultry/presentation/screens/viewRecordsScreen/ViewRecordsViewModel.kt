@@ -41,4 +41,6 @@ class ViewRecordsViewModel @Inject constructor(
     fun getCell(cellId : Int): Cells?{
         return cellsMap[cellId]
     }
+
+
 }
