@@ -16,14 +16,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import com.example.smartpoultry.presentation.theme.SmartPoultryTheme
+import com.example.smartpoultry.data.dataModels.EggRecordFull
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MySearchBar(
    // isActive : Boolean = false
-    listOfRecords : List<String> = listOf("moday","elena", "enola", "machine", "debryune")
+    listOfRecords : List<String> = listOf("moday","elena", "enola", "machine", "debryune"),
+    searchRecord : () -> List<EggRecordFull>
 ) {
     var queryValue by remember { mutableStateOf("") }
     var active by remember { mutableStateOf(false) }
@@ -62,10 +62,3 @@ fun MySearchBar(
 }
 
 
-@Preview(showSystemUi = true, showBackground = true)
-@Composable
-fun MyPrev(){
-    SmartPoultryTheme {
-        MySearchBar()
-    }
-}

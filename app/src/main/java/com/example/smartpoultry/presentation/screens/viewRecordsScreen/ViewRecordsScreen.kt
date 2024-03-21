@@ -1,20 +1,29 @@
 package com.example.smartpoultry.presentation.screens.viewRecordsScreen
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SearchBar
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
@@ -51,22 +60,59 @@ fun ViewRecordsScreen(
         Surface(
             modifier = Modifier.padding(paddingValues)
         ) {
+            Column {
+                var queryValue by remember { mutableStateOf("") }
+                var active by remember { mutableStateOf(false) }
+                var items = remember { mutableStateListOf(listOfRecords) }
+                SearchBar(
+                    modifier = Modifier.fillMaxWidth(),
+                    query = queryValue,
+                    onQueryChange = { newQuery ->
+                        queryValue = newQuery
+                    },
+                    onSearch = {
+                        active = false
+                    } ,
+                    active = active,
+                    onActiveChange = {
+                        active = it
+                    },
+                    placeholder = {
+                        Text(text = "Search")
+                    },
+                    leadingIcon = {
+                        Icon(imageVector = Icons.Default.Search, contentDescription = "search")
+                    },
+                    trailingIcon = {
+                        IconButton(
+                            onClick = {
+                                if (queryValue.isNotBlank()) queryValue = ""
+                                else active = false
+                            }) {
+                            Icon(imageVector = Icons.Default.Clear, contentDescription = "clear")
+                        }
+                    }
+                ) {
 
-            LazyColumn(modifier = Modifier.padding(6.dp)) {
-                itemsIndexed(listOfRecords.value) { _, item ->
-                    MyVerticalSpacer(height = 10)
-                    val cell = recordsViewModel.getCell(item.cellId)
-                    MyBorderedColumn(
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Text(text = "Date: ${item.date}")
-                        Text(text = "BlockID: ${cell?.blockId}")
-                        Text(text = "Cell num: ${cell?.cellNum}")
-                        Text(text = "Eggs collected: ${item.eggCount}")
-                        Text(text = "Chicken on this day: ${item.henCount}")
+                }
+
+                LazyColumn(modifier = Modifier.padding(6.dp)) {
+                    itemsIndexed(listOfRecords.value) { _, item ->
+                        MyVerticalSpacer(height = 10)
+                        val cell = recordsViewModel.getCell(item.cellId)
+                        MyBorderedColumn(
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            Text(text = "Date: ${item.date}")
+                            Text(text = "BlockID: ${cell?.blockId}")
+                            Text(text = "Cell num: ${cell?.cellNum}")
+                            Text(text = "Eggs collected: ${item.eggCount}")
+                            Text(text = "Chicken on this day: ${item.henCount}")
+                        }
                     }
                 }
             }
+
         }
     }
 }
