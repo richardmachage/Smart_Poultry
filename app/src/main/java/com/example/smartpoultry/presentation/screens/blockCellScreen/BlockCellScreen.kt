@@ -188,7 +188,7 @@ fun BlockCellScreen(
                                 .fillMaxWidth(0.9f)
                                 .padding(6.dp)
                         ) {
-                            Text(text = "BlockId : ${blockWithCells.block.blockId}")
+                          //  Text(text = "BlockId : ${blockWithCells.block.blockId}")
                             Text(text = "Block Number : ${blockWithCells.block.blockNum}")
                             Text(text = "Number of cells: ${blockWithCells.cell.size}")
                         }
