@@ -277,47 +277,50 @@ fun SettingsScreen(
 
                     }
                     //edit part
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(6.dp),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        var showDialog by remember {
-                            mutableStateOf(false)
-                        }
-                        var newRepeatInterval by remember {
-                            mutableStateOf(repeatInterval.value)
-                        }
-                        MyInputDialog(
-                            showDialog = showDialog,
-                            title = "Repeat Interval",
-                            onConfirm = {
-                                settingsViewModel.saveToDataStore(
-                                    REPEAT_INTERVAL_KEY,
-                                    newRepeatInterval
-                                )
-                                showDialog = false
-                                //Log.i(PAST_DAYS_KEY + "on dialog click",newPastDays)
-                            },
-                            onDismiss = { showDialog = false }
+                    if (isAutomatedAnalysis.value == "1"){
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(6.dp),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
                         ) {
-                            MyOutlineTextFiled(
-                                modifier = Modifier.fillMaxWidth(),
-                                label = "Repeat interval",
-                                keyboardType = KeyboardType.Number,
-                                initialText = repeatInterval.value,
-                                onValueChange = {
-                                    newRepeatInterval = it
-                                }
-                            )
-                        }
-                        Text(text = repeatInterval.value)
-                        IconButton(onClick = { showDialog = true }) {
-                            Icon(imageVector = Icons.Default.Edit, contentDescription = "edit")
+                            var showDialog by remember {
+                                mutableStateOf(false)
+                            }
+                            var newRepeatInterval by remember {
+                                mutableStateOf(repeatInterval.value)
+                            }
+                            MyInputDialog(
+                                showDialog = showDialog,
+                                title = "Repeat Interval",
+                                onConfirm = {
+                                    settingsViewModel.saveToDataStore(
+                                        REPEAT_INTERVAL_KEY,
+                                        newRepeatInterval
+                                    )
+                                    showDialog = false
+                                    //Log.i(PAST_DAYS_KEY + "on dialog click",newPastDays)
+                                },
+                                onDismiss = { showDialog = false }
+                            ) {
+                                MyOutlineTextFiled(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    label = "Time in Hours",
+                                    keyboardType = KeyboardType.Number,
+                                    initialText = repeatInterval.value,
+                                    onValueChange = {
+                                        newRepeatInterval = it
+                                    }
+                                )
+                            }
+                            Text(text = repeatInterval.value)
+                            IconButton(onClick = { showDialog = true }) {
+                                Icon(imageVector = Icons.Default.Edit, contentDescription = "edit")
+                            }
                         }
                     }
+
                 }
                 MyVerticalSpacer(height = 10)
 
