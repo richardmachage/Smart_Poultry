@@ -1,6 +1,7 @@
 package com.example.smartpoultry.presentation.screens.viewRecordsScreen
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -12,6 +13,7 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SearchBar
 import androidx.compose.material3.Surface
@@ -59,7 +61,10 @@ fun ViewRecordsScreen(
         }
     ) { paddingValues ->
         Surface(
-            modifier = Modifier.padding(paddingValues)
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues),
+            color = MaterialTheme.colorScheme.background,
         ) {
             Column {
                 var queryValue by remember { mutableStateOf("") }
@@ -95,23 +100,31 @@ fun ViewRecordsScreen(
                     }
                 ) {
                     //SearchBar Content
-                    LazyColumn(modifier = Modifier.padding(6.dp)) {
-                        itemsIndexed(
-                            recordsViewModel.searchRecord(
-                                queryValue,
-                                listOfRecordsFull.value
-                            )
-                        ) { _, item ->
-                            MyVerticalSpacer(height = 5)
-                            //val cell = recordsViewModel.getCell(item.cellId)
-                            MyBorderedColumn(
-                                modifier = Modifier.fillMaxWidth()
-                            ) {
-                                Text(text = "Date: ${item.date}")
-                                Text(text = "Block: ${item.blockNum}")
-                                Text(text = "Cell : ${item.cellNum}")
-                                Text(text = "Eggs collected on this day: ${item.eggCount}")
-                                Text(text = "Chicken on this day: ${item.henCount}")
+                    Surface(
+                        modifier = Modifier
+                            .fillMaxSize(),
+                        color = MaterialTheme.colorScheme.background,
+                    ) {
+
+
+                        LazyColumn(modifier = Modifier.padding(6.dp)) {
+                            itemsIndexed(
+                                recordsViewModel.searchRecord(
+                                    queryValue,
+                                    listOfRecordsFull.value
+                                )
+                            ) { _, item ->
+                                MyVerticalSpacer(height = 5)
+                                //val cell = recordsViewModel.getCell(item.cellId)
+                                MyBorderedColumn(
+                                    modifier = Modifier.fillMaxWidth()
+                                ) {
+                                    Text(text = "Date: ${item.date}")
+                                    Text(text = "Block: ${item.blockNum}")
+                                    Text(text = "Cell : ${item.cellNum}")
+                                    Text(text = "Eggs collected on this day: ${item.eggCount}")
+                                    Text(text = "Chicken on this day: ${item.henCount}")
+                                }
                             }
                         }
                     }
@@ -137,4 +150,5 @@ fun ViewRecordsScreen(
         }
     }
 }
+
 

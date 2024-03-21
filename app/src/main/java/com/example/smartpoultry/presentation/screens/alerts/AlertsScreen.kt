@@ -36,6 +36,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.smartpoultry.presentation.composables.MyBorderedRow
+import com.example.smartpoultry.presentation.composables.MyCard
 import com.example.smartpoultry.presentation.composables.MyInputDialog
 import com.example.smartpoultry.presentation.composables.MyVerticalSpacer
 import com.ramcosta.composedestinations.annotation.Destination
@@ -90,8 +91,8 @@ fun AlertScreen(
             if (listOfAlerts.isNotEmpty()) {
                 Column {
 
-                    Card(
-                        modifier = Modifier.padding(6.dp)
+                    MyCard(
+                        modifier = Modifier.padding(6.dp).fillMaxWidth()
                     ) {
                         Row(
                             modifier = Modifier
