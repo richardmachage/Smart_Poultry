@@ -45,7 +45,6 @@ fun ViewRecordsScreen(
                         )
                     }
                 },
-                // scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
             )
         }
     ) { paddingValues ->
@@ -53,6 +52,7 @@ fun ViewRecordsScreen(
             modifier = Modifier.padding(paddingValues)
         ) {
 
+            Mys
             LazyColumn(modifier = Modifier.padding(6.dp)) {
                 itemsIndexed(listOfRecords.value) { _, item ->
                     MyVerticalSpacer(height = 10)
