@@ -82,13 +82,6 @@ fun CellsScreen(
                             cellsViewModel.cellNumText.value = it
                         }
                     )
-                    /*TextField( //shows cell num
-                        value = cellsViewModel.cellNumText.value,
-                        onValueChange = {
-                            cellsViewModel.cellNumText.value = it
-                        },
-                        label = { Text(text = "Cell Number") }
-                    )*/
 
                     MyVerticalSpacer(height = 5)
 
@@ -100,15 +93,7 @@ fun CellsScreen(
                             cellsViewModel.henCountText.value = it
                         }
                     )
-                    /*TextField(
-                        //shows hen count
-                        value = cellsViewModel.henCountText.value,
-                        onValueChange = {
-                            cellsViewModel.henCountText.value = it
-                        },
-                        label = { Text(text = "Hen Count") },
 
-                        )*/
                 }
             },
             confirmButton = {
@@ -238,7 +223,7 @@ fun CellsScreen(
 
                                     .padding(6.dp)
                             ) {
-                                Text(text = "Cell Id : ${item.cellId}")
+                               // Text(text = "Cell Id : ${item.cellId}")
                                 Text(text = "Cell number : ${item.cellNum}")
                                 Text(text = "Number of Chicken : ${item.henCount}")
                             }
