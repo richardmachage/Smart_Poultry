@@ -9,7 +9,7 @@ import java.sql.Date
 interface EggCollectionRepository{
     suspend fun addNewRecord(eggCollection: EggCollection) : Boolean
 
-    suspend fun deleteRecord(eggCollection: EggCollection)
+    suspend fun deleteRecord(recordId: Int)
 
     fun getAllRecords() : Flow<List<EggCollection>>
 

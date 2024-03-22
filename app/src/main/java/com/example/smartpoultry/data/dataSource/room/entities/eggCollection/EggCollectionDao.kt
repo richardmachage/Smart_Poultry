@@ -1,7 +1,6 @@
 package com.example.smartpoultry.data.dataSource.room.entities.eggCollection
 
 import androidx.room.Dao
-import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
@@ -22,8 +21,8 @@ interface EggCollectionDao {
     @Update
     suspend fun updateCollectionRecord(eggCollection: EggCollection)
 
-    @Delete
-    suspend fun deleteCollectionRecord(eggCollection: EggCollection)
+    @Query("DELETE  FROM egg_collection_tbl WHERE productionId = :recordId")
+    suspend fun deleteCollectionRecord(recordId: Int)
 
     @Query("SELECT * FROM egg_collection_tbl ORDER BY date DESC ")
     fun getAllCollectionRecords(): Flow<List<EggCollection>>

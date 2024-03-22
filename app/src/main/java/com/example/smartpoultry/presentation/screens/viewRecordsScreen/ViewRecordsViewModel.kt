@@ -66,6 +66,8 @@ class ViewRecordsViewModel @Inject constructor(
     }
 
     fun onDeleteRecord(recordId:Int){
-
+        viewModelScope.launch {
+            eggCollectionRepository.deleteRecord(recordId)
+        }
     }
 }

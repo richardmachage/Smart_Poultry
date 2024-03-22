@@ -115,11 +115,11 @@ class EggCollectionRepositoryImpl @Inject constructor(
         return insertStatus
     }
 
-    override suspend fun deleteRecord(eggCollection: EggCollection) {
-        eggCollectionDao.deleteCollectionRecord(eggCollection)
+    override suspend fun deleteRecord(recordId: Int) {
+        eggCollectionDao.deleteCollectionRecord(recordId)
         fireStoreDb
             .collection("EggCollections")
-            .document(eggCollection.productionId.toString())
+            .document(recordId.toString())
             .delete()
     }
 
