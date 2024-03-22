@@ -78,12 +78,13 @@ class EggCollectionRepositoryImpl @Inject constructor(
                         DocumentChange.Type.REMOVED -> {
                             CoroutineScope(Dispatchers.IO).launch {
                                 eggCollectionDao.deleteCollectionRecord(
-                                    EggCollection(
+                                    eggCollection.productionId
+                                    /*EggCollection(
                                         eggCollection.productionId,
                                         date = Date(eggCollection.date.time),                                        eggCollection.cellId,
                                         eggCollection.eggCount,
                                         eggCollection.henCount
-                                    )
+                                    )*/
                                 )
                             }
                         }
