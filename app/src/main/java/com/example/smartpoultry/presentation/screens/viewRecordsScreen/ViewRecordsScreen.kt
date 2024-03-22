@@ -9,6 +9,7 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -30,6 +31,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.smartpoultry.presentation.composables.MyBorderedColumn
+import com.example.smartpoultry.presentation.composables.MyBorderedRow
 import com.example.smartpoultry.presentation.composables.MyVerticalSpacer
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -105,8 +107,7 @@ fun ViewRecordsScreen(
                             .fillMaxSize(),
                         color = MaterialTheme.colorScheme.background,
                     ) {
-
-
+                        
                         LazyColumn(modifier = Modifier.padding(6.dp)) {
                             itemsIndexed(
                                 recordsViewModel.searchRecord(
@@ -116,14 +117,20 @@ fun ViewRecordsScreen(
                             ) { _, item ->
                                 MyVerticalSpacer(height = 5)
                                 //val cell = recordsViewModel.getCell(item.cellId)
-                                MyBorderedColumn(
+                                MyBorderedRow(
                                     modifier = Modifier.fillMaxWidth()
                                 ) {
-                                    Text(text = "Date: ${item.date}")
-                                    Text(text = "Block: ${item.blockNum}")
-                                    Text(text = "Cell : ${item.cellNum}")
-                                    Text(text = "Eggs collected on this day: ${item.eggCount}")
-                                    Text(text = "Chicken on this day: ${item.henCount}")
+                                    Column {
+                                        Text(text = "Date: ${item.date}")
+                                        Text(text = "Block: ${item.blockNum}")
+                                        Text(text = "Cell : ${item.cellNum}")
+                                        Text(text = "Eggs collected on this day: ${item.eggCount}")
+                                        Text(text = "Chicken on this day: ${item.henCount}")
+                                    }
+                                    
+                                    IconButton(onClick = { }) {
+                                        Icon(imageVector = Icons.Filled.Delete, contentDescription = "delete")
+                                    }
                                 }
                             }
                         }
