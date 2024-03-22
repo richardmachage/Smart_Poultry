@@ -1,5 +1,6 @@
 package com.example.smartpoultry.presentation.screens.viewRecordsScreen
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -30,8 +31,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.smartpoultry.presentation.composables.MyBorderedColumn
 import com.example.smartpoultry.presentation.composables.MyBorderedRow
+import com.example.smartpoultry.presentation.composables.MyInputDialog
 import com.example.smartpoultry.presentation.composables.MyVerticalSpacer
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -118,9 +119,11 @@ fun ViewRecordsScreen(
                                 MyVerticalSpacer(height = 5)
                                 //val cell = recordsViewModel.getCell(item.cellId)
                                 MyBorderedRow(
-                                    modifier = Modifier.fillMaxWidth()
+                                    modifier = Modifier.fillMaxWidth(),
+                                    horizontalArrangement = Arrangement.SpaceBetween
                                 ) {
-                                    Column {
+                                    Column (
+                                    ) {
                                         Text(text = "Date: ${item.date}")
                                         Text(text = "Block: ${item.blockNum}")
                                         Text(text = "Cell : ${item.cellNum}")
@@ -128,7 +131,7 @@ fun ViewRecordsScreen(
                                         Text(text = "Chicken on this day: ${item.henCount}")
                                     }
                                     
-                                    IconButton(onClick = { }) {
+                                    IconButton(onClick = {}) {
                                         Icon(imageVector = Icons.Filled.Delete, contentDescription = "delete")
                                     }
                                 }
@@ -138,17 +141,36 @@ fun ViewRecordsScreen(
                 }
                 //General List
                 LazyColumn(modifier = Modifier.padding(6.dp)) {
-                    itemsIndexed(listOfRecords.value) { _, item ->
-                        MyVerticalSpacer(height = 10)
-                        val cell = recordsViewModel.getCell(item.cellId)
-                        MyBorderedColumn(
-                            modifier = Modifier.fillMaxWidth()
+                    itemsIndexed(listOfRecordsFull.value) { _, item ->
+                        var showDeleteDialog by remember{ mutableStateOf(false)}
+                        MyInputDialog(
+                            showDialog= showDeleteDialog,
+                            title = "Delete Record",
+                            onConfirm = {
+                                recordsViewModel.onDeleteRecord(item.productionId)
+                                showDeleteDialog = false
+                            },
+                            onDismiss = {showDeleteDialog = false}
                         ) {
-                            Text(text = "Date: ${item.date}")
-                            Text(text = "BlockID: ${cell?.blockId}")
-                            Text(text = "Cell num: ${cell?.cellNum}")
-                            Text(text = "Eggs collected: ${item.eggCount}")
-                            Text(text = "Chicken on this day: ${item.henCount}")
+                            Text(text = "Delete record for block ${item.blockNum} cell ${item.cellNum} date ${item.date} ?")
+                        }
+                        MyVerticalSpacer(height = 10)
+                        MyBorderedRow(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
+                            Column (
+                            ) {
+                                Text(text = "Date: ${item.date}")
+                                Text(text = "Block: ${item.blockNum}")
+                                Text(text = "Cell : ${item.cellNum}")
+                                Text(text = "Eggs collected on this day: ${item.eggCount}")
+                                Text(text = "Chicken on this day: ${item.henCount}")
+                            }
+
+                            IconButton(onClick = {showDeleteDialog = true}) {
+                                Icon(imageVector = Icons.Filled.Delete, contentDescription = "delete")
+                            }
                         }
                     }
                 }

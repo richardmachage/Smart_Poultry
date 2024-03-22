@@ -75,7 +75,7 @@ interface EggCollectionDao {
     fun getOverallCollectionForPAstDays(startDate: Date) : Flow<List<DailyEggCollection>>
 
     @Transaction
-    @Query("SELECT egg_collection_tbl.productionId,egg_collection_tbl.date, egg_collection_tbl.eggCount , egg_collection_tbl.henCount, cells_tbl.cellNum, blocks_tbl.blockNum FROM egg_collection_tbl INNER JOIN cells_tbl ON egg_collection_tbl.cellId = cells_tbl.cellId INNER JOIN blocks_tbl ON cells_tbl.blockId = blocks_tbl.blockId ORDER BY date ASC")
+    @Query("SELECT egg_collection_tbl.productionId,egg_collection_tbl.date, egg_collection_tbl.eggCount , egg_collection_tbl.henCount, cells_tbl.cellNum, blocks_tbl.blockNum FROM egg_collection_tbl INNER JOIN cells_tbl ON egg_collection_tbl.cellId = cells_tbl.cellId INNER JOIN blocks_tbl ON cells_tbl.blockId = blocks_tbl.blockId ORDER BY date DESC")
     fun getEggRecordsFull() : Flow<List<EggRecordFull>>
 
 }
