@@ -64,4 +64,8 @@ class ViewRecordsViewModel @Inject constructor(
             record.doesMatchSearchQuery(searchQuery)
         } else emptyList()
     }
+
+    fun onDeleteRecord(recordId:Int){
+
+    }
 }
