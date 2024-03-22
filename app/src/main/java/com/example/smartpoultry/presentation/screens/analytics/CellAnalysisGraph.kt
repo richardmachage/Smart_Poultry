@@ -222,10 +222,7 @@ fun CellAnalysisGraph(
                 .padding(6.dp)
         ){
 
-
-
             MyVerticalSpacer(height = 5)
-
             Text(text = "Column Chart for egg produced")
             Chart(
                 chart = columnChart(),
@@ -271,7 +268,7 @@ fun CellAnalysisGraph(
             )
 
 
-            Text(text = "Column chart for ratio of eggs to hen count")
+          /*  Text(text = "Column chart for ratio of eggs to hen count")
             Chart(
                 chart = columnChart(),
                 model = chartEntryModelRatio,
@@ -315,6 +312,7 @@ fun CellAnalysisGraph(
                 isZoomEnabled = true,
             )
 
+          */
             MyVerticalSpacer(height = 5)
             Text(text = "combined Line Chart for eggs and hen count")
             val datasetLineSpec = remember { arrayListOf<LineChart. LineSpec>()}
