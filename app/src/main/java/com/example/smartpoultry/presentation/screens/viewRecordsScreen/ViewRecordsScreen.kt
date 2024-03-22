@@ -116,6 +116,18 @@ fun ViewRecordsScreen(
                                     listOfRecordsFull.value
                                 )
                             ) { _, item ->
+                                var showDeleteDialog by remember{ mutableStateOf(false)}
+                                MyInputDialog(
+                                    showDialog= showDeleteDialog,
+                                    title = "Delete Record",
+                                    onConfirm = {
+                                        recordsViewModel.onDeleteRecord(item.productionId)
+                                        showDeleteDialog = false
+                                    },
+                                    onDismiss = {showDeleteDialog = false}
+                                ) {
+                                    Text(text = "Delete record for block ${item.blockNum} cell ${item.cellNum} date ${item.date} ?")
+                                }
                                 MyVerticalSpacer(height = 5)
                                 //val cell = recordsViewModel.getCell(item.cellId)
                                 MyBorderedRow(
@@ -131,7 +143,9 @@ fun ViewRecordsScreen(
                                         Text(text = "Chicken on this day: ${item.henCount}")
                                     }
                                     
-                                    IconButton(onClick = {}) {
+                                    IconButton(onClick = {
+                                        showDeleteDialog = true
+                                    }) {
                                         Icon(imageVector = Icons.Filled.Delete, contentDescription = "delete")
                                     }
                                 }
