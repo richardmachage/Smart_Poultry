@@ -32,6 +32,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.smartpoultry.data.dataModels.DailyEggCollection
 import com.example.smartpoultry.data.dataSource.room.entities.cells.Cells
 import com.example.smartpoultry.data.dataSource.room.entities.eggCollection.EggCollection
+import com.example.smartpoultry.destinations.ViewRecordsScreenDestination
 import com.example.smartpoultry.presentation.composables.BlocksDropDownMenu
 import com.example.smartpoultry.presentation.composables.CellsDropDownMenu
 import com.example.smartpoultry.presentation.composables.MonthsDropDownMenu
@@ -44,6 +45,7 @@ import com.example.smartpoultry.presentation.uiModels.ChartClass
 import com.example.smartpoultry.utils.localDateToJavaDate
 import com.example.smartpoultry.utils.toGraphDate
 import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.vanpra.composematerialdialogs.rememberMaterialDialogState
 import java.text.SimpleDateFormat
 
@@ -52,7 +54,7 @@ import java.text.SimpleDateFormat
 @Destination
 @Composable
 fun AnalyticsScreen(
-    //modifier : Modifier
+    navigator: DestinationsNavigator
 ) {
     var exa = 0
     val context = LocalContext.current
@@ -79,7 +81,7 @@ fun AnalyticsScreen(
         ) {
 
             Column(
-                // Analysis by cell
+                // level of Analysis by cell
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(6.dp),
@@ -245,6 +247,7 @@ fun AnalyticsScreen(
 
                 MyVerticalSpacer(height = 10)
 
+                //Plot charts
                 if (analyticsViewModel.plotChart.value) {
                     //plot the chart
                     //first get the data...yes but which data??? here there should be a condition
@@ -393,6 +396,15 @@ fun AnalyticsScreen(
                 modifier = Modifier.fillMaxWidth(),
                 onButtonClick = { analyticsViewModel.fireWorker(context) },
                 btnName = "Perform Automated Analysis >>>"
+            )
+
+            MyVerticalSpacer(height = 5)
+            //view all records button
+            NormButton(
+                modifier = Modifier.fillMaxWidth(),
+                onButtonClick = {
+                    navigator.navigate(ViewRecordsScreenDestination)
+                }, btnName = "View All records"
             )
         }
     }

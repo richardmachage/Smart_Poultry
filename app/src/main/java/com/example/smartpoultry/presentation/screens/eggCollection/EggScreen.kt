@@ -38,7 +38,6 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.smartpoultry.R
-import com.example.smartpoultry.destinations.ViewRecordsScreenDestination
 import com.example.smartpoultry.presentation.composables.MyBorderedColumn
 import com.example.smartpoultry.presentation.composables.MyCard
 import com.example.smartpoultry.presentation.composables.MyCircularProgressBar
@@ -80,13 +79,6 @@ fun EggScreen(
             modifier = Modifier
                 .fillMaxSize()
         ) {
-            //view all records button
-            NormButton(
-                modifier = Modifier.fillMaxWidth(),
-                onButtonClick = {
-                    navigator.navigate(ViewRecordsScreenDestination)
-                }, btnName = "View All records"
-            )
             //Defining the datePicker
             MyDatePicker(
                 modifier = Modifier
