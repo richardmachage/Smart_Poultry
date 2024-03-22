@@ -79,6 +79,12 @@ fun AnalyticsScreen(
                 .padding(8.dp)
                 .verticalScroll(rememberScrollState())
         ) {
+            NormButton(
+                modifier = Modifier.fillMaxWidth(),
+                onButtonClick = {
+                    navigator.navigate(ViewRecordsScreenDestination)
+                }, btnName = "View All records >>>"
+            )
 
             Column(
                 // level of Analysis by cell
@@ -400,12 +406,7 @@ fun AnalyticsScreen(
 
             MyVerticalSpacer(height = 5)
             //view all records button
-            NormButton(
-                modifier = Modifier.fillMaxWidth(),
-                onButtonClick = {
-                    navigator.navigate(ViewRecordsScreenDestination)
-                }, btnName = "View All records"
-            )
+
         }
     }
 }
