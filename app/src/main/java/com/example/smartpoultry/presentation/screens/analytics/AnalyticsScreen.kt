@@ -60,8 +60,7 @@ fun AnalyticsScreen(
     val context = LocalContext.current
     val analyticsViewModel = hiltViewModel<AnalyticsViewModel>()
     val listOfBlocksWithCells by remember { analyticsViewModel.listOfBlocksWithCells }.collectAsState()
-    //var selectedCellNum = listOfBlocksWithCells.
-    //val context = LocalContext.current
+
     var width by remember {
         mutableFloatStateOf(0.5f)
     }
