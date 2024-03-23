@@ -56,7 +56,6 @@ import java.text.SimpleDateFormat
 fun AnalyticsScreen(
     navigator: DestinationsNavigator
 ) {
-    var exa = 0
     val context = LocalContext.current
     val analyticsViewModel = hiltViewModel<AnalyticsViewModel>()
     val listOfBlocksWithCells by remember { analyticsViewModel.listOfBlocksWithCells }.collectAsState()
