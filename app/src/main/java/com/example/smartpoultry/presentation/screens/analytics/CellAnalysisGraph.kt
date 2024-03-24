@@ -268,51 +268,7 @@ fun CellAnalysisGraph(
             )
 
 
-          /*  Text(text = "Column chart for ratio of eggs to hen count")
-            Chart(
-                chart = columnChart(),
-                model = chartEntryModelRatio,
-                startAxis = rememberStartAxis(
-                    //valueFormatter = verticalAxisValueFormatter,
-                    titleComponent = textComponent().apply {
-                        color = MaterialTheme.colorScheme.primary.toArgb()
-                    },
-                    title = "eggs to hen count ratio",
-                    itemPlacer = AxisItemPlacer.Vertical.default(maxItemCount = itemPlacerCount)
-                ),
-                bottomAxis = rememberBottomAxis(
-                    valueFormatter = horizontalAxisValueFormatter,
-                    titleComponent = textComponent().apply {
-                        color = MaterialTheme.colorScheme.primary.toArgb()
-                    },
-                    title = bottomAxisTitle
-                ),
-                isZoomEnabled = true,
-            )
 
-            Text(text = "Line chart for ratio eggs to hen per day")
-            Chart(
-                chart = lineChart(),
-                model = chartEntryModelRatio,
-                startAxis = rememberStartAxis(
-                    //valueFormatter = verticalAxisValueFormatter,
-                    titleComponent = textComponent().apply {
-                        color = MaterialTheme.colorScheme.primary.toArgb()
-                    },
-                    title = "eggs to hen count ratio",
-                    itemPlacer = AxisItemPlacer.Vertical.default(maxItemCount = itemPlacerCount)
-                ),
-                bottomAxis = rememberBottomAxis(
-                    valueFormatter = horizontalAxisValueFormatter,
-                    titleComponent = textComponent().apply {
-                        color = MaterialTheme.colorScheme.primary.toArgb()
-                    },
-                    title = bottomAxisTitle
-                ),
-                isZoomEnabled = true,
-            )
-
-          */
             MyVerticalSpacer(height = 5)
             Text(text = "combined Line Chart for eggs and hen count")
             val datasetLineSpec = remember { arrayListOf<LineChart. LineSpec>()}
