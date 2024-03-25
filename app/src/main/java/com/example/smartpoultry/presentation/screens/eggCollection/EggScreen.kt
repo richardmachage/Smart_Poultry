@@ -127,18 +127,7 @@ fun EggScreen(
                             var saveButtonState by remember { mutableStateOf(true) }
                             LazyRow {
                                 itemsIndexed(listOfBlocks[blockIndex].cells) { cellIndex, cell ->
-                                    /*Card(
-                                        modifier = Modifier
-                                            .padding(6.dp)
-                                            .shadow(
-                                                elevation = 10.dp,
-                                                shape = RoundedCornerShape(10.dp)
-                                            )
-                                            .width(
-                                                (LocalConfiguration.current.screenWidthDp / 3).dp
-                                            )
 
-                                    ) */
                                     MyCard(
                                         modifier = Modifier.width(
                                             (LocalConfiguration.current.screenWidthDp / 3).dp
