@@ -1,6 +1,11 @@
 package com.example.smartpoultry.presentation.screens.accountScreen
 
 import androidx.lifecycle.ViewModel
+import com.example.smartpoultry.domain.repository.FirebaseAuthRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 
-class AccountViewModel : ViewModel() {
+@HiltViewModel
+class AccountViewModel(
+    private val fireBaseAuthRepo : FirebaseAuthRepository
+) : ViewModel() {
 }
