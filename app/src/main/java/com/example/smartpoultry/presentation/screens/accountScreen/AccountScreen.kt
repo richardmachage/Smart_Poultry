@@ -27,7 +27,7 @@ fun AccountScreen(
             TopAppBar(
                 title = { Text(text = "Account Details")},
                 navigationIcon = {
-                    IconButton(onClick = { na }) {
+                    IconButton(onClick = { navigator.navigateUp() }) {
                         
                     }
                 }
