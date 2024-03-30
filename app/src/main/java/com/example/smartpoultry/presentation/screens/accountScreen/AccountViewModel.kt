@@ -8,4 +8,13 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 class AccountViewModel(
     private val fireBaseAuthRepo : FirebaseAuthRepository
 ) : ViewModel() {
+    fun registerUser(){
+
+    }
+    fun changeEmail(){
+
+    }
+    fun changeUserName(){
+
+    }
 }
