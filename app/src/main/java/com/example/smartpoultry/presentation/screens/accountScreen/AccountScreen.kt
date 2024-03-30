@@ -2,6 +2,7 @@ package com.example.smartpoultry.presentation.screens.accountScreen
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -17,6 +18,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import com.example.smartpoultry.presentation.composables.MyCard
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -47,10 +49,16 @@ fun AccountScreen(
             color = MaterialTheme.colorScheme.background
         ) {
             Column (
-                modifier = Modifier.verticalScroll(rememberScrollState())
+                modifier = Modifier
+                    .verticalScroll(rememberScrollState())
             ){
-                MyCard {
-                    Text(text = "Logged in as : ")
+                MyCard(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                ) {
+                    Text(
+                       modifier = Modifier.padding(6.dp),
+                        text = "Logged in as : ")
                 }
             }
         }
