@@ -63,7 +63,7 @@ fun AccountScreen(
                 ) {
                     Text(
                        modifier = Modifier.padding(6.dp),
-                        text = "Logged in as : ")
+                        text = "Logged in as : $userRole")
                 }
             }
         }
