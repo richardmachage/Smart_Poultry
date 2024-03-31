@@ -17,8 +17,11 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.smartpoultry.data.dataSource.datastore.USER_ROLE_KEY
 import com.example.smartpoultry.presentation.composables.MyCard
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -29,6 +32,8 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 fun AccountScreen(
     navigator : DestinationsNavigator
 ){
+    val accountViewModel = hiltViewModel<AccountViewModel>()
+    val userRole = accountViewModel.myDataStore.readData(USER_ROLE_KEY).collectAsState(initial = "")
 
     Scaffold(
         topBar = {
