@@ -21,12 +21,19 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.smartpoultry.data.dataSource.datastore.USER_ROLE_KEY
 import com.example.smartpoultry.presentation.composables.MyCard
+import com.example.smartpoultry.presentation.composables.MyInputDialog
+import com.example.smartpoultry.presentation.composables.MyOutlineTextFiled
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
@@ -75,7 +82,7 @@ fun AccountScreen(
                 }
 
 
-                Row(
+                Row(//User Name
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(6.dp)
@@ -83,10 +90,27 @@ fun AccountScreen(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
+                    var showDialog by remember { mutableStateOf(false) }
+                    MyInputDialog(
+                        showDialog = showDialog,
+                        title = "User Name",
+                        onConfirm = { showDialog = false },
+                        onDismiss = {showDialog = false}
+                    ) {
+                        MyOutlineTextFiled(
+                            modifier = Modifier.fillMaxWidth(),
+                            label = "Name",
+                            keyboardType = KeyboardType.Text,
+                            initialText = "",
+                            onValueChange = {
+                                //newThreshold = it
+                            }
+                        )
+                    }
 
                    Text(text = "Name : Joshua")
                     IconButton(onClick = {
-
+                        showDialog = true
                     }) {
                         Icon(imageVector = Icons.Default.Edit, contentDescription = "edit")
                     }
