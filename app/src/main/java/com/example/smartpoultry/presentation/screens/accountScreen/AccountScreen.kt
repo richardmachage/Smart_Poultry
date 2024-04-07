@@ -1,6 +1,8 @@
 package com.example.smartpoultry.presentation.screens.accountScreen
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -8,6 +10,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -18,6 +21,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -30,40 +34,62 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 @Destination
 @Composable
 fun AccountScreen(
-    navigator : DestinationsNavigator
-){
+    navigator: DestinationsNavigator
+) {
     val accountViewModel = hiltViewModel<AccountViewModel>()
     val userRole = accountViewModel.myDataStore.readData(USER_ROLE_KEY).collectAsState(initial = "")
 
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(text = "Account Details")},
+                title = { Text(text = "Account Details") },
                 navigationIcon = {
                     IconButton(onClick = { navigator.navigateUp() }) {
-                        Icon(imageVector = Icons.AutoMirrored.Default.ArrowBack, contentDescription = "Back")
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Default.ArrowBack,
+                            contentDescription = "Back"
+                        )
                     }
                 }
             )
         }
-    ) {paddingValues->
+    ) { paddingValues ->
         Surface(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues),
             color = MaterialTheme.colorScheme.background
         ) {
-            Column (
+            Column(
                 modifier = Modifier
                     .verticalScroll(rememberScrollState())
-            ){
+            ) {
                 MyCard(
                     modifier = Modifier
                         .fillMaxWidth()
                 ) {
                     Text(
-                       modifier = Modifier.padding(6.dp),
-                        text = "Logged in as : ${userRole.value}")
+                        modifier = Modifier.padding(6.dp),
+                        text = "Logged in as : ${userRole.value}"
+                    )
+                }
+
+
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(6.dp)
+                    ,
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+
+                   Text(text = "Name : Joshua")
+                    IconButton(onClick = {
+
+                    }) {
+                        Icon(imageVector = Icons.Default.Edit, contentDescription = "edit")
+                    }
                 }
             }
         }

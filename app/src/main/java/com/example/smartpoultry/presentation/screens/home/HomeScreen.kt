@@ -2,7 +2,6 @@ package com.example.smartpoultry.presentation.screens.home
 
 import android.annotation.SuppressLint
 import android.os.Build
-import android.util.Log
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.border
@@ -90,8 +89,6 @@ fun HomeScreen(
                     .fillMaxWidth()
 
             ) {
-                Log.d("UserRole", userRole)
-
                 Text(
                     text = "Logged in as: $userRole",
                     modifier = Modifier
