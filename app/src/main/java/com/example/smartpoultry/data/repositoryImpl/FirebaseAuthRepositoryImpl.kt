@@ -80,14 +80,6 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
     }
 
 
-    /*override fun logIn(email: String, password: String): Boolean {
-
-
-        var isSuccess = false
-        firebaseAuth.signInWithEmailAndPassword(email,password)
-            .addOnSuccessListener { isSuccess = true }
-        return isSuccess
-    }*/
 
     override suspend fun resetPassword(email: String) : Result<Boolean> = coroutineScope {
         try {
@@ -97,6 +89,10 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
         } catch (e: Exception) {
             Result.failure(e)
         }
+    }
+
+    override suspend fun editUserName(name: String): Result<Boolean> {
+
     }
 
     override fun logOut() {
