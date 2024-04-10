@@ -11,6 +11,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -215,6 +216,7 @@ fun AccountScreen(
                             )
                         }
 
+                        Icon(imageVector = Icons.Default.Email, contentDescription = "email")
                         Text(text = "Email Address: beast@gmail.com")
                         IconButton(onClick = {
                             showDialog = true
