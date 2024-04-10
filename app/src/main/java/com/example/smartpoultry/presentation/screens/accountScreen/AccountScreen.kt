@@ -39,6 +39,7 @@ import com.example.smartpoultry.presentation.composables.MyBorderedColumn
 import com.example.smartpoultry.presentation.composables.MyEditText
 import com.example.smartpoultry.presentation.composables.MyInputDialog
 import com.example.smartpoultry.presentation.composables.MyOutlineTextFiled
+import com.example.smartpoultry.presentation.composables.MyVerticalSpacer
 import com.example.smartpoultry.presentation.composables.NormButton
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -78,9 +79,9 @@ fun AccountScreen(
                     .verticalScroll(rememberScrollState())
             ) {
 
-                MyBorderedColumn (
+                MyBorderedColumn(
                     modifier = Modifier.padding(6.dp)
-                ){
+                ) {
                     Text(text = "My Account")
 
                     Row(// User Role
@@ -118,7 +119,7 @@ fun AccountScreen(
                             enabled = false
                         )
 
-                        if (userRole.value == "Director"){
+                        if (userRole.value == "Director") {
                             IconButton(onClick = {
                                 showDialog = true
                             }) {
@@ -154,8 +155,8 @@ fun AccountScreen(
                             )
                         }
 
-                     /*   Icon(imageVector = Icons.Default.Person, contentDescription = "edit")
-                        Text(text = "User Name : Beast", textAlign = TextAlign.Start)*/
+                        /*   Icon(imageVector = Icons.Default.Person, contentDescription = "edit")
+                           Text(text = "User Name : Beast", textAlign = TextAlign.Start)*/
                         MyEditText(
                             value = "Beast Mode",
                             label = "User name",
@@ -165,8 +166,8 @@ fun AccountScreen(
                         )
                         IconButton(
                             onClick = {
-                            showDialog = true
-                        }) {
+                                showDialog = true
+                            }) {
                             Icon(imageVector = Icons.Default.Edit, contentDescription = "edit")
                         }
                     }
@@ -204,7 +205,7 @@ fun AccountScreen(
                             value = "beast.com.ku@gmail.com",
                             label = "Email address",
                             iconLeading = Icons.Default.Email,
-                            iconLeadingDescription ="Email",
+                            iconLeadingDescription = "Email",
                             enabled = false
                         )
                         IconButton(onClick = {
@@ -241,8 +242,8 @@ fun AccountScreen(
 
                         MyEditText(
                             value = "0654233214",
-                            label ="Phone Number",
-                            iconLeading =  Icons.Default.Phone,
+                            label = "Phone Number",
+                            iconLeading = Icons.Default.Phone,
                             iconLeadingDescription = "Phone",
                             readOnly = true,
                             enabled = false
@@ -255,6 +256,27 @@ fun AccountScreen(
                             Icon(imageVector = Icons.Default.Edit, contentDescription = "edit")
                         }
                     }
+                    MyVerticalSpacer(height = 10)
+                    var showPasswordDialog by remember {
+                        mutableStateOf(false)
+                    }
+                    MyInputDialog(
+                        showDialog = showPasswordDialog,
+                        title = "Reset Password",
+                        onConfirm = { /*TODO*/
+                        showPasswordDialog = false
+                        },
+                        onDismiss = {showPasswordDialog = false}
+                    ) {
+                        Text(text = "A password reset Link will be sent to your Email address example@gmail.com \nConfirm to proceed")
+                    }
+                    Text(text = "You can change your password by clicking the button below. ")
+                    NormButton(
+                        onButtonClick = { showPasswordDialog = true },
+                        btnName = "Reset Password",
+                        modifier = Modifier.fillMaxWidth()
+                    )
+
                 }
 
                 var showRegDialog by remember { mutableStateOf(false) }
@@ -262,10 +284,10 @@ fun AccountScreen(
                     showDialog = showRegDialog,
                     title = "Register New User",
                     onConfirm = {
-                                //TODO
-                                showRegDialog = false
+                        //TODO
+                        showRegDialog = false
                     },
-                    onDismiss = { showRegDialog = false}
+                    onDismiss = { showRegDialog = false }
                 ) {
                     Column {
 
