@@ -257,6 +257,14 @@ fun AccountScreen(
                     }
                 }
 
+                var showRegDialog by remember { mutableStateOf(false) }
+                MyInputDialog(
+                    title = "RegisterNew User",
+                    onConfirm = { /*TODO*/ },
+                    onDismiss = {}
+                ) {
+
+                }
                 if (userRole.value == "Director") {
                     NormButton(
                         modifier = Modifier.fillMaxWidth(),
