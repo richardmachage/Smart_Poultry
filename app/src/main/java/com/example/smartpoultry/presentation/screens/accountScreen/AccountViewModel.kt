@@ -10,19 +10,25 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AccountViewModel @Inject constructor(
-    private val fireBaseAuthRepo : FirebaseAuthRepository,
-    private val dataStore : AppDataStore
+    private val fireBaseAuthRepo: FirebaseAuthRepository,
+    private val dataStore: AppDataStore
 ) : ViewModel() {
     val myDataStore = dataStore
-    fun registerUser(){
+    fun registerUser(name: String, email: String) {
 
     }
-    fun changeEmail(){
+
+    fun changeEmail(email: String) {
 
     }
-    fun changeUserName(name : String){
+
+    fun changeUserName(name: String) {
         viewModelScope.launch {
             fireBaseAuthRepo.editUserName(name)
         }
+    }
+
+    fun changeUserRole(role: String) {
+
     }
 }
