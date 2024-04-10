@@ -1,4 +1,8 @@
 package com.example.smartpoultry.presentation.screens.registerScreen
 
-class RegisterViewModel {
+import androidx.lifecycle.ViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
+
+@HiltViewModel
+class RegisterViewModel : ViewModel(){
 }
