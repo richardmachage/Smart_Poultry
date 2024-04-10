@@ -31,4 +31,12 @@ class AccountViewModel @Inject constructor(
     fun changeUserRole(role: String) {
 
     }
+
+    fun changePhoneNumber(phoneNumber : String){
+
+    }
+
+    fun resetPassword(){
+
+    }
 }
