@@ -12,6 +12,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.Face
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -34,6 +36,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.smartpoultry.data.dataSource.datastore.USER_ROLE_KEY
 import com.example.smartpoultry.presentation.composables.MyBorderedColumn
+import com.example.smartpoultry.presentation.composables.MyEditText
 import com.example.smartpoultry.presentation.composables.MyInputDialog
 import com.example.smartpoultry.presentation.composables.MyOutlineTextFiled
 import com.ramcosta.composedestinations.annotation.Destination
@@ -113,8 +116,17 @@ fun AccountScreen(
                                 }
                             )
                         }
+                        /*Icon(imageVector = Icons.Default.AccountCircle, contentDescription = "role")
+                        Text(text = "Role : ${userRole.value}")*/
 
-                        Text(text = "Role : ${userRole.value}")
+                        MyEditText(
+                            value = userRole.value,
+                            label = "User Role",
+                            iconLeading = Icons.Default.Face,
+                            iconLeadingDescription = "userRole",
+                            enabled = false
+                        )
+
                         if (userRole.value == "Director"){
                             IconButton(onClick = {
                                 showDialog = true
@@ -125,7 +137,8 @@ fun AccountScreen(
 
                     }
 
-                    Row(//First Name
+
+                    Row(//User Name
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(6.dp),
@@ -135,7 +148,7 @@ fun AccountScreen(
                         var showDialog by remember { mutableStateOf(false) }
                         MyInputDialog(
                             showDialog = showDialog,
-                            title = "First Name",
+                            title = "User Name",
                             onConfirm = { showDialog = false },
                             onDismiss = { showDialog = false }
                         ) {
@@ -150,15 +163,24 @@ fun AccountScreen(
                             )
                         }
 
-                        Text(text = "First Name : Beast")
-                        IconButton(onClick = {
+                     /*   Icon(imageVector = Icons.Default.Person, contentDescription = "edit")
+                        Text(text = "User Name : Beast", textAlign = TextAlign.Start)*/
+                        MyEditText(
+                            value = "Beast Mode",
+                            label = "User name",
+                            iconLeading = Icons.Default.Person,
+                            iconLeadingDescription = "user",
+                            enabled = false
+                        )
+                        IconButton(
+                            onClick = {
                             showDialog = true
                         }) {
                             Icon(imageVector = Icons.Default.Edit, contentDescription = "edit")
                         }
                     }
 
-                    Row(//Last Name
+                  /*  Row(//Last Name
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(6.dp),
@@ -189,7 +211,7 @@ fun AccountScreen(
                         }) {
                             Icon(imageVector = Icons.Default.Edit, contentDescription = "edit")
                         }
-                    }
+                    }*/
 
                     Row(// Email address
                         modifier = Modifier
@@ -216,8 +238,15 @@ fun AccountScreen(
                             )
                         }
 
-                        Icon(imageVector = Icons.Default.Email, contentDescription = "email")
-                        Text(text = "Email Address: beast@gmail.com")
+                        /*Icon(imageVector = Icons.Default.Email, contentDescription = "email")
+                        Text(text = "Email Address: beast@gmail.com")*/
+                        MyEditText(
+                            value = "beast.com.ku@gmail.com",
+                            label = "Email address",
+                            iconLeading = Icons.Default.Email,
+                            iconLeadingDescription ="Email",
+                            enabled = false
+                        )
                         IconButton(onClick = {
                             showDialog = true
                         }) {
@@ -250,8 +279,16 @@ fun AccountScreen(
                             )
                         }
 
-                        Icon(imageVector = Icons.Default.Phone, contentDescription = "edit")
-                        Text(text = "Phone Number : 0654233214")
+                        MyEditText(
+                            value = "0654233214",
+                            label ="Phone Number",
+                            iconLeading =  Icons.Default.Phone,
+                            iconLeadingDescription = "Phone",
+                            readOnly = true,
+                            enabled = false
+                        )
+                        /*Icon(imageVector = Icons.Default.Phone, contentDescription = "edit")
+                        Text(text = "Phone Number : 0654233214")*/
                         IconButton(onClick = {
                             showDialog = true
                         }) {

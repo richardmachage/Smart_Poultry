@@ -100,13 +100,15 @@ fun MyTextButton(onButtonClick: () -> Unit, btnText: String, modifier: Modifier)
 
 @Composable
 fun MyEditText(
+    value : String = "",
     label: String,
-    keyboardType: KeyboardType,
+    keyboardType: KeyboardType = KeyboardType.Text,
     iconLeading: ImageVector,
     iconLeadingDescription: String,
-    readOnly: Boolean
+    readOnly: Boolean = false,
+    enabled: Boolean = true
     ) {
-    var text by remember { mutableStateOf(TextFieldValue("")) }
+    var text by remember { mutableStateOf(value) }
     OutlinedTextField(
         modifier = Modifier
            // .fillMaxWidth()
@@ -124,6 +126,7 @@ fun MyEditText(
         },
         singleLine = true,
         readOnly = readOnly,
+        enabled = enabled
 
 
     )
