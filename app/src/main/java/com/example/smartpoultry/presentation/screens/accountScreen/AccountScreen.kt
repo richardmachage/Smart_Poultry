@@ -82,7 +82,41 @@ fun AccountScreen(
                 }
 
 
-                Row(//User Name
+                Row(//First Name
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(6.dp)
+                    ,
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    var showDialog by remember { mutableStateOf(false) }
+                    MyInputDialog(
+                        showDialog = showDialog,
+                        title = "First Name",
+                        onConfirm = { showDialog = false },
+                        onDismiss = {showDialog = false}
+                    ) {
+                        MyOutlineTextFiled(
+                            modifier = Modifier.fillMaxWidth(),
+                            label = "First Name",
+                            keyboardType = KeyboardType.Text,
+                            initialText = "",
+                            onValueChange = {
+                                //newThreshold = it
+                            }
+                        )
+                    }
+
+                   Text(text = "Name : Joshua")
+                    IconButton(onClick = {
+                        showDialog = true
+                    }) {
+                        Icon(imageVector = Icons.Default.Edit, contentDescription = "edit")
+                    }
+                }
+
+                Row(//Last Name
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(6.dp)
@@ -108,7 +142,41 @@ fun AccountScreen(
                         )
                     }
 
-                   Text(text = "Name : Joshua")
+                    Text(text = "Name : Joshua")
+                    IconButton(onClick = {
+                        showDialog = true
+                    }) {
+                        Icon(imageVector = Icons.Default.Edit, contentDescription = "edit")
+                    }
+                }
+
+                Row(// Email address
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(6.dp)
+                    ,
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    var showDialog by remember { mutableStateOf(false) }
+                    MyInputDialog(
+                        showDialog = showDialog,
+                        title = "User Name",
+                        onConfirm = { showDialog = false },
+                        onDismiss = {showDialog = false}
+                    ) {
+                        MyOutlineTextFiled(
+                            modifier = Modifier.fillMaxWidth(),
+                            label = "Name",
+                            keyboardType = KeyboardType.Text,
+                            initialText = "",
+                            onValueChange = {
+                                //newThreshold = it
+                            }
+                        )
+                    }
+
+                    Text(text = "Name : Joshua")
                     IconButton(onClick = {
                         showDialog = true
                     }) {
