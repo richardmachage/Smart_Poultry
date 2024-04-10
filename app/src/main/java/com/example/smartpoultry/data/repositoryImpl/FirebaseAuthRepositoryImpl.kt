@@ -6,8 +6,10 @@ import com.example.smartpoultry.data.dataSource.remote.firebase.models.User
 import com.example.smartpoultry.domain.repository.FirebaseAuthRepository
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
@@ -91,8 +93,21 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
         }
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     override suspend fun editUserName(name: String): Result<Boolean> {
+        val result = CompletableDeferred<Boolean>()
+        firebaseFirestore.collection("Users")
+            .document(firebaseAuth.uid.toString())
+            .update("name", name)
+            .addOnSuccessListener {
+               result.complete(true)
+            }
+            .addOnFailureListener{
+               result.completeExceptionally(it)
+            }
+            //.await()
 
+        return if (result.await()) Result.success(true) else Result.failure(result.getCompletionExceptionOrNull()!!)
     }
 
     override fun logOut() {
