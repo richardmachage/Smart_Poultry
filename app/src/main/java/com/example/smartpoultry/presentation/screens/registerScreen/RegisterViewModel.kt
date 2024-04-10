@@ -9,4 +9,11 @@ import javax.inject.Inject
 class RegisterViewModel @Inject constructor(
     firebaseAuthRepository: FirebaseAuthRepository
 ) : ViewModel(){
+    fun onRegister(){
+
+    }
+
+    fun validation(){
+
+    }
 }
