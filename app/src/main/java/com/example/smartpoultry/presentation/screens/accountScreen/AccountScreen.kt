@@ -31,7 +31,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.smartpoultry.data.dataSource.datastore.USER_ROLE_KEY
-import com.example.smartpoultry.presentation.composables.MyCard
+import com.example.smartpoultry.presentation.composables.MyBorderedColumn
 import com.example.smartpoultry.presentation.composables.MyInputDialog
 import com.example.smartpoultry.presentation.composables.MyOutlineTextFiled
 import com.ramcosta.composedestinations.annotation.Destination
@@ -71,7 +71,7 @@ fun AccountScreen(
                 modifier = Modifier
                     .verticalScroll(rememberScrollState())
             ) {
-                MyCard(
+               /* MyCard(
                     modifier = Modifier
                         .fillMaxWidth()
                 ) {
@@ -79,109 +79,183 @@ fun AccountScreen(
                         modifier = Modifier.padding(6.dp),
                         text = "Logged in as : ${userRole.value}"
                     )
-                }
+                }*/
 
 
-                Row(//First Name
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(6.dp)
-                    ,
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    var showDialog by remember { mutableStateOf(false) }
-                    MyInputDialog(
-                        showDialog = showDialog,
-                        title = "First Name",
-                        onConfirm = { showDialog = false },
-                        onDismiss = {showDialog = false}
+                MyBorderedColumn (
+                    modifier = Modifier.padding(6.dp)
+                ){
+                    Text(text = "My Account")
+
+                    Row(// User Role
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(6.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
-                        MyOutlineTextFiled(
-                            modifier = Modifier.fillMaxWidth(),
-                            label = "First Name",
-                            keyboardType = KeyboardType.Text,
-                            initialText = "",
-                            onValueChange = {
-                                //newThreshold = it
+                        var showDialog by remember { mutableStateOf(false) }
+                        MyInputDialog(
+                            showDialog = showDialog,
+                            title = "Email",
+                            onConfirm = { showDialog = false },
+                            onDismiss = { showDialog = false }
+                        ) {
+                            MyOutlineTextFiled(
+                                modifier = Modifier.fillMaxWidth(),
+                                label = "Email",
+                                keyboardType = KeyboardType.Email,
+                                initialText = "",
+                                onValueChange = {
+                                    //newThreshold = it
+                                }
+                            )
+                        }
+
+                        Text(text = "Role : ${userRole.value}")
+                        if (userRole.value == "Director"){
+                            IconButton(onClick = {
+                                showDialog = true
+                            }) {
+                                Icon(imageVector = Icons.Default.Edit, contentDescription = "edit")
                             }
-                        )
+                        }
+
                     }
 
-                   Text(text = "Name : Joshua")
-                    IconButton(onClick = {
-                        showDialog = true
-                    }) {
-                        Icon(imageVector = Icons.Default.Edit, contentDescription = "edit")
-                    }
-                }
-
-                Row(//Last Name
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(6.dp)
-                    ,
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    var showDialog by remember { mutableStateOf(false) }
-                    MyInputDialog(
-                        showDialog = showDialog,
-                        title = "User Name",
-                        onConfirm = { showDialog = false },
-                        onDismiss = {showDialog = false}
+                    Row(//First Name
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(6.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
-                        MyOutlineTextFiled(
-                            modifier = Modifier.fillMaxWidth(),
-                            label = "Name",
-                            keyboardType = KeyboardType.Text,
-                            initialText = "",
-                            onValueChange = {
-                                //newThreshold = it
-                            }
-                        )
+                        var showDialog by remember { mutableStateOf(false) }
+                        MyInputDialog(
+                            showDialog = showDialog,
+                            title = "First Name",
+                            onConfirm = { showDialog = false },
+                            onDismiss = { showDialog = false }
+                        ) {
+                            MyOutlineTextFiled(
+                                modifier = Modifier.fillMaxWidth(),
+                                label = "First Name",
+                                keyboardType = KeyboardType.Text,
+                                initialText = "",
+                                onValueChange = {
+                                    //newThreshold = it
+                                }
+                            )
+                        }
+
+                        Text(text = "First Name : Beast")
+                        IconButton(onClick = {
+                            showDialog = true
+                        }) {
+                            Icon(imageVector = Icons.Default.Edit, contentDescription = "edit")
+                        }
                     }
 
-                    Text(text = "Name : Joshua")
-                    IconButton(onClick = {
-                        showDialog = true
-                    }) {
-                        Icon(imageVector = Icons.Default.Edit, contentDescription = "edit")
-                    }
-                }
-
-                Row(// Email address
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(6.dp)
-                    ,
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    var showDialog by remember { mutableStateOf(false) }
-                    MyInputDialog(
-                        showDialog = showDialog,
-                        title = "User Name",
-                        onConfirm = { showDialog = false },
-                        onDismiss = {showDialog = false}
+                    Row(//Last Name
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(6.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
-                        MyOutlineTextFiled(
-                            modifier = Modifier.fillMaxWidth(),
-                            label = "Name",
-                            keyboardType = KeyboardType.Text,
-                            initialText = "",
-                            onValueChange = {
-                                //newThreshold = it
-                            }
-                        )
+                        var showDialog by remember { mutableStateOf(false) }
+                        MyInputDialog(
+                            showDialog = showDialog,
+                            title = "Last Name",
+                            onConfirm = { showDialog = false },
+                            onDismiss = { showDialog = false }
+                        ) {
+                            MyOutlineTextFiled(
+                                modifier = Modifier.fillMaxWidth(),
+                                label = "Last Name",
+                                keyboardType = KeyboardType.Text,
+                                initialText = "",
+                                onValueChange = {
+                                    //newThreshold = it
+                                }
+                            )
+                        }
+
+                        Text(text = "Last Name : Mode")
+                        IconButton(onClick = {
+                            showDialog = true
+                        }) {
+                            Icon(imageVector = Icons.Default.Edit, contentDescription = "edit")
+                        }
                     }
 
-                    Text(text = "Name : Joshua")
-                    IconButton(onClick = {
-                        showDialog = true
-                    }) {
-                        Icon(imageVector = Icons.Default.Edit, contentDescription = "edit")
+                    Row(// Email address
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(6.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        var showDialog by remember { mutableStateOf(false) }
+                        MyInputDialog(
+                            showDialog = showDialog,
+                            title = "Email",
+                            onConfirm = { showDialog = false },
+                            onDismiss = { showDialog = false }
+                        ) {
+                            MyOutlineTextFiled(
+                                modifier = Modifier.fillMaxWidth(),
+                                label = "Email",
+                                keyboardType = KeyboardType.Email,
+                                initialText = "",
+                                onValueChange = {
+                                    //newThreshold = it
+                                }
+                            )
+                        }
+
+                        Text(text = "Email : beast@gmail.com")
+                        IconButton(onClick = {
+                            showDialog = true
+                        }) {
+                            Icon(imageVector = Icons.Default.Edit, contentDescription = "edit")
+                        }
                     }
+
+                    Row(// Phone Number
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(6.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        var showDialog by remember { mutableStateOf(false) }
+                        MyInputDialog(
+                            showDialog = showDialog,
+                            title = "Phone Number",
+                            onConfirm = { showDialog = false },
+                            onDismiss = { showDialog = false }
+                        ) {
+                            MyOutlineTextFiled(
+                                modifier = Modifier.fillMaxWidth(),
+                                label = "Phone Number",
+                                keyboardType = KeyboardType.Email,
+                                initialText = "",
+                                onValueChange = {
+                                    //newThreshold = it
+                                }
+                            )
+                        }
+
+                        Text(text = "Phone Number : beast@gmail.com")
+                        IconButton(onClick = {
+                            showDialog = true
+                        }) {
+                            Icon(imageVector = Icons.Default.Edit, contentDescription = "edit")
+                        }
+                    }
+
+
                 }
             }
         }
