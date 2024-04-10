@@ -39,6 +39,7 @@ import com.example.smartpoultry.presentation.composables.MyBorderedColumn
 import com.example.smartpoultry.presentation.composables.MyEditText
 import com.example.smartpoultry.presentation.composables.MyInputDialog
 import com.example.smartpoultry.presentation.composables.MyOutlineTextFiled
+import com.example.smartpoultry.presentation.composables.NormButton
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
@@ -254,10 +255,17 @@ fun AccountScreen(
                             Icon(imageVector = Icons.Default.Edit, contentDescription = "edit")
                         }
                     }
+                }
 
-
+                if (userRole.value == "Director") {
+                    NormButton(
+                        modifier = Modifier.fillMaxWidth(),
+                        onButtonClick = { /*TODO*/ },
+                        btnName = "Register new user"
+                    )
                 }
             }
+
         }
     }
 
