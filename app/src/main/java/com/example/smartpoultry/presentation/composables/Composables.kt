@@ -104,13 +104,14 @@ fun MyEditText(
     keyboardType: KeyboardType,
     iconLeading: ImageVector,
     iconLeadingDescription: String,
-
+    readOnly: Boolean
     ) {
     var text by remember { mutableStateOf(TextFieldValue("")) }
     OutlinedTextField(
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(start = 8.dp, end = 8.dp),
+           // .fillMaxWidth()
+            //.padding(start = 8.dp, end = 8.dp)
+                ,
         value = text,
         onValueChange = { newText -> text = newText },
         label = { Text(text = label) },
@@ -121,7 +122,9 @@ fun MyEditText(
                 contentDescription = iconLeadingDescription
             )
         },
-        singleLine = true
+        singleLine = true,
+        readOnly = readOnly,
+
 
     )
 }
