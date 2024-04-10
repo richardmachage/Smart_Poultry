@@ -76,16 +76,6 @@ fun AccountScreen(
                 modifier = Modifier
                     .verticalScroll(rememberScrollState())
             ) {
-               /* MyCard(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                ) {
-                    Text(
-                        modifier = Modifier.padding(6.dp),
-                        text = "Logged in as : ${userRole.value}"
-                    )
-                }*/
-
 
                 MyBorderedColumn (
                     modifier = Modifier.padding(6.dp)
@@ -102,13 +92,13 @@ fun AccountScreen(
                         var showDialog by remember { mutableStateOf(false) }
                         MyInputDialog(
                             showDialog = showDialog,
-                            title = "Email",
+                            title = "User Role",
                             onConfirm = { showDialog = false },
                             onDismiss = { showDialog = false }
                         ) {
                             MyOutlineTextFiled(
                                 modifier = Modifier.fillMaxWidth(),
-                                label = "Email",
+                                label = "Role",
                                 keyboardType = KeyboardType.Email,
                                 initialText = "",
                                 onValueChange = {
@@ -154,7 +144,7 @@ fun AccountScreen(
                         ) {
                             MyOutlineTextFiled(
                                 modifier = Modifier.fillMaxWidth(),
-                                label = "First Name",
+                                label = "User Name",
                                 keyboardType = KeyboardType.Text,
                                 initialText = "",
                                 onValueChange = {
@@ -180,38 +170,7 @@ fun AccountScreen(
                         }
                     }
 
-                  /*  Row(//Last Name
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(6.dp),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        var showDialog by remember { mutableStateOf(false) }
-                        MyInputDialog(
-                            showDialog = showDialog,
-                            title = "Last Name",
-                            onConfirm = { showDialog = false },
-                            onDismiss = { showDialog = false }
-                        ) {
-                            MyOutlineTextFiled(
-                                modifier = Modifier.fillMaxWidth(),
-                                label = "Last Name",
-                                keyboardType = KeyboardType.Text,
-                                initialText = "",
-                                onValueChange = {
-                                    //newThreshold = it
-                                }
-                            )
-                        }
 
-                        Text(text = "Last Name : Mode")
-                        IconButton(onClick = {
-                            showDialog = true
-                        }) {
-                            Icon(imageVector = Icons.Default.Edit, contentDescription = "edit")
-                        }
-                    }*/
 
                     Row(// Email address
                         modifier = Modifier
