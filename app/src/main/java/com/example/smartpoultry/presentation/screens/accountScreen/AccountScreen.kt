@@ -259,16 +259,34 @@ fun AccountScreen(
 
                 var showRegDialog by remember { mutableStateOf(false) }
                 MyInputDialog(
-                    title = "RegisterNew User",
-                    onConfirm = { /*TODO*/ },
-                    onDismiss = {}
+                    showDialog = showRegDialog,
+                    title = "Register New User",
+                    onConfirm = {
+                                //TODO
+                                showRegDialog = false
+                    },
+                    onDismiss = { showRegDialog = false}
                 ) {
+                    Column {
 
+                        MyOutlineTextFiled(
+                            label = "Name",
+                            keyboardType = KeyboardType.Text,
+                            initialText = "",
+                            onValueChange = {}
+                        )
+                        MyOutlineTextFiled(
+                            label = "Email address",
+                            keyboardType = KeyboardType.Email,
+                            initialText = "",
+                            onValueChange = {}
+                        )
+                    }
                 }
                 if (userRole.value == "Director") {
                     NormButton(
                         modifier = Modifier.fillMaxWidth(),
-                        onButtonClick = { /*TODO*/ },
+                        onButtonClick = { showRegDialog = true },
                         btnName = "Register new user"
                     )
                 }
