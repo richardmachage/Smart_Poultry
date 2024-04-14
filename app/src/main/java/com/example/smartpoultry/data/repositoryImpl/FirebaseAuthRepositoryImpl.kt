@@ -132,6 +132,36 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
         return if (result.await()) Result.success(true) else Result.failure(result.getCompletionExceptionOrNull()!!)
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
+    override suspend fun editEmail(email: String): Result<Boolean> {
+        var completableDeferred = CompletableDeferred<Boolean>()
+        firebaseAuth.currentUser?.verifyBeforeUpdateEmail(email)
+            ?.addOnSuccessListener {
+                firebaseFirestore.collection("Users")
+                    .document(firebaseAuth.uid.toString())
+                    .update("email", email)
+                    .addOnSuccessListener {
+                        completableDeferred.complete(true)
+                    }
+                    .addOnFailureListener{
+                        completableDeferred.completeExceptionally(it)
+                    }
+            }
+            ?.addOnFailureListener{
+                completableDeferred.completeExceptionally(it)
+            }
+        return if (completableDeferred.await()) Result.success(true) else Result.failure(completableDeferred.getCompletionExceptionOrNull()!!)
+    }
+
+    override suspend fun editUserRole(email: String, role: String): Result<Boolean> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun editPhone(phone: String): Result<Boolean> {
+        TODO("Not yet implemented")
+    }
+
+
     override fun logOut() {
         firebaseAuth.signOut()
     }
