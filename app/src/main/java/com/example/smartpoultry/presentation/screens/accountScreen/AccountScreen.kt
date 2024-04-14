@@ -34,9 +34,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.smartpoultry.data.dataSource.datastore.USER_EMAIL_KEY
-import com.example.smartpoultry.data.dataSource.datastore.USER_NAME_KEY
-import com.example.smartpoultry.data.dataSource.datastore.USER_PHONE_KEY
 import com.example.smartpoultry.presentation.composables.MyBorderedColumn
 import com.example.smartpoultry.presentation.composables.MyEditText
 import com.example.smartpoultry.presentation.composables.MyEditTextClear
@@ -57,10 +54,9 @@ fun AccountScreen(
     val accountViewModel = hiltViewModel<AccountViewModel>()
     //val userRole = accountViewModel.myDataStore.readData(USER_ROLE_KEY).collectAsState(initial = "-")
     val userRole by accountViewModel.userRole.collectAsState()
-
-    val userName = accountViewModel.myDataStore.readData(USER_NAME_KEY).collectAsState(initial = "-")
-    val userEmail = accountViewModel.myDataStore.readData(USER_EMAIL_KEY).collectAsState(initial = "-")
-    val userPhone = accountViewModel.myDataStore.readData(USER_PHONE_KEY).collectAsState(initial = "-")
+    val userName by accountViewModel.userName.collectAsState()
+    val userEmail by  accountViewModel.userEmail.collectAsState()
+    val userPhone by accountViewModel.userPhone.collectAsState()
 
     Scaffold(
         topBar = {
@@ -158,7 +154,7 @@ fun AccountScreen(
                                 modifier = Modifier.fillMaxWidth(),
                                 label = "User Name",
                                 keyboardType = KeyboardType.Text,
-                                initialText = "",
+                                initialText = userName,
                                 onValueChange = {
                                     //newThreshold = it
                                 }
@@ -166,7 +162,7 @@ fun AccountScreen(
                         }
 
                         MyEditText(
-                            value = userName.value,
+                            value = userName,
                             label = "User name",
                             iconLeading = Icons.Default.Person,
                             iconLeadingDescription = "user",
@@ -201,7 +197,7 @@ fun AccountScreen(
                                 modifier = Modifier.fillMaxWidth(),
                                 label = "Email",
                                 keyboardType = KeyboardType.Email,
-                                initialText = "",
+                                initialText = userEmail,
                                 onValueChange = {
                                     //newThreshold = it
                                 }
@@ -211,7 +207,7 @@ fun AccountScreen(
                         /*Icon(imageVector = Icons.Default.Email, contentDescription = "email")
                         Text(text = "Email Address: beast@gmail.com")*/
                         MyEditText(
-                            value = userEmail.value,
+                            value = userEmail,
                             label = "Email address",
                             iconLeading = Icons.Default.Email,
                             iconLeadingDescription = "Email",
@@ -243,7 +239,7 @@ fun AccountScreen(
                                 modifier = Modifier.fillMaxWidth(),
                                 label = "Phone Number",
                                 keyboardType = KeyboardType.Email,
-                                initialText = "",
+                                initialText = userPhone,
                                 onValueChange = {
                                     //newThreshold = it
                                 }
@@ -251,7 +247,7 @@ fun AccountScreen(
                         }
 
                         MyEditText(
-                            value = userPhone.value,
+                            value = userPhone,
                             label = "Phone Number",
                             iconLeading = Icons.Default.Phone,
                             iconLeadingDescription = "Phone",
