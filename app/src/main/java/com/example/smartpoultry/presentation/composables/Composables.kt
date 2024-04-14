@@ -100,7 +100,7 @@ fun MyTextButton(onButtonClick: () -> Unit, btnText: String, modifier: Modifier)
 
 @Composable
 fun MyEditText(
-    value : String = "",
+    value : String ,
     label: String,
     keyboardType: KeyboardType = KeyboardType.Text,
     iconLeading: ImageVector,

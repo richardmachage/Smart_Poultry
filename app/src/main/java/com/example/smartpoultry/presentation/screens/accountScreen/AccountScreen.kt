@@ -37,7 +37,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.smartpoultry.data.dataSource.datastore.USER_EMAIL_KEY
 import com.example.smartpoultry.data.dataSource.datastore.USER_NAME_KEY
 import com.example.smartpoultry.data.dataSource.datastore.USER_PHONE_KEY
-import com.example.smartpoultry.data.dataSource.datastore.USER_ROLE_KEY
 import com.example.smartpoultry.presentation.composables.MyBorderedColumn
 import com.example.smartpoultry.presentation.composables.MyEditText
 import com.example.smartpoultry.presentation.composables.MyEditTextClear
@@ -56,10 +55,12 @@ fun AccountScreen(
     navigator: DestinationsNavigator
 ) {
     val accountViewModel = hiltViewModel<AccountViewModel>()
-    val userRole = accountViewModel.myDataStore.readData(USER_ROLE_KEY).collectAsState(initial = "")
-    val userName = accountViewModel.myDataStore.readData(USER_NAME_KEY).collectAsState(initial = "")
-    val userEmail = accountViewModel.myDataStore.readData(USER_EMAIL_KEY).collectAsState(initial = "")
-    val userPhone = accountViewModel.myDataStore.readData(USER_PHONE_KEY).collectAsState(initial = "")
+    //val userRole = accountViewModel.myDataStore.readData(USER_ROLE_KEY).collectAsState(initial = "-")
+    val userRole by accountViewModel.userRole.collectAsState()
+
+    val userName = accountViewModel.myDataStore.readData(USER_NAME_KEY).collectAsState(initial = "-")
+    val userEmail = accountViewModel.myDataStore.readData(USER_EMAIL_KEY).collectAsState(initial = "-")
+    val userPhone = accountViewModel.myDataStore.readData(USER_PHONE_KEY).collectAsState(initial = "-")
 
     Scaffold(
         topBar = {
@@ -120,7 +121,7 @@ fun AccountScreen(
                         Text(text = "Role : ${userRole.value}")*/
 
                         MyEditText(
-                            value = userRole.value,
+                            value = userRole,
                             label = "User Role",
                             iconLeading = Icons.Default.Face,
                             iconLeadingDescription = "userRole",
@@ -128,7 +129,7 @@ fun AccountScreen(
                             readOnly = true
                         )
 
-                        if (userRole.value == "Director") {
+                        if (userRole == "Director") {
                             IconButton(onClick = {
                                 showDialog = true
                             }) {
@@ -311,7 +312,7 @@ fun AccountScreen(
                         )
                     }
                 }
-                if (userRole.value == "Director") {
+                if (userRole == "Director") {
                     NormButton(
                         modifier = Modifier.fillMaxWidth(),
                         onButtonClick = { showRegDialog = true },

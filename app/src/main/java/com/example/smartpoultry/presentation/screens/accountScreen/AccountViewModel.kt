@@ -4,8 +4,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.smartpoultry.data.dataSource.datastore.AppDataStore
+import com.example.smartpoultry.data.dataSource.datastore.USER_ROLE_KEY
 import com.example.smartpoultry.domain.repository.FirebaseAuthRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -17,6 +20,12 @@ class AccountViewModel @Inject constructor(
     val myDataStore = dataStore
     var isLoading = mutableStateOf(false)
     var toastMessage = mutableStateOf("")
+
+    val userRole = dataStore.readData(USER_ROLE_KEY).stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.Eagerly,
+        initialValue = ""
+    )
 
     fun registerUser(userRole: String, email: String) {
         viewModelScope.launch {
@@ -35,7 +44,7 @@ class AccountViewModel @Inject constructor(
     }
 
     fun changeEmail(email: String) {
-        
+
     }
 
     fun changeUserName(name: String) {
