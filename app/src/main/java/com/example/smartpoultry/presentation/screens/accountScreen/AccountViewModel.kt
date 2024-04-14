@@ -101,6 +101,7 @@ class AccountViewModel @Inject constructor(
             result.onFailure {
                 toastMessage.value = "failed: ${it.message.toString()}"
             }
+            isLoading.value = false
         }
     }
 

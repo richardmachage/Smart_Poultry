@@ -157,18 +157,20 @@ fun AccountScreen(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         var showDialog by remember { mutableStateOf(false) }
-                        var newUserName by remember { mutableStateOf("") }
+                        var newUserName by remember { mutableStateOf(userName) }
                         MyInputDialog(
                             showDialog = showDialog,
                             title = "User Name",
                             onConfirm = {
-                                if (newUserName.isNotBlank()) {
-                                    accountViewModel.changeUserName(newUserName)
-                                    showDialog = false
-                                } else if (newUserName == userName) {
+                                if (newUserName.isBlank())
+                                    accountViewModel.toastMessage.value = "Empty field"
+                                else if (newUserName == userName)
                                     accountViewModel.toastMessage.value =
                                         "Same name, no change made"
-                                } else accountViewModel.toastMessage.value = "Empty field"
+                                else {
+                                    accountViewModel.changeUserName(newUserName)
+                                    showDialog = false
+                                }
                             },
                             onDismiss = { showDialog = false }
                         ) {
@@ -176,7 +178,7 @@ fun AccountScreen(
                                 modifier = Modifier.fillMaxWidth(),
                                 label = "User Name",
                                 keyboardType = KeyboardType.Text,
-                                initialText = userName,
+                                initialText = newUserName,
                                 onValueChange = {
                                     newUserName = it
                                 }
@@ -209,7 +211,7 @@ fun AccountScreen(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         var showDialog by remember { mutableStateOf(false) }
-                        var newEmail by remember { mutableStateOf("") }
+                        var newEmail by remember { mutableStateOf(userEmail) }
                         MyInputDialog(
                             showDialog = showDialog,
                             title = "Email",
@@ -229,7 +231,7 @@ fun AccountScreen(
                                 modifier = Modifier.fillMaxWidth(),
                                 label = "Email",
                                 keyboardType = KeyboardType.Email,
-                                initialText = userEmail,
+                                initialText = newEmail,
                                 onValueChange = {
                                     newEmail = it
                                 }
@@ -259,13 +261,15 @@ fun AccountScreen(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         var showDialog by remember { mutableStateOf(false) }
-                        var newPhone by remember { mutableStateOf("") }
+                        var newPhone by remember { mutableStateOf(userPhone) }
                         MyInputDialog(
                             showDialog = showDialog,
                             title = "Phone Number",
                             onConfirm = {
-                                if (newPhone.isBlank()) accountViewModel.toastMessage.value = "empty field"
-                                else if (newPhone == userPhone) accountViewModel.toastMessage.value = "same phone number, no change made"
+                                if (newPhone.isBlank()) accountViewModel.toastMessage.value =
+                                    "empty field"
+                                else if (newPhone == userPhone) accountViewModel.toastMessage.value =
+                                    "same phone number, no change made"
                                 else {
                                     accountViewModel.changePhoneNumber(phoneNumber = newPhone)
                                     showDialog = false
@@ -277,9 +281,9 @@ fun AccountScreen(
                                 modifier = Modifier.fillMaxWidth(),
                                 label = "Phone Number",
                                 keyboardType = KeyboardType.Email,
-                                initialText = userPhone,
+                                initialText = newPhone,
                                 onValueChange = {
-                                    //newThreshold = it
+                                    newPhone = it
                                 }
                             )
                         }
