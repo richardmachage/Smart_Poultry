@@ -61,6 +61,7 @@ fun AccountScreen(
     val userName by accountViewModel.userName.collectAsState()
     val userEmail by accountViewModel.userEmail.collectAsState()
     val userPhone by accountViewModel.userPhone.collectAsState()
+    var refreshData = 0
 
     LaunchedEffect(key1 = accountViewModel.toastMessage.value) {
         if (accountViewModel.toastMessage.value.isNotBlank()) Toast.makeText(
