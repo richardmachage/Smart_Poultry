@@ -65,6 +65,12 @@ class AccountViewModel @Inject constructor(
     fun changeEmail(email: String) {
         viewModelScope.launch {
             val result = fireBaseAuthRepo.editEmail(email = email)
+            result.onSuccess {
+                toastMessage.value = "succesfully updated email"
+            }
+            result.onFailure {
+                toastMessage.value = "failed: ${it.message.toString()}"
+            }
         }
     }
 
