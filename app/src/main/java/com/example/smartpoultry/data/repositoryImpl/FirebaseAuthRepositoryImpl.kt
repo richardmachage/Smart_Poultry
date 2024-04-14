@@ -134,7 +134,7 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
 
     @OptIn(ExperimentalCoroutinesApi::class)
     override suspend fun editEmail(email: String): Result<Boolean> {
-        var completableDeferred = CompletableDeferred<Boolean>()
+        val completableDeferred = CompletableDeferred<Boolean>()
         firebaseAuth.currentUser?.verifyBeforeUpdateEmail(email)
             ?.addOnSuccessListener {
                 firebaseFirestore.collection("Users")
@@ -157,8 +157,20 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
         TODO("Not yet implemented")
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     override suspend fun editPhone(phone: String): Result<Boolean> {
-        TODO("Not yet implemented")
+        val completableDeferred = CompletableDeferred<Boolean>()
+        firebaseFirestore.collection("Users")
+            .document(firebaseAuth.currentUser?.uid.toString())
+            .update("phone", phone)
+            .addOnSuccessListener {
+                completableDeferred.complete(true)
+            }
+            .addOnFailureListener{
+                completableDeferred.completeExceptionally(it)
+            }
+
+        return if (completableDeferred.await()) Result.success(true) else Result.failure(completableDeferred.getCompletionExceptionOrNull()!!)
     }
 
 
