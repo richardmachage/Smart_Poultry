@@ -63,7 +63,9 @@ class AccountViewModel @Inject constructor(
     }
 
     fun changeEmail(email: String) {
-
+        viewModelScope.launch {
+            fireBaseAuthRepo.editEmail(email = email)
+        }
     }
 
     fun changeUserName(name: String) {
