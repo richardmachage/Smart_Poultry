@@ -214,13 +214,14 @@ fun AccountScreen(
                             showDialog = showDialog,
                             title = "Email",
                             onConfirm = {
-                                if (newEmail.isNotBlank()){
+                                if (newEmail.isBlank())
+                                    accountViewModel.toastMessage.value = "empty field"
+                                else if (newEmail == userEmail) accountViewModel.toastMessage.value =
+                                    "similar email, no change"
+                                else {
                                     accountViewModel.changeEmail(email = newEmail)
                                     showDialog = false
                                 }
-                                else if (newEmail == userEmail) accountViewModel.toastMessage.value =
-                                    "similar email, no change"
-                                else accountViewModel.toastMessage.value = "empty field"
                             },
                             onDismiss = { showDialog = false }
                         ) {
@@ -258,10 +259,16 @@ fun AccountScreen(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         var showDialog by remember { mutableStateOf(false) }
+                        var newPhone by remember { mutableStateOf("") }
                         MyInputDialog(
                             showDialog = showDialog,
                             title = "Phone Number",
-                            onConfirm = { showDialog = false },
+                            onConfirm = {
+                                if (newPhone.isBlank()) {
+
+                                }
+                                showDialog = false
+                            },
                             onDismiss = { showDialog = false }
                         ) {
                             MyOutlineTextFiled(
