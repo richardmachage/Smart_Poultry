@@ -92,7 +92,16 @@ class AccountViewModel @Inject constructor(
     }
 
     fun changePhoneNumber(phoneNumber: String) {
-
+        viewModelScope.launch {
+            isLoading.value = true
+            val result = fireBaseAuthRepo.editPhone(phoneNumber)
+            result.onSuccess {
+                toastMessage.value = "Change successful, changes will reflect on next log in"
+            }
+            result.onFailure {
+                toastMessage.value = "failed: ${it.message.toString()}"
+            }
+        }
     }
 
     fun resetPassword() {
