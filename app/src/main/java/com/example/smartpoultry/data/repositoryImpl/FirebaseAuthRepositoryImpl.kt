@@ -105,8 +105,6 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
         deferred.await()
     }
 
-
-
     override suspend fun resetPassword(email: String) : Result<Boolean> = coroutineScope {
         try {
             // Await the completion of the password reset email sending

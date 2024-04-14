@@ -113,8 +113,6 @@ fun AccountScreen(
                                 }
                             )
                         }
-                        /*Icon(imageVector = Icons.Default.AccountCircle, contentDescription = "role")
-                        Text(text = "Role : ${userRole.value}")*/
 
                         MyEditText(
                             value = userRole,
@@ -124,15 +122,13 @@ fun AccountScreen(
                             enabled = true,
                             readOnly = true
                         )
-
-                        if (userRole == "Director") {
+                        /*if (userRole == "Director") {
                             IconButton(onClick = {
                                 showDialog = true
                             }) {
                                 Icon(imageVector = Icons.Default.Edit, contentDescription = "edit")
                             }
-                        }
-
+                        }*/
                     }
 
 
