@@ -35,7 +35,7 @@ class AccountViewModel @Inject constructor(
     }
 
     fun changeEmail(email: String) {
-
+        
     }
 
     fun changeUserName(name: String) {

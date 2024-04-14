@@ -124,7 +124,8 @@ fun AccountScreen(
                             label = "User Role",
                             iconLeading = Icons.Default.Face,
                             iconLeadingDescription = "userRole",
-                            enabled = false
+                            enabled = true,
+                            readOnly = true
                         )
 
                         if (userRole.value == "Director") {
@@ -163,14 +164,13 @@ fun AccountScreen(
                             )
                         }
 
-                        /*   Icon(imageVector = Icons.Default.Person, contentDescription = "edit")
-                           Text(text = "User Name : Beast", textAlign = TextAlign.Start)*/
                         MyEditText(
-                            value = "Beast Mode",
+                            value = userName.value,
                             label = "User name",
                             iconLeading = Icons.Default.Person,
                             iconLeadingDescription = "user",
-                            enabled = false
+                            enabled = true,
+                            readOnly = true
                         )
                         IconButton(
                             onClick = {
@@ -210,11 +210,12 @@ fun AccountScreen(
                         /*Icon(imageVector = Icons.Default.Email, contentDescription = "email")
                         Text(text = "Email Address: beast@gmail.com")*/
                         MyEditText(
-                            value = "beast.com.ku@gmail.com",
+                            value = userEmail.value,
                             label = "Email address",
                             iconLeading = Icons.Default.Email,
                             iconLeadingDescription = "Email",
-                            enabled = false
+                            enabled = true,
+                            readOnly = true
                         )
                         IconButton(onClick = {
                             showDialog = true
@@ -249,12 +250,12 @@ fun AccountScreen(
                         }
 
                         MyEditText(
-                            value = "0654233214",
+                            value = userPhone.value,
                             label = "Phone Number",
                             iconLeading = Icons.Default.Phone,
                             iconLeadingDescription = "Phone",
                             readOnly = true,
-                            enabled = false
+                            enabled = true
                         )
                         /*Icon(imageVector = Icons.Default.Phone, contentDescription = "edit")
                         Text(text = "Phone Number : 0654233214")*/
