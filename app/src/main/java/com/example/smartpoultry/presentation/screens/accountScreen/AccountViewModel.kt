@@ -1,5 +1,6 @@
 package com.example.smartpoultry.presentation.screens.accountScreen
 
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.smartpoultry.data.dataSource.datastore.AppDataStore
@@ -14,9 +15,23 @@ class AccountViewModel @Inject constructor(
     private val dataStore: AppDataStore
 ) : ViewModel() {
     val myDataStore = dataStore
+    var isLoading = mutableStateOf(false)
+    var toastMessage = mutableStateOf("")
 
-    fun registerUser(name: String, email: String) {
-
+    fun registerUser(userRole: String, email: String) {
+        viewModelScope.launch {
+            isLoading.value = true
+            val result =
+                fireBaseAuthRepo.registerUser(email = email, role = userRole, password = "0000000")
+            result.onSuccess {
+                isLoading.value = false
+                toastMessage.value = "User registered successfully"
+            }
+            result.onFailure {
+                toastMessage.value = "Failed to register: ${it.message.toString()}"
+                isLoading.value = false
+            }
+        }
     }
 
     fun changeEmail(email: String) {
@@ -33,11 +48,11 @@ class AccountViewModel @Inject constructor(
 
     }
 
-    fun changePhoneNumber(phoneNumber : String){
+    fun changePhoneNumber(phoneNumber: String) {
 
     }
 
-    fun resetPassword(){
+    fun resetPassword() {
 
     }
 }
