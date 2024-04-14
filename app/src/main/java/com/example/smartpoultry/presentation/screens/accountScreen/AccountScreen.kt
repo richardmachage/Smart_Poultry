@@ -41,6 +41,7 @@ import com.example.smartpoultry.presentation.composables.MyInputDialog
 import com.example.smartpoultry.presentation.composables.MyOutlineTextFiled
 import com.example.smartpoultry.presentation.composables.MyVerticalSpacer
 import com.example.smartpoultry.presentation.composables.NormButton
+import com.example.smartpoultry.presentation.composables.UserTypeDropDownMenu
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
@@ -279,6 +280,7 @@ fun AccountScreen(
 
                 }
 
+                //Register new user
                 var showRegDialog by remember { mutableStateOf(false) }
                 MyInputDialog(
                     showDialog = showRegDialog,
@@ -291,12 +293,13 @@ fun AccountScreen(
                 ) {
                     Column {
 
-                        MyOutlineTextFiled(
+                        /*MyOutlineTextFiled(
                             label = "Name",
                             keyboardType = KeyboardType.Text,
                             initialText = "",
                             onValueChange = {}
-                        )
+                        )*/
+                        UserTypeDropDownMenu(onItemClick = {userRole-> })
                         MyOutlineTextFiled(
                             label = "Email address",
                             keyboardType = KeyboardType.Email,
