@@ -3,6 +3,7 @@ package com.example.smartpoultry.data.repositoryImpl
 import com.example.smartpoultry.data.dataSource.datastore.AppDataStore
 import com.example.smartpoultry.data.dataSource.datastore.USER_EMAIL_KEY
 import com.example.smartpoultry.data.dataSource.datastore.USER_NAME_KEY
+import com.example.smartpoultry.data.dataSource.datastore.USER_PHONE_KEY
 import com.example.smartpoultry.data.dataSource.datastore.USER_ROLE_KEY
 import com.example.smartpoultry.data.dataSource.remote.firebase.models.User
 import com.example.smartpoultry.domain.repository.FirebaseAuthRepository
@@ -82,6 +83,12 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
                             CoroutineScope(Dispatchers.IO).launch {
                                 user?.let { user->
                                     dataStore.saveData(USER_EMAIL_KEY, user.email)
+                                }
+                            }
+                            //User phone
+                            CoroutineScope(Dispatchers.IO).launch {
+                                user?.let { user->
+                                    dataStore.saveData(USER_PHONE_KEY, user.phone)
                                 }
                             }
 
