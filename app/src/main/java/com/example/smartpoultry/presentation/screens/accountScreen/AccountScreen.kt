@@ -264,10 +264,12 @@ fun AccountScreen(
                             showDialog = showDialog,
                             title = "Phone Number",
                             onConfirm = {
-                                if (newPhone.isBlank()) {
-
+                                if (newPhone.isBlank()) accountViewModel.toastMessage.value = "empty field"
+                                else if (newPhone == userPhone) accountViewModel.toastMessage.value = "same phone number, no change made"
+                                else {
+                                    accountViewModel.changePhoneNumber(phoneNumber = newPhone)
+                                    showDialog = false
                                 }
-                                showDialog = false
                             },
                             onDismiss = { showDialog = false }
                         ) {
