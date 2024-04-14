@@ -59,11 +59,15 @@ fun AccountScreen(
     val context = LocalContext.current
     val userRole by accountViewModel.userRole.collectAsState()
     val userName by accountViewModel.userName.collectAsState()
-    val userEmail by  accountViewModel.userEmail.collectAsState()
+    val userEmail by accountViewModel.userEmail.collectAsState()
     val userPhone by accountViewModel.userPhone.collectAsState()
 
     LaunchedEffect(key1 = accountViewModel.toastMessage.value) {
-        if (accountViewModel.toastMessage.value.isNotBlank()) Toast.makeText(context,accountViewModel.toastMessage.value,Toast.LENGTH_SHORT).show()
+        if (accountViewModel.toastMessage.value.isNotBlank()) Toast.makeText(
+            context,
+            accountViewModel.toastMessage.value,
+            Toast.LENGTH_SHORT
+        ).show()
         accountViewModel.toastMessage.value = ""
     }
 
@@ -152,10 +156,19 @@ fun AccountScreen(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         var showDialog by remember { mutableStateOf(false) }
+                        var newUserName by remember {
+                            mutableStateOf("")
+                        }
                         MyInputDialog(
                             showDialog = showDialog,
                             title = "User Name",
-                            onConfirm = { showDialog = false },
+                            onConfirm = {
+                                if (newUserName.isNotBlank()) {
+                                    accountViewModel.changeUserName(newUserName)
+                                    showDialog = false
+                                }
+                                else accountViewModel.toastMessage.value = "Empty field"
+                            },
                             onDismiss = { showDialog = false }
                         ) {
                             MyOutlineTextFiled(
@@ -164,7 +177,7 @@ fun AccountScreen(
                                 keyboardType = KeyboardType.Text,
                                 initialText = userName,
                                 onValueChange = {
-                                    //newThreshold = it
+                                    newUserName = it
                                 }
                             )
                         }
@@ -278,9 +291,9 @@ fun AccountScreen(
                         showDialog = showPasswordDialog,
                         title = "Reset Password",
                         onConfirm = { /*TODO*/
-                        showPasswordDialog = false
+                            showPasswordDialog = false
                         },
-                        onDismiss = {showPasswordDialog = false}
+                        onDismiss = { showPasswordDialog = false }
                     ) {
                         Text(text = "A password reset Link will be sent to your Email address example@gmail.com \nConfirm to proceed")
                     }
@@ -306,13 +319,13 @@ fun AccountScreen(
                 ) {
                     Column {
 
-                        UserTypeDropDownMenu(onItemClick = {userRole-> })
+                        UserTypeDropDownMenu(onItemClick = { userRole -> })
                         MyEditTextClear(
                             label = "Email address",
                             iconLeading = Icons.Default.Email,
-                            iconLeadingDescription ="Email",
+                            iconLeadingDescription = "Email",
                             keyboardType = KeyboardType.Email,
-                            onValueChange = {text ->  }
+                            onValueChange = { text -> }
                         )
                     }
                 }

@@ -68,7 +68,9 @@ class AccountViewModel @Inject constructor(
 
     fun changeUserName(name: String) {
         viewModelScope.launch {
-            fireBaseAuthRepo.editUserName(name)
+            val result = fireBaseAuthRepo.editUserName(name)
+            if (result.isSuccess) toastMessage.value = "Change succesfull, changes will reflect on next log in"
+            else if (result.isFailure)toastMessage.value = "Failed: ${result.exceptionOrNull()?.message.toString()}"
         }
     }
 
