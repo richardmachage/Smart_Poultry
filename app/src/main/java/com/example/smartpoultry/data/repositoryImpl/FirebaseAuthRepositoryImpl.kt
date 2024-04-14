@@ -61,7 +61,9 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
                         .addOnSuccessListener {documentSnapshot->
                             val user = documentSnapshot.toObject(User::class.java)
 
-                            //save user role to datastore
+                            //save user details  to datastore
+
+                            //user Role
                             CoroutineScope(Dispatchers.IO).launch {
                                 user?.let { user->
                                     dataStore.saveData(USER_ROLE_KEY, user.role)

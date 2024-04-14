@@ -10,6 +10,10 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 const val USER_ROLE_KEY = "user_role"
+const val USER_NAME_KEY = "user_name"
+const val USER_PHONE_KEY = "user_phone"
+const val USER_EMAIL_KEY = "user_email"
+
 @Singleton
 class AppDataStore @Inject constructor(
     private val dataStore: DataStore<Preferences>

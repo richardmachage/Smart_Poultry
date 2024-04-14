@@ -294,19 +294,7 @@ fun AccountScreen(
                 ) {
                     Column {
 
-                        /*MyOutlineTextFiled(
-                            label = "Name",
-                            keyboardType = KeyboardType.Text,
-                            initialText = "",
-                            onValueChange = {}
-                        )*/
                         UserTypeDropDownMenu(onItemClick = {userRole-> })
-                       /* MyOutlineTextFiled(
-                            label = "Email address",
-                            keyboardType = KeyboardType.Email,
-                            initialText = "",
-                            onValueChange = {}
-                        )*/
                         MyEditTextClear(
                             label = "Email address",
                             iconLeading = Icons.Default.Email,
