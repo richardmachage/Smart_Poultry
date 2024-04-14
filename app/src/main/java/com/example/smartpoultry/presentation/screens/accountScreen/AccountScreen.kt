@@ -37,6 +37,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.smartpoultry.data.dataSource.datastore.USER_ROLE_KEY
 import com.example.smartpoultry.presentation.composables.MyBorderedColumn
 import com.example.smartpoultry.presentation.composables.MyEditText
+import com.example.smartpoultry.presentation.composables.MyEditTextClear
 import com.example.smartpoultry.presentation.composables.MyInputDialog
 import com.example.smartpoultry.presentation.composables.MyOutlineTextFiled
 import com.example.smartpoultry.presentation.composables.MyVerticalSpacer
@@ -300,11 +301,18 @@ fun AccountScreen(
                             onValueChange = {}
                         )*/
                         UserTypeDropDownMenu(onItemClick = {userRole-> })
-                        MyOutlineTextFiled(
+                       /* MyOutlineTextFiled(
                             label = "Email address",
                             keyboardType = KeyboardType.Email,
                             initialText = "",
                             onValueChange = {}
+                        )*/
+                        MyEditTextClear(
+                            label = "Email address",
+                            iconLeading = Icons.Default.Email,
+                            iconLeadingDescription ="Email",
+                            keyboardType = KeyboardType.Email,
+                            onValueChange = {text ->  }
                         )
                     }
                 }

@@ -158,8 +158,8 @@ fun MySimpleEditText(
 
 @Composable
 fun MyEditTextClear(
-    label: String,
-    hint: String,
+    label: String = "",
+    hint: String = "",
     iconLeading: ImageVector,
     iconLeadingDescription: String,
     keyboardType: KeyboardType,
