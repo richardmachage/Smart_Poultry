@@ -34,6 +34,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.smartpoultry.data.dataSource.datastore.USER_EMAIL_KEY
+import com.example.smartpoultry.data.dataSource.datastore.USER_NAME_KEY
+import com.example.smartpoultry.data.dataSource.datastore.USER_PHONE_KEY
 import com.example.smartpoultry.data.dataSource.datastore.USER_ROLE_KEY
 import com.example.smartpoultry.presentation.composables.MyBorderedColumn
 import com.example.smartpoultry.presentation.composables.MyEditText
@@ -54,6 +57,9 @@ fun AccountScreen(
 ) {
     val accountViewModel = hiltViewModel<AccountViewModel>()
     val userRole = accountViewModel.myDataStore.readData(USER_ROLE_KEY).collectAsState(initial = "")
+    val userName = accountViewModel.myDataStore.readData(USER_NAME_KEY).collectAsState(initial = "")
+    val userEmail = accountViewModel.myDataStore.readData(USER_EMAIL_KEY).collectAsState(initial = "")
+    val userPhone = accountViewModel.myDataStore.readData(USER_PHONE_KEY).collectAsState(initial = "")
 
     Scaffold(
         topBar = {

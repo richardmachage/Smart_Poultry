@@ -14,6 +14,7 @@ class AccountViewModel @Inject constructor(
     private val dataStore: AppDataStore
 ) : ViewModel() {
     val myDataStore = dataStore
+
     fun registerUser(name: String, email: String) {
 
     }
