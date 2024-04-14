@@ -53,7 +53,7 @@ class EggCollectionRepositoryImpl @Inject constructor(
                                         )
                                     )
                                 }catch (e : Exception){
-                                    Log.i("Error : ", "record with date ")
+                                   // Log.i("Error : ", "record with date ")
                                 }
                             }
                         }
@@ -70,7 +70,7 @@ class EggCollectionRepositoryImpl @Inject constructor(
                                     )
                                 )
                             } catch (e : Exception){
-                                Log.i("error","record with date exists")
+                                //Log.i("error","record with date exists")
                             }
                             }
                         }
