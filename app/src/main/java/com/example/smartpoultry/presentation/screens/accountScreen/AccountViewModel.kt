@@ -105,7 +105,13 @@ class AccountViewModel @Inject constructor(
         }
     }
 
-    fun resetPassword() {
+    fun resetPassword(email: String) {
+        viewModelScope.launch{
+            val result = fireBaseAuthRepo.resetPassword(email)
+            result.onSuccess {
+                fireBaseAuthRepo.logOut()
+            }
 
+        }
     }
 }
