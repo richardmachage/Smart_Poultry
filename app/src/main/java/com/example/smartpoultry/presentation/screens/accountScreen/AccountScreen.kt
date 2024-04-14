@@ -157,9 +157,7 @@ fun AccountScreen(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         var showDialog by remember { mutableStateOf(false) }
-                        var newUserName by remember {
-                            mutableStateOf("")
-                        }
+                        var newUserName by remember { mutableStateOf("") }
                         MyInputDialog(
                             showDialog = showDialog,
                             title = "User Name",
@@ -167,8 +165,10 @@ fun AccountScreen(
                                 if (newUserName.isNotBlank()) {
                                     accountViewModel.changeUserName(newUserName)
                                     showDialog = false
-                                }
-                                else accountViewModel.toastMessage.value = "Empty field"
+                                } else if (newUserName == userName) {
+                                    accountViewModel.toastMessage.value =
+                                        "Same name, no change made"
+                                } else accountViewModel.toastMessage.value = "Empty field"
                             },
                             onDismiss = { showDialog = false }
                         ) {
@@ -209,10 +209,19 @@ fun AccountScreen(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         var showDialog by remember { mutableStateOf(false) }
+                        var newEmail by remember { mutableStateOf("") }
                         MyInputDialog(
                             showDialog = showDialog,
                             title = "Email",
-                            onConfirm = { showDialog = false },
+                            onConfirm = {
+                                if (newEmail.isNotBlank()){
+                                    accountViewModel.changeEmail(email = newEmail)
+                                    showDialog = false
+                                }
+                                else if (newEmail == userEmail) accountViewModel.toastMessage.value =
+                                    "similar email, no change"
+                                else accountViewModel.toastMessage.value = "empty field"
+                            },
                             onDismiss = { showDialog = false }
                         ) {
                             MyOutlineTextFiled(
@@ -221,13 +230,11 @@ fun AccountScreen(
                                 keyboardType = KeyboardType.Email,
                                 initialText = userEmail,
                                 onValueChange = {
-                                    //newThreshold = it
+                                    newEmail = it
                                 }
                             )
                         }
 
-                        /*Icon(imageVector = Icons.Default.Email, contentDescription = "email")
-                        Text(text = "Email Address: beast@gmail.com")*/
                         MyEditText(
                             value = userEmail,
                             label = "Email address",
