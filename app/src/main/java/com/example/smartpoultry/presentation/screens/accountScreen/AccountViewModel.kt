@@ -4,6 +4,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.smartpoultry.data.dataSource.datastore.AppDataStore
+import com.example.smartpoultry.data.dataSource.datastore.USER_NAME_KEY
 import com.example.smartpoultry.data.dataSource.datastore.USER_ROLE_KEY
 import com.example.smartpoultry.domain.repository.FirebaseAuthRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -22,6 +23,11 @@ class AccountViewModel @Inject constructor(
     var toastMessage = mutableStateOf("")
 
     val userRole = dataStore.readData(USER_ROLE_KEY).stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.Eagerly,
+        initialValue = ""
+    )
+    val userName = dataStore.readData(USER_NAME_KEY).stateIn(
         scope = viewModelScope,
         started = SharingStarted.Eagerly,
         initialValue = ""
