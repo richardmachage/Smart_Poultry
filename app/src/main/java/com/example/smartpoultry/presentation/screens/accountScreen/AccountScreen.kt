@@ -1,5 +1,6 @@
 package com.example.smartpoultry.presentation.screens.accountScreen
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -24,6 +25,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -31,10 +33,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.smartpoultry.presentation.composables.MyBorderedColumn
+import com.example.smartpoultry.presentation.composables.MyCircularProgressBar
 import com.example.smartpoultry.presentation.composables.MyEditText
 import com.example.smartpoultry.presentation.composables.MyEditTextClear
 import com.example.smartpoultry.presentation.composables.MyInputDialog
@@ -52,11 +56,16 @@ fun AccountScreen(
     navigator: DestinationsNavigator
 ) {
     val accountViewModel = hiltViewModel<AccountViewModel>()
-    //val userRole = accountViewModel.myDataStore.readData(USER_ROLE_KEY).collectAsState(initial = "-")
+    val context = LocalContext.current
     val userRole by accountViewModel.userRole.collectAsState()
     val userName by accountViewModel.userName.collectAsState()
     val userEmail by  accountViewModel.userEmail.collectAsState()
     val userPhone by accountViewModel.userPhone.collectAsState()
+
+    LaunchedEffect(key1 = accountViewModel.toastMessage.value) {
+        if (accountViewModel.toastMessage.value.isNotBlank()) Toast.makeText(context,accountViewModel.toastMessage.value,Toast.LENGTH_SHORT).show()
+        accountViewModel.toastMessage.value = ""
+    }
 
     Scaffold(
         topBar = {
@@ -79,6 +88,9 @@ fun AccountScreen(
                 .padding(paddingValues),
             color = MaterialTheme.colorScheme.background
         ) {
+
+            MyCircularProgressBar(isLoading = accountViewModel.isLoading.value)
+
             Column(
                 modifier = Modifier
                     .verticalScroll(rememberScrollState())
