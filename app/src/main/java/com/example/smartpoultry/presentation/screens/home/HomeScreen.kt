@@ -56,6 +56,7 @@ fun HomeScreen(
     val totalBlocks = homeViewModel.totalBlocks.collectAsState()
     val totalCells = homeViewModel.totalCells.collectAsState()
     val userRole by homeViewModel.userRole.collectAsState()
+    val userName by homeViewModel.userName.collectAsState()
 
     val pastDaysState =
         remember { homeViewModel.dataStore.readData(PAST_DAYS_KEY) }.collectAsState(initial = "0")
@@ -87,10 +88,11 @@ fun HomeScreen(
             MyCard(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .padding(bottom = 10.dp)
 
             ) {
                 Text(
-                    text = "Logged in as: $userRole",
+                    text = "Hello, $userName !",
                     modifier = Modifier
                         .padding(6.dp)
                         .align(Alignment.Start)
