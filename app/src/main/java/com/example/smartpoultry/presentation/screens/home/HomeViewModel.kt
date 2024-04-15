@@ -1,22 +1,18 @@
 package com.example.smartpoultry.presentation.screens.home
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.work.ExistingWorkPolicy
-import androidx.work.OneTimeWorkRequestBuilder
-import androidx.work.WorkManager
 import com.example.smartpoultry.data.dataModels.DailyEggCollection
 import com.example.smartpoultry.data.dataSource.datastore.AppDataStore
+import com.example.smartpoultry.data.dataSource.datastore.USER_NAME_KEY
 import com.example.smartpoultry.data.dataSource.datastore.USER_ROLE_KEY
 import com.example.smartpoultry.domain.reports.Report
 import com.example.smartpoultry.domain.repository.BlocksRepository
 import com.example.smartpoultry.domain.repository.CellsRepository
 import com.example.smartpoultry.domain.repository.EggCollectionRepository
-import com.example.smartpoultry.domain.workers.AnalysisWorker
 import com.example.smartpoultry.utils.localDateToJavaDate
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
@@ -39,6 +35,12 @@ class HomeViewModel @Inject constructor(
 
 
     val userRole = dataStore.readData(USER_ROLE_KEY).stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.Eagerly,
+        initialValue = ""
+    )
+
+    val userName = dataStore.readData(USER_NAME_KEY).stateIn(
         scope = viewModelScope,
         started = SharingStarted.Eagerly,
         initialValue = ""

@@ -306,27 +306,7 @@ fun AccountScreen(
                     }
                     MyVerticalSpacer(height = 10)
 
-                 /*
-                   //Password reset
-                   var showPasswordDialog by remember {
-                        mutableStateOf(false)
-                    }
-                    MyInputDialog(
-                        showDialog = showPasswordDialog,
-                        title = "Reset Password",
-                        onConfirm = { *//*TODO*//*
-                            showPasswordDialog = false
-                        },
-                        onDismiss = { showPasswordDialog = false }
-                    ) {
-                        Text(text = "A password reset Link will be sent to your Email address example@gmail.com \nConfirm to proceed")
-                    }
-                    Text(text = "You can change your password by clicking the button below. ")
-                    NormButton(
-                        onButtonClick = { showPasswordDialog = true },
-                        btnName = "Reset Password",
-                        modifier = Modifier.fillMaxWidth()
-                    )*/
+
 
                 }
 
