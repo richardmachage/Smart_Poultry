@@ -19,13 +19,11 @@ class SignUpViewModel @Inject constructor(
 ) : ViewModel() {
 
     var farmName = mutableStateOf("")
-    //var userType = mutableStateOf("")
     var email = mutableStateOf("")
     var password = mutableStateOf("")
     var confirmPassword = mutableStateOf("")
 
-
-
+    var toastMessage = mutableStateOf("")
     var validationError = mutableStateOf("")
     var isCreateAccountSuccess by mutableStateOf(false)
     var isLoading = mutableStateOf(false)

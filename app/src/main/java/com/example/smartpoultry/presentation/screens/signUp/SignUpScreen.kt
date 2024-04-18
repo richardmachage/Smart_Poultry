@@ -46,6 +46,15 @@ fun SignUpScreen(
 
     var isLoading = singUpViewModel.isLoading.value
 
+
+    //For All Toasts in this screen
+    LaunchedEffect(singUpViewModel.toastMessage.value) {
+        if (singUpViewModel.toastMessage.value.isNotBlank()){
+            Toast.makeText(context,singUpViewModel.toastMessage.value, Toast.LENGTH_SHORT).show()
+            singUpViewModel.toastMessage.value = ""
+        }
+    }
+
     //validation error toast
     LaunchedEffect(key1 = singUpViewModel.validationError.value) {
         singUpViewModel.validationError.value.let { toastMessage ->
@@ -60,7 +69,6 @@ fun SignUpScreen(
     LaunchedEffect(key1 = singUpViewModel.isCreateAccountSuccess) {
         if (singUpViewModel.isCreateAccountSuccess) {
             navigator.navigateUp()
-
             singUpViewModel.isCreateAccountSuccess = false
         }
     }
