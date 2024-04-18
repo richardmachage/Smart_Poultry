@@ -1,5 +1,6 @@
 package com.example.smartpoultry.presentation.screens.signUp
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -36,11 +37,9 @@ class SignUpViewModel @Inject constructor(
         viewModelScope.launch {
             if (validateSignUp()) {
                 isLoading.value = true
-                delay(3000)
-                isLoading.value = false
-                toastMessage.value = "Sing up test success"
-                /*val result =
-                    firebaseAuthRepository.registerUser(email.value, password.value, userType.value)
+                val result =
+                    firebaseAuthRepository.signUp(email=email.value.trim(), password = password.value, role = "Super", farmName = farmName.value.trim())
+                   // firebaseAuthRepository.registerUser(email.value, password.value, userType.value)
                 result.onSuccess {
                     validationError.value = "Account created successfully, proceed to log in"
                     isLoading.value = false
@@ -48,8 +47,9 @@ class SignUpViewModel @Inject constructor(
                 }
                     .onFailure {
                         validationError.value = "Failed to sign up : ${it.message.toString()}"
+                        Log.d("error:","Failed to sign up : ${it.message.toString()}" )
                         isLoading.value = false
-                    }*/
+                    }
             }
         }
     }

@@ -5,6 +5,9 @@ import com.example.smartpoultry.data.dataSource.datastore.USER_EMAIL_KEY
 import com.example.smartpoultry.data.dataSource.datastore.USER_NAME_KEY
 import com.example.smartpoultry.data.dataSource.datastore.USER_PHONE_KEY
 import com.example.smartpoultry.data.dataSource.datastore.USER_ROLE_KEY
+import com.example.smartpoultry.data.dataSource.remote.firebase.FARMS_COLLECTION
+import com.example.smartpoultry.data.dataSource.remote.firebase.USERS_COLLECTION
+import com.example.smartpoultry.data.dataSource.remote.firebase.models.Farm
 import com.example.smartpoultry.data.dataSource.remote.firebase.models.User
 import com.example.smartpoultry.domain.repository.FirebaseAuthRepository
 import com.google.firebase.auth.FirebaseAuth
@@ -23,30 +26,102 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
     private val firebaseAuth: FirebaseAuth,
     private val firebaseFirestore: FirebaseFirestore,
     private val dataStore: AppDataStore
-) : FirebaseAuthRepository{
-    override suspend fun registerUser(email: String, password: String, role:String): Result<Boolean> = coroutineScope {
+) : FirebaseAuthRepository {
 
-            val deferred = async(Dispatchers.IO) {
-                try {
-                    val authResult =
-                        firebaseAuth.createUserWithEmailAndPassword(email, password).await()
-                    val firebaseUser = authResult.user
+    override suspend fun signUp(
+        email: String,
+        password: String,
+        role: String ,
+        farmName: String
+    ): Result<Boolean> = coroutineScope {
+        try {
+            // Create a new document reference for the farm
+            val newFarm = firebaseFirestore.collection(FARMS_COLLECTION).document()
 
-                    firebaseUser?.let {
-                        val user = User(email, role)
-                        firebaseFirestore.collection("Users")
-                            .document(firebaseUser.uid)
-                            .set(user)
-                            .await()
-                        Result.success(true)
-                    } ?: Result.failure(Exception("Firebase user is null"))
-                } catch (e: Exception) {
-                    Result.failure(e)
-                }
+            // Set farm details synchronously using coroutines instead of listeners
+            newFarm.set(Farm(name = farmName, id = newFarm.id, superUserEmail = email)).await()
+
+            // Proceed to register user
+            try {
+                val registerResult = registerUser(email, password, role, newFarm.id)
+                return@coroutineScope registerResult  // Returns the Result from registerUser directly
+            } catch (e: Exception) {
+                // If user registration fails, attempt to delete the new farm document to clean up
+                newFarm.delete()
+                throw e  // Re-throw exception to be handled by the outer catch
             }
-
-            deferred.await()
+        } catch (e: Exception) {
+            return@coroutineScope Result.failure(e)  // Capture any exception and return as failure
         }
+    }
+
+/*
+    suspend fun registerUser(email: String, password: String, role: String, farmId: String): Result<Boolean> {
+        // Placeholder for user registration logic
+        return Result.success(true)  // Simulated result
+    }
+*/
+
+
+    override suspend fun registerUser(
+        email: String,
+        password: String,
+        role: String,
+        farmId: String
+    ): Result<Boolean> = coroutineScope {
+
+        val deferred = async(Dispatchers.IO) {
+            try {
+                val authResult =
+                    firebaseAuth.createUserWithEmailAndPassword(email, password).await()
+                val firebaseUser = authResult.user
+
+                firebaseUser?.let {
+                    val user = User(email = email, role = role, farmId = farmId)
+                    firebaseFirestore.collection(FARMS_COLLECTION).document(farmId).collection(
+                        USERS_COLLECTION
+                    )
+                        .document(firebaseUser.uid)
+                        .set(user)
+                        .await()
+                    Result.success(true)
+                } ?: Result.failure(Exception("Firebase user is null"))
+            } catch (e: Exception) {
+                Result.failure(e)
+            }
+        }
+
+        deferred.await()
+    }
+
+    override suspend fun registerUser(
+        email: String,
+        password: String,
+        role: String
+    ): Result<Boolean> = coroutineScope {
+
+        val deferred = async(Dispatchers.IO) {
+            try {
+                val authResult =
+                    firebaseAuth.createUserWithEmailAndPassword(email, password).await()
+                val firebaseUser = authResult.user
+
+                firebaseUser?.let {
+                    val user = User(email, role)
+                    firebaseFirestore.collection("Users")
+                        .document(firebaseUser.uid)
+                        .set(user)
+                        .await()
+                    Result.success(true)
+                } ?: Result.failure(Exception("Firebase user is null"))
+            } catch (e: Exception) {
+                Result.failure(e)
+            }
+        }
+
+        deferred.await()
+    }
+
 
     override suspend fun logIn(email: String, password: String): Result<Boolean> = coroutineScope {
         val deferred = async(Dispatchers.IO) {
@@ -61,33 +136,33 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
                         .collection("Users")
                         .document(firebaseUser.uid)
                         .get()
-                        .addOnSuccessListener {documentSnapshot->
+                        .addOnSuccessListener { documentSnapshot ->
                             val user = documentSnapshot.toObject(User::class.java)
 
                             //save user details  to datastore
 
                             //user Role
                             CoroutineScope(Dispatchers.IO).launch {
-                                user?.let { user->
+                                user?.let { user ->
                                     dataStore.saveData(USER_ROLE_KEY, user.role)
                                 }
                             }
 
                             //User Name
                             CoroutineScope(Dispatchers.IO).launch {
-                                user?.let { user->
+                                user?.let { user ->
                                     dataStore.saveData(USER_NAME_KEY, user.name)
                                 }
                             }
                             //User email
                             CoroutineScope(Dispatchers.IO).launch {
-                                user?.let { user->
+                                user?.let { user ->
                                     dataStore.saveData(USER_EMAIL_KEY, user.email)
                                 }
                             }
                             //User phone
                             CoroutineScope(Dispatchers.IO).launch {
-                                user?.let { user->
+                                user?.let { user ->
                                     dataStore.saveData(USER_PHONE_KEY, user.phone)
                                 }
                             }
@@ -105,7 +180,7 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
         deferred.await()
     }
 
-    override suspend fun resetPassword(email: String) : Result<Boolean> = coroutineScope {
+    override suspend fun resetPassword(email: String): Result<Boolean> = coroutineScope {
         try {
             // Await the completion of the password reset email sending
             firebaseAuth.sendPasswordResetEmail(email).await()
@@ -122,12 +197,12 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
             .document(firebaseAuth.uid.toString())
             .update("name", name)
             .addOnSuccessListener {
-               result.complete(true)
+                result.complete(true)
             }
-            .addOnFailureListener{
-               result.completeExceptionally(it)
+            .addOnFailureListener {
+                result.completeExceptionally(it)
             }
-            //.await()
+        //.await()
 
         return if (result.await()) Result.success(true) else Result.failure(result.getCompletionExceptionOrNull()!!)
     }
@@ -143,14 +218,16 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
                     .addOnSuccessListener {
                         completableDeferred.complete(true)
                     }
-                    .addOnFailureListener{
+                    .addOnFailureListener {
                         completableDeferred.completeExceptionally(it)
                     }
             }
-            ?.addOnFailureListener{
+            ?.addOnFailureListener {
                 completableDeferred.completeExceptionally(it)
             }
-        return if (completableDeferred.await()) Result.success(true) else Result.failure(completableDeferred.getCompletionExceptionOrNull()!!)
+        return if (completableDeferred.await()) Result.success(true) else Result.failure(
+            completableDeferred.getCompletionExceptionOrNull()!!
+        )
     }
 
     override suspend fun editUserRole(email: String, role: String): Result<Boolean> {
@@ -166,11 +243,13 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
             .addOnSuccessListener {
                 completableDeferred.complete(true)
             }
-            .addOnFailureListener{
+            .addOnFailureListener {
                 completableDeferred.completeExceptionally(it)
             }
 
-        return if (completableDeferred.await()) Result.success(true) else Result.failure(completableDeferred.getCompletionExceptionOrNull()!!)
+        return if (completableDeferred.await()) Result.success(true) else Result.failure(
+            completableDeferred.getCompletionExceptionOrNull()!!
+        )
     }
 
 

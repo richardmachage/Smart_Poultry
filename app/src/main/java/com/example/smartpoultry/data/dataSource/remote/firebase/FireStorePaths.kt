@@ -1,5 +1,6 @@
 package com.example.smartpoultry.data.dataSource.remote.firebase
 
+const val FARMS_COLLECTION = "Farms"
 const val USERS_COLLECTION = "Users"
 const val EGGS_COLLECTION = "EggCollections"
 const val BLOCKS_COLLECTION = "Blocks"
