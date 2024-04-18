@@ -93,10 +93,7 @@ fun SignUpScreen(
             MyCircularProgressBar(isLoading = isLoading)
 
             Column {
-/*
-                NormText(text = "Sign Up")
-                MyVerticalSpacer(height = 30)
-*/        MyVerticalSpacer(height = 10)
+                MyVerticalSpacer(height = 10)
 
 
                 Column(
