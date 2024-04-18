@@ -18,10 +18,14 @@ class SignUpViewModel @Inject constructor(
     private  val firebaseAuthRepository: FirebaseAuthRepository
 ) : ViewModel() {
 
-    var userType = mutableStateOf("")
+    var farmName = mutableStateOf("")
+    //var userType = mutableStateOf("")
     var email = mutableStateOf("")
     var password = mutableStateOf("")
     var confirmPassword = mutableStateOf("")
+
+
+
     var validationError = mutableStateOf("")
     var isCreateAccountSuccess by mutableStateOf(false)
     var isLoading = mutableStateOf(false)
@@ -32,7 +36,7 @@ class SignUpViewModel @Inject constructor(
         viewModelScope.launch {
             if (validateSignUp()) {
                 isLoading.value = true
-                val result =
+                /*val result =
                     firebaseAuthRepository.registerUser(email.value, password.value, userType.value)
                 result.onSuccess {
                     validationError.value = "Account created successfully, proceed to log in"
@@ -42,7 +46,7 @@ class SignUpViewModel @Inject constructor(
                     .onFailure {
                         validationError.value = "Failed to sign up : ${it.message.toString()}"
                         isLoading.value = false
-                    }
+                    }*/
             }
         }
     }
@@ -78,6 +82,6 @@ class SignUpViewModel @Inject constructor(
     }
 
     private fun checkEmptyFields() : Boolean{
-        return  userType.value.isBlank() || email.value.isBlank() || password.value.isBlank() || confirmPassword.value.isBlank()
+        return  farmName.value.isBlank() || email.value.isBlank() || password.value.isBlank() || confirmPassword.value.isBlank()
     }
 }
