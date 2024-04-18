@@ -112,7 +112,10 @@ fun SignUpScreen(
                         hint = "eg. Abuya Poultry Farm",
                         iconLeading = Icons.Default.Place,
                         iconLeadingDescription = "place",
-                        keyboardType = KeyboardType.Text
+                        keyboardType = KeyboardType.Text,
+                        onValueChange = {
+                            singUpViewModel.farmName.value = it
+                        }
                     )
 
                     MyEditTextClear( // Input Email address

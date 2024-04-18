@@ -10,7 +10,9 @@ import com.example.smartpoultry.utils.checkPasswordLength
 import com.example.smartpoultry.utils.isPasswordSame
 import com.example.smartpoultry.utils.isValidEmail
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 @HiltViewModel
@@ -34,6 +36,9 @@ class SignUpViewModel @Inject constructor(
         viewModelScope.launch {
             if (validateSignUp()) {
                 isLoading.value = true
+                delay(3000)
+                isLoading.value = false
+                toastMessage.value = "Sing up test success"
                 /*val result =
                     firebaseAuthRepository.registerUser(email.value, password.value, userType.value)
                 result.onSuccess {
