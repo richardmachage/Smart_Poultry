@@ -52,30 +52,33 @@ class SignUpViewModel @Inject constructor(
     private fun validateSignUp(): Boolean {
         //check empty fields
         if (checkEmptyFields()){
-            validationError.value = "You must fill in all fields to Sign Up"
+            //validationError.value = "You must fill in all fields to Sign Up"
+            toastMessage.value = "You must fill in all fields to Sign Up"
+            return false
         }
 
         // Validate Email
         if (!isValidEmail(email.value)) {
-            validationError.value = "Invalid Email address"
+            //validationError.value = "Invalid Email address"
+            toastMessage.value = "Invalid Email address"
             return false
         }
 
         // Check if Passwords Match
         if (!isPasswordSame(password.value, confirmPassword.value)) {
-            validationError.value = "Passwords do not match"
+            //validationError.value = "Passwords do not match"
+            toastMessage.value = "Passwords do not match"
             return false
         }
 
         // Check Password Length
         if (!checkPasswordLength(password.value)) {
-            validationError.value = "Passwords must be more than 6 characters"
+            //validationError.value = "Passwords must be more than 6 characters"
+            toastMessage.value = "Passwords must be more than 6 characters"
             return false
         }
 
         // At this point, all validations have passed
-        // Here you would normally proceed with the registration process
-        // Since we're focusing on validation only, we'll simulate a successful validation
         return true
     }
 
