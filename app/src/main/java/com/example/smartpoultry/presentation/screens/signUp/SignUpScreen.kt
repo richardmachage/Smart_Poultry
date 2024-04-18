@@ -10,6 +10,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material.icons.filled.Place
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -31,7 +32,6 @@ import com.example.smartpoultry.presentation.composables.MyEditTextClear
 import com.example.smartpoultry.presentation.composables.MyPasswordEditText
 import com.example.smartpoultry.presentation.composables.MyVerticalSpacer
 import com.example.smartpoultry.presentation.composables.NormButton
-import com.example.smartpoultry.presentation.composables.UserTypeDropDownMenu
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
@@ -99,15 +99,17 @@ fun SignUpScreen(
                 Column(
                     verticalArrangement = Arrangement.Center
                 ) {
-                    UserTypeDropDownMenu(
-                        onItemClick = { userType ->
-                            singUpViewModel.userType.value = userType
-                        },
+                    MyEditTextClear(
+                        label = "Farm Name",
+                        hint = "eg. Abuya Poultry Farm",
+                        iconLeading = Icons.Default.Place,
+                        iconLeadingDescription = "place",
+                        keyboardType = KeyboardType.Text
                     )
 
                     MyEditTextClear( // Input Email address
                         label = "Email",
-                        hint = "Enter Email",
+                        hint = "eg. smartPoultry@gmail.com",
                         iconLeading = Icons.Default.Email,
                         iconLeadingDescription = "Email",
                         keyboardType = KeyboardType.Email,
@@ -118,7 +120,7 @@ fun SignUpScreen(
 
                     MyPasswordEditText( // Input new Password
                         label = "Password",
-                        hint = "New Password",
+                       // hint = "New Password",
                         iconLeading = Icons.Default.Lock,
                         iconLeadingDescription = "Password",
                         keyboardType = KeyboardType.Password,
@@ -129,7 +131,7 @@ fun SignUpScreen(
 
                     MyPasswordEditText( // Confirm Password
                         label = "Confirm Password",
-                        hint = "Confirm Password",
+                        //hint = "Confirm Password",
                         iconLeading = Icons.Default.Lock,
                         iconLeadingDescription = "Password",
                         keyboardType = KeyboardType.Password,

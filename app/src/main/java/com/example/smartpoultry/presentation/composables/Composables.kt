@@ -196,7 +196,7 @@ fun MyEditTextClear(
 @Composable
 fun MyPasswordEditText(
     label: String,
-    hint: String,
+    hint: String = "",
     iconLeading: ImageVector,
     iconLeadingDescription: String,
     keyboardType: KeyboardType,
