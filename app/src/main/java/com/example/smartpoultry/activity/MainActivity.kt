@@ -28,12 +28,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity (): ComponentActivity() {
     val mainViewModel: MainViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
-        /*val periodicWorkRequest = PeriodicWorkRequestBuilder<AnalysisWorker>(15, TimeUnit.MINUTES).build()
-        WorkManager.getInstance(applicationContext).enqueueUniquePeriodicWork(
-            "automated_analysis_work",
-            ExistingPeriodicWorkPolicy.KEEP,
-            periodicWorkRequest
-        )*/
+
 
         createNotificationChannel(
             context = applicationContext,
