@@ -1,0 +1,41 @@
+package com.example.smartpoultry.presentation.screens.onBoarding.components
+
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.size
+import androidx.compose.material3.Button
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+
+@Composable
+fun NextBackButton(
+    currentPage : Int,
+    onNextClick: () -> Unit,
+    onBackClick: () -> Unit,
+    onGetStartedClick: () -> Unit
+){
+    Row (
+        verticalAlignment = Alignment.CenterVertically
+    ){
+        if (currentPage != 0){
+            TextButton(onClick = { onBackClick() }) {
+                Text(text = "Previous")
+            }
+        }
+
+        Spacer(modifier = Modifier.size(8.dp))
+
+        Button(onClick = {
+            if (currentPage == 3) onGetStartedClick() else onNextClick()
+        }) {
+            Text(text =
+            if (currentPage == 3) "Get Started" else "Next"
+            )
+        }
+
+    }
+}
