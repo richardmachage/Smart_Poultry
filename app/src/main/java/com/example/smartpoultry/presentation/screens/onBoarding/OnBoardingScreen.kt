@@ -27,7 +27,7 @@ import com.ramcosta.composedestinations.navigation.popUpTo
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)
-@Destination
+@Destination(start = true)
 @Composable
 fun OnBoardingScreen(
     navigator: DestinationsNavigator

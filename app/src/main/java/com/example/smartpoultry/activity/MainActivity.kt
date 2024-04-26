@@ -58,7 +58,7 @@ class MainActivity (): ComponentActivity() {
 
 }
 
-@Destination(start = true)
+@Destination
 @Composable
 fun LaunchScreen(
     navigator: DestinationsNavigator,
