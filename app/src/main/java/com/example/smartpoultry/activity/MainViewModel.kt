@@ -32,7 +32,7 @@ class MainViewModel @Inject constructor(
 
     private fun checkFirstInstall(){
         viewModelScope.launch(Dispatchers.IO){
-             dataStore.readData(FIRST_INSTALL).collect { if (it == "true") isFirstInstall = true }
+             dataStore.readData(FIRST_INSTALL).collect { if (it != "onBoardingDone") isFirstInstall = true }
         }
     }
 
