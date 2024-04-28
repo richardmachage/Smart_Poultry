@@ -32,6 +32,7 @@ import kotlinx.coroutines.launch
 fun OnBoardingScreen(
     navigator: DestinationsNavigator
 ) {
+
     val onBoardingViewModel = hiltViewModel<OnBoardingViewModel>()
 
     Column(
@@ -46,6 +47,7 @@ fun OnBoardingScreen(
         HorizontalPager(state = pagerState) {position->
             OnBoardingPage(pages[position])
         }
+
         Spacer(modifier = Modifier.weight(1f))
 
         Row (modifier = Modifier
