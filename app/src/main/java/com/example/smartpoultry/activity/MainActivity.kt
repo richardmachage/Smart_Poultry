@@ -10,12 +10,12 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.smartpoultry.NavGraphs
 import com.example.smartpoultry.destinations.LogInScreenDestination
 import com.example.smartpoultry.destinations.MainScreenDestination
+import com.example.smartpoultry.destinations.OnBoardingScreenDestination
 import com.example.smartpoultry.domain.notifications.createNotificationChannel
 import com.example.smartpoultry.presentation.theme.SmartPoultryTheme
 import com.ramcosta.composedestinations.DestinationsNavHost
@@ -58,25 +58,35 @@ class MainActivity (): ComponentActivity() {
 
 }
 
-@Destination
+@Destination(start = true)
 @Composable
 fun LaunchScreen(
     navigator: DestinationsNavigator,
 ){
     val launchViewmodel = hiltViewModel<MainViewModel>()
-    var isLoggedIn by remember{ mutableStateOf( launchViewmodel.isLoggedIn)}
+    val isLoggedIn by remember{ mutableStateOf( launchViewmodel.isLoggedIn)}
+    val isFirstInstall by remember { mutableStateOf(launchViewmodel.isFirstInstall) }
 
-    LaunchedEffect(isLoggedIn){
-        if (isLoggedIn){
-            navigator.navigate(MainScreenDestination){
+    LaunchedEffect(isFirstInstall) {
+        if(isFirstInstall){
+            navigator.navigate(OnBoardingScreenDestination){
                 popUpTo(NavGraphs.root.startRoute){inclusive=true}
             }
-        } else{
-            navigator.navigate(LogInScreenDestination){
-                popUpTo(NavGraphs.root.startRoute){inclusive=true}
-            }
+        }else{
+            //LaunchedEffect(isLoggedIn){
+                if (isLoggedIn){
+                    navigator.navigate(MainScreenDestination){
+                        popUpTo(NavGraphs.root.startRoute){inclusive=true}
+                    }
+                } else{
+                    navigator.navigate(LogInScreenDestination){
+                        popUpTo(NavGraphs.root.startRoute){inclusive=true}
+                    }
+                }
+                //isLoggedIn = false
+            //}
+
         }
-        //isLoggedIn = false
     }
 
 }

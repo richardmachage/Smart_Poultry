@@ -20,6 +20,7 @@ const val USER_ROLE_KEY = "user_role"
 const val USER_NAME_KEY = "user_name"
 const val USER_PHONE_KEY = "user_phone"
 const val USER_EMAIL_KEY = "user_email"
+const val FIRST_INSTALL = "first_install"
 
 @Singleton
 class AppDataStore @Inject constructor(
