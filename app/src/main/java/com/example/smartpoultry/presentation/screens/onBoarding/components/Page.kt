@@ -18,7 +18,7 @@ val pages = listOf(
     ),
     Page(
         title = "Data Integrity",
-        description = "Different levels of access an permissions to different farm employees depending on your organisation",
+        description = "Different levels of access and specific permissions to the different farm employees depending on your organisation",
         image = R.drawable.farm_employees
 
     ),
