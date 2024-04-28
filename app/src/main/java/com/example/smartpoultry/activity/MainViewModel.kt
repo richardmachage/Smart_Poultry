@@ -9,7 +9,6 @@ import com.example.smartpoultry.data.dataSource.datastore.AppDataStore
 import com.example.smartpoultry.data.dataSource.datastore.FIRST_INSTALL
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -22,6 +21,7 @@ class MainViewModel @Inject constructor(
     var isFirstInstall by mutableStateOf(false)
 
     init {
+        checkFirstInstall()
         checkIfLoggedIn()
     }
     private fun checkIfLoggedIn(){
@@ -31,7 +31,7 @@ class MainViewModel @Inject constructor(
     }
 
     private fun checkFirstInstall(){
-        viewModelScope.launch(Dispatchers.IO){
+        viewModelScope.launch{
              dataStore.readData(FIRST_INSTALL).collect { if (it != "onBoardingDone") isFirstInstall = true }
         }
     }
