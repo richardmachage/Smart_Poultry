@@ -27,7 +27,7 @@ class LogInViewModel @Inject constructor(
             if (validateInputs()){
                 val result = firebaseAuthRepository.logIn(email.value, password = password.value)
                 result.onSuccess {
-                    validateError.value = "Log In successsful"
+                    validateError.value = "Log In successful"
                     isLogInSuccess = true
                     //isLoading.value = false
                 }
