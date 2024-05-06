@@ -35,7 +35,6 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.compose.rememberNavController
 import com.example.smartpoultry.NavGraphs
 import com.example.smartpoultry.destinations.LogInScreenDestination
 import com.example.smartpoultry.presentation.composables.MyBorderedColumn
@@ -53,7 +52,7 @@ import com.ramcosta.composedestinations.navigation.popUpTo
 fun SettingsScreen(
     navigator: DestinationsNavigator
 ) {
-    val navController = rememberNavController()
+    //val navController = rememberNavController()
     val context = LocalContext.current
     val settingsViewModel = hiltViewModel<SettingsViewModel>()
     val pastDays =
