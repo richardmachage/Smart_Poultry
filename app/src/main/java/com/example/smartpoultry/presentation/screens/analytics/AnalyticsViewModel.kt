@@ -32,6 +32,7 @@ class AnalyticsViewModel @Inject constructor(
     private val blocksRepository: BlocksRepository,
     private val eggCollectionRepository: EggCollectionRepository,
 ) : ViewModel() {
+    val toastMessage = mutableStateOf("")
     var plotChart = mutableStateOf(false)
     var selectedBlockId = mutableIntStateOf(0)
     var selectedBlockNum = mutableIntStateOf(0)

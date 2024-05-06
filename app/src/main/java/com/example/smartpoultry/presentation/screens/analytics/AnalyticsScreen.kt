@@ -2,6 +2,7 @@ package com.example.smartpoultry.presentation.screens.analytics
 
 import android.annotation.SuppressLint
 import android.os.Build
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
@@ -19,6 +20,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
@@ -41,6 +43,7 @@ import com.example.smartpoultry.presentation.composables.BlocksDropDownMenu
 import com.example.smartpoultry.presentation.composables.CellsDropDownMenu
 import com.example.smartpoultry.presentation.composables.MonthsDropDownMenu
 import com.example.smartpoultry.presentation.composables.MyDatePicker
+import com.example.smartpoultry.presentation.composables.MyInputDialog
 import com.example.smartpoultry.presentation.composables.MyVerticalSpacer
 import com.example.smartpoultry.presentation.composables.NormButton
 import com.example.smartpoultry.presentation.composables.RadioButtonGroup
@@ -69,6 +72,13 @@ fun AnalyticsScreen(
     }
 
     var reportType by remember { mutableStateOf("") }
+
+    LaunchedEffect(analyticsViewModel.toastMessage.value) {
+        val toastMessage = analyticsViewModel.toastMessage.value
+        if (toastMessage.isNotBlank()){
+            Toast.makeText(context,toastMessage,Toast.LENGTH_SHORT).show()
+        }
+    }
 
     Surface(
         modifier = Modifier
@@ -410,14 +420,37 @@ fun AnalyticsScreen(
             MyVerticalSpacer(height = 10)
 
 
+            var showDialog by remember { mutableStateOf(false) }
             var isNotificationPermissionGranted by remember { mutableStateOf( checkIfPermissionGranted(context, POST_NOTIFICATIONS))}
             val launcher = rememberLauncherForActivityResult(
                 contract = ActivityResultContracts.RequestPermission(),
                 onResult = { isGranted ->
-                    isNotificationPermissionGranted = isGranted
+                    if (isGranted) {
+                        isNotificationPermissionGranted = true
+                        showDialog = false
+                        analyticsViewModel.fireWorker(context)
+                    }else{
+                        isNotificationPermissionGranted = false
+                        showDialog = false
+                        analyticsViewModel.toastMessage.value = "Permission denied...Go to settings and enable notifications persmision"
+                    }
                 }
 
             )
+            MyInputDialog(
+                showDialog = showDialog,
+                title = "Permission Required",
+                onConfirm = {
+                    launcher.launch(POST_NOTIFICATIONS)
+                   // showDialog = false
+                },
+                onDismiss = {
+                    analyticsViewModel.toastMessage.value = "Permission denied..."
+                    showDialog = false
+
+                }) {
+                Text(text = "This feature requires use of Notifications.\nAllow notifications Permission to proceed.")
+            }
             NormButton(
                 modifier = Modifier.fillMaxWidth(),
                 onButtonClick = {
@@ -425,7 +458,8 @@ fun AnalyticsScreen(
                     if (isNotificationPermissionGranted){
                         analyticsViewModel.fireWorker(context)
                     }else{
-                        launcher.launch(POST_NOTIFICATIONS)
+                        showDialog = true
+                        //launcher.launch(POST_NOTIFICATIONS)
                     }
                 },
                 btnName = "Perform Automated Analysis >>>"
