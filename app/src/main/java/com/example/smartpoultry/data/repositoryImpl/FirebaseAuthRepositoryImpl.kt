@@ -74,8 +74,6 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
             try {
                 val authResult = firebaseAuth.createUserWithEmailAndPassword(email, password).await()
                 val firebaseUser = authResult.user
-                //set custom claim for the farm
-                val claims = hashMapOf("farmId" to farmId)
 
                 firebaseUser?.let {
                     val user = User(email = email, role = role, farmId = farmId)
