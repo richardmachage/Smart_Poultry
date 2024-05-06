@@ -5,10 +5,12 @@ import android.app.AlertDialog
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
+import androidx.activity.result.ActivityResultLauncher
 import androidx.annotation.RequiresApi
 import androidx.compose.material3.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.example.smartpoultry.activity.MainActivity
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
@@ -16,7 +18,7 @@ import javax.inject.Inject
 
 class PermissionService @Inject constructor(
     @ApplicationContext val context: Context
-) {
+)  {
 
     //check for permission
     fun checkIfPermissionGranted(permission : String) = ContextCompat.checkSelfPermission(context, permission) == PackageManager.PERMISSION_GRANTED

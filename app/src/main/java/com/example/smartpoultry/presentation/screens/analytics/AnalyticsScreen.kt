@@ -2,6 +2,8 @@ package com.example.smartpoultry.presentation.screens.analytics
 
 import android.annotation.SuppressLint
 import android.os.Build
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -33,6 +35,8 @@ import com.example.smartpoultry.data.dataModels.DailyEggCollection
 import com.example.smartpoultry.data.dataSource.room.entities.cells.Cells
 import com.example.smartpoultry.data.dataSource.room.entities.eggCollection.EggCollection
 import com.example.smartpoultry.destinations.ViewRecordsScreenDestination
+import com.example.smartpoultry.domain.permissions.POST_NOTIFICATIONS
+import com.example.smartpoultry.domain.permissions.checkIfPermissionGranted
 import com.example.smartpoultry.presentation.composables.BlocksDropDownMenu
 import com.example.smartpoultry.presentation.composables.CellsDropDownMenu
 import com.example.smartpoultry.presentation.composables.MonthsDropDownMenu
@@ -143,12 +147,12 @@ fun AnalyticsScreen(
                         if (analyticsViewModel.levelOfAnalysis.value != "Overall") {
                             BlocksDropDownMenu(
                                 listOfItems = listOfBlocksWithCells,
-                                onItemClick = { blockId,blockNum, cells ->
+                                onItemClick = { blockId, blockNum, cells ->
                                     listOfCells = cells
                                     analyticsViewModel.selectedBlockId.intValue = blockId
                                     analyticsViewModel.selectedBlockNum.intValue = blockNum
                                     analyticsViewModel.plotChart.value = false
-                                   // Toast.makeText(context, "Selected block num: ${analyticsViewModel.selectedBlockNum.intValue}", Toast.LENGTH_SHORT).show()
+                                    // Toast.makeText(context, "Selected block num: ${analyticsViewModel.selectedBlockNum.intValue}", Toast.LENGTH_SHORT).show()
                                 },
                                 width = width,
                             )
@@ -261,75 +265,84 @@ fun AnalyticsScreen(
                     val listOfRecords by remember {
                         if (analyticsViewModel.levelOfAnalysis.value == "Cell") {
                             if (analyticsViewModel.isPastXDaysAnalysis.value) {
-                                reportType = "Collections of cell ${analyticsViewModel.selectedCellNum.intValue} in Block ${analyticsViewModel.selectedBlockNum.intValue } for duration of Past ${analyticsViewModel.pastDays.value} days"
+                                reportType =
+                                    "Collections of cell ${analyticsViewModel.selectedCellNum.intValue} in Block ${analyticsViewModel.selectedBlockNum.intValue} for duration of Past ${analyticsViewModel.pastDays.value} days"
                                 return@remember analyticsViewModel.getCellEggCollectionForPastDays()
-                            }
-                            else if (analyticsViewModel.isCustomRangeAnalysis.value) {
+                            } else if (analyticsViewModel.isCustomRangeAnalysis.value) {
                                 reportType = "Collections of " +
                                         "cell ${analyticsViewModel.selectedCellNum.intValue} in " +
-                                        "Block ${analyticsViewModel.selectedBlockNum.intValue } " +
-                                        "from ${SimpleDateFormat("dd MMM,yyyy").format(
-                                            localDateToJavaDate(analyticsViewModel.startDate.value)
-                                        )} "+
-                                        "to ${SimpleDateFormat("dd MMM,yyyy").format(
-                                            localDateToJavaDate(analyticsViewModel.endDate.value)
-                                        )} "
+                                        "Block ${analyticsViewModel.selectedBlockNum.intValue} " +
+                                        "from ${
+                                            SimpleDateFormat("dd MMM,yyyy").format(
+                                                localDateToJavaDate(analyticsViewModel.startDate.value)
+                                            )
+                                        } " +
+                                        "to ${
+                                            SimpleDateFormat("dd MMM,yyyy").format(
+                                                localDateToJavaDate(analyticsViewModel.endDate.value)
+                                            )
+                                        } "
                                 return@remember analyticsViewModel.getCellCollectionBetweenDates()
-                            }
-                            else {  //meaning analysis is just monthly
+                            } else {  //meaning analysis is just monthly
                                 reportType = "Collections of " +
                                         "cell ${analyticsViewModel.selectedCellNum.intValue} in " +
-                                        "Block ${analyticsViewModel.selectedCellNum.intValue } " +
+                                        "Block ${analyticsViewModel.selectedCellNum.intValue} " +
                                         "for ${analyticsViewModel.selectedMonth.value}," +
                                         "${analyticsViewModel.selectedYear}"
 
                                 return@remember analyticsViewModel.getCellMonthlyRecords()
                             }
                         } else if (analyticsViewModel.levelOfAnalysis.value == "Block") {
-                            if (analyticsViewModel.isPastXDaysAnalysis.value){
-                                reportType = "Block ${analyticsViewModel.selectedBlockNum.intValue } " +
-                                        "for duration of Past ${analyticsViewModel.pastDays.value} days"
+                            if (analyticsViewModel.isPastXDaysAnalysis.value) {
+                                reportType =
+                                    "Block ${analyticsViewModel.selectedBlockNum.intValue} " +
+                                            "for duration of Past ${analyticsViewModel.pastDays.value} days"
                                 return@remember analyticsViewModel.getBlockCollectionsForPastDays()
-                            }
-                            else if (analyticsViewModel.isCustomRangeAnalysis.value) {
+                            } else if (analyticsViewModel.isCustomRangeAnalysis.value) {
                                 reportType = "Collections of " +
-                                        "Block ${analyticsViewModel.selectedBlockNum.intValue } " +
-                                        "from ${SimpleDateFormat("dd MMM,yyyy").format(
-                                            localDateToJavaDate(analyticsViewModel.startDate.value)
-                                        )} "+
-                                        "to ${SimpleDateFormat("dd MMM,yyyy").format(
-                                            localDateToJavaDate(analyticsViewModel.endDate.value)
-                                        )} "
+                                        "Block ${analyticsViewModel.selectedBlockNum.intValue} " +
+                                        "from ${
+                                            SimpleDateFormat("dd MMM,yyyy").format(
+                                                localDateToJavaDate(analyticsViewModel.startDate.value)
+                                            )
+                                        } " +
+                                        "to ${
+                                            SimpleDateFormat("dd MMM,yyyy").format(
+                                                localDateToJavaDate(analyticsViewModel.endDate.value)
+                                            )
+                                        } "
                                 return@remember analyticsViewModel.getBlockEggCollectionBetweenDates()
-                            }
-                            else { //monthly
+                            } else { //monthly
                                 reportType = "Collections of " +
-                                        "Block ${analyticsViewModel.selectedBlockNum.intValue } " +
+                                        "Block ${analyticsViewModel.selectedBlockNum.intValue} " +
                                         "for ${analyticsViewModel.selectedMonth.value}, " +
                                         "${analyticsViewModel.selectedYear}"
                                 return@remember analyticsViewModel.getMonthlyBlockCollections()
                             }
                         } else { //meaning the level is just overall
                             if (analyticsViewModel.isPastXDaysAnalysis.value) {
-                                reportType = "Total Egg Collections "+
+                                reportType = "Total Egg Collections " +
                                         "for duration of Past ${analyticsViewModel.pastDays.value} days"
                                 return@remember analyticsViewModel.getOverallCollectionsForPastDays()
-                            }
-                            else if (analyticsViewModel.isCustomRangeAnalysis.value){
+                            } else if (analyticsViewModel.isCustomRangeAnalysis.value) {
                                 reportType = "Total Egg Collections " +
-                                        "from ${SimpleDateFormat("dd MMM,yyyy").format(
-                                            localDateToJavaDate(analyticsViewModel.startDate.value)
-                                        )} "+
-                                        "to ${SimpleDateFormat("dd MMM,yyyy").format(
-                                            localDateToJavaDate(analyticsViewModel.endDate.value)
-                                        )} "
+                                        "from ${
+                                            SimpleDateFormat("dd MMM,yyyy").format(
+                                                localDateToJavaDate(analyticsViewModel.startDate.value)
+                                            )
+                                        } " +
+                                        "to ${
+                                            SimpleDateFormat("dd MMM,yyyy").format(
+                                                localDateToJavaDate(analyticsViewModel.endDate.value)
+                                            )
+                                        } "
                                 return@remember analyticsViewModel.getOverallCollectionBetweenDays()
-                            }
-                            else { //monthly
+                            } else { //monthly
                                 reportType = "Total Egg Collections " +
                                         "for ${analyticsViewModel.selectedMonth.value}, " +
                                         "${analyticsViewModel.selectedYear}"
-                                return@remember analyticsViewModel.getMonthlyOverallCollections()}
+                                return@remember analyticsViewModel.getMonthlyOverallCollections()
+                            }
                         }
 
                     }.collectAsState(
@@ -358,16 +371,16 @@ fun AnalyticsScreen(
                             }
                         } as List<ChartClass>
 
-                        if (analyticsViewModel.levelOfAnalysis.value == "Cell"){
+                        if (analyticsViewModel.levelOfAnalysis.value == "Cell") {
                             CellAnalysisGraph(
-                                isGraphPlotted = analyticsViewModel.plotChart.value ,
-                                myListOfRecords =  turnToChartData.map { it as ChartClass },
-                                itemPlacerCount =  (turnToChartData.maxOf { chartClass: ChartClass -> chartClass.yNumOfEggs }) + 1,
+                                isGraphPlotted = analyticsViewModel.plotChart.value,
+                                myListOfRecords = turnToChartData.map { it as ChartClass },
+                                itemPlacerCount = (turnToChartData.maxOf { chartClass: ChartClass -> chartClass.yNumOfEggs }) + 1,
                                 startAxisTitle = "Num of eggs/chicken",
-                                bottomAxisTitle ="Date" ,
+                                bottomAxisTitle = "Date",
                                 reportType = reportType
                             )
-                        }else{
+                        } else {
                             AnalysisGraph(
                                 isGraphPlotted = analyticsViewModel.plotChart.value,
                                 myListOfRecords = turnToChartData.map { it as ChartClass },
@@ -396,9 +409,25 @@ fun AnalyticsScreen(
 
             MyVerticalSpacer(height = 10)
 
+
+            var isNotificationPermissionGranted by remember { mutableStateOf( checkIfPermissionGranted(context, POST_NOTIFICATIONS))}
+            val launcher = rememberLauncherForActivityResult(
+                contract = ActivityResultContracts.RequestPermission(),
+                onResult = { isGranted ->
+                    isNotificationPermissionGranted = isGranted
+                }
+
+            )
             NormButton(
                 modifier = Modifier.fillMaxWidth(),
-                onButtonClick = { analyticsViewModel.fireWorker(context) },
+                onButtonClick = {
+                    //TODO check is notification  permission is allowed or not
+                    if (isNotificationPermissionGranted){
+                        analyticsViewModel.fireWorker(context)
+                    }else{
+                        launcher.launch(POST_NOTIFICATIONS)
+                    }
+                },
                 btnName = "Perform Automated Analysis >>>"
             )
 
