@@ -1,5 +1,6 @@
 package com.example.smartpoultry.presentation.screens.settingsScreen
 
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.smartpoultry.data.dataSource.datastore.AppDataStore
@@ -23,6 +24,7 @@ class SettingsViewModel @Inject constructor (
     private val firebaseAuth: FirebaseAuth
 ): ViewModel() {
 
+    val toastMessage = mutableStateOf("")
     val myDataStore = dataStore
     // Initialize StateFlows with default values
     private val _pastDays = MutableStateFlow("")

@@ -78,6 +78,8 @@ fun AnalyticsScreen(
         if (toastMessage.isNotBlank()){
             Toast.makeText(context,toastMessage,Toast.LENGTH_SHORT).show()
         }
+        analyticsViewModel.toastMessage.value = ""
+
     }
 
     Surface(

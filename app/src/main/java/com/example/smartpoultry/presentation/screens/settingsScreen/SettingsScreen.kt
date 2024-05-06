@@ -1,6 +1,8 @@
 package com.example.smartpoultry.presentation.screens.settingsScreen
 
 import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -23,6 +25,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -37,6 +40,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.smartpoultry.NavGraphs
 import com.example.smartpoultry.destinations.LogInScreenDestination
+import com.example.smartpoultry.domain.permissions.POST_NOTIFICATIONS
+import com.example.smartpoultry.domain.permissions.checkIfPermissionGranted
 import com.example.smartpoultry.presentation.composables.MyBorderedColumn
 import com.example.smartpoultry.presentation.composables.MyInputDialog
 import com.example.smartpoultry.presentation.composables.MyOutlineTextFiled
@@ -72,6 +77,14 @@ fun SettingsScreen(
     val isAutomatedAnalysis = remember {
         settingsViewModel.myDataStore.readData(IS_AUTOMATED_ANALYSIS_KEY)
     }.collectAsState(initial = "0")
+
+    LaunchedEffect(settingsViewModel.toastMessage.value) {
+        val toastMessage = settingsViewModel.toastMessage.value
+        if (toastMessage.isNotBlank()){
+            Toast.makeText(context,toastMessage,Toast.LENGTH_SHORT).show()
+        }
+        settingsViewModel.toastMessage.value = ""
+    }
 
     Scaffold(
         topBar = {
@@ -263,14 +276,55 @@ fun SettingsScreen(
 
                     ) {
                         Text(text = "Repeat interval for automated analysis")
+
+                        var showDialog by remember { mutableStateOf(false) }
+                        var isNotificationPermissionGranted by remember {
+                            mutableStateOf(
+                                checkIfPermissionGranted(context, POST_NOTIFICATIONS)
+                            )
+                        }
+                        val launcher = rememberLauncherForActivityResult(
+                            contract = ActivityResultContracts.RequestPermission(),
+                            onResult = { isGranted ->
+                                if (isGranted) {
+                                    isNotificationPermissionGranted = true
+                                    showDialog = false
+                                    settingsViewModel.saveToDataStore(IS_AUTOMATED_ANALYSIS_KEY, "1")
+                                } else {
+                                    isNotificationPermissionGranted = false
+                                    settingsViewModel.toastMessage.value = "Permission denied..."
+                                    showDialog = false
+                                }
+                            }
+
+                        )
+                        MyInputDialog(
+                            showDialog = showDialog,
+                            title = "Permission Required",
+                            onConfirm = {
+                                launcher.launch(POST_NOTIFICATIONS)
+                                // showDialog = false
+                            },
+                            onDismiss = {
+                                settingsViewModel.toastMessage.value = "Permission denied..."
+                                showDialog = false
+
+                            }) {
+                            Text(text = "This feature requires use of Notifications.\nAllow notifications Permission to proceed.\nYou can also go to App settings to enable notifications")
+                        }
+
+
                         ToggleButton(
                             modifier = Modifier.align(Alignment.CenterVertically),
                             isChecked = isAutomatedAnalysis.value == "1",
                             onCheckedChange = {
-                                if (it) settingsViewModel.saveToDataStore(
-                                    IS_AUTOMATED_ANALYSIS_KEY,
-                                    "1"
-                                ) else settingsViewModel.saveToDataStore(
+                                if (it) {
+                                    if (!isNotificationPermissionGranted) {
+                                        showDialog = true
+                                    }else{
+                                        settingsViewModel.saveToDataStore(IS_AUTOMATED_ANALYSIS_KEY, "1")
+                                    }
+                                } else settingsViewModel.saveToDataStore(
                                     IS_AUTOMATED_ANALYSIS_KEY,
                                     "0"
                                 )
@@ -278,7 +332,7 @@ fun SettingsScreen(
 
                     }
                     //edit part
-                    if (isAutomatedAnalysis.value == "1"){
+                    if (isAutomatedAnalysis.value == "1") {
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -315,7 +369,7 @@ fun SettingsScreen(
                                     }
                                 )
                             }
-                            Text(text ="Time in hours: ${repeatInterval.value}")
+                            Text(text = "Time in hours: ${repeatInterval.value}")
                             IconButton(onClick = { showDialog = true }) {
                                 Icon(imageVector = Icons.Default.Edit, contentDescription = "edit")
                             }
