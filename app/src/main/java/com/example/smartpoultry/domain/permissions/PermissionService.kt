@@ -1,6 +1,7 @@
 package com.example.smartpoultry.domain.permissions
 
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
@@ -23,6 +24,17 @@ class PermissionService @Inject constructor(
     fun showRequestPermissionRationale(permission: String, rationale : String, activity : Activity) : Boolean{
         //if permission is not granted and the rtionale needs to be shown return true, otherwise false
         if (!checkIfPermissionGranted(permission) && ActivityCompat.shouldShowRequestPermissionRationale(activity,permission)) {
+            AlertDialog.Builder(activity)
+                .setTitle("Permission Required")
+                .setMessage(rationale)
+                .setPositiveButton("OK"){_,_->
+                    //requesting for permission
+                }
+                .setNegativeButton("Cancel"){dialog, _->
+                    //handle other cases on dismiss
+                    dialog.dismiss()
+                }
+                .show()
             return true
         }
         else{ return false}
