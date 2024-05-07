@@ -24,14 +24,15 @@ class EggCollectionRepositoryImpl @Inject constructor(
     private val fireStoreDb: FirebaseFirestore,
     dataStore: AppDataStore
 ) : EggCollectionRepository {
-    private val eggsCollectionPath = FARMS_COLLECTION +"/"+dataStore.farmID+"/"+ EGGS_COLLECTION
+    private val eggsCollectionPath = fireStoreDb.collection(FARMS_COLLECTION).document(dataStore.farmID).collection(EGGS_COLLECTION)
+
     init {
        listenForFireStoreChanges()
     }
 
     private fun listenForFireStoreChanges() {
         fireStoreDb
-            .collection(eggsCollectionPath)
+            .collection(eggsCollectionPath.path)
             .addSnapshotListener { querySnapShot, exception ->
 
                 if (exception != null) { //f an error exists, it logs the error and returns early from the listener.
@@ -96,7 +97,7 @@ class EggCollectionRepositoryImpl @Inject constructor(
 
             val recordId = eggCollectionDao.insertCollectionRecord(eggCollection)
             fireStoreDb
-                .collection(eggsCollectionPath)
+                .collection(eggsCollectionPath.path)
                 .document(recordId.toString())
                 .set(
                     EggCollection(
@@ -117,7 +118,7 @@ class EggCollectionRepositoryImpl @Inject constructor(
     override suspend fun deleteRecord(recordId: Int) {
         eggCollectionDao.deleteCollectionRecord(recordId)
         fireStoreDb
-            .collection(eggsCollectionPath)
+            .collection(eggsCollectionPath.path)
             .document(recordId.toString())
             .delete()
     }

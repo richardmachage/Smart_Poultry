@@ -22,14 +22,15 @@ class CellsRepositoryImpl @Inject constructor(
     private val fireStoreDb: FirebaseFirestore,
     dataStore : AppDataStore
 ) : CellsRepository {
-    private val cellsCollectionPath = FARMS_COLLECTION +"/"+dataStore.farmID+"/"+ CELLS_COLLECTION
+    private val cellsCollectionPath = fireStoreDb.collection(FARMS_COLLECTION).document(dataStore.farmID).collection(CELLS_COLLECTION)
+
     init {
         listenForFireStoreChanges()
     }
 
 
     private fun listenForFireStoreChanges() {
-        fireStoreDb.collection(cellsCollectionPath)
+        fireStoreDb.collection(cellsCollectionPath.path)
             .addSnapshotListener { querySnapshot, exception ->
                 if (exception != null) { //if an error exists, it logs the error and returns early from the listener.
                    Log.w("Error", "Listen failed.", exception)
@@ -88,7 +89,7 @@ class CellsRepositoryImpl @Inject constructor(
     override suspend fun addNewCell(cell: Cells) {
         val cellId = cellsDao.addNewCell(cell = cell)
         fireStoreDb
-            .collection(cellsCollectionPath)
+            .collection(cellsCollectionPath.path)
             .document(cellId.toString())
             .set(
                 Cell(
@@ -109,7 +110,7 @@ class CellsRepositoryImpl @Inject constructor(
     override suspend fun deleteCell(cell: Cells) {
         cellsDao.deleteCell(cell = cell)
         fireStoreDb
-            .collection(cellsCollectionPath)
+            .collection(cellsCollectionPath.path)
             .document(cell.cellId.toString())
             .delete()
             .addOnSuccessListener {
@@ -138,7 +139,7 @@ class CellsRepositoryImpl @Inject constructor(
 
     override suspend fun updateCellInfo(cell: Cells) {
         cellsDao.updateCellInfo(cell)
-        fireStoreDb.collection(cellsCollectionPath)
+        fireStoreDb.collection(cellsCollectionPath.path)
             .document(cell.cellId.toString())
             .set(cell, SetOptions.merge())
 
