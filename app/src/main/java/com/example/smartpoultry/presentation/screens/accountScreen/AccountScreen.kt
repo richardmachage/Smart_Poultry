@@ -334,7 +334,7 @@ fun AccountScreen(
                             iconLeadingDescription = "Email",
                             keyboardType = KeyboardType.Email,
                             onValueChange = { text ->
-                                userEmailReg = text
+                                userEmailReg = text.trim()
                             }
                         )
                     }
