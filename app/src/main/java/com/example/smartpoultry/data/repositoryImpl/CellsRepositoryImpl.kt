@@ -2,7 +2,6 @@ package com.example.smartpoultry.data.repositoryImpl
 
 import android.util.Log
 import com.example.smartpoultry.data.dataSource.datastore.AppDataStore
-import com.example.smartpoultry.data.dataSource.remote.firebase.BLOCKS_COLLECTION
 import com.example.smartpoultry.data.dataSource.remote.firebase.CELLS_COLLECTION
 import com.example.smartpoultry.data.dataSource.remote.firebase.FARMS_COLLECTION
 import com.example.smartpoultry.data.dataSource.remote.firebase.models.Cell
@@ -21,15 +20,13 @@ import javax.inject.Inject
 class CellsRepositoryImpl @Inject constructor(
     private val cellsDao: CellsDao,
     private val fireStoreDb: FirebaseFirestore,
-    private val dataStore : AppDataStore
+    dataStore : AppDataStore
 ) : CellsRepository {
-    private val blocksCollectionPath = FARMS_COLLECTION +"/"+dataStore.farmID+"/"+ BLOCKS_COLLECTION
     private val cellsCollectionPath = FARMS_COLLECTION +"/"+dataStore.farmID+"/"+ CELLS_COLLECTION
     init {
         listenForFireStoreChanges()
     }
 
-   // val farmId = dataStore.readData(FARM_ID_KEY)
 
     private fun listenForFireStoreChanges() {
         fireStoreDb.collection(cellsCollectionPath)
@@ -91,7 +88,7 @@ class CellsRepositoryImpl @Inject constructor(
     override suspend fun addNewCell(cell: Cells) {
         val cellId = cellsDao.addNewCell(cell = cell)
         fireStoreDb
-            .collection("Cells")
+            .collection(cellsCollectionPath)
             .document(cellId.toString())
             .set(
                 Cell(
@@ -112,7 +109,7 @@ class CellsRepositoryImpl @Inject constructor(
     override suspend fun deleteCell(cell: Cells) {
         cellsDao.deleteCell(cell = cell)
         fireStoreDb
-            .collection("Cells")
+            .collection(cellsCollectionPath)
             .document(cell.cellId.toString())
             .delete()
             .addOnSuccessListener {
