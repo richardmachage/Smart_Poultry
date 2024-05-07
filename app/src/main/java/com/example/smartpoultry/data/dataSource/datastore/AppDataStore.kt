@@ -1,6 +1,7 @@
 package com.example.smartpoultry.data.dataSource.datastore
 
 import android.util.Log
+import androidx.compose.runtime.mutableStateOf
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
@@ -30,8 +31,15 @@ class AppDataStore @Inject constructor(
     private val fireBaseAuth: FirebaseAuth
 ) {
 
+    var farmID = mutableStateOf("")
+
     init {
         listenForFireStoreChanges()
+        CoroutineScope(Dispatchers.IO).launch {
+            readData(FARM_ID_KEY).collect {
+                farmID.value = it
+            }
+        }
     }
 
     private fun listenForFireStoreChanges() {
@@ -47,9 +55,9 @@ class AppDataStore @Inject constructor(
                     val user = snapshot.toObject(User::class.java)
                     //role
                     CoroutineScope(Dispatchers.IO).launch {
-                            user?.let {
-                                saveData(key = USER_ROLE_KEY, value = it.role)
-                            }
+                        user?.let {
+                            saveData(key = USER_ROLE_KEY, value = it.role)
+                        }
                     }
 
                     //name

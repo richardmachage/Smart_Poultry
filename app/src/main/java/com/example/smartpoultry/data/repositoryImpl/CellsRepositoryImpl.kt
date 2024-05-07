@@ -16,12 +16,15 @@ import javax.inject.Inject
 
 class CellsRepositoryImpl @Inject constructor(
     private val cellsDao: CellsDao,
-    private val fireStoreDb: FirebaseFirestore
+    private val fireStoreDb: FirebaseFirestore,
+   // private val dataStore : AppDataStore
 ) : CellsRepository {
 
     init {
         listenForFireStoreChanges()
     }
+
+   // val farmId = dataStore.readData(FARM_ID_KEY)
 
     private fun listenForFireStoreChanges() {
         fireStoreDb.collection("Cells")
