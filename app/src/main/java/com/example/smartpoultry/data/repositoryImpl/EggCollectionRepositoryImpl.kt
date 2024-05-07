@@ -24,15 +24,19 @@ class EggCollectionRepositoryImpl @Inject constructor(
     private val fireStoreDb: FirebaseFirestore,
     dataStore: AppDataStore
 ) : EggCollectionRepository {
-    private val eggsCollectionPath = fireStoreDb.collection(FARMS_COLLECTION).document(dataStore.farmID).collection(EGGS_COLLECTION)
+   // private val eggsCollectionPath = fireStoreDb.collection(FARMS_COLLECTION).document(dataStore.farmID).collection(EGGS_COLLECTION)
+
+    private val farmsCollection = fireStoreDb.collection(FARMS_COLLECTION)
+    private val farmDocument = farmsCollection.document("710uve6Bmd25yAXcnPfr")
+    private val eggsCollection = farmDocument.collection(EGGS_COLLECTION)
 
     init {
        listenForFireStoreChanges()
     }
 
     private fun listenForFireStoreChanges() {
-        fireStoreDb
-            .collection(eggsCollectionPath.path)
+        //fireStoreDb.collection(eggsCollectionPath.path)
+        eggsCollection
             .addSnapshotListener { querySnapShot, exception ->
 
                 if (exception != null) { //f an error exists, it logs the error and returns early from the listener.
@@ -96,9 +100,8 @@ class EggCollectionRepositoryImpl @Inject constructor(
         try {
 
             val recordId = eggCollectionDao.insertCollectionRecord(eggCollection)
-            fireStoreDb
-                .collection(eggsCollectionPath.path)
-                .document(recordId.toString())
+            //fireStoreDb.collection(eggsCollectionPath.path)
+              eggsCollection.document(recordId.toString())
                 .set(
                     EggCollection(
                         productionId = recordId.toInt(),
@@ -117,9 +120,8 @@ class EggCollectionRepositoryImpl @Inject constructor(
 
     override suspend fun deleteRecord(recordId: Int) {
         eggCollectionDao.deleteCollectionRecord(recordId)
-        fireStoreDb
-            .collection(eggsCollectionPath.path)
-            .document(recordId.toString())
+        //fireStoreDb.collection(eggsCollectionPath.path)
+            eggsCollection.document(recordId.toString())
             .delete()
     }
 

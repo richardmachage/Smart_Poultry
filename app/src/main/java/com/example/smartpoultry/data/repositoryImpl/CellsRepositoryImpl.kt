@@ -20,9 +20,12 @@ import javax.inject.Inject
 class CellsRepositoryImpl @Inject constructor(
     private val cellsDao: CellsDao,
     private val fireStoreDb: FirebaseFirestore,
-    dataStore : AppDataStore
+    dataStore: AppDataStore
 ) : CellsRepository {
-    private val cellsCollectionPath = fireStoreDb.collection(FARMS_COLLECTION).document(dataStore.farmID).collection(CELLS_COLLECTION)
+    // private val cellsCollectionPath = fireStoreDb.collection(FARMS_COLLECTION).document(dataStore.farmID).collection(CELLS_COLLECTION)
+    private val farmsCollection = fireStoreDb.collection(FARMS_COLLECTION)
+    private val farmDocument = farmsCollection.document("710uve6Bmd25yAXcnPfr")
+    private val cellsCollection = farmDocument.collection(CELLS_COLLECTION)
 
     init {
         listenForFireStoreChanges()
@@ -30,67 +33,66 @@ class CellsRepositoryImpl @Inject constructor(
 
 
     private fun listenForFireStoreChanges() {
-        fireStoreDb.collection(cellsCollectionPath.path)
-            .addSnapshotListener { querySnapshot, exception ->
-                if (exception != null) { //if an error exists, it logs the error and returns early from the listener.
-                   Log.w("Error", "Listen failed.", exception)
-                    return@addSnapshotListener
-                }
+        //  fireStoreDb.collection(cellsCollectionPath.path)
+        cellsCollection.addSnapshotListener { querySnapshot, exception ->
+            if (exception != null) { //if an error exists, it logs the error and returns early from the listener.
+                Log.w("Error", "Listen failed.", exception)
+                return@addSnapshotListener
+            }
 
-                for (docChange in querySnapshot!!.documentChanges) {
-                    val cell =
-                        docChange.document.toObject(Cell::class.java) // converting the doc to cell object
+            for (docChange in querySnapshot!!.documentChanges) {
+                val cell =
+                    docChange.document.toObject(Cell::class.java) // converting the doc to cell object
 
-                    when (docChange.type) {
-                        DocumentChange.Type.ADDED -> {
-                            CoroutineScope(Dispatchers.IO).launch {
-                                cellsDao.addNewCell(
-                                    Cells(
-                                        cellId = cell.cellId,
-                                        cellNum = cell.cellNum,
-                                        blockId = cell.blockId,
-                                        henCount = cell.henCount
-                                    )
+                when (docChange.type) {
+                    DocumentChange.Type.ADDED -> {
+                        CoroutineScope(Dispatchers.IO).launch {
+                            cellsDao.addNewCell(
+                                Cells(
+                                    cellId = cell.cellId,
+                                    cellNum = cell.cellNum,
+                                    blockId = cell.blockId,
+                                    henCount = cell.henCount
                                 )
-                            }
+                            )
                         }
-
-                        DocumentChange.Type.MODIFIED -> {
-                            CoroutineScope(Dispatchers.IO).launch {
-                                cellsDao.updateCellInfo(
-                                    Cells(
-                                        cellId = cell.cellId,
-                                        cellNum = cell.cellNum,
-                                        blockId = cell.blockId,
-                                        henCount = cell.henCount
-                                    )
-                                )
-                            }
-                        }
-
-                        DocumentChange.Type.REMOVED -> {
-                            CoroutineScope(Dispatchers.IO).launch {
-                                cellsDao.deleteCell(
-                                    Cells(
-                                        cellId = cell.cellId,
-                                        cellNum = cell.cellNum,
-                                        blockId = cell.blockId,
-                                        henCount = cell.henCount
-                                    )
-                                )
-                            }
-                        }
-
                     }
+
+                    DocumentChange.Type.MODIFIED -> {
+                        CoroutineScope(Dispatchers.IO).launch {
+                            cellsDao.updateCellInfo(
+                                Cells(
+                                    cellId = cell.cellId,
+                                    cellNum = cell.cellNum,
+                                    blockId = cell.blockId,
+                                    henCount = cell.henCount
+                                )
+                            )
+                        }
+                    }
+
+                    DocumentChange.Type.REMOVED -> {
+                        CoroutineScope(Dispatchers.IO).launch {
+                            cellsDao.deleteCell(
+                                Cells(
+                                    cellId = cell.cellId,
+                                    cellNum = cell.cellNum,
+                                    blockId = cell.blockId,
+                                    henCount = cell.henCount
+                                )
+                            )
+                        }
+                    }
+
                 }
             }
+        }
     }
 
     override suspend fun addNewCell(cell: Cells) {
         val cellId = cellsDao.addNewCell(cell = cell)
-        fireStoreDb
-            .collection(cellsCollectionPath.path)
-            .document(cellId.toString())
+        //fireStoreDb.collection(cellsCollectionPath.path)
+        cellsCollection.document(cellId.toString())
             .set(
                 Cell(
                     cellId = cellId.toInt(),
@@ -109,9 +111,8 @@ class CellsRepositoryImpl @Inject constructor(
 
     override suspend fun deleteCell(cell: Cells) {
         cellsDao.deleteCell(cell = cell)
-        fireStoreDb
-            .collection(cellsCollectionPath.path)
-            .document(cell.cellId.toString())
+        //fireStoreDb.collection(cellsCollectionPath.path)
+        cellsCollection.document(cell.cellId.toString())
             .delete()
             .addOnSuccessListener {
 
@@ -139,8 +140,8 @@ class CellsRepositoryImpl @Inject constructor(
 
     override suspend fun updateCellInfo(cell: Cells) {
         cellsDao.updateCellInfo(cell)
-        fireStoreDb.collection(cellsCollectionPath.path)
-            .document(cell.cellId.toString())
+        // fireStoreDb.collection(cellsCollectionPath.path)
+        cellsCollection.document(cell.cellId.toString())
             .set(cell, SetOptions.merge())
 
     }

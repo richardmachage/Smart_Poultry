@@ -22,14 +22,19 @@ class BlocksRepositoryImpl @Inject constructor(
     private val fireStoreDB: FirebaseFirestore,
     dataStore: AppDataStore
 ) : BlocksRepository {
-    private val blocksCollectionPath = fireStoreDB.collection(FARMS_COLLECTION).document(dataStore.farmID).collection(BLOCKS_COLLECTION)
-    private val cellsCollectionPath = fireStoreDB.collection(FARMS_COLLECTION).document(dataStore.farmID).collection(CELLS_COLLECTION)
+    private val farmsCollection = fireStoreDB.collection(FARMS_COLLECTION)
+    private val farmDocument = farmsCollection.document("710uve6Bmd25yAXcnPfr")//dataStore.farmID)
+    private val blocksCollection = farmDocument.collection(BLOCKS_COLLECTION)
+    private val cellsCollection = farmDocument.collection(CELLS_COLLECTION)
+   // private val blocksCollectionPath = fireStoreDB.collection(FARMS_COLLECTION).document(dataStore.farmID).collection(BLOCKS_COLLECTION)
+    //private val cellsCollectionPath = fireStoreDB.collection(FARMS_COLLECTION).document(dataStore.farmID).collection(CELLS_COLLECTION)
     init {
         listenForFireStoreChanges()
     }
 
     private fun listenForFireStoreChanges() {
-        fireStoreDB.collection(blocksCollectionPath.path).addSnapshotListener { querySnapshot, exception ->
+        //fireStoreDB.collection(blocksCollectionPath.path)
+            blocksCollection.addSnapshotListener { querySnapshot, exception ->
 
             if (exception != null) { //if an error exists, it logs the error and returns early from the listener.
                 Log.w("Error", "Listen failed.", exception)
@@ -64,8 +69,8 @@ class BlocksRepositoryImpl @Inject constructor(
 
     override suspend fun addNewBlock(block: Blocks): Long {
         val blockId = blocksDao.addNewBlock(block)
-        fireStoreDB
-            .collection(blocksCollectionPath.path)
+        //fireStoreDB.collection(blocksCollectionPath.path)
+            blocksCollection
             .document(blockId.toString())
             .set(
                 Blocks(
@@ -92,8 +97,8 @@ class BlocksRepositoryImpl @Inject constructor(
         blocksDao.deleteCellsForBlock(blockId = block.blockId)
 
         //then delete the block in the remote data source to allow for synchronization
-        fireStoreDB
-            .collection(blocksCollectionPath.path)
+        //fireStoreDB.collection(blocksCollectionPath.path)
+            blocksCollection
             .document(block.blockId.toString())
             .delete()
             .addOnSuccessListener {
@@ -104,8 +109,8 @@ class BlocksRepositoryImpl @Inject constructor(
             }
 
         //Then delete the cells of the block as well in the cells collection
-        fireStoreDB
-            .collection(cellsCollectionPath.path)
+        //fireStoreDB.collection(cellsCollectionPath.path)
+            cellsCollection
             .whereEqualTo("blockId", block.blockId)
             .get()
             .addOnSuccessListener { querySnapshot ->
@@ -114,7 +119,7 @@ class BlocksRepositoryImpl @Inject constructor(
                 fireStoreDB.runBatch { batch ->
                     querySnapshot.documents.forEach { document ->
                        // Log.i("Firebase", "deleting cell ${document.id}")
-                        batch.delete(fireStoreDB.collection(cellsCollectionPath.path).document(document.id))
+                        batch.delete(cellsCollection.document(document.id))
                     }
                 }.addOnCompleteListener {
 
