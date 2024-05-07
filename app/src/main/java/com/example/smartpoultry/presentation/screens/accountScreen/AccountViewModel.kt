@@ -20,7 +20,7 @@ class AccountViewModel @Inject constructor(
     private val fireBaseAuthRepo: FirebaseAuthRepository,
     private val dataStore: AppDataStore
 ) : ViewModel() {
-    val myDataStore = dataStore
+    //val myDataStore = dataStore
     var isLoading = mutableStateOf(false)
     var toastMessage = mutableStateOf("")
 
@@ -50,7 +50,7 @@ class AccountViewModel @Inject constructor(
         viewModelScope.launch {
             isLoading.value = true
             val result =
-                fireBaseAuthRepo.registerUser(email = email, role = userRole, password = "0000000")
+                fireBaseAuthRepo.registerUser(email = email, role = userRole, password = "0000000", farmId = dataStore.farmID)
             result.onSuccess {
                 isLoading.value = false
                 toastMessage.value = "User registered successfully"
