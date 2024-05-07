@@ -1,6 +1,10 @@
 package com.example.smartpoultry.data.repositoryImpl
 
 import android.util.Log
+import com.example.smartpoultry.data.dataSource.datastore.AppDataStore
+import com.example.smartpoultry.data.dataSource.remote.firebase.BLOCKS_COLLECTION
+import com.example.smartpoultry.data.dataSource.remote.firebase.CELLS_COLLECTION
+import com.example.smartpoultry.data.dataSource.remote.firebase.FARMS_COLLECTION
 import com.example.smartpoultry.data.dataSource.remote.firebase.models.Cell
 import com.example.smartpoultry.data.dataSource.room.entities.cells.Cells
 import com.example.smartpoultry.data.dataSource.room.entities.cells.CellsDao
@@ -17,9 +21,10 @@ import javax.inject.Inject
 class CellsRepositoryImpl @Inject constructor(
     private val cellsDao: CellsDao,
     private val fireStoreDb: FirebaseFirestore,
-   // private val dataStore : AppDataStore
+    private val dataStore : AppDataStore
 ) : CellsRepository {
-
+    private val blocksCollectionPath = FARMS_COLLECTION +"/"+dataStore.farmID+"/"+ BLOCKS_COLLECTION
+    private val cellsCollectionPath = FARMS_COLLECTION +"/"+dataStore.farmID+"/"+ CELLS_COLLECTION
     init {
         listenForFireStoreChanges()
     }
