@@ -3,6 +3,7 @@ package com.example.smartpoultry.data.repositoryImpl
 import android.util.Log
 import com.example.smartpoultry.data.dataSource.datastore.AppDataStore
 import com.example.smartpoultry.data.dataSource.remote.firebase.BLOCKS_COLLECTION
+import com.example.smartpoultry.data.dataSource.remote.firebase.CELLS_COLLECTION
 import com.example.smartpoultry.data.dataSource.remote.firebase.FARMS_COLLECTION
 import com.example.smartpoultry.data.dataSource.room.entities.blocks.Blocks
 import com.example.smartpoultry.data.dataSource.room.entities.blocks.BlocksDao
@@ -22,12 +23,13 @@ class BlocksRepositoryImpl @Inject constructor(
     private val appDataStore: AppDataStore
 ) : BlocksRepository {
     private val blocksCollectionPath = FARMS_COLLECTION+"/"+appDataStore.farmID+"/"+ BLOCKS_COLLECTION
+    private val cellsCollectionPath = FARMS_COLLECTION+"/"+appDataStore.farmID+"/"+ CELLS_COLLECTION
     init {
         listenForFireStoreChanges()
     }
 
     private fun listenForFireStoreChanges() {
-        fireStoreDB.collection("Blocks").addSnapshotListener { querySnapshot, exception ->
+        fireStoreDB.collection(blocksCollectionPath).addSnapshotListener { querySnapshot, exception ->
 
             if (exception != null) { //if an error exists, it logs the error and returns early from the listener.
                 Log.w("Error", "Listen failed.", exception)
@@ -91,7 +93,7 @@ class BlocksRepositoryImpl @Inject constructor(
 
         //then delete the block in the remote data source to allow for synchronization
         fireStoreDB
-            .collection("Blocks")
+            .collection(blocksCollectionPath)
             .document(block.blockId.toString())
             .delete()
             .addOnSuccessListener {
@@ -101,11 +103,9 @@ class BlocksRepositoryImpl @Inject constructor(
 
             }
 
-        //Then delete the cells of the block as well
-        Log.i("Firebase", "query firebase")
-
+        //Then delete the cells of the block as well in the cells collection
         fireStoreDB
-            .collection("Cells")
+            .collection(cellsCollectionPath)
             .whereEqualTo("blockId", block.blockId)
             .get()
             .addOnSuccessListener { querySnapshot ->
@@ -113,15 +113,15 @@ class BlocksRepositoryImpl @Inject constructor(
 
                 fireStoreDB.runBatch { batch ->
                     querySnapshot.documents.forEach { document ->
-                        Log.i("Firebase", "deleting cell ${document.id}")
-                        batch.delete(fireStoreDB.collection("Cells").document(document.id))
+                       // Log.i("Firebase", "deleting cell ${document.id}")
+                        batch.delete(fireStoreDB.collection(cellsCollectionPath).document(document.id))
                     }
                 }.addOnCompleteListener {
 
                 }
             }
             .addOnFailureListener {
-                Log.i("Firebase", "query failed")
+                //Log.i("Firebase", "query failed")
 
             }
 
