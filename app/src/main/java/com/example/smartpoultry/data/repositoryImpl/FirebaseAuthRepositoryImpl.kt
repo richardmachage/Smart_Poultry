@@ -68,7 +68,8 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
     override suspend fun registerUser(
         email: String,
         password: String,
-        role: String
+        role: String,
+        farmId: String
     ): Result<Boolean> = coroutineScope {
 
         val deferred = async(Dispatchers.IO) {
@@ -78,8 +79,8 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
                 val firebaseUser = authResult.user
 
                 firebaseUser?.let {
-                    val user = User(email, role)
-                    firebaseFirestore.collection("Users")
+                    val user = User(email= email, role = role, farmId = farmId, phone = "", name = "")
+                    firebaseFirestore.collection(USERS_COLLECTION)
                         .document(firebaseUser.uid)
                         .set(user)
                         .await()
