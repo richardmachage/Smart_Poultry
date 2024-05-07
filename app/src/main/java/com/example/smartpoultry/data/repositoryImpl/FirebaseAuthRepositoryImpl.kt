@@ -236,7 +236,7 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
         firebaseAuth.currentUser?.verifyBeforeUpdateEmail(email)
             ?.addOnSuccessListener {
                 firebaseFirestore.collection(USERS_COLLECTION)
-                    .document(firebaseAuth.uid.toString())
+                    .document(firebaseAuth.currentUser?.uid.toString())
                     .update("email", email)
                     .addOnSuccessListener {
                         completableDeferred.complete(true)
