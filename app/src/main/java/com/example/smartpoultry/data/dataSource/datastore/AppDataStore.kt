@@ -21,6 +21,7 @@ const val USER_NAME_KEY = "user_name"
 const val USER_PHONE_KEY = "user_phone"
 const val USER_EMAIL_KEY = "user_email"
 const val FIRST_INSTALL = "first_install"
+const val FARM_ID_KEY = "farm_id"
 
 @Singleton
 class AppDataStore @Inject constructor(

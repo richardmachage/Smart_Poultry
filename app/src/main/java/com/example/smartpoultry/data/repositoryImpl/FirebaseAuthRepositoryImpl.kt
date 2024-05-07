@@ -1,6 +1,7 @@
 package com.example.smartpoultry.data.repositoryImpl
 
 import com.example.smartpoultry.data.dataSource.datastore.AppDataStore
+import com.example.smartpoultry.data.dataSource.datastore.FARM_ID_KEY
 import com.example.smartpoultry.data.dataSource.datastore.USER_EMAIL_KEY
 import com.example.smartpoultry.data.dataSource.datastore.USER_NAME_KEY
 import com.example.smartpoultry.data.dataSource.datastore.USER_PHONE_KEY
@@ -164,6 +165,12 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
                             val user = documentSnapshot.toObject(User::class.java)
 
                             //save user details  to datastore
+                            //user Farm
+                            CoroutineScope(Dispatchers.IO).launch {
+                                user?.let { user ->
+                                    dataStore.saveData(FARM_ID_KEY, user.farmId)
+                                }
+                            }
 
                             //user Role
                             CoroutineScope(Dispatchers.IO).launch {
