@@ -7,6 +7,7 @@ import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStoreFile
 import com.example.smartpoultry.data.dataSource.datastore.AppDataStore
+import com.example.smartpoultry.data.dataSource.remote.firebase.FirestorePathProvider
 import com.example.smartpoultry.data.dataSource.room.database.SmartPoultryDatabase
 import com.example.smartpoultry.data.repositoryImpl.AlertsRepositoryImpl
 import com.example.smartpoultry.data.repositoryImpl.BlocksRepositoryImpl
@@ -46,8 +47,8 @@ object AppModule {
     }
     @Provides
     @Singleton
-    fun providesBlocksRepository(database: SmartPoultryDatabase, firestore: FirebaseFirestore, dataStore: AppDataStore): BlocksRepository{
-        return BlocksRepositoryImpl(database.blocksDao(), firestore,dataStore)
+    fun providesBlocksRepository(database: SmartPoultryDatabase, firestore: FirebaseFirestore, firestorePathProvider: FirestorePathProvider): BlocksRepository{
+        return BlocksRepositoryImpl(database.blocksDao(), firestore,firestorePathProvider )
     }
 
     @Provides

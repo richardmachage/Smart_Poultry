@@ -7,6 +7,7 @@ import com.example.smartpoultry.data.dataSource.datastore.FARM_ID_KEY
 import com.example.smartpoultry.data.dataSource.remote.firebase.BLOCKS_COLLECTION
 import com.example.smartpoultry.data.dataSource.remote.firebase.CELLS_COLLECTION
 import com.example.smartpoultry.data.dataSource.remote.firebase.FARMS_COLLECTION
+import com.example.smartpoultry.data.dataSource.remote.firebase.FirestorePathProvider
 import com.example.smartpoultry.data.dataSource.room.entities.blocks.Blocks
 import com.example.smartpoultry.data.dataSource.room.entities.blocks.BlocksDao
 import com.example.smartpoultry.data.dataSource.room.relations.BlocksWithCells
@@ -23,7 +24,8 @@ import javax.inject.Inject
 class BlocksRepositoryImpl @Inject constructor(
     private val blocksDao: BlocksDao,
     private val fireStoreDB: FirebaseFirestore,
-    dataStore: AppDataStore
+    //dataStore: AppDataStore
+    firestorePathProvider: FirestorePathProvider
 ) : BlocksRepository {
     private val farmsCollection = fireStoreDB.collection(FARMS_COLLECTION)
     private val farmDocument = farmsCollection.document("710uve6Bmd25yAXcnPfr")//dataStore.farmID)
