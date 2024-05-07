@@ -32,10 +32,10 @@ class CellsRepositoryImpl @Inject constructor(
    // val farmId = dataStore.readData(FARM_ID_KEY)
 
     private fun listenForFireStoreChanges() {
-        fireStoreDb.collection("Cells")
+        fireStoreDb.collection(cellsCollectionPath)
             .addSnapshotListener { querySnapshot, exception ->
                 if (exception != null) { //if an error exists, it logs the error and returns early from the listener.
-                    Log.w("Error", "Listen failed.", exception)
+                   Log.w("Error", "Listen failed.", exception)
                     return@addSnapshotListener
                 }
 
