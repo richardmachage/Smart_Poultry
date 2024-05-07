@@ -1,6 +1,9 @@
 package com.example.smartpoultry.data.repositoryImpl
 
 import android.util.Log
+import com.example.smartpoultry.data.dataSource.datastore.AppDataStore
+import com.example.smartpoultry.data.dataSource.remote.firebase.BLOCKS_COLLECTION
+import com.example.smartpoultry.data.dataSource.remote.firebase.FARMS_COLLECTION
 import com.example.smartpoultry.data.dataSource.room.entities.blocks.Blocks
 import com.example.smartpoultry.data.dataSource.room.entities.blocks.BlocksDao
 import com.example.smartpoultry.data.dataSource.room.relations.BlocksWithCells
@@ -15,8 +18,10 @@ import javax.inject.Inject
 
 class BlocksRepositoryImpl @Inject constructor(
     private val blocksDao: BlocksDao,
-    private val fireStoreDB: FirebaseFirestore
+    private val fireStoreDB: FirebaseFirestore,
+    private val appDataStore: AppDataStore
 ) : BlocksRepository {
+    private val blocksCollectionPath = FARMS_COLLECTION+"/"+appDataStore.farmID+"/"+ BLOCKS_COLLECTION
     init {
         listenForFireStoreChanges()
     }
@@ -24,7 +29,7 @@ class BlocksRepositoryImpl @Inject constructor(
     private fun listenForFireStoreChanges() {
         fireStoreDB.collection("Blocks").addSnapshotListener { querySnapshot, exception ->
 
-            if (exception != null) { //f an error exists, it logs the error and returns early from the listener.
+            if (exception != null) { //if an error exists, it logs the error and returns early from the listener.
                 Log.w("Error", "Listen failed.", exception)
                 return@addSnapshotListener
             }
@@ -58,7 +63,7 @@ class BlocksRepositoryImpl @Inject constructor(
     override suspend fun addNewBlock(block: Blocks): Long {
         val blockId = blocksDao.addNewBlock(block)
         fireStoreDB
-            .collection("Blocks")
+            .collection(blocksCollectionPath)
             .document(blockId.toString())
             .set(
                 Blocks(

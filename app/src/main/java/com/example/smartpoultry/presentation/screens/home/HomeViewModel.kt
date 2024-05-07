@@ -34,7 +34,7 @@ class HomeViewModel @Inject constructor(
 ) : ViewModel() {
 
 
-    var farmId = dataStore.farmID.value
+    var farmId = dataStore.farmID
     val userRole = dataStore.readData(USER_ROLE_KEY).stateIn(
         scope = viewModelScope,
         started = SharingStarted.Eagerly,

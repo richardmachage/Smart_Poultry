@@ -1,7 +1,9 @@
 package com.example.smartpoultry.data.dataSource.datastore
 
 import android.util.Log
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
@@ -31,13 +33,13 @@ class AppDataStore @Inject constructor(
     private val fireBaseAuth: FirebaseAuth
 ) {
 
-    var farmID = mutableStateOf("")
+    var farmID by mutableStateOf("")
 
     init {
         listenForFireStoreChanges()
         CoroutineScope(Dispatchers.IO).launch {
             readData(FARM_ID_KEY).collect {
-                farmID.value = it
+                farmID = it
             }
         }
     }

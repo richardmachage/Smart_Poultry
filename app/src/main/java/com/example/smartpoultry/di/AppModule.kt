@@ -46,8 +46,8 @@ object AppModule {
     }
     @Provides
     @Singleton
-    fun providesBlocksRepository(database: SmartPoultryDatabase, firestore: FirebaseFirestore): BlocksRepository{
-        return BlocksRepositoryImpl(database.blocksDao(), firestore)
+    fun providesBlocksRepository(database: SmartPoultryDatabase, firestore: FirebaseFirestore, dataStore: AppDataStore): BlocksRepository{
+        return BlocksRepositoryImpl(database.blocksDao(), firestore,dataStore)
     }
 
     @Provides
