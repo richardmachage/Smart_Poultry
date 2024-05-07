@@ -333,7 +333,7 @@ fun AccountScreen(
                         )
                     }
                 }
-                if (userRole == "Director") {
+                if (userRole == "Director" || userRole == "Super") {
                     NormButton(
                         modifier = Modifier.fillMaxWidth(),
                         onButtonClick = { showRegDialog = true },
