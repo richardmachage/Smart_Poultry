@@ -8,6 +8,7 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
+import com.example.smartpoultry.data.dataSource.remote.firebase.USERS_COLLECTION
 import com.example.smartpoultry.data.dataSource.remote.firebase.models.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -16,8 +17,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
-import javax.inject.Singleton
 
 const val USER_ROLE_KEY = "user_role"
 const val USER_NAME_KEY = "user_name"
@@ -26,7 +27,7 @@ const val USER_EMAIL_KEY = "user_email"
 const val FIRST_INSTALL = "first_install"
 const val FARM_ID_KEY = "farm_id"
 
-@Singleton
+//@Singleton
 class AppDataStore @Inject constructor(
     private val dataStore: DataStore<Preferences>,
     private val fireStoreDB: FirebaseFirestore,
@@ -38,8 +39,10 @@ class AppDataStore @Inject constructor(
     init {
         listenForFireStoreChanges()
         CoroutineScope(Dispatchers.IO).launch {
-            readData(FARM_ID_KEY).collect {
-                farmID = it
+            readData(FARM_ID_KEY).collect {theId->
+                withContext(Dispatchers.Main){
+                    farmID = theId
+                }
             }
         }
     }
@@ -47,7 +50,7 @@ class AppDataStore @Inject constructor(
 
 
     private fun listenForFireStoreChanges() {
-        fireStoreDB.collection("Users")
+        fireStoreDB.collection(USERS_COLLECTION)
             .document(fireBaseAuth.currentUser?.uid.toString())
             .addSnapshotListener { snapshot, exception ->
                 if (exception != null) {

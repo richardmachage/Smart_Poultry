@@ -24,6 +24,8 @@ class MainViewModel @Inject constructor(
         checkFirstInstall()
         checkIfLoggedIn()
     }
+
+
     private fun checkIfLoggedIn(){
         firebaseAuth.currentUser?.let {
             isLoggedIn = true

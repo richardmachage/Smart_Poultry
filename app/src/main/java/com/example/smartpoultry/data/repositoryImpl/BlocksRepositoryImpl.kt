@@ -1,7 +1,9 @@
 package com.example.smartpoultry.data.repositoryImpl
 
 import android.util.Log
+import androidx.compose.runtime.mutableStateOf
 import com.example.smartpoultry.data.dataSource.datastore.AppDataStore
+import com.example.smartpoultry.data.dataSource.datastore.FARM_ID_KEY
 import com.example.smartpoultry.data.dataSource.remote.firebase.BLOCKS_COLLECTION
 import com.example.smartpoultry.data.dataSource.remote.firebase.CELLS_COLLECTION
 import com.example.smartpoultry.data.dataSource.remote.firebase.FARMS_COLLECTION
@@ -14,6 +16,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -29,6 +32,7 @@ class BlocksRepositoryImpl @Inject constructor(
    // private val blocksCollectionPath = fireStoreDB.collection(FARMS_COLLECTION).document(dataStore.farmID).collection(BLOCKS_COLLECTION)
     //private val cellsCollectionPath = fireStoreDB.collection(FARMS_COLLECTION).document(dataStore.farmID).collection(CELLS_COLLECTION)
     init {
+
         listenForFireStoreChanges()
     }
 
