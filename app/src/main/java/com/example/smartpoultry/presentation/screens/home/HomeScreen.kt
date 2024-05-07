@@ -85,18 +85,20 @@ fun HomeScreen(
         ) {
             MyVerticalSpacer(height = 5)
             //Type of role card
-            MyCard(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 10.dp)
-
-            ) {
-                Text(
-                    text = "Hello, $userName !",
+            if (userName.isNotBlank()) {
+                MyCard(
                     modifier = Modifier
-                        .padding(6.dp)
-                        .align(Alignment.Start)
-                )
+                        .fillMaxWidth()
+                        .padding(bottom = 10.dp)
+
+                ) {
+                    Text(
+                        text = "Hello, $userName",
+                        modifier = Modifier
+                            .padding(6.dp)
+                            .align(Alignment.Start)
+                    )
+                }
             }
 
             Column(
