@@ -42,6 +42,8 @@ class AppDataStore @Inject constructor(
         }
     }
 
+
+
     private fun listenForFireStoreChanges() {
         fireStoreDB.collection("Users")
             .document(fireBaseAuth.currentUser?.uid.toString())
