@@ -6,6 +6,7 @@ import com.example.smartpoultry.data.dataModels.EggRecordFull
 import com.example.smartpoultry.data.dataSource.datastore.AppDataStore
 import com.example.smartpoultry.data.dataSource.remote.firebase.BLOCKS_COLLECTION
 import com.example.smartpoultry.data.dataSource.remote.firebase.CELLS_COLLECTION
+import com.example.smartpoultry.data.dataSource.remote.firebase.EGGS_COLLECTION
 import com.example.smartpoultry.data.dataSource.remote.firebase.FARMS_COLLECTION
 import com.example.smartpoultry.data.dataSource.remote.firebase.models.EggCollectionFb
 import com.example.smartpoultry.data.dataSource.room.entities.eggCollection.EggCollection
@@ -27,13 +28,14 @@ class EggCollectionRepositoryImpl @Inject constructor(
 ) : EggCollectionRepository {
     private val blocksCollectionPath = FARMS_COLLECTION +"/"+dataStore.farmID+"/"+ BLOCKS_COLLECTION
     private val cellsCollectionPath = FARMS_COLLECTION +"/"+dataStore.farmID+"/"+ CELLS_COLLECTION
+    private val eggsCollectionPath = FARMS_COLLECTION +"/"+dataStore.farmID+"/"+ EGGS_COLLECTION
     init {
        listenForFireStoreChanges()
     }
 
     private fun listenForFireStoreChanges() {
         fireStoreDb
-            .collection("EggCollections")
+            .collection(eggsCollectionPath)
             .addSnapshotListener { querySnapShot, exception ->
 
                 if (exception != null) { //f an error exists, it logs the error and returns early from the listener.
@@ -85,12 +87,6 @@ class EggCollectionRepositoryImpl @Inject constructor(
                             CoroutineScope(Dispatchers.IO).launch {
                                 eggCollectionDao.deleteCollectionRecord(
                                     eggCollection.productionId
-                                    /*EggCollection(
-                                        eggCollection.productionId,
-                                        date = Date(eggCollection.date.time),                                        eggCollection.cellId,
-                                        eggCollection.eggCount,
-                                        eggCollection.henCount
-                                    )*/
                                 )
                             }
                         }
@@ -104,7 +100,7 @@ class EggCollectionRepositoryImpl @Inject constructor(
 
             val recordId = eggCollectionDao.insertCollectionRecord(eggCollection)
             fireStoreDb
-                .collection("EggCollections")
+                .collection(eggsCollectionPath)
                 .document(recordId.toString())
                 .set(
                     EggCollection(
@@ -125,7 +121,7 @@ class EggCollectionRepositoryImpl @Inject constructor(
     override suspend fun deleteRecord(recordId: Int) {
         eggCollectionDao.deleteCollectionRecord(recordId)
         fireStoreDb
-            .collection("EggCollections")
+            .collection(eggsCollectionPath)
             .document(recordId.toString())
             .delete()
     }
