@@ -31,10 +31,35 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
     override suspend fun signUp(
         email: String,
         password: String,
-        role: String ,
+        role: String,
         farmName: String
     ): Result<Boolean> = coroutineScope {
-        try {
+        //step 1. Create user -> using email and password
+        //step 2. create farm and retrieve farm ID
+        //step 3. create the user in the users collection in firestore
+        val deffered = async(Dispatchers.IO) {
+            try {
+                //step 1 create user
+                val authResult =
+                    firebaseAuth.createUserWithEmailAndPassword(email, password).await()
+                val firebaseUser = authResult.user
+                //step 2 create farm
+                val newFarm = firebaseFirestore.collection(FARMS_COLLECTION).document()
+                newFarm.set(Farm(name = farmName, id = newFarm.id, superUserEmail = email)).await()
+                //step 3 add created user to the Main Users Collection
+                firebaseUser?.let {
+                    val user = User(email = email, role = role, farmId = newFarm.id)
+                    firebaseFirestore.collection(USERS_COLLECTION)
+                        .document(firebaseUser.uid)
+                        .set(user)
+                        .await()
+                    Result.success(true)
+                }?:Result.failure(Exception("Firebase user is null"))
+            } catch (e: Exception) {
+                Result.failure(e)
+            }
+        }
+        /* try {
             // Create a new document reference for the farm
             val newFarm = firebaseFirestore.collection(FARMS_COLLECTION).document()
 
@@ -52,8 +77,10 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
             }
         } catch (e: Exception) {
             return@coroutineScope Result.failure(e)  // Capture any exception and return as failure
-        }
+        }*/
+        deffered.await()
     }
+
 
 /*
     suspend fun registerUser(email: String, password: String, role: String, farmId: String): Result<Boolean> {
@@ -61,8 +88,6 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
         return Result.success(true)  // Simulated result
     }
 */
-
-
     override suspend fun registerUser(
         email: String,
         password: String,
