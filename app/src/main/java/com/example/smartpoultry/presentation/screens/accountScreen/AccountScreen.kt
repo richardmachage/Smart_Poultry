@@ -61,7 +61,6 @@ fun AccountScreen(
     val userName by accountViewModel.userName.collectAsState()
     val userEmail by accountViewModel.userEmail.collectAsState()
     val userPhone by accountViewModel.userPhone.collectAsState()
-    var refreshData = 0
 
     LaunchedEffect(key1 = accountViewModel.toastMessage.value) {
         if (accountViewModel.toastMessage.value.isNotBlank()) Toast.makeText(
@@ -312,24 +311,31 @@ fun AccountScreen(
 
                 //Register new user
                 var showRegDialog by remember { mutableStateOf(false) }
+                var userEmailReg by remember { mutableStateOf("") }
+                var userRoleReg by remember { mutableStateOf("") }
                 MyInputDialog(
                     showDialog = showRegDialog,
                     title = "Register New User",
                     onConfirm = {
-                        //TODO
+                        //TODO -> validate Email address, and role selected.
+                        accountViewModel.registerUser(email = userEmailReg, userRole = userRoleReg)
                         showRegDialog = false
                     },
                     onDismiss = { showRegDialog = false }
                 ) {
                     Column {
 
-                        UserTypeDropDownMenu(onItemClick = { userRole -> })
+                        UserTypeDropDownMenu(onItemClick = { userRole ->
+                            userRoleReg = userRole
+                        })
                         MyEditTextClear(
                             label = "Email address",
                             iconLeading = Icons.Default.Email,
                             iconLeadingDescription = "Email",
                             keyboardType = KeyboardType.Email,
-                            onValueChange = { text -> }
+                            onValueChange = { text ->
+                                userEmailReg = text
+                            }
                         )
                     }
                 }
