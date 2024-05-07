@@ -260,7 +260,7 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
     @OptIn(ExperimentalCoroutinesApi::class)
     override suspend fun editPhone(phone: String): Result<Boolean> {
         val completableDeferred = CompletableDeferred<Boolean>()
-        firebaseFirestore.collection("Users")
+        firebaseFirestore.collection(USERS_COLLECTION)
             .document(firebaseAuth.currentUser?.uid.toString())
             .update("phone", phone)
             .addOnSuccessListener {
