@@ -20,10 +20,10 @@ import javax.inject.Inject
 class BlocksRepositoryImpl @Inject constructor(
     private val blocksDao: BlocksDao,
     private val fireStoreDB: FirebaseFirestore,
-    private val appDataStore: AppDataStore
+    private val dataStore: AppDataStore
 ) : BlocksRepository {
-    private val blocksCollectionPath = FARMS_COLLECTION+"/"+appDataStore.farmID+"/"+ BLOCKS_COLLECTION
-    private val cellsCollectionPath = FARMS_COLLECTION+"/"+appDataStore.farmID+"/"+ CELLS_COLLECTION
+    private val blocksCollectionPath = FARMS_COLLECTION+"/"+dataStore.farmID+"/"+ BLOCKS_COLLECTION
+    private val cellsCollectionPath = FARMS_COLLECTION+"/"+dataStore.farmID+"/"+ CELLS_COLLECTION
     init {
         listenForFireStoreChanges()
     }
