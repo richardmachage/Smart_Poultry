@@ -138,7 +138,7 @@ class CellsRepositoryImpl @Inject constructor(
 
     override suspend fun updateCellInfo(cell: Cells) {
         cellsDao.updateCellInfo(cell)
-        fireStoreDb.collection("Cells")
+        fireStoreDb.collection(cellsCollectionPath)
             .document(cell.cellId.toString())
             .set(cell, SetOptions.merge())
 
