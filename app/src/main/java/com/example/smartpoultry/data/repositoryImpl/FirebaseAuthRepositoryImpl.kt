@@ -55,7 +55,7 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
                         .set(user)
                         .await()
                     Result.success(true)
-                }?:Result.failure(Exception("Firebase user is null"))
+                } ?: Result.failure(Exception("Firebase user is null"))
             } catch (e: Exception) {
                 Result.failure(e)
             }
@@ -64,36 +64,6 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
         deffered.await()
     }
 
-
-    override suspend fun registerUser(
-        email: String,
-        password: String,
-        role: String,
-        farmId: String
-    ): Result<Boolean> = coroutineScope {
-
-        val deferred = async(Dispatchers.IO) {
-            try {
-                val authResult = firebaseAuth.createUserWithEmailAndPassword(email, password).await()
-                val firebaseUser = authResult.user
-
-                firebaseUser?.let {
-                    val user = User(email = email, role = role, farmId = farmId)
-                    firebaseFirestore.collection(FARMS_COLLECTION).document(farmId).collection(
-                        USERS_COLLECTION
-                    )
-                        .document(firebaseUser.uid)
-                        .set(user)
-                        .await()
-                    Result.success(true)
-                } ?: Result.failure(Exception("Firebase user is null"))
-            } catch (e: Exception) {
-                Result.failure(e)
-            }
-        }
-
-        deferred.await()
-    }
 
     override suspend fun registerUser(
         email: String,
