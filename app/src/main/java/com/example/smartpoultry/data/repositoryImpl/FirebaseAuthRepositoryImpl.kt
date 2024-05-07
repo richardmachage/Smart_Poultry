@@ -60,35 +60,11 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
                 Result.failure(e)
             }
         }
-        /* try {
-            // Create a new document reference for the farm
-            val newFarm = firebaseFirestore.collection(FARMS_COLLECTION).document()
 
-            // Set farm details synchronously using coroutines instead of listeners
-            newFarm.set(Farm(name = farmName, id = newFarm.id, superUserEmail = email)).await()
-
-            // Proceed to register user
-            try {
-                val registerResult = registerUser(email, password, role, newFarm.id)
-                return@coroutineScope registerResult  // Returns the Result from registerUser directly
-            } catch (e: Exception) {
-                // If user registration fails, attempt to delete the new farm document to clean up
-                newFarm.delete()
-                throw e  // Re-throw exception to be handled by the outer catch
-            }
-        } catch (e: Exception) {
-            return@coroutineScope Result.failure(e)  // Capture any exception and return as failure
-        }*/
         deffered.await()
     }
 
 
-/*
-    suspend fun registerUser(email: String, password: String, role: String, farmId: String): Result<Boolean> {
-        // Placeholder for user registration logic
-        return Result.success(true)  // Simulated result
-    }
-*/
     override suspend fun registerUser(
         email: String,
         password: String,

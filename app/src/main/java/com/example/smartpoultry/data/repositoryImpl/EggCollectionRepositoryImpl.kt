@@ -4,8 +4,6 @@ import android.util.Log
 import com.example.smartpoultry.data.dataModels.DailyEggCollection
 import com.example.smartpoultry.data.dataModels.EggRecordFull
 import com.example.smartpoultry.data.dataSource.datastore.AppDataStore
-import com.example.smartpoultry.data.dataSource.remote.firebase.BLOCKS_COLLECTION
-import com.example.smartpoultry.data.dataSource.remote.firebase.CELLS_COLLECTION
 import com.example.smartpoultry.data.dataSource.remote.firebase.EGGS_COLLECTION
 import com.example.smartpoultry.data.dataSource.remote.firebase.FARMS_COLLECTION
 import com.example.smartpoultry.data.dataSource.remote.firebase.models.EggCollectionFb
@@ -26,8 +24,6 @@ class EggCollectionRepositoryImpl @Inject constructor(
     private val fireStoreDb: FirebaseFirestore,
     dataStore: AppDataStore
 ) : EggCollectionRepository {
-    private val blocksCollectionPath = FARMS_COLLECTION +"/"+dataStore.farmID+"/"+ BLOCKS_COLLECTION
-    private val cellsCollectionPath = FARMS_COLLECTION +"/"+dataStore.farmID+"/"+ CELLS_COLLECTION
     private val eggsCollectionPath = FARMS_COLLECTION +"/"+dataStore.farmID+"/"+ EGGS_COLLECTION
     init {
        listenForFireStoreChanges()
