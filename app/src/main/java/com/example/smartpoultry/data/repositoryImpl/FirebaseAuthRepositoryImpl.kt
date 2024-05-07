@@ -157,7 +157,7 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
                     // Optionally, you can perform additional checks or fetch user details from Firestore if needed.
                     // For simplicity, we're just checking if the Firebase user is not null.
                     firebaseFirestore
-                        .collection("Users")
+                        .collection(USERS_COLLECTION)
                         .document(firebaseUser.uid)
                         .get()
                         .addOnSuccessListener { documentSnapshot ->
@@ -217,8 +217,8 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
     @OptIn(ExperimentalCoroutinesApi::class)
     override suspend fun editUserName(name: String): Result<Boolean> {
         val result = CompletableDeferred<Boolean>()
-        firebaseFirestore.collection("Users")
-            .document(firebaseAuth.uid.toString())
+        firebaseFirestore.collection(USERS_COLLECTION)
+            .document(firebaseAuth.currentUser?.uid.toString())//firebaseAuth.uid.toString())
             .update("name", name)
             .addOnSuccessListener {
                 result.complete(true)
@@ -226,7 +226,6 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
             .addOnFailureListener {
                 result.completeExceptionally(it)
             }
-        //.await()
 
         return if (result.await()) Result.success(true) else Result.failure(result.getCompletionExceptionOrNull()!!)
     }
