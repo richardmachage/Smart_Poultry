@@ -12,6 +12,7 @@ import com.example.smartpoultry.data.dataSource.room.entities.blocks.Blocks
 import com.example.smartpoultry.data.dataSource.room.entities.blocks.BlocksDao
 import com.example.smartpoultry.data.dataSource.room.relations.BlocksWithCells
 import com.example.smartpoultry.domain.repository.BlocksRepository
+import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.CoroutineScope
@@ -27,23 +28,28 @@ class BlocksRepositoryImpl @Inject constructor(
     //dataStore: AppDataStore
     firestorePathProvider: FirestorePathProvider
 ) : BlocksRepository {
+    private var blocksCollection:CollectionReference? = null
     private val farmsCollection = fireStoreDB.collection(FARMS_COLLECTION)
     private val farmDocument = farmsCollection.document("710uve6Bmd25yAXcnPfr")//dataStore.farmID)
-    private val blocksCollection = farmDocument.collection(BLOCKS_COLLECTION)
+    //private val blocksCollection = farmDocument.collection(BLOCKS_COLLECTION)
     private val cellsCollection = farmDocument.collection(CELLS_COLLECTION)
    // private val blocksCollectionPath = fireStoreDB.collection(FARMS_COLLECTION).document(dataStore.farmID).collection(BLOCKS_COLLECTION)
     //private val cellsCollectionPath = fireStoreDB.collection(FARMS_COLLECTION).document(dataStore.farmID).collection(CELLS_COLLECTION)
     init {
-
-        listenForFireStoreChanges()
+        CoroutineScope(Dispatchers.IO).launch {
+            firestorePathProvider.blocksCollectionFlow.collect{
+                blocksCollection = it
+                listenForFireStoreChanges()
+            }
+        }
     }
 
     private fun listenForFireStoreChanges() {
         //fireStoreDB.collection(blocksCollectionPath.path)
-            blocksCollection.addSnapshotListener { querySnapshot, exception ->
+            blocksCollection?.addSnapshotListener { querySnapshot, exception ->
 
             if (exception != null) { //if an error exists, it logs the error and returns early from the listener.
-                Log.w("Error", "Listen failed.", exception)
+                Log.w("BlocksRepository", "Listening to Firestore changes failed.", exception)
                 return@addSnapshotListener
             }
 
@@ -77,19 +83,19 @@ class BlocksRepositoryImpl @Inject constructor(
         val blockId = blocksDao.addNewBlock(block)
         //fireStoreDB.collection(blocksCollectionPath.path)
             blocksCollection
-            .document(blockId.toString())
-            .set(
+            ?.document(blockId.toString())
+            ?.set(
                 Blocks(
                     blockId = blockId.toInt(),
                     blockNum = block.blockNum,
                     totalCells = block.totalCells
                 )
             )
-            .addOnSuccessListener {
+            ?.addOnSuccessListener {
 
             }
-            .addOnFailureListener {
-
+            ?.addOnFailureListener {
+                Log.e("BlocksRepository", "Failed to add block to Firestore.", it)
             }
         return blockId
     }
@@ -105,12 +111,12 @@ class BlocksRepositoryImpl @Inject constructor(
         //then delete the block in the remote data source to allow for synchronization
         //fireStoreDB.collection(blocksCollectionPath.path)
             blocksCollection
-            .document(block.blockId.toString())
-            .delete()
-            .addOnSuccessListener {
+            ?.document(block.blockId.toString())
+            ?.delete()
+            ?.addOnSuccessListener {
 
             }
-            .addOnFailureListener {
+            ?.addOnFailureListener {
 
             }
 

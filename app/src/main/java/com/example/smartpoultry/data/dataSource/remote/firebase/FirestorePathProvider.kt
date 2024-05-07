@@ -5,28 +5,27 @@ import com.example.smartpoultry.data.dataSource.datastore.FARM_ID_KEY
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class FirestorePathProvider @Inject constructor(
     private val dataStore: AppDataStore,
     private val firestoreDb: FirebaseFirestore
 ) {
-    val farmsCollection = firestoreDb.collection("Farms")
-    var farmDocument : DocumentReference? = null
-    var blocksCollection: CollectionReference? = null
-    var cellsCollection : CollectionReference? = null
+    private val farmIDFlow = dataStore.readData(FARM_ID_KEY).filter { it.isNotEmpty() }.distinctUntilChanged()
 
-    init{
-        CoroutineScope(Dispatchers.IO).launch{
-            dataStore.readData(FARM_ID_KEY).filter { it.isNotBlank() }.collect{id->
-                farmDocument = farmsCollection.document(id)
-                blocksCollection = farmDocument?.collection("Blocks")
-                cellsCollection = farmDocument?.collection("Cells")
-            }
-        }
+    val farmDocumentFlow: Flow<DocumentReference> = farmIDFlow.map { farmId->
+        firestoreDb.collection("Farms").document(farmId)
+    }
+
+    val blocksCollectionFlow: Flow<CollectionReference> = farmDocumentFlow.map { farmDocument ->
+        farmDocument.collection("Blocks")
+    }
+
+    val cellsCollectionFlow: Flow<CollectionReference> = farmDocumentFlow.map { farmDocument ->
+        farmDocument.collection("Cells")
     }
 }
