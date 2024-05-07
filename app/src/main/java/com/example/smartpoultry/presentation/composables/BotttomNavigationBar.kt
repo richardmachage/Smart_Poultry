@@ -28,7 +28,7 @@ fun MyBottomNavBar(
     navController: NavController,
     userRole : String
 ) {
-    val items = if (userRole == "Collector" || userRole == "Manager")listOf<BottomNavigationItem>(
+    val items = if (userRole == "Collector" || userRole == "Manager" || userRole == "Super")listOf<BottomNavigationItem>(
         BottomNavigationItem(
             route = HomeScreenDestination.route,
             title = "Home",
