@@ -31,7 +31,7 @@ const val FARM_ID_KEY = "farm_id"
 class AppDataStore @Inject constructor(
     private val dataStore: DataStore<Preferences>,
     private val fireStoreDB: FirebaseFirestore,
-    private val fireBaseAuth: FirebaseAuth
+    private val fireBaseAuth: FirebaseAuth,
 ) {
 
     var farmID by mutableStateOf("")
