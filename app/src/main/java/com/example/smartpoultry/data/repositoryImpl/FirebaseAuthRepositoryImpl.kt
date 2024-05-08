@@ -2,6 +2,7 @@ package com.example.smartpoultry.data.repositoryImpl
 
 import com.example.smartpoultry.data.dataSource.datastore.AppDataStore
 import com.example.smartpoultry.data.dataSource.datastore.FARM_ID_KEY
+import com.example.smartpoultry.data.dataSource.datastore.PreferencesRepo
 import com.example.smartpoultry.data.dataSource.datastore.USER_EMAIL_KEY
 import com.example.smartpoultry.data.dataSource.datastore.USER_NAME_KEY
 import com.example.smartpoultry.data.dataSource.datastore.USER_PHONE_KEY
@@ -27,7 +28,8 @@ import javax.inject.Inject
 class FirebaseAuthRepositoryImpl @Inject constructor(
     private val firebaseAuth: FirebaseAuth,
     private val firebaseFirestore: FirebaseFirestore,
-    private val dataStore: AppDataStore
+    private val dataStore: AppDataStore,
+    private val preferencesRepo: PreferencesRepo
 ) : FirebaseAuthRepository {
 
     override suspend fun signUp(
@@ -118,6 +120,10 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
                                 user?.let { user ->
                                     dataStore.saveData(FARM_ID_KEY, user.farmId)
                                 }
+                            }
+                            //user farm
+                            user?.let {
+                                preferencesRepo.saveData(FARM_ID_KEY,user.farmId)
                             }
 
                             //user Role
