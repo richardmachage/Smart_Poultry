@@ -40,77 +40,121 @@ class BlocksRepositoryImpl @Inject constructor(
     // private var blocksCollection:CollectionReference = firestorePathProvider.blocksCollection
     private val farmsCollection = fireStoreDB.collection(FARMS_COLLECTION)
 
-    private  var farmDocument : DocumentReference //farmsCollection.document("710uve6Bmd25yAXcnPfr")//dataStore.farmID)
-    private  var blocksCollection : CollectionReference //= farmDocument.collection(BLOCKS_COLLECTION)
-    private  var cellsCollection : CollectionReference// farmDocument.collection(CELLS_COLLECTION)
+    private lateinit var farmDocument : DocumentReference //farmsCollection.document("710uve6Bmd25yAXcnPfr")//dataStore.farmID)
+    private lateinit var blocksCollection : CollectionReference //= farmDocument.collection(BLOCKS_COLLECTION)
+    private lateinit var cellsCollection : CollectionReference// farmDocument.collection(CELLS_COLLECTION)
     //private lateinit var  blocksCollectionPath : CollectionReference//= fireStoreDB.collection(FARMS_COLLECTION).document(dataStore.farmID).collection(BLOCKS_COLLECTION)
     //private lateinit var cellsCollectionPath : CollectionReference// = fireStoreDB.collection(FARMS_COLLECTION).document(dataStore.farmID).collection(CELLS_COLLECTION)
     init {
-//        blocksCollection = firestorePathProvider.blocksCollection
-        listenForFireStoreChanges()
         val farmID = preferencesRepo.loadData(FARM_ID_KEY)?:""
-        farmDocument = farmsCollection.document(farmID)
-        blocksCollection = farmDocument.collection(BLOCKS_COLLECTION)
-        cellsCollection = farmDocument.collection(CELLS_COLLECTION)
+        if (farmID.isNotBlank()){
+            farmDocument = farmsCollection.document(farmID)
+            blocksCollection = farmDocument.collection(BLOCKS_COLLECTION)
+            cellsCollection = farmDocument.collection(CELLS_COLLECTION)
+        }
+        listenForFireStoreChanges()
+
     }
 
 
     private fun listenForFireStoreChanges() {
-        //fireStoreDB.collection(blocksCollectionPath.path)
+        //check if farmId exists
+        val farmId = preferencesRepo.loadData(FARM_ID_KEY)?:""
 
-        //try to retrieve farm Id here
-        fireStoreDB.collection(USERS_COLLECTION)
-            .document(firebaseAuth.currentUser?.uid.toString())
-            .get()
-            .addOnSuccessListener { docSnapshot ->
-                val user = docSnapshot.toObject(User::class.java)
-                //Log.d("Farm ID", "From Listener: ${user?.farmId}")
+        if (farmId.isNotBlank()){
+            blocksCollection.addSnapshotListener { querySnapshot, exception ->
 
-                //proceed to the rest of the code after getting the ID
-                user?.let {
-                    //store the id in preferences
-                    preferencesRepo.saveData(FARM_ID_KEY, user.farmId)
-                    //Log.d("Farm ID", "From Preferences: ${preferencesRepo.loadData(FARM_ID_KEY)}")
-                    val farmDoc = farmsCollection.document(it.farmId)
-                    val blockColle = farmDoc.collection(BLOCKS_COLLECTION)
-                    blockColle.addSnapshotListener { querySnapshot, exception ->
+                if (exception != null) { //if an error exists, it logs the error and returns early from the listener.
+                    Log.w(
+                        "BlocksRepository",
+                        "Listening to Firestore changes failed.",
+                        exception
+                    )
+                    return@addSnapshotListener
+                }
 
-                        if (exception != null) { //if an error exists, it logs the error and returns early from the listener.
-                            Log.w(
-                                "BlocksRepository",
-                                "Listening to Firestore changes failed.",
-                                exception
-                            )
-                            return@addSnapshotListener
+
+                for (docChange in querySnapshot!!.documentChanges) {
+                    val block =
+                        docChange.document.toObject(Blocks::class.java) //For each change, it converts the document to a Blocks object
+
+                    when (docChange.type) {
+                        DocumentChange.Type.ADDED,
+                        DocumentChange.Type.MODIFIED -> {
+                            CoroutineScope(Dispatchers.IO).launch {
+                                blocksDao.addNewBlock(block)
+
+                            }
                         }
 
+                        DocumentChange.Type.REMOVED -> {
+                            CoroutineScope(Dispatchers.IO).launch {
+                                blocksDao.deleteBlock(block)
+                                blocksDao.deleteCellsForBlock(blockId = block.blockId)
 
-                        for (docChange in querySnapshot!!.documentChanges) {
-                            val block =
-                                docChange.document.toObject(Blocks::class.java) //For each change, it converts the document to a Blocks object
+                            }
+                        }
+                    }
+                }
+            }
+        }else{
+            //try to retrieve farm Id first here
+            fireStoreDB.collection(USERS_COLLECTION)
+                .document(firebaseAuth.currentUser?.uid.toString())
+                .get()
+                .addOnSuccessListener { docSnapshot ->
+                    val user = docSnapshot.toObject(User::class.java)
+                    //Log.d("Farm ID", "From Listener: ${user?.farmId}")
 
-                            when (docChange.type) {
-                                DocumentChange.Type.ADDED,
-                                DocumentChange.Type.MODIFIED -> {
-                                    CoroutineScope(Dispatchers.IO).launch {
-                                        blocksDao.addNewBlock(block)
+                    //proceed to the rest of the code after getting the ID
+                    user?.let {
+                        //store the id in preferences
+                        preferencesRepo.saveData(FARM_ID_KEY, user.farmId)
+                        //Log.d("Farm ID", "From Preferences: ${preferencesRepo.loadData(FARM_ID_KEY)}")
+                        val farmDoc = farmsCollection.document(it.farmId)
+                        val blockColle = farmDoc.collection(BLOCKS_COLLECTION)
+                        blockColle.addSnapshotListener { querySnapshot, exception ->
 
+                            if (exception != null) { //if an error exists, it logs the error and returns early from the listener.
+                                Log.w(
+                                    "BlocksRepository",
+                                    "Listening to Firestore changes failed.",
+                                    exception
+                                )
+                                return@addSnapshotListener
+                            }
+
+
+                            for (docChange in querySnapshot!!.documentChanges) {
+                                val block =
+                                    docChange.document.toObject(Blocks::class.java) //For each change, it converts the document to a Blocks object
+
+                                when (docChange.type) {
+                                    DocumentChange.Type.ADDED,
+                                    DocumentChange.Type.MODIFIED -> {
+                                        CoroutineScope(Dispatchers.IO).launch {
+                                            blocksDao.addNewBlock(block)
+
+                                        }
                                     }
-                                }
 
-                                DocumentChange.Type.REMOVED -> {
-                                    CoroutineScope(Dispatchers.IO).launch {
-                                        blocksDao.deleteBlock(block)
-                                        blocksDao.deleteCellsForBlock(blockId = block.blockId)
+                                    DocumentChange.Type.REMOVED -> {
+                                        CoroutineScope(Dispatchers.IO).launch {
+                                            blocksDao.deleteBlock(block)
+                                            blocksDao.deleteCellsForBlock(blockId = block.blockId)
 
+                                        }
                                     }
                                 }
                             }
                         }
                     }
-                }
 
-            }
+                }
+        }
+
+
+
 
     }
 

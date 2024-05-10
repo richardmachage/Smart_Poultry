@@ -31,20 +31,23 @@ class CellsRepositoryImpl @Inject constructor(
 ) : CellsRepository {
     // private val cellsCollectionPath = fireStoreDb.collection(FARMS_COLLECTION).document(dataStore.farmID).collection(CELLS_COLLECTION)
     private val farmsCollection = fireStoreDb.collection(FARMS_COLLECTION)
-    private  var farmDocument : DocumentReference //farmsCollection.document("710uve6Bmd25yAXcnPfr")//dataStore.farmID)
-    private  var cellsCollection : CollectionReference// farmDocument.collection(CELLS_COLLECTION)
+    private lateinit var farmDocument : DocumentReference //farmsCollection.document("710uve6Bmd25yAXcnPfr")//dataStore.farmID)
+    private lateinit var cellsCollection : CollectionReference// farmDocument.collection(CELLS_COLLECTION)
 
     init {
         val farmID = preferencesRepo.loadData(FARM_ID_KEY)?:""
-        farmDocument = farmsCollection.document(farmID)
-        cellsCollection = farmDocument.collection(CELLS_COLLECTION)
+        if (farmID.isNotBlank()){
+            farmDocument = farmsCollection.document(farmID)
+            cellsCollection = farmDocument.collection(CELLS_COLLECTION)
+        }
+
         listenForFireStoreChanges()
 
     }
 
 
     private fun listenForFireStoreChanges() {
-        //check is farmId exists
+        //check if farmId exists
         val farmId = preferencesRepo.loadData(FARM_ID_KEY)?:""
 
         if (farmId.isNotBlank()){
@@ -113,7 +116,7 @@ class CellsRepositoryImpl @Inject constructor(
                         preferencesRepo.saveData(FARM_ID_KEY, it.farmId)
                         val farmID = preferencesRepo.loadData(FARM_ID_KEY)?:""
                         val farmDoc = farmsCollection.document(farmID)
-                        val cellsColle = farmDocument.collection(CELLS_COLLECTION)
+                        val cellsColle = farmDoc.collection(CELLS_COLLECTION)
 
                         cellsColle.addSnapshotListener { querySnapshot, exception ->
                             if (exception != null) { //if an error exists, it logs the error and returns early from the listener.
