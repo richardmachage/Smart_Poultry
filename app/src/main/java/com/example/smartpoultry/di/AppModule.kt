@@ -48,8 +48,8 @@ object AppModule {
     }
         @Provides
     @Singleton
-    fun providesBlocksRepository(database: SmartPoultryDatabase, firestore: FirebaseFirestore, firestorePathProvider: FirestorePathProvider, firebaseAuth: FirebaseAuth): BlocksRepository{
-        return BlocksRepositoryImpl(database.blocksDao(), firestore ,firebaseAuth = firebaseAuth, firestorePathProvider= firestorePathProvider)
+    fun providesBlocksRepository(database: SmartPoultryDatabase, firestore: FirebaseFirestore, firestorePathProvider: FirestorePathProvider, firebaseAuth: FirebaseAuth, preferencesRepo: PreferencesRepo): BlocksRepository{
+        return BlocksRepositoryImpl(database.blocksDao(), firestore ,firebaseAuth = firebaseAuth, firestorePathProvider= firestorePathProvider, preferencesRepo)
     }
 
     @Provides

@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import com.example.smartpoultry.data.dataSource.datastore.AppDataStore
 import com.example.smartpoultry.data.dataSource.datastore.FARM_ID_KEY
+import com.example.smartpoultry.data.dataSource.datastore.PreferencesRepo
 import com.example.smartpoultry.data.dataSource.remote.firebase.BLOCKS_COLLECTION
 import com.example.smartpoultry.data.dataSource.remote.firebase.CELLS_COLLECTION
 import com.example.smartpoultry.data.dataSource.remote.firebase.FARMS_COLLECTION
@@ -17,6 +18,7 @@ import com.example.smartpoultry.domain.repository.BlocksRepository
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentChange
+import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.toObject
 import kotlinx.coroutines.CoroutineScope
@@ -32,18 +34,24 @@ class BlocksRepositoryImpl @Inject constructor(
     private val fireStoreDB: FirebaseFirestore,
     private val firebaseAuth: FirebaseAuth,
     //dataStore: AppDataStore
-    firestorePathProvider: FirestorePathProvider
+    firestorePathProvider: FirestorePathProvider,
+    private val preferencesRepo: PreferencesRepo
 ) : BlocksRepository {
-   // private var blocksCollection:CollectionReference = firestorePathProvider.blocksCollection
+    // private var blocksCollection:CollectionReference = firestorePathProvider.blocksCollection
     private val farmsCollection = fireStoreDB.collection(FARMS_COLLECTION)
-    private val farmDocument = farmsCollection.document("710uve6Bmd25yAXcnPfr")//dataStore.farmID)
-    private val blocksCollection = farmDocument.collection(BLOCKS_COLLECTION)
-    private val cellsCollection = farmDocument.collection(CELLS_COLLECTION)
-   // private val blocksCollectionPath = fireStoreDB.collection(FARMS_COLLECTION).document(dataStore.farmID).collection(BLOCKS_COLLECTION)
-    //private val cellsCollectionPath = fireStoreDB.collection(FARMS_COLLECTION).document(dataStore.farmID).collection(CELLS_COLLECTION)
+
+    private lateinit var farmDocument : DocumentReference //farmsCollection.document("710uve6Bmd25yAXcnPfr")//dataStore.farmID)
+    private lateinit var blocksCollection : CollectionReference //= farmDocument.collection(BLOCKS_COLLECTION)
+    private lateinit var cellsCollection : CollectionReference// farmDocument.collection(CELLS_COLLECTION)
+    //private lateinit var  blocksCollectionPath : CollectionReference//= fireStoreDB.collection(FARMS_COLLECTION).document(dataStore.farmID).collection(BLOCKS_COLLECTION)
+    //private lateinit var cellsCollectionPath : CollectionReference// = fireStoreDB.collection(FARMS_COLLECTION).document(dataStore.farmID).collection(CELLS_COLLECTION)
     init {
 //        blocksCollection = firestorePathProvider.blocksCollection
-    listenForFireStoreChanges()
+        listenForFireStoreChanges()
+        val farmID = preferencesRepo.loadData(FARM_ID_KEY)?:""
+        farmDocument = farmsCollection.document(farmID)
+        blocksCollection = farmDocument.collection(BLOCKS_COLLECTION)
+        cellsCollection = farmDocument.collection(CELLS_COLLECTION)
     }
 
 
@@ -54,46 +62,58 @@ class BlocksRepositoryImpl @Inject constructor(
         fireStoreDB.collection(USERS_COLLECTION)
             .document(firebaseAuth.currentUser?.uid.toString())
             .get()
-            .addOnSuccessListener {docSnapshot->
+            .addOnSuccessListener { docSnapshot ->
                 val user = docSnapshot.toObject(User::class.java)
-                //Log.d("Farm ID", "From Listener: ${user?.farmId}")
-                 //then proceed to the rest of the code after getting the ID
+                Log.d("Farm ID", "From Listener: ${user?.farmId}")
+
+                //proceed to the rest of the code after getting the ID
+                user?.let {
+                    //store the id in preferences
+                    preferencesRepo.saveData(FARM_ID_KEY, user.farmId)
+                    Log.d("Farm ID", "From Preferences: ${preferencesRepo.loadData(FARM_ID_KEY)}")
 
 
-            }
-           // .await()
+                    val farmDoc = farmsCollection.document(it.farmId)
+                    val blockColle = farmDoc.collection(BLOCKS_COLLECTION)
+                    blockColle.addSnapshotListener { querySnapshot, exception ->
 
-        blocksCollection.addSnapshotListener { querySnapshot, exception ->
-
-            if (exception != null) { //if an error exists, it logs the error and returns early from the listener.
-                Log.w("BlocksRepository", "Listening to Firestore changes failed.", exception)
-                return@addSnapshotListener
-            }
-
-
-            for (docChange in querySnapshot!!.documentChanges) {
-                val block =
-                    docChange.document.toObject(Blocks::class.java) //For each change, it converts the document to a Blocks object
-
-                when (docChange.type) {
-                    DocumentChange.Type.ADDED,
-                    DocumentChange.Type.MODIFIED -> {
-                        CoroutineScope(Dispatchers.IO).launch {
-                            blocksDao.addNewBlock(block)
-
+                        if (exception != null) { //if an error exists, it logs the error and returns early from the listener.
+                            Log.w(
+                                "BlocksRepository",
+                                "Listening to Firestore changes failed.",
+                                exception
+                            )
+                            return@addSnapshotListener
                         }
-                    }
 
-                    DocumentChange.Type.REMOVED -> {
-                        CoroutineScope(Dispatchers.IO).launch {
-                            blocksDao.deleteBlock(block)
-                            blocksDao.deleteCellsForBlock(blockId = block.blockId)
 
+                        for (docChange in querySnapshot!!.documentChanges) {
+                            val block =
+                                docChange.document.toObject(Blocks::class.java) //For each change, it converts the document to a Blocks object
+
+                            when (docChange.type) {
+                                DocumentChange.Type.ADDED,
+                                DocumentChange.Type.MODIFIED -> {
+                                    CoroutineScope(Dispatchers.IO).launch {
+                                        blocksDao.addNewBlock(block)
+
+                                    }
+                                }
+
+                                DocumentChange.Type.REMOVED -> {
+                                    CoroutineScope(Dispatchers.IO).launch {
+                                        blocksDao.deleteBlock(block)
+                                        blocksDao.deleteCellsForBlock(blockId = block.blockId)
+
+                                    }
+                                }
+                            }
                         }
                     }
                 }
+
             }
-        }
+
     }
 
     override suspend fun addNewBlock(block: Blocks): Long {
@@ -127,7 +147,7 @@ class BlocksRepositoryImpl @Inject constructor(
 
         //then delete the block in the remote data source to allow for synchronization
         //fireStoreDB.collection(blocksCollectionPath.path)
-            blocksCollection
+        blocksCollection
             .document(block.blockId.toString())
             .delete()
             .addOnSuccessListener {
@@ -139,7 +159,7 @@ class BlocksRepositoryImpl @Inject constructor(
 
         //Then delete the cells of the block as well in the cells collection
         //fireStoreDB.collection(cellsCollectionPath.path)
-            cellsCollection
+        cellsCollection
             .whereEqualTo("blockId", block.blockId)
             .get()
             .addOnSuccessListener { querySnapshot ->
@@ -147,7 +167,7 @@ class BlocksRepositoryImpl @Inject constructor(
 
                 fireStoreDB.runBatch { batch ->
                     querySnapshot.documents.forEach { document ->
-                       // Log.i("Firebase", "deleting cell ${document.id}")
+                        // Log.i("Firebase", "deleting cell ${document.id}")
                         batch.delete(cellsCollection.document(document.id))
                     }
                 }.addOnCompleteListener {
