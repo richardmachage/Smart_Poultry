@@ -28,25 +28,23 @@ class BlocksRepositoryImpl @Inject constructor(
     //dataStore: AppDataStore
     firestorePathProvider: FirestorePathProvider
 ) : BlocksRepository {
-    private var blocksCollection:CollectionReference? = null
+   // private var blocksCollection:CollectionReference = firestorePathProvider.blocksCollection
     private val farmsCollection = fireStoreDB.collection(FARMS_COLLECTION)
     private val farmDocument = farmsCollection.document("710uve6Bmd25yAXcnPfr")//dataStore.farmID)
-    //private val blocksCollection = farmDocument.collection(BLOCKS_COLLECTION)
+    private val blocksCollection = farmDocument.collection(BLOCKS_COLLECTION)
     private val cellsCollection = farmDocument.collection(CELLS_COLLECTION)
    // private val blocksCollectionPath = fireStoreDB.collection(FARMS_COLLECTION).document(dataStore.farmID).collection(BLOCKS_COLLECTION)
     //private val cellsCollectionPath = fireStoreDB.collection(FARMS_COLLECTION).document(dataStore.farmID).collection(CELLS_COLLECTION)
     init {
-        CoroutineScope(Dispatchers.IO).launch {
-            firestorePathProvider.blocksCollectionFlow.collect{
-                blocksCollection = it
-                listenForFireStoreChanges()
-            }
-        }
+//        blocksCollection = firestorePathProvider.blocksCollection
+    listenForFireStoreChanges()
     }
+
 
     private fun listenForFireStoreChanges() {
         //fireStoreDB.collection(blocksCollectionPath.path)
-            blocksCollection?.addSnapshotListener { querySnapshot, exception ->
+
+        blocksCollection.addSnapshotListener { querySnapshot, exception ->
 
             if (exception != null) { //if an error exists, it logs the error and returns early from the listener.
                 Log.w("BlocksRepository", "Listening to Firestore changes failed.", exception)
@@ -82,19 +80,19 @@ class BlocksRepositoryImpl @Inject constructor(
     override suspend fun addNewBlock(block: Blocks): Long {
         val blockId = blocksDao.addNewBlock(block)
         //fireStoreDB.collection(blocksCollectionPath.path)
-            blocksCollection
-            ?.document(blockId.toString())
-            ?.set(
+        blocksCollection
+            .document(blockId.toString())
+            .set(
                 Blocks(
                     blockId = blockId.toInt(),
                     blockNum = block.blockNum,
                     totalCells = block.totalCells
                 )
             )
-            ?.addOnSuccessListener {
+            .addOnSuccessListener {
 
             }
-            ?.addOnFailureListener {
+            .addOnFailureListener {
                 Log.e("BlocksRepository", "Failed to add block to Firestore.", it)
             }
         return blockId
@@ -111,12 +109,12 @@ class BlocksRepositoryImpl @Inject constructor(
         //then delete the block in the remote data source to allow for synchronization
         //fireStoreDB.collection(blocksCollectionPath.path)
             blocksCollection
-            ?.document(block.blockId.toString())
-            ?.delete()
-            ?.addOnSuccessListener {
+            .document(block.blockId.toString())
+            .delete()
+            .addOnSuccessListener {
 
             }
-            ?.addOnFailureListener {
+            .addOnFailureListener {
 
             }
 

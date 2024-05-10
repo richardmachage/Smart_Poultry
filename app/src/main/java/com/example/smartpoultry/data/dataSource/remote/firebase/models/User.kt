@@ -5,5 +5,5 @@ data class User(
     val phone : String = "",
     val email : String = "",
     val role : String = "",
-    val farmId:String = ""
+    var farmId:String = ""
 )

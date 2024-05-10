@@ -46,7 +46,7 @@ object AppModule {
     fun providesFirebaseFireStoreInstance(): FirebaseFirestore{
         return FirebaseFirestore.getInstance()
     }
-    @Provides
+        @Provides
     @Singleton
     fun providesBlocksRepository(database: SmartPoultryDatabase, firestore: FirebaseFirestore, firestorePathProvider: FirestorePathProvider): BlocksRepository{
         return BlocksRepositoryImpl(database.blocksDao(), firestore,firestorePathProvider )

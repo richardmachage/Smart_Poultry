@@ -1,5 +1,6 @@
 package com.example.smartpoultry.data.repositoryImpl
 
+import android.util.Log
 import com.example.smartpoultry.data.dataSource.datastore.AppDataStore
 import com.example.smartpoultry.data.dataSource.datastore.FARM_ID_KEY
 import com.example.smartpoultry.data.dataSource.datastore.PreferencesRepo
@@ -119,12 +120,10 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
                             CoroutineScope(Dispatchers.IO).launch {
                                 user?.let { user ->
                                     dataStore.saveData(FARM_ID_KEY, user.farmId)
+                                    Log.d("Farm","saving farm to datastore: ${user.farmId}")
                                 }
                             }
-                            //user farm
-                            user?.let {
-                                preferencesRepo.saveData(FARM_ID_KEY,user.farmId)
-                            }
+
 
                             //user Role
                             CoroutineScope(Dispatchers.IO).launch {

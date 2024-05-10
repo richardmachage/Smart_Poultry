@@ -98,7 +98,7 @@ class TrendAnalysis @Inject constructor(
                 var count = 0
                 for (record in records){
                     val ratio = record.eggCount.toFloat() / record.henCount.toFloat()
-                    Log.d("Compare", "is $ratio < $THRESHOLD_RATIO")
+                   // Log.d("Compare", "is $ratio < $THRESHOLD_RATIO")
                     if (ratio <= THRESHOLD_RATIO){
                         count++
                         if (count >= CONSUCUTIVE_DAYS) result = true
@@ -106,7 +106,7 @@ class TrendAnalysis @Inject constructor(
                         count = 0
                     }
                 }
-                Log.d("Flag status", "isFlagged $result")
+               // Log.d("Flag status", "isFlagged $result")
                 isUnderPerforming.complete(result)
             }
         }
