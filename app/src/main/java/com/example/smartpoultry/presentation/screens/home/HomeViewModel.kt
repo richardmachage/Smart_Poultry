@@ -7,6 +7,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.smartpoultry.data.dataModels.DailyEggCollection
 import com.example.smartpoultry.data.dataSource.datastore.AppDataStore
+import com.example.smartpoultry.data.dataSource.datastore.FARM_ID_KEY
+import com.example.smartpoultry.data.dataSource.datastore.PreferencesRepo
 import com.example.smartpoultry.data.dataSource.datastore.USER_NAME_KEY
 import com.example.smartpoultry.data.dataSource.datastore.USER_ROLE_KEY
 import com.example.smartpoultry.domain.reports.Report
@@ -30,11 +32,12 @@ class HomeViewModel @Inject constructor(
     val eggCollectionRepository: EggCollectionRepository,
     val report: Report,
     val dataStore: AppDataStore,
+    val preferencesRepo: PreferencesRepo
    // @ApplicationContext val context: Context
 ) : ViewModel() {
 
 
-    var farmId = dataStore.farmID
+    var farmId = preferencesRepo.loadData(FARM_ID_KEY)?:""
     val userRole = dataStore.readData(USER_ROLE_KEY).stateIn(
         scope = viewModelScope,
         started = SharingStarted.Eagerly,

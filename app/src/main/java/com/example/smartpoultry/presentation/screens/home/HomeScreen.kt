@@ -84,7 +84,7 @@ fun HomeScreen(
                 .verticalScroll(rememberScrollState())
         ) {
             MyVerticalSpacer(height = 5)
-            //Type of role card
+            //Greeting card
             if (userName.isNotBlank()) {
                 MyCard(
                     modifier = Modifier
