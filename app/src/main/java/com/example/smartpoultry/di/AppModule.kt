@@ -60,8 +60,8 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun providesCellsRepository(database: SmartPoultryDatabase, fireStoreDb: FirebaseFirestore, dataStore: AppDataStore): CellsRepository{
-        return CellsRepositoryImpl(cellsDao = database.cellsDao(), fireStoreDb = fireStoreDb, dataStore = dataStore)
+    fun providesCellsRepository(database: SmartPoultryDatabase, fireStoreDb: FirebaseFirestore, dataStore: AppDataStore, preferencesRepo: PreferencesRepo, firebaseAuth: FirebaseAuth): CellsRepository{
+        return CellsRepositoryImpl(cellsDao = database.cellsDao(), fireStoreDb = fireStoreDb, preferencesRepo=preferencesRepo, firebaseAuth = firebaseAuth)
     }
 
     @Provides

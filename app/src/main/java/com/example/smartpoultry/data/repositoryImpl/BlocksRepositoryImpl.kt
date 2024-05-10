@@ -64,15 +64,13 @@ class BlocksRepositoryImpl @Inject constructor(
             .get()
             .addOnSuccessListener { docSnapshot ->
                 val user = docSnapshot.toObject(User::class.java)
-                Log.d("Farm ID", "From Listener: ${user?.farmId}")
+                //Log.d("Farm ID", "From Listener: ${user?.farmId}")
 
                 //proceed to the rest of the code after getting the ID
                 user?.let {
                     //store the id in preferences
                     preferencesRepo.saveData(FARM_ID_KEY, user.farmId)
-                    Log.d("Farm ID", "From Preferences: ${preferencesRepo.loadData(FARM_ID_KEY)}")
-
-
+                    //Log.d("Farm ID", "From Preferences: ${preferencesRepo.loadData(FARM_ID_KEY)}")
                     val farmDoc = farmsCollection.document(it.farmId)
                     val blockColle = farmDoc.collection(BLOCKS_COLLECTION)
                     blockColle.addSnapshotListener { querySnapshot, exception ->
