@@ -40,9 +40,9 @@ class BlocksRepositoryImpl @Inject constructor(
     // private var blocksCollection:CollectionReference = firestorePathProvider.blocksCollection
     private val farmsCollection = fireStoreDB.collection(FARMS_COLLECTION)
 
-    private lateinit var farmDocument : DocumentReference //farmsCollection.document("710uve6Bmd25yAXcnPfr")//dataStore.farmID)
-    private lateinit var blocksCollection : CollectionReference //= farmDocument.collection(BLOCKS_COLLECTION)
-    private lateinit var cellsCollection : CollectionReference// farmDocument.collection(CELLS_COLLECTION)
+    private  var farmDocument : DocumentReference //farmsCollection.document("710uve6Bmd25yAXcnPfr")//dataStore.farmID)
+    private  var blocksCollection : CollectionReference //= farmDocument.collection(BLOCKS_COLLECTION)
+    private  var cellsCollection : CollectionReference// farmDocument.collection(CELLS_COLLECTION)
     //private lateinit var  blocksCollectionPath : CollectionReference//= fireStoreDB.collection(FARMS_COLLECTION).document(dataStore.farmID).collection(BLOCKS_COLLECTION)
     //private lateinit var cellsCollectionPath : CollectionReference// = fireStoreDB.collection(FARMS_COLLECTION).document(dataStore.farmID).collection(CELLS_COLLECTION)
     init {

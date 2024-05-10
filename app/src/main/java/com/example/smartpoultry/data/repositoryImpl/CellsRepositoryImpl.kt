@@ -33,7 +33,7 @@ class CellsRepositoryImpl @Inject constructor(
 
 
     private fun listenForFireStoreChanges() {
-        //  fireStoreDb.collection(cellsCollectionPath.path)
+
         cellsCollection.addSnapshotListener { querySnapshot, exception ->
             if (exception != null) { //if an error exists, it logs the error and returns early from the listener.
                 Log.w("Error", "Listen failed.", exception)
