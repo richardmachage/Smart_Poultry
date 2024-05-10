@@ -8,23 +8,29 @@ import com.example.smartpoultry.data.dataSource.remote.firebase.BLOCKS_COLLECTIO
 import com.example.smartpoultry.data.dataSource.remote.firebase.CELLS_COLLECTION
 import com.example.smartpoultry.data.dataSource.remote.firebase.FARMS_COLLECTION
 import com.example.smartpoultry.data.dataSource.remote.firebase.FirestorePathProvider
+import com.example.smartpoultry.data.dataSource.remote.firebase.USERS_COLLECTION
+import com.example.smartpoultry.data.dataSource.remote.firebase.models.User
 import com.example.smartpoultry.data.dataSource.room.entities.blocks.Blocks
 import com.example.smartpoultry.data.dataSource.room.entities.blocks.BlocksDao
 import com.example.smartpoultry.data.dataSource.room.relations.BlocksWithCells
 import com.example.smartpoultry.domain.repository.BlocksRepository
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.toObject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 class BlocksRepositoryImpl @Inject constructor(
     private val blocksDao: BlocksDao,
     private val fireStoreDB: FirebaseFirestore,
+    private val firebaseAuth: FirebaseAuth,
     //dataStore: AppDataStore
     firestorePathProvider: FirestorePathProvider
 ) : BlocksRepository {
@@ -43,6 +49,19 @@ class BlocksRepositoryImpl @Inject constructor(
 
     private fun listenForFireStoreChanges() {
         //fireStoreDB.collection(blocksCollectionPath.path)
+
+        //try to retrieve farm Id here
+        fireStoreDB.collection(USERS_COLLECTION)
+            .document(firebaseAuth.currentUser?.uid.toString())
+            .get()
+            .addOnSuccessListener {docSnapshot->
+                val user = docSnapshot.toObject(User::class.java)
+                //Log.d("Farm ID", "From Listener: ${user?.farmId}")
+                 //then proceed to the rest of the code after getting the ID
+
+
+            }
+           // .await()
 
         blocksCollection.addSnapshotListener { querySnapshot, exception ->
 
