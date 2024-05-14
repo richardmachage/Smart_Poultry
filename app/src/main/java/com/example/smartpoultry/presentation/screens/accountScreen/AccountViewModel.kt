@@ -19,7 +19,7 @@ import javax.inject.Inject
 @HiltViewModel
 class AccountViewModel @Inject constructor(
     private val fireBaseAuthRepo: FirebaseAuthRepository,
-    private val dataStore: AppDataStore
+    private val dataStore: AppDataStore,
 ) : ViewModel() {
     //val myDataStore = dataStore
     var isLoading = mutableStateOf(false)

@@ -93,7 +93,7 @@ fun HomeScreen(
 
                 ) {
                     Text(
-                        text = "Hello, $userName",
+                        text = "Hello, $userName from ${homeViewModel.farmName.value}",
                         modifier = Modifier
                             .padding(6.dp)
                             .align(Alignment.Start)

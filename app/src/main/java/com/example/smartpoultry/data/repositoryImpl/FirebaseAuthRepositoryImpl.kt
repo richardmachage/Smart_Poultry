@@ -257,7 +257,8 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
                         preferencesRepo.saveData(FARM_NAME_KEY, it.name)
                     }
                 }
-            return  docsnapshot.result.getString("name")?:""
+                .await()
+            return  preferencesRepo.loadData(FARM_NAME_KEY)?:""
         }
 
     }

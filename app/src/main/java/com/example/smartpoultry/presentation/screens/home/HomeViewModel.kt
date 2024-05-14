@@ -3,11 +3,11 @@ package com.example.smartpoultry.presentation.screens.home
 import android.annotation.SuppressLint
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.smartpoultry.data.dataModels.DailyEggCollection
 import com.example.smartpoultry.data.dataSource.datastore.AppDataStore
-import com.example.smartpoultry.data.dataSource.datastore.FARM_ID_KEY
 import com.example.smartpoultry.data.dataSource.datastore.PreferencesRepo
 import com.example.smartpoultry.data.dataSource.datastore.USER_NAME_KEY
 import com.example.smartpoultry.data.dataSource.datastore.USER_ROLE_KEY
@@ -15,11 +15,13 @@ import com.example.smartpoultry.domain.reports.Report
 import com.example.smartpoultry.domain.repository.BlocksRepository
 import com.example.smartpoultry.domain.repository.CellsRepository
 import com.example.smartpoultry.domain.repository.EggCollectionRepository
+import com.example.smartpoultry.domain.repository.FirebaseAuthRepository
 import com.example.smartpoultry.utils.localDateToJavaDate
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 import java.sql.Date
 import java.time.LocalDate
 import javax.inject.Inject
@@ -30,14 +32,31 @@ class HomeViewModel @Inject constructor(
     val blocksRepository: BlocksRepository,
     val cellsRepository: CellsRepository,
     val eggCollectionRepository: EggCollectionRepository,
-    val report: Report,
+    private val report: Report,
     val dataStore: AppDataStore,
-    val preferencesRepo: PreferencesRepo
-   // @ApplicationContext val context: Context
+    val preferencesRepo: PreferencesRepo,
+    val firebaseAuthRepository: FirebaseAuthRepository
+    // @ApplicationContext val context: Context
 ) : ViewModel() {
 
+    var farmName = mutableStateOf("")
 
-    var farmId = preferencesRepo.loadData(FARM_ID_KEY)?:""
+    init {
+        viewModelScope.launch {
+           // async {
+                getFarmName()
+            //}.await()
+        }
+        //getFarmName()
+    }
+
+    //var farmId = preferencesRepo.loadData(FARM_ID_KEY)?:""
+    private fun getFarmName() {
+        viewModelScope.launch {
+            farmName.value = firebaseAuthRepository.getFarm()
+        }
+    }
+
     val userRole = dataStore.readData(USER_ROLE_KEY).stateIn(
         scope = viewModelScope,
         started = SharingStarted.Eagerly,
@@ -63,7 +82,7 @@ class HomeViewModel @Inject constructor(
     )
 
     @RequiresApi(Build.VERSION_CODES.O)
-    fun getOverallCollectionsForPastDays(days : Int): Flow<List<DailyEggCollection>> {
+    fun getOverallCollectionsForPastDays(days: Int): Flow<List<DailyEggCollection>> {
         return eggCollectionRepository.getOverallCollectionForPAstDays(
             startDate = Date(
                 localDateToJavaDate(
