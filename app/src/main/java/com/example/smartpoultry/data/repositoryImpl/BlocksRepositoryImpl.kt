@@ -97,14 +97,14 @@ class BlocksRepositoryImpl @Inject constructor(
                     }
                 }
             }
-        }else{
+        }
+        else{
             //try to retrieve farm Id first here
             fireStoreDB.collection(USERS_COLLECTION)
                 .document(firebaseAuth.currentUser?.uid.toString())
                 .get()
                 .addOnSuccessListener { docSnapshot ->
                     val user = docSnapshot.toObject(User::class.java)
-                    //Log.d("Farm ID", "From Listener: ${user?.farmId}")
 
                     //proceed to the rest of the code after getting the ID
                     user?.let {

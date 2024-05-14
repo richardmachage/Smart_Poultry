@@ -10,5 +10,7 @@ interface FirebaseAuthRepository {
     suspend fun editEmail(email: String):Result<Boolean>
     suspend fun editUserRole(email: String, role: String): Result<Boolean>
     suspend fun editPhone (phone:String) : Result<Boolean>
+
+    suspend fun getFarm() : String
     fun logOut()
 }

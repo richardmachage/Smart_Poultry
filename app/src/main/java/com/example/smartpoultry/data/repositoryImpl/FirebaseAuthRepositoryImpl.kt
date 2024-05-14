@@ -3,6 +3,7 @@ package com.example.smartpoultry.data.repositoryImpl
 import android.util.Log
 import com.example.smartpoultry.data.dataSource.datastore.AppDataStore
 import com.example.smartpoultry.data.dataSource.datastore.FARM_ID_KEY
+import com.example.smartpoultry.data.dataSource.datastore.FARM_NAME_KEY
 import com.example.smartpoultry.data.dataSource.datastore.PreferencesRepo
 import com.example.smartpoultry.data.dataSource.datastore.USER_EMAIL_KEY
 import com.example.smartpoultry.data.dataSource.datastore.USER_NAME_KEY
@@ -19,7 +20,6 @@ import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
@@ -83,7 +83,8 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
                 val firebaseUser = authResult.user
 
                 firebaseUser?.let {
-                    val user = User(email= email, role = role, farmId = farmId, phone = "", name = "")
+                    val user =
+                        User(email = email, role = role, farmId = farmId, phone = "", name = "")
                     firebaseFirestore.collection(USERS_COLLECTION)
                         .document(firebaseUser.uid)
                         .set(user)
@@ -120,7 +121,7 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
                             CoroutineScope(Dispatchers.IO).launch {
                                 user?.let { user ->
                                     dataStore.saveData(FARM_ID_KEY, user.farmId)
-                                    Log.d("Farm","saving farm to datastore: ${user.farmId}")
+                                    Log.d("Farm", "saving farm to datastore: ${user.farmId}")
                                 }
                             }
 
@@ -233,6 +234,32 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
         return if (completableDeferred.await()) Result.success(true) else Result.failure(
             completableDeferred.getCompletionExceptionOrNull()!!
         )
+    }
+
+    override suspend fun getFarm(): String {
+        //1. check if name exists locally
+        //2. if not, read froom remote and store locally
+        //3. return value from local
+
+        var farmName = preferencesRepo.loadData(FARM_NAME_KEY) ?: ""
+        var farmId = preferencesRepo.loadData(FARM_ID_KEY) ?: ""
+
+        if (farmName.isNotBlank()) {
+            //farm name exists locally, we return here
+            return farmName
+        } else {
+            //farm name does not exist locally so we red from remote source
+            val docsnapshot  = firebaseFirestore.collection(FARMS_COLLECTION).document(farmId)
+                .get()
+                .addOnSuccessListener {
+                    val farm = it.toObject(Farm::class.java)
+                    farm?.let {
+                        preferencesRepo.saveData(FARM_NAME_KEY, it.name)
+                    }
+                }
+            return  docsnapshot.result.getString("name")?:""
+        }
+
     }
 
 

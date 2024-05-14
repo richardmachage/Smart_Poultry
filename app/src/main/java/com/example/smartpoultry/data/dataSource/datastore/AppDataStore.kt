@@ -1,9 +1,6 @@
 package com.example.smartpoultry.data.dataSource.datastore
 
 import android.util.Log
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
@@ -17,7 +14,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 const val USER_ROLE_KEY = "user_role"
@@ -26,6 +22,7 @@ const val USER_PHONE_KEY = "user_phone"
 const val USER_EMAIL_KEY = "user_email"
 const val FIRST_INSTALL = "first_install"
 const val FARM_ID_KEY = "farm_id"
+const val FARM_NAME_KEY = "farm_name"
 
 //@Singleton
 class AppDataStore @Inject constructor(
@@ -34,17 +31,17 @@ class AppDataStore @Inject constructor(
     private val fireBaseAuth: FirebaseAuth,
 ) {
 
-    var farmID by mutableStateOf("")
+    //var farmID by mutableStateOf("")
 
     init {
         listenForFireStoreChanges()
-        CoroutineScope(Dispatchers.IO).launch {
+        /*CoroutineScope(Dispatchers.IO).launch {
             readData(FARM_ID_KEY).collect {theId->
                 withContext(Dispatchers.Main){
                     farmID = theId
                 }
             }
-        }
+        }*/
     }
 
 
