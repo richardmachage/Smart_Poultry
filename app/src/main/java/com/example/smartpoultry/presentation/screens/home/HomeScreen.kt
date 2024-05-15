@@ -88,21 +88,26 @@ fun HomeScreen(
                 .padding(8.dp)
                 .verticalScroll(rememberScrollState())
         ) {
-            // if ( homeViewModel.passwordReset.value != "false") {
-            MyCard(
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                TextButton(onClick = {
-                    //show password reset dialog
-                }) {
-                    Icon(imageVector = Icons.Default.Warning, contentDescription = "info")
-                    NormText(text = "Please Reset your Password, click to reset")
+            if ( homeViewModel.passwordReset.value == "false") {
+                MyCard(
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    TextButton(onClick = {
+                        //show password reset dialog
+                        Toast.makeText(context, "Reset password dialog", Toast.LENGTH_LONG).show()
+                    }) {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceEvenly
+                        ) {
+                            Icon(imageVector = Icons.Default.Warning, contentDescription = "info")
+                            NormText(text = "To reset your password, click here")
+                        }
+                    }
+
+
                 }
-                // Text(text = "Alert! Password Reset required")
-
-
             }
-            //  }
 
             //Greeting card
             if (userName.isNotBlank()) {
