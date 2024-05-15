@@ -14,9 +14,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Warning
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
@@ -36,6 +40,7 @@ import com.example.smartpoultry.presentation.composables.MyCard
 import com.example.smartpoultry.presentation.composables.MyCardInventory
 import com.example.smartpoultry.presentation.composables.MyVerticalSpacer
 import com.example.smartpoultry.presentation.composables.NormButton
+import com.example.smartpoultry.presentation.composables.NormText
 import com.example.smartpoultry.presentation.composables.RecentEggsLineChart
 import com.example.smartpoultry.presentation.screens.settingsScreen.PAST_DAYS_KEY
 import com.ramcosta.composedestinations.annotation.Destination
@@ -83,7 +88,22 @@ fun HomeScreen(
                 .padding(8.dp)
                 .verticalScroll(rememberScrollState())
         ) {
-            MyVerticalSpacer(height = 5)
+            // if ( homeViewModel.passwordReset.value != "false") {
+            MyCard(
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                TextButton(onClick = {
+                    //show password reset dialog
+                }) {
+                    Icon(imageVector = Icons.Default.Warning, contentDescription = "info")
+                    NormText(text = "Please Reset your Password, click to reset")
+                }
+                // Text(text = "Alert! Password Reset required")
+
+
+            }
+            //  }
+
             //Greeting card
             if (userName.isNotBlank()) {
                 MyCard(
