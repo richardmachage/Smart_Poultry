@@ -27,6 +27,7 @@ const val USER_EMAIL_KEY = "user_email"
 const val FIRST_INSTALL = "first_install"
 const val FARM_ID_KEY = "farm_id"
 const val FARM_NAME_KEY = "farm_name"
+const val IS_PASSWORD_RESET_KEY = "is_password_reset"
 
 //@Singleton
 class AppDataStore @Inject constructor(
@@ -84,6 +85,13 @@ class AppDataStore @Inject constructor(
                     CoroutineScope(Dispatchers.IO).launch {
                         user?.let {
                             saveData(key = USER_PHONE_KEY, value = it.phone)
+                        }
+                    }
+
+                    //is password reset
+                    CoroutineScope(Dispatchers.IO).launch {
+                        user?.let {
+                            saveData(IS_PASSWORD_RESET_KEY, user.isPasswordReset.toString())
                         }
                     }
                 }

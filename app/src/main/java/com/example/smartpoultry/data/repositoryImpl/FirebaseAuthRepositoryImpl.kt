@@ -4,6 +4,7 @@ import android.util.Log
 import com.example.smartpoultry.data.dataSource.datastore.AppDataStore
 import com.example.smartpoultry.data.dataSource.datastore.FARM_ID_KEY
 import com.example.smartpoultry.data.dataSource.datastore.FARM_NAME_KEY
+import com.example.smartpoultry.data.dataSource.datastore.IS_PASSWORD_RESET_KEY
 import com.example.smartpoultry.data.dataSource.datastore.PreferencesRepo
 import com.example.smartpoultry.data.dataSource.datastore.USER_EMAIL_KEY
 import com.example.smartpoultry.data.dataSource.datastore.USER_NAME_KEY
@@ -16,6 +17,7 @@ import com.example.smartpoultry.data.dataSource.remote.firebase.models.User
 import com.example.smartpoultry.domain.repository.FirebaseAuthRepository
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.protobuf.Internal.BooleanList
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -26,6 +28,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
+var isPasswordReset : Boolean? = null
 class FirebaseAuthRepositoryImpl @Inject constructor(
     private val firebaseAuth: FirebaseAuth,
     private val firebaseFirestore: FirebaseFirestore,
@@ -103,19 +106,24 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
     override suspend fun logIn(email: String, password: String): Result<Boolean> = coroutineScope {
         val deferred = async(Dispatchers.IO) {
             try {
+                //try logging in
                 val authResult = firebaseAuth.signInWithEmailAndPassword(email, password).await()
                 val firebaseUser = authResult.user
 
                 if (firebaseUser != null) {
-                    // Optionally, you can perform additional checks or fetch user details from Firestore if needed.
-                    // For simplicity, we're just checking if the Firebase user is not null.
+                    // Perform additional checks or fetch user details from Firestore if needed.
                     firebaseFirestore
                         .collection(USERS_COLLECTION)
                         .document(firebaseUser.uid)
                         .get()
                         .addOnSuccessListener { documentSnapshot ->
                             val user = documentSnapshot.toObject(User::class.java)
-
+                            //check status of password reset
+                            user?.let {
+                                isPasswordReset = it.isPasswordReset
+                                //then also save to local
+                                preferencesRepo.saveData(IS_PASSWORD_RESET_KEY, it.isPasswordReset.toString())
+                            }
                             //save user details  to datastore
                             //user Farm
                             CoroutineScope(Dispatchers.IO).launch {
@@ -124,7 +132,6 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
                                     Log.d("Farm", "saving farm to datastore: ${user.farmId}")
                                 }
                             }
-
 
                             //user Role
                             CoroutineScope(Dispatchers.IO).launch {
