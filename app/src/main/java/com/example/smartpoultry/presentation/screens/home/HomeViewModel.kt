@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.smartpoultry.data.dataModels.DailyEggCollection
 import com.example.smartpoultry.data.dataSource.datastore.AppDataStore
+import com.example.smartpoultry.data.dataSource.datastore.IS_PASSWORD_RESET_KEY
 import com.example.smartpoultry.data.dataSource.datastore.PreferencesRepo
 import com.example.smartpoultry.data.dataSource.datastore.USER_NAME_KEY
 import com.example.smartpoultry.data.dataSource.datastore.USER_ROLE_KEY
@@ -40,14 +41,13 @@ class HomeViewModel @Inject constructor(
 ) : ViewModel() {
 
     var farmName = mutableStateOf("")
+    var passwordReset = mutableStateOf("")
 
     init {
         viewModelScope.launch {
-           // async {
                 getFarmName()
-            //}.await()
         }
-        //getFarmName()
+        passwordReset.value = preferencesRepo.loadData(IS_PASSWORD_RESET_KEY)?:""
     }
 
     //var farmId = preferencesRepo.loadData(FARM_ID_KEY)?:""

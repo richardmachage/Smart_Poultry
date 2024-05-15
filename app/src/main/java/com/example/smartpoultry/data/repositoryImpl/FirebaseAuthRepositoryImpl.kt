@@ -124,7 +124,8 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
                                 //then also save to local
                                 preferencesRepo.saveData(IS_PASSWORD_RESET_KEY, it.isPasswordReset.toString())
                             }
-                            //save user details  to datastore
+
+                            //save user other details  to datastore
                             //user Farm
                             CoroutineScope(Dispatchers.IO).launch {
                                 user?.let { user ->
