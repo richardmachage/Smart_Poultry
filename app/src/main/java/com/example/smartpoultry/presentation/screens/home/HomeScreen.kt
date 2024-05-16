@@ -22,6 +22,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -81,6 +82,12 @@ fun HomeScreen(
             }
         }
 
+    LaunchedEffect(homeViewModel.toastMessage) {
+        if (homeViewModel.toastMessage.isNotBlank()){
+            Toast.makeText(context, homeViewModel.toastMessage,Toast.LENGTH_SHORT).show()
+            homeViewModel.toastMessage = ""
+        }
+    }
     Surface(
         modifier = Modifier
             .fillMaxSize(),
