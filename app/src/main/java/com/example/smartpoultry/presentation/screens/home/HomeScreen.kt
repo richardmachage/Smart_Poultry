@@ -25,8 +25,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
@@ -38,6 +40,7 @@ import com.example.smartpoultry.data.dataModels.DailyEggCollection
 import com.example.smartpoultry.data.dataSource.room.entities.cells.Cells
 import com.example.smartpoultry.presentation.composables.MyCard
 import com.example.smartpoultry.presentation.composables.MyCardInventory
+import com.example.smartpoultry.presentation.composables.MyInputDialog
 import com.example.smartpoultry.presentation.composables.MyVerticalSpacer
 import com.example.smartpoultry.presentation.composables.NormButton
 import com.example.smartpoultry.presentation.composables.NormText
@@ -88,13 +91,30 @@ fun HomeScreen(
                 .padding(8.dp)
                 .verticalScroll(rememberScrollState())
         ) {
+            var showPasswordResetDialog by remember {
+                mutableStateOf(false)
+            }
+            //change password dialog here
+            MyInputDialog(
+                showDialog = showPasswordResetDialog,
+                title = "Reset Password" ,
+                onConfirm = { /*TODO*/
+                showPasswordResetDialog = false
+                },
+                onDismiss = {
+                    /*TODO*/
+                    showPasswordResetDialog = false
+                }
+            ) {
+
+            }
             if ( homeViewModel.passwordReset.value == "false") {
                 MyCard(
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     TextButton(onClick = {
                         //show password reset dialog
-                        Toast.makeText(context, "Reset password dialog", Toast.LENGTH_LONG).show()
+                        showPasswordResetDialog = true
                     }) {
                         Row(
                             modifier = Modifier.fillMaxWidth(),
