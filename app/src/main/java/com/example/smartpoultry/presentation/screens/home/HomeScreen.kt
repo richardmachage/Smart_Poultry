@@ -37,6 +37,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.smartpoultry.data.dataModels.DailyEggCollection
+import com.example.smartpoultry.data.dataSource.datastore.USER_EMAIL_KEY
 import com.example.smartpoultry.data.dataSource.room.entities.cells.Cells
 import com.example.smartpoultry.presentation.composables.MyCard
 import com.example.smartpoultry.presentation.composables.MyCardInventory
@@ -65,6 +66,7 @@ fun HomeScreen(
     val totalCells = homeViewModel.totalCells.collectAsState()
     val userRole by homeViewModel.userRole.collectAsState()
     val userName by homeViewModel.userName.collectAsState()
+    val emailAddress by homeViewModel.dataStore.readData(USER_EMAIL_KEY).collectAsState(initial = "")
 
     val pastDaysState =
         remember { homeViewModel.dataStore.readData(PAST_DAYS_KEY) }.collectAsState(initial = "0")
@@ -94,6 +96,7 @@ fun HomeScreen(
             var showPasswordResetDialog by remember {
                 mutableStateOf(false)
             }
+
             //change password dialog here
             MyInputDialog(
                 showDialog = showPasswordResetDialog,
@@ -106,7 +109,16 @@ fun HomeScreen(
                     showPasswordResetDialog = false
                 }
             ) {
-
+                //Dialog body content
+                Column {
+                    Text(text = "A password reset link will be sent to your email address: $emailAddress")
+                    MyVerticalSpacer(height = 10)
+                    Text(text = "After clicking okay, follow these steps \n" +
+                            "1.You will be logged out automatically \n" +
+                            "2.Go to your email inbox \n" +
+                            "3.Click on link sent to reset your password \n" +
+                            "4.Now open Smart Poultry and log in using your new password")
+                }
             }
             if ( homeViewModel.passwordReset.value == "false") {
                 MyCard(
@@ -124,8 +136,6 @@ fun HomeScreen(
                             NormText(text = "To reset your password, click here")
                         }
                     }
-
-
                 }
             }
 
@@ -138,7 +148,7 @@ fun HomeScreen(
 
                 ) {
                     Text(
-                        text = "Hello, $userName from ${homeViewModel.farmName.value}\n Password Reset: ${homeViewModel.passwordReset.value}",
+                        text = "Hello, $userName from ${homeViewModel.farmName.value}",
                         modifier = Modifier
                             .padding(6.dp)
                             .align(Alignment.Start)
