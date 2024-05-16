@@ -176,7 +176,9 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
     override suspend fun resetPassword(email: String): Result<Boolean> = coroutineScope {
         try {
             // Await the completion of the password reset email sending
-            firebaseAuth.sendPasswordResetEmail(email).await()
+            firebaseAuth.sendPasswordResetEmail(email).addOnFailureListener {
+                Throwable(message = it.message, cause = it)
+            }.await()
             Result.success(true)
         } catch (e: Exception) {
             Result.failure(e)

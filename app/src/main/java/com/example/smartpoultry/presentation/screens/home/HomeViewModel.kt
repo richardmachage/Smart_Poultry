@@ -2,8 +2,11 @@ package com.example.smartpoultry.presentation.screens.home
 
 import android.annotation.SuppressLint
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.smartpoultry.data.dataModels.DailyEggCollection
@@ -42,7 +45,8 @@ class HomeViewModel @Inject constructor(
 
     var farmName = mutableStateOf("")
     var passwordReset = mutableStateOf("")
-
+    var isLoading by  mutableStateOf(false)
+    var toastMessage by mutableStateOf("")
     init {
         viewModelScope.launch {
                 getFarmName()
@@ -50,7 +54,24 @@ class HomeViewModel @Inject constructor(
         passwordReset.value = preferencesRepo.loadData(IS_PASSWORD_RESET_KEY)?:""
     }
 
-    //var farmId = preferencesRepo.loadData(FARM_ID_KEY)?:""
+
+    fun onPasswordReset(email : String){
+        if (email.isNotEmpty()){
+            viewModelScope.launch {
+                isLoading = true
+                val result = firebaseAuthRepository.resetPassword(email)
+
+                result.onSuccess {
+                    //set the isPassword reset value to true
+                    //Log Out
+                    toastMessage = "Password rest link has been sent to your email"
+                }
+                result.onFailure {
+                    Log.d("error", it.message.toString())
+                }
+            }
+        }
+    }
     private fun getFarmName() {
         viewModelScope.launch {
             farmName.value = firebaseAuthRepository.getFarm()

@@ -102,6 +102,7 @@ fun HomeScreen(
                 showDialog = showPasswordResetDialog,
                 title = "Reset Password" ,
                 onConfirm = { /*TODO*/
+                    homeViewModel.onPasswordReset(emailAddress)
                 showPasswordResetDialog = false
                 },
                 onDismiss = {
