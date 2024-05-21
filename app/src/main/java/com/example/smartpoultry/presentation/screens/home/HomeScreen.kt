@@ -65,7 +65,7 @@ fun HomeScreen(
     val homeViewModel: HomeViewModel = hiltViewModel()
     val totalBlocks = homeViewModel.totalBlocks.collectAsState()
     val totalCells = homeViewModel.totalCells.collectAsState()
-    val userRole by homeViewModel.userRole.collectAsState()
+   // val userRole by homeViewModel.userRole.collectAsState()
     val userName by homeViewModel.userName.collectAsState()
     val emailAddress by homeViewModel.dataStore.readData(USER_EMAIL_KEY).collectAsState(initial = "")
 
@@ -250,8 +250,9 @@ fun HomeScreen(
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Preview(showSystemUi = true, showBackground = true)
 @Composable
 fun HomeScreenPrev() {
-    //HomeScreen()
+    HomeScreen()
 }
