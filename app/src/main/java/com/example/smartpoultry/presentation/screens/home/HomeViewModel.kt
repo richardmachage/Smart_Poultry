@@ -50,7 +50,7 @@ class HomeViewModel @Inject constructor(
     var navigateToLogin by mutableStateOf("")
     init {
         viewModelScope.launch {
-                getFarmName()
+             //   getFarmName()
         }
         passwordReset.value = preferencesRepo.loadData(IS_PASSWORD_RESET_KEY)?:""
     }

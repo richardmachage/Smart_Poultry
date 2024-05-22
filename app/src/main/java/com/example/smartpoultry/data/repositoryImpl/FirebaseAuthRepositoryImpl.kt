@@ -58,7 +58,7 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
                 newFarm.set(Farm(name = farmName, id = newFarm.id, superUserEmail = email)).await()
                 //step 3 add created user to the Main Users Collection
                 firebaseUser?.let {
-                    val user = User(email = email, role = role, farmId = newFarm.id)
+                    val user = User(email = email, role = role, farmId = newFarm.id, passwordReset = true)
                     firebaseFirestore.collection(USERS_COLLECTION)
                         .document(firebaseUser.uid)
                         .set(user)
@@ -89,7 +89,7 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
 
                 firebaseUser?.let {
                     val user =
-                        User(email = email, role = role, farmId = farmId, phone = "", name = "")
+                        User(email = email, role = role, farmId = farmId, phone = "", name = "", passwordReset = false)
                     firebaseFirestore.collection(USERS_COLLECTION)
                         .document(firebaseUser.uid)
                         .set(user)
@@ -123,13 +123,15 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
                             val user = documentSnapshot.toObject(User::class.java)
                             //check status of password reset
                             user?.let {
-                                isPasswordReset = it.isPasswordReset
                                 //then also save to local
-                                preferencesRepo.saveData(IS_PASSWORD_RESET_KEY, it.isPasswordReset.toString())
+                                preferencesRepo.saveData(IS_PASSWORD_RESET_KEY, it.passwordReset.toString())
                             }
 
                             //save user other details  to datastore
                             //user Farm
+                            preferencesRepo.saveData(FARM_ID_KEY,user?.farmId.toString())
+                            Log.d("Farm", "saving farm to datastore: ${user?.farmId}")
+
                             CoroutineScope(Dispatchers.IO).launch {
                                 user?.let { user ->
                                     dataStore.saveData(FARM_ID_KEY, user.farmId)
@@ -209,7 +211,7 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
         val result = CompletableDeferred<Boolean>()
         firebaseFirestore.collection(USERS_COLLECTION)
             .document(firebaseAuth.currentUser?.uid.toString())//firebaseAuth.uid.toString())
-            .update("isPasswordReset", true)
+            .update("passwordReset", true)
             .addOnSuccessListener {
                 result.complete(true)
             }
@@ -267,7 +269,7 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
 
     override suspend fun getFarm(): String {
         //1. check if name exists locally
-        //2. if not, read froom remote and store locally
+        //2. if not, read from remote and store locally
         //3. return value from local
 
         var farmName = preferencesRepo.loadData(FARM_NAME_KEY) ?: ""
@@ -292,10 +294,7 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
 
     }
 
-    fun getAuthCredential(email : String, password: String)  : String{
-        val credential  = EmailAuthProvider.getCredential(email,password)
-        return  credential.provider.toString()
-    }
+
     override fun logOut() {
         firebaseAuth.signOut()
     }

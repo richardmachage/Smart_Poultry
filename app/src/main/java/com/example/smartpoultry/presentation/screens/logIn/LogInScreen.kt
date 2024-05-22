@@ -26,6 +26,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.smartpoultry.R
+import com.example.smartpoultry.destinations.LogInScreenDestination
 import com.example.smartpoultry.destinations.MainScreenDestination
 import com.example.smartpoultry.destinations.SignUpScreenDestination
 import com.example.smartpoultry.presentation.composables.MyCircularProgressBar
@@ -63,7 +64,7 @@ fun LogInScreen(
     LaunchedEffect(key1 = logInViewModel.isLogInSuccess){
        if (logInViewModel.isLogInSuccess){
            navigator.navigate(MainScreenDestination){
-               popUpTo(MainScreenDestination){inclusive=true}
+               popUpTo(LogInScreenDestination){inclusive=true}
            }
            // Reset the login success state in the ViewModel if needed to prevent repeated navigation
            logInViewModel.isLogInSuccess = false

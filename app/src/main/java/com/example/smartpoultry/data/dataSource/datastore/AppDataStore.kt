@@ -91,7 +91,7 @@ class AppDataStore @Inject constructor(
                     //is password reset
                     CoroutineScope(Dispatchers.IO).launch {
                         user?.let {
-                            saveData(IS_PASSWORD_RESET_KEY, user.isPasswordReset.toString())
+                            saveData(IS_PASSWORD_RESET_KEY, user.passwordReset.toString())
                         }
                     }
                 }

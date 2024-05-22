@@ -6,5 +6,5 @@ data class User(
     val email : String = "",
     val role : String = "",
     var farmId:String = "",
-    var isPasswordReset: Boolean = false
+    var passwordReset: Boolean = false
 )
