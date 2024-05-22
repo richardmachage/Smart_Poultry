@@ -47,6 +47,7 @@ class HomeViewModel @Inject constructor(
     var passwordReset = mutableStateOf("")
     var isLoading by  mutableStateOf(false)
     var toastMessage by mutableStateOf("")
+    var navigateToLogin by mutableStateOf("")
     init {
         viewModelScope.launch {
                 getFarmName()
@@ -63,9 +64,18 @@ class HomeViewModel @Inject constructor(
 
                 result.onSuccess {
                     //set the isPassword reset value to true
+                    viewModelScope.launch {
+                        firebaseAuthRepository.updateIsPasswordChanged()
+                        toastMessage = "Password rest link has been sent to your email"
 
-                    //Log Out
-                    toastMessage = "Password rest link has been sent to your email"
+                        //Log Out
+                        firebaseAuthRepository.logOut()
+
+                        //then navigate to login
+                        navigateToLogin = "yes"
+
+
+                    }
                 }
                 result.onFailure {
                     Log.d("error", it.message.toString())

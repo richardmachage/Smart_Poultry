@@ -37,9 +37,11 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.smartpoultry.NavGraphs
 import com.example.smartpoultry.data.dataModels.DailyEggCollection
 import com.example.smartpoultry.data.dataSource.datastore.USER_EMAIL_KEY
 import com.example.smartpoultry.data.dataSource.room.entities.cells.Cells
+import com.example.smartpoultry.destinations.LogInScreenDestination
 import com.example.smartpoultry.presentation.composables.MyCard
 import com.example.smartpoultry.presentation.composables.MyCardInventory
 import com.example.smartpoultry.presentation.composables.MyInputDialog
@@ -49,6 +51,8 @@ import com.example.smartpoultry.presentation.composables.NormText
 import com.example.smartpoultry.presentation.composables.RecentEggsLineChart
 import com.example.smartpoultry.presentation.screens.settingsScreen.PAST_DAYS_KEY
 import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import com.ramcosta.composedestinations.navigation.popUpTo
 import java.text.SimpleDateFormat
 
 
@@ -59,6 +63,7 @@ import java.text.SimpleDateFormat
 @Composable
 fun HomeScreen(
     //modifier: Modifier
+    navigator: DestinationsNavigator
 ) {
     val context = LocalContext.current
     //viewmodel initialization
@@ -86,6 +91,15 @@ fun HomeScreen(
         if (homeViewModel.toastMessage.isNotBlank()){
             Toast.makeText(context, homeViewModel.toastMessage,Toast.LENGTH_SHORT).show()
             homeViewModel.toastMessage = ""
+        }
+    }
+
+    LaunchedEffect (homeViewModel.navigateToLogin){
+        if (homeViewModel.navigateToLogin.isNotBlank()){
+            homeViewModel.navigateToLogin = ""
+            navigator.navigate(LogInScreenDestination){
+                popUpTo(NavGraphs.root) { inclusive = true }
+            }
         }
     }
     Surface(
@@ -254,5 +268,5 @@ fun HomeScreen(
 @Preview(showSystemUi = true, showBackground = true)
 @Composable
 fun HomeScreenPrev() {
-    HomeScreen()
+   // HomeScreen(rememberNavController())
 }
