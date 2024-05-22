@@ -63,6 +63,7 @@ class HomeViewModel @Inject constructor(
 
                 result.onSuccess {
                     //set the isPassword reset value to true
+
                     //Log Out
                     toastMessage = "Password rest link has been sent to your email"
                 }

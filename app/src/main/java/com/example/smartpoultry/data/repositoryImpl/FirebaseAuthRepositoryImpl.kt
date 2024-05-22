@@ -15,6 +15,8 @@ import com.example.smartpoultry.data.dataSource.remote.firebase.USERS_COLLECTION
 import com.example.smartpoultry.data.dataSource.remote.firebase.models.Farm
 import com.example.smartpoultry.data.dataSource.remote.firebase.models.User
 import com.example.smartpoultry.domain.repository.FirebaseAuthRepository
+import com.google.firebase.auth.EmailAuthCredential
+import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.protobuf.Internal.BooleanList
@@ -110,6 +112,7 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
                 val authResult = firebaseAuth.signInWithEmailAndPassword(email, password).await()
                 val firebaseUser = authResult.user
 
+
                 if (firebaseUser != null) {
                     // Perform additional checks or fetch user details from Firestore if needed.
                     firebaseFirestore
@@ -202,6 +205,22 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
+    override suspend fun updateIsPasswordChanged(): Result<Boolean> {
+        val result = CompletableDeferred<Boolean>()
+        firebaseFirestore.collection(USERS_COLLECTION)
+            .document(firebaseAuth.currentUser?.uid.toString())//firebaseAuth.uid.toString())
+            .update("isPasswordReset", true)
+            .addOnSuccessListener {
+                result.complete(true)
+            }
+            .addOnFailureListener {
+                result.completeExceptionally(it)
+            }
+
+        return if (result.await()) Result.success(true) else Result.failure(result.getCompletionExceptionOrNull()!!)
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
     override suspend fun editEmail(email: String): Result<Boolean> {
         val completableDeferred = CompletableDeferred<Boolean>()
         firebaseAuth.currentUser?.verifyBeforeUpdateEmail(email)
@@ -273,7 +292,10 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
 
     }
 
-
+    fun getAuthCredential(email : String, password: String)  : String{
+        val credential  = EmailAuthProvider.getCredential(email,password)
+        return  credential.provider.toString()
+    }
     override fun logOut() {
         firebaseAuth.signOut()
     }
