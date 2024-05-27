@@ -1,13 +1,19 @@
 package com.example.smartpoultry.presentation.screens.accountScreen
 
 import android.widget.Toast
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -16,6 +22,10 @@ import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Face
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Phone
+import androidx.compose.material.icons.filled.Star
+import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -33,10 +43,16 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.smartpoultry.R
 import com.example.smartpoultry.destinations.ManageUsersScreenDestination
 import com.example.smartpoultry.presentation.composables.MyBorderedColumn
 import com.example.smartpoultry.presentation.composables.MyCircularProgressBar
@@ -47,6 +63,7 @@ import com.example.smartpoultry.presentation.composables.MyOutlineTextFiled
 import com.example.smartpoultry.presentation.composables.MyVerticalSpacer
 import com.example.smartpoultry.presentation.composables.NormButton
 import com.example.smartpoultry.presentation.composables.UserTypeDropDownMenu
+import com.example.smartpoultry.presentation.theme.SmartPoultryTheme
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
@@ -355,6 +372,119 @@ fun AccountScreen(
                 }
             }
 
+        }
+    }
+
+}
+
+
+
+@Composable
+fun AccountDetailsScreen() {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        /*Text(
+            text = "Account Details",
+            style = MaterialTheme.typography.headlineLarge.copy(fontWeight = FontWeight.Bold),
+            modifier = Modifier.padding(vertical = 8.dp)
+        )*/
+        //Spacer(modifier = Modifier.height(16.dp))
+        MyVerticalSpacer(height = 16)
+        AccountCard()
+        Spacer(modifier = Modifier.height(24.dp))
+        ActionButton("Register new user",ImageVector.vectorResource(id =  R.drawable.person_add))
+        Spacer(modifier = Modifier.height(16.dp))
+        ActionButton("Manage Users", ImageVector.vectorResource(id = R.drawable.supervisor_account))
+    }
+}
+
+@Composable
+fun AccountCard() {
+    Card(
+        shape = RoundedCornerShape(16.dp),
+        elevation = CardDefaults.cardElevation(8.dp),
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Column(
+            modifier = Modifier
+                .background(MaterialTheme.colorScheme.surface)
+                .padding(16.dp)
+        ) {
+            Text(
+                text = "My Account",
+                style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.Bold),
+                color = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.padding(bottom = 8.dp)
+            )
+            UserInfoRow(Icons.Default.Star, label = "User Role", value = "Super")
+            Spacer(modifier = Modifier.height(16.dp))
+            UserInfoRow(Icons.Default.Person, "User name", "John Doe", true)
+            Spacer(modifier = Modifier.height(16.dp))
+            UserInfoRow(Icons.Default.Email, "Email address", "johndoe@example.com", true)
+            Spacer(modifier = Modifier.height(16.dp))
+            UserInfoRow(Icons.Default.Phone, "Phone Number", "+1234567890", true)
+        }
+    }
+}
+
+@Composable
+fun UserInfoRow(icon: ImageVector, label: String, value: String, editable: Boolean = false) {
+    Row(verticalAlignment = Alignment.CenterVertically) {
+        Icon(
+            imageVector = icon,
+            contentDescription = null,
+            modifier = Modifier
+                .size(34.dp)
+                .padding(end = 8.dp),
+            tint = MaterialTheme.colorScheme.primary
+        )
+        Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.Center) {
+            Text(
+                text = label,
+                style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Light)
+            )
+            Text(
+                text = value,
+                style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Medium),
+                fontSize = 16.sp
+            )
+        }
+        if (editable) {
+            IconButton(onClick = { /* Edit action */ }) {
+                Icon(imageVector = Icons.Default.Edit, contentDescription = "Edit")
+            }
+        }
+    }
+}
+
+@Composable
+fun ActionButton(text: String, icon: ImageVector) {
+    Button(
+        onClick = { /* Handle click */ },
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(48.dp),
+        shape = RoundedCornerShape(size = 24.dp)//RoundedCornerShape(24.dp)
+    ) {
+        Icon(imageVector = icon, contentDescription = null, modifier = Modifier.size(24.dp))
+        Spacer(modifier = Modifier.width(8.dp))
+        Text(text = text)
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun DefaultPreview() {
+   // MyApp {
+    SmartPoultryTheme {
+        Surface(
+            color = MaterialTheme.colorScheme.background
+        ) {
+            AccountDetailsScreen()
         }
     }
 
