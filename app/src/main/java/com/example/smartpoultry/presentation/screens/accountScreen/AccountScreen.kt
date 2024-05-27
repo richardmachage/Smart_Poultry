@@ -19,7 +19,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Email
-import androidx.compose.material.icons.filled.Face
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material3.Button
@@ -53,14 +52,10 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.smartpoultry.R
 import com.example.smartpoultry.destinations.ManageUsersScreenDestination
-import com.example.smartpoultry.presentation.composables.MyBorderedColumn
 import com.example.smartpoultry.presentation.composables.MyCircularProgressBar
-import com.example.smartpoultry.presentation.composables.MyEditText
 import com.example.smartpoultry.presentation.composables.MyEditTextClear
 import com.example.smartpoultry.presentation.composables.MyInputDialog
 import com.example.smartpoultry.presentation.composables.MyOutlineTextFiled
-import com.example.smartpoultry.presentation.composables.MyVerticalSpacer
-import com.example.smartpoultry.presentation.composables.NormButton
 import com.example.smartpoultry.presentation.composables.UserTypeDropDownMenu
 import com.example.smartpoultry.presentation.theme.SmartPoultryTheme
 import com.ramcosta.composedestinations.annotation.Destination
@@ -120,7 +115,7 @@ fun AccountScreen(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
 
-                MyBorderedColumn(
+                /*MyBorderedColumn(
                     modifier = Modifier.padding(6.dp)
                 ) {
                     Text(text = "My Account")
@@ -315,8 +310,8 @@ fun AccountScreen(
                             readOnly = true,
                             enabled = true
                         )
-                        /*Icon(imageVector = Icons.Default.Phone, contentDescription = "edit")
-                        Text(text = "Phone Number : 0654233214")*/
+                        *//*Icon(imageVector = Icons.Default.Phone, contentDescription = "edit")
+                        Text(text = "Phone Number : 0654233214")*//*
                         IconButton(onClick = {
                             showDialog = true
                         }) {
@@ -324,7 +319,7 @@ fun AccountScreen(
                         }
                     }
                     MyVerticalSpacer(height = 10)
-                }
+                }*/
 
                /* Column(
                     modifier = Modifier
@@ -332,7 +327,7 @@ fun AccountScreen(
                         .padding(16.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {*/
-                    MyVerticalSpacer(height = 16)
+                   // MyVerticalSpacer(height = 16)
                    // AccountCard()
                     Card(
                         shape = RoundedCornerShape(16.dp),
@@ -353,22 +348,103 @@ fun AccountScreen(
                             UserInfoRow(ImageVector.vectorResource(id = R.drawable.verified_user), label = "Role", value = "Super")
                             Spacer(modifier = Modifier.height(16.dp))
                             //Name
-
-                            UserInfoRow(Icons.Default.Person, "name", "John Doe", true, onEditClick = {
+                            var showNameDialog by remember { mutableStateOf(false) }
+                            var newUserName by remember { mutableStateOf(userName) }
+                            MyInputDialog(
+                                showDialog = showNameDialog,
+                                title = "User Name",
+                                onConfirm = {
+                                    if (newUserName.isBlank())
+                                        accountViewModel.toastMessage.value = "Empty field"
+                                    else if (newUserName == userName)
+                                        accountViewModel.toastMessage.value =
+                                            "Same name, no change made"
+                                    else {
+                                        accountViewModel.changeUserName(newUserName)
+                                        showNameDialog = false
+                                    }
+                                },
+                                onDismiss = { showNameDialog = false }
+                            ) {
+                                MyOutlineTextFiled(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    label = "User Name",
+                                    keyboardType = KeyboardType.Text,
+                                    initialText = newUserName,
+                                    onValueChange = {
+                                        newUserName = it
+                                    }
+                                )
+                            }
+                            UserInfoRow(Icons.Default.Person, "name", value = userName.ifBlank { "No name set" }, true, onEditClick = {
+                                showNameDialog = true
                             })
 
+                            Spacer(modifier = Modifier.height(16.dp))
 
+                            //Email address
+                            var showEmailDialog by remember { mutableStateOf(false) }
+                            var newEmail by remember { mutableStateOf(userEmail) }
+                            MyInputDialog(
+                                showDialog = showEmailDialog,
+                                title = "Email",
+                                onConfirm = {
+                                    if (newEmail.isBlank())
+                                        accountViewModel.toastMessage.value = "empty field"
+                                    else if (newEmail == userEmail) accountViewModel.toastMessage.value =
+                                        "similar email, no change"
+                                    else {
+                                        accountViewModel.changeEmail(email = newEmail)
+                                        showEmailDialog = false
+                                    }
+                                },
+                                onDismiss = { showEmailDialog = false }
+                            ) {
+                                MyOutlineTextFiled(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    label = "Email",
+                                    keyboardType = KeyboardType.Email,
+                                    initialText = newEmail,
+                                    onValueChange = {
+                                        newEmail = it
+                                    }
+                                )
+                            }
+                            UserInfoRow(Icons.Default.Email, "Email address", userEmail, true, onEditClick = {showEmailDialog = true})
                             Spacer(modifier = Modifier.height(16.dp))
-                            UserInfoRow(Icons.Default.Email, "Email address", "johndoe@example.com", true)
-                            Spacer(modifier = Modifier.height(16.dp))
-                            UserInfoRow(Icons.Default.Phone, "Phone Number", "+1234567890", true)
+
+                            //phone number
+                            var showPhoneDialog by remember { mutableStateOf(false) }
+                            var newPhone by remember { mutableStateOf(userPhone) }
+                            MyInputDialog(
+                                showDialog = showPhoneDialog,
+                                title = "Phone Number",
+                                onConfirm = {
+                                    if (newPhone.isBlank()) accountViewModel.toastMessage.value =
+                                        "empty field"
+                                    else if (newPhone == userPhone) accountViewModel.toastMessage.value =
+                                        "same phone number, no change made"
+                                    else {
+                                        accountViewModel.changePhoneNumber(phoneNumber = newPhone)
+                                        showPhoneDialog = false
+                                    }
+                                },
+                                onDismiss = { showPhoneDialog = false }
+                            ) {
+                                MyOutlineTextFiled(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    label = "Phone Number",
+                                    keyboardType = KeyboardType.Email,
+                                    initialText = newPhone,
+                                    onValueChange = {
+                                        newPhone = it
+                                    }
+                                )
+                            }
+                            UserInfoRow(Icons.Default.Phone, "Phone Number", userPhone.ifBlank { "No number set" }, true, onEditClick = {showPhoneDialog = true})
                         }
-                    //}
-                   // Spacer(modifier = Modifier.height(24.dp))
-                    //ActionButton("Register new user",ImageVector.vectorResource(id =  R.drawable.person_add))
-                    //Spacer(modifier = Modifier.height(16.dp))
-                    //ActionButton("Manage Users", ImageVector.vectorResource(id = R.drawable.supervisor_account))
-                }
+                    }
+                   //}
                 //Register new user
                 var showRegDialog by remember { mutableStateOf(false) }
                 var userEmailReg by remember { mutableStateOf("") }
@@ -400,17 +476,24 @@ fun AccountScreen(
                     }
                 }
                 if (userRole == "Director" || userRole == "Super") {
-                    NormButton(
+                     Spacer(modifier = Modifier.height(24.dp))
+                    ActionButton(text = "Register new user", icon = ImageVector.vectorResource(id =  R.drawable.person_add), onClick = {showRegDialog = true})
+                    Spacer(modifier = Modifier.height(16.dp))
+                    ActionButton("Manage Users", ImageVector.vectorResource(id = R.drawable.supervisor_account), onClick = {navigator.navigate(
+                        ManageUsersScreenDestination
+                    )  })
+
+                   /* NormButton(
                         modifier = Modifier.fillMaxWidth(),
                         onButtonClick = { showRegDialog = true },
                         btnName = "Register new user"
-                    )
+                    )*/
 
-                    NormButton(
+                    /*NormButton(
                         modifier = Modifier.fillMaxWidth(),
-                        onButtonClick = { navigator.navigate(ManageUsersScreenDestination) },
+                        onButtonClick = { },
                         btnName = "Manage Users"
-                    )
+                    )*/
                 }
             }
 
@@ -421,22 +504,7 @@ fun AccountScreen(
 
 
 
-@Composable
-fun AccountDetailsScreen() {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        MyVerticalSpacer(height = 16)
-        AccountCard()
-        Spacer(modifier = Modifier.height(24.dp))
-        ActionButton("Register new user",ImageVector.vectorResource(id =  R.drawable.person_add))
-        Spacer(modifier = Modifier.height(16.dp))
-        ActionButton("Manage Users", ImageVector.vectorResource(id = R.drawable.supervisor_account))
-    }
-}
+
 
 @Composable
 fun AccountCard() {
@@ -500,12 +568,13 @@ fun UserInfoRow(icon: ImageVector, label: String, value: String, editable: Boole
 }
 
 @Composable
-fun ActionButton(text: String, icon: ImageVector) {
+fun ActionButton(text: String, icon: ImageVector, onClick: ()-> Unit = {}) {
     Button(
-        onClick = { /* Handle click */ },
+        onClick = { onClick() },
         modifier = Modifier
             .fillMaxWidth()
-            .height(48.dp),
+          //  .height(48.dp)
+        ,
         shape = RoundedCornerShape(size = 24.dp)//RoundedCornerShape(24.dp)
     ) {
         Icon(imageVector = icon, contentDescription = null, modifier = Modifier.size(24.dp))
@@ -522,7 +591,7 @@ fun DefaultPreview() {
         Surface(
             color = MaterialTheme.colorScheme.background
         ) {
-            AccountDetailsScreen()
+           // AccountDetailsScreen()
         }
     }
 
