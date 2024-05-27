@@ -37,6 +37,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.smartpoultry.destinations.ManageUsersScreenDestination
 import com.example.smartpoultry.presentation.composables.MyBorderedColumn
 import com.example.smartpoultry.presentation.composables.MyCircularProgressBar
 import com.example.smartpoultry.presentation.composables.MyEditText
@@ -344,6 +345,12 @@ fun AccountScreen(
                         modifier = Modifier.fillMaxWidth(),
                         onButtonClick = { showRegDialog = true },
                         btnName = "Register new user"
+                    )
+
+                    NormButton(
+                        modifier = Modifier.fillMaxWidth(),
+                        onButtonClick = { navigator.navigate(ManageUsersScreenDestination) },
+                        btnName = "Manage Users"
                     )
                 }
             }
