@@ -22,7 +22,6 @@ import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Face
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Phone
-import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -115,7 +114,10 @@ fun AccountScreen(
 
             Column(
                 modifier = Modifier
-                    .verticalScroll(rememberScrollState())
+                    .fillMaxSize()
+                    .padding(16.dp)
+                    .verticalScroll(rememberScrollState()),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
 
                 MyBorderedColumn(
@@ -156,13 +158,13 @@ fun AccountScreen(
                             enabled = true,
                             readOnly = true
                         )
-                        /*if (userRole == "Director") {
+                        if (userRole == "Director") {
                             IconButton(onClick = {
                                 showDialog = true
                             }) {
                                 Icon(imageVector = Icons.Default.Edit, contentDescription = "edit")
                             }
-                        }*/
+                        }
                     }
 
 
@@ -322,11 +324,51 @@ fun AccountScreen(
                         }
                     }
                     MyVerticalSpacer(height = 10)
-
-
-
                 }
 
+               /* Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(16.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {*/
+                    MyVerticalSpacer(height = 16)
+                   // AccountCard()
+                    Card(
+                        shape = RoundedCornerShape(16.dp),
+                        elevation = CardDefaults.cardElevation(8.dp),
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Column(
+                            modifier = Modifier
+                                .background(MaterialTheme.colorScheme.surface)
+                                .padding(16.dp)
+                        ) {
+                            Text(
+                                text = "My Account",
+                                style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.Bold),
+                                color = MaterialTheme.colorScheme.primary,
+                                modifier = Modifier.padding(bottom = 8.dp)
+                            )
+                            UserInfoRow(ImageVector.vectorResource(id = R.drawable.verified_user), label = "Role", value = "Super")
+                            Spacer(modifier = Modifier.height(16.dp))
+                            //Name
+
+                            UserInfoRow(Icons.Default.Person, "name", "John Doe", true, onEditClick = {
+                            })
+
+
+                            Spacer(modifier = Modifier.height(16.dp))
+                            UserInfoRow(Icons.Default.Email, "Email address", "johndoe@example.com", true)
+                            Spacer(modifier = Modifier.height(16.dp))
+                            UserInfoRow(Icons.Default.Phone, "Phone Number", "+1234567890", true)
+                        }
+                    //}
+                   // Spacer(modifier = Modifier.height(24.dp))
+                    //ActionButton("Register new user",ImageVector.vectorResource(id =  R.drawable.person_add))
+                    //Spacer(modifier = Modifier.height(16.dp))
+                    //ActionButton("Manage Users", ImageVector.vectorResource(id = R.drawable.supervisor_account))
+                }
                 //Register new user
                 var showRegDialog by remember { mutableStateOf(false) }
                 var userEmailReg by remember { mutableStateOf("") }
@@ -387,12 +429,6 @@ fun AccountDetailsScreen() {
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        /*Text(
-            text = "Account Details",
-            style = MaterialTheme.typography.headlineLarge.copy(fontWeight = FontWeight.Bold),
-            modifier = Modifier.padding(vertical = 8.dp)
-        )*/
-        //Spacer(modifier = Modifier.height(16.dp))
         MyVerticalSpacer(height = 16)
         AccountCard()
         Spacer(modifier = Modifier.height(24.dp))
@@ -420,9 +456,11 @@ fun AccountCard() {
                 color = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.padding(bottom = 8.dp)
             )
-            UserInfoRow(Icons.Default.Star, label = "User Role", value = "Super")
+            UserInfoRow(ImageVector.vectorResource(id = R.drawable.verified_user), label = "Role", value = "Super")
             Spacer(modifier = Modifier.height(16.dp))
-            UserInfoRow(Icons.Default.Person, "User name", "John Doe", true)
+            UserInfoRow(Icons.Default.Person, "name", "John Doe", true){
+
+            }
             Spacer(modifier = Modifier.height(16.dp))
             UserInfoRow(Icons.Default.Email, "Email address", "johndoe@example.com", true)
             Spacer(modifier = Modifier.height(16.dp))
@@ -432,7 +470,7 @@ fun AccountCard() {
 }
 
 @Composable
-fun UserInfoRow(icon: ImageVector, label: String, value: String, editable: Boolean = false) {
+fun UserInfoRow(icon: ImageVector, label: String, value: String, editable: Boolean = false, onEditClick : () -> Unit = {}) {
     Row(verticalAlignment = Alignment.CenterVertically) {
         Icon(
             imageVector = icon,
@@ -454,7 +492,7 @@ fun UserInfoRow(icon: ImageVector, label: String, value: String, editable: Boole
             )
         }
         if (editable) {
-            IconButton(onClick = { /* Edit action */ }) {
+            IconButton(onClick = { onEditClick() }) {
                 Icon(imageVector = Icons.Default.Edit, contentDescription = "Edit")
             }
         }
