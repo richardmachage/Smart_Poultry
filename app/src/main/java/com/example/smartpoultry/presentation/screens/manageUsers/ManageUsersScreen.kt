@@ -68,15 +68,14 @@ fun ManageUsersScreen(
                 modifier = Modifier.padding(it)
             ) {
 
-                items(sampleUserList()){
+                items(manageUsersViewModel.listOfUsers){user->
                    // UserItem()
-                    UserListItem(user = it)
-                    Text(text = "users: ${manageUsersViewModel.listOfUsers.size}")
+                    UserListItem(user = user)
+                    //Text(text = "users: ${manageUsersViewModel.listOfUsers.size}")
 
                 }
             }
         }
-
     }
 }
 
@@ -141,7 +140,7 @@ fun UserListItem(user: User) {
                 .background(MaterialTheme.colorScheme.primary)
         ) {
             Text(
-                text = user.name.first().uppercaseChar().toString(),
+                text = if (user.name.isNotBlank())user.name.first().uppercaseChar().toString() else "",
                 style = MaterialTheme.typography.bodyLarge.copy(
                     color = MaterialTheme.colorScheme.onPrimary,
                     fontWeight = FontWeight.Bold,
@@ -153,13 +152,25 @@ fun UserListItem(user: User) {
         MyHorizontalSpacer(width = 16)
        // Spacer(modifier = Modifier.width(16.dp))
         Column(modifier = Modifier.weight(1f)) {
+            if (user.name.isNotBlank()) {
+                Text(
+                    text = user.name,
+                    style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold),
+                    fontSize = 20.sp
+                )
+            }
+            if (user.phone.isNotBlank()) {
+                Text(
+                    text = user.phone,
+                    style = MaterialTheme.typography.bodyMedium,
+                    fontSize = 16.sp
+                )
+            }
             Text(
-                text = user.name,
-                style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold),
-                fontSize = 20.sp
+                text = user.email,
+                style = MaterialTheme.typography.bodySmall,
+                fontSize = 14.sp
             )
-            Text(text = user.phone, style = MaterialTheme.typography.bodyMedium, fontSize = 16.sp)
-            Text(text = user.email, style = MaterialTheme.typography.bodySmall, fontSize = 14.sp)
             Text(
                 text = user.role,
                 style = MaterialTheme.typography.bodySmall.copy(
