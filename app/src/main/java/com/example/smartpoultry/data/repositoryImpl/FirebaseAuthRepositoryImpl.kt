@@ -19,6 +19,7 @@ import com.google.firebase.auth.EmailAuthCredential
 import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.toObject
 import com.google.protobuf.Internal.BooleanList
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
@@ -294,6 +295,27 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
 
     }
 
+    override suspend fun getFarmEmployees(farmId: String): Result<List<User>> {
+        val listOfEmployees = mutableListOf<User>()
+
+        try {
+            val querySnapshot = firebaseFirestore.collection(USERS_COLLECTION)
+                .whereEqualTo("farmId" , farmId)
+                .get()
+                .await()
+
+            for (document in querySnapshot.documents){
+                val user = document.toObject<User>()
+                user?.let {
+                    listOfEmployees.add(it)
+                }
+            }
+            return Result.success(listOfEmployees)
+        }catch (e : Exception){
+            Log.d("get employees", e.message.toString())
+            return Result.failure(e)
+        }
+    }
 
     override fun logOut() {
         firebaseAuth.signOut()

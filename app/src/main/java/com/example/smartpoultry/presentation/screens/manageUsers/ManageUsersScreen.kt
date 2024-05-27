@@ -34,6 +34,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.smartpoultry.data.dataSource.remote.firebase.models.User
 import com.example.smartpoultry.presentation.composables.MyHorizontalSpacer
 import com.example.smartpoultry.presentation.composables.MyVerticalSpacer
@@ -47,6 +48,7 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 fun ManageUsersScreen(
     navigator:DestinationsNavigator
 ){
+    val manageUsersViewModel : ManageUsersViewModel = hiltViewModel()
     SmartPoultryTheme {
 
         Scaffold(
@@ -65,9 +67,12 @@ fun ManageUsersScreen(
             LazyColumn(
                 modifier = Modifier.padding(it)
             ) {
+
                 items(sampleUserList()){
                    // UserItem()
                     UserListItem(user = it)
+                    Text(text = "users: ${manageUsersViewModel.listOfUsers.size}")
+
                 }
             }
         }
@@ -114,13 +119,16 @@ fun UserListItem(user: User) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-           // .padding(start = 6.dp, end = 6.dp)
-                .clickable {
+            // .padding(start = 6.dp, end = 6.dp)
+            .clickable {
 
-                }
+            }
             .background(
                 brush = Brush.horizontalGradient(
-                    colors = listOf(MaterialTheme.colorScheme.surfaceDim, MaterialTheme.colorScheme.surfaceBright)
+                    colors = listOf(
+                        MaterialTheme.colorScheme.surfaceDim,
+                        MaterialTheme.colorScheme.surfaceBright
+                    )
                 )
             )
             .padding(16.dp)
