@@ -25,7 +25,7 @@ class ManageUsersViewModel @Inject constructor(
     *  4. see the users currently singed in
     *
     * */
-
+    val toastMessage = mutableStateOf("")
     val farmId = mutableStateOf("")
     val listOfUsers = mutableStateListOf<User>()
 
@@ -39,6 +39,8 @@ class ManageUsersViewModel @Inject constructor(
         }
     }
 
-
+    fun onListItemClicked(item : User ){
+        toastMessage.value = "email for this user is ${item.email}"
+    }
 
 }
