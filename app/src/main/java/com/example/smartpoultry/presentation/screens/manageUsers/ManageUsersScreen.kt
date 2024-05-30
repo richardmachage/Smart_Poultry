@@ -21,8 +21,13 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -48,6 +53,7 @@ fun ManageUsersScreen(
 ){
     val manageUsersViewModel : ManageUsersViewModel = hiltViewModel()
     val context = LocalContext.current
+    var showBottomSheet by remember { manageUsersViewModel.showBottomSheet }
 
     LaunchedEffect (manageUsersViewModel.toastMessage.value){
         if (manageUsersViewModel.toastMessage.value.isNotBlank()){
@@ -70,6 +76,16 @@ fun ManageUsersScreen(
                     }
                 )}
         ) {
+
+            if (showBottomSheet){
+                ManageUsersBottomSheet(
+                    user = manageUsersViewModel.currentUser!!,
+                    sheetState = rememberModalBottomSheetState(),
+                    scope = rememberCoroutineScope(),
+                    onDismiss = {showBottomSheet = false}
+                )
+            }
+
             LazyColumn(
                 modifier = Modifier.padding(it)
             ) {

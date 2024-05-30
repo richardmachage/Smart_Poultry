@@ -18,16 +18,18 @@ class ManageUsersViewModel @Inject constructor(
     private val preferencesRepo: PreferencesRepo
 ): ViewModel(){
 
+
     /*objectives here
-    *  1. delete user
-    *  2. change permissions of a given user
-    *  3. see all users registered
-    *  4. see the users currently singed in
-    *
-    * */
+        *  1. delete user
+        *  2. change permissions of a given user
+        *  3. see all users registered
+        * */
     val toastMessage = mutableStateOf("")
     val farmId = mutableStateOf("")
     val listOfUsers = mutableStateListOf<User>()
+    var  currentUser : User? = null
+    val showBottomSheet = mutableStateOf(false)
+
 
     init {
         viewModelScope.launch {
@@ -39,8 +41,10 @@ class ManageUsersViewModel @Inject constructor(
         }
     }
 
-    fun onListItemClicked(item : User ){
-        toastMessage.value = "email for this user is ${item.email}"
+    fun onListItemClicked(user : User ){
+        //toastMessage.value = "email for this user is ${item.email}"
+        currentUser = user
+        showBottomSheet.value = true
     }
 
 }
