@@ -292,6 +292,7 @@ fun AccountScreen(
 
 
 
+/*
 
 @Composable
 fun AccountCard() {
@@ -323,6 +324,7 @@ fun AccountCard() {
         }
     }
 }
+*/
 
 @Composable
 fun UserInfoRow(icon: ImageVector, label: String, value: String, editable: Boolean = false, onEditClick : () -> Unit = {}) {
