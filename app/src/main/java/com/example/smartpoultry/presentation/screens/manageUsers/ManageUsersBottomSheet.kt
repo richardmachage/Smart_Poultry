@@ -1,12 +1,34 @@
 package com.example.smartpoultry.presentation.screens.manageUsers
 
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SheetState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import com.example.smartpoultry.R
 import com.example.smartpoultry.data.dataSource.remote.firebase.models.User
+import com.example.smartpoultry.presentation.composables.MyVerticalSpacer
+import com.example.smartpoultry.presentation.composables.UserTypeDropDownMenu
+import com.example.smartpoultry.presentation.screens.accountScreen.UserInfoRow
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -17,20 +39,68 @@ fun ManageUsersBottomSheet(
     user: User,
     sheetState: SheetState,
     scope: CoroutineScope,
-    onDismiss : () -> Unit = {}
-){
+    onDismiss: () -> Unit = {}
+) {
     ModalBottomSheet(
         sheetState = sheetState,
-        onDismissRequest = { onDismiss() }
-    ) {
-        Button(onClick = {
-            scope.launch { sheetState.hide() }.invokeOnCompletion {
-                if (!sheetState.isVisible){
-                    onDismiss() //set showBottomSheet = false
-                }
+        onDismissRequest = { scope.launch { sheetState.hide() }.invokeOnCompletion {
+            if (!sheetState.isVisible) {
+                onDismiss() //set showBottomSheet = false
             }
-        }) {
-            Text(text = "hide bottom sheet")
+        } }
+    ) {
+        Column(
+            modifier = Modifier.padding(10.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = "Edit Details",
+                style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.Bold),
+                color = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.padding(bottom = 8.dp)
+            )
+            MyVerticalSpacer(height = 20)
+
+            if (user.name.isNotBlank()) {
+                UserInfoRow(Icons.Default.Person, "name", value = user.name, false)
+            }
+
+            MyVerticalSpacer(height = 10)
+            UserInfoRow(Icons.Default.Email, "Email", value = user.email, false)
+
+            if (user.phone.isNotBlank()) {
+                UserInfoRow(Icons.Default.Phone, "Phone", value = user.phone, false)
+            }
+
+            var shoeEditRole by remember { mutableStateOf(false) }
+            UserInfoRow(
+                icon = ImageVector.vectorResource(id = R.drawable.verified_user),
+                label = "Role",
+                value = user.role,
+                editable = user.role.lowercase() != "super",
+                onEditClick = { shoeEditRole = true }
+            )
+
+            if (shoeEditRole) {
+                UserTypeDropDownMenu(onItemClick = { shoeEditRole = false })
+            }
+
+
+        }
+        MyVerticalSpacer(height = 30)
+        Button(
+            onClick = {
+                scope.launch { sheetState.hide() }.invokeOnCompletion {
+                    if (!sheetState.isVisible) {
+                        onDismiss() //set showBottomSheet = false
+                    }
+                }
+            },
+            modifier = Modifier
+                .padding(10.dp)
+                .fillMaxWidth()
+        ) {
+            Text(text = "Cancel")
         }
     }
 }

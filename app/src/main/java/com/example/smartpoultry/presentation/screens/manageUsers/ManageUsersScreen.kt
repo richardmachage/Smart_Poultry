@@ -106,39 +106,6 @@ fun ManageUsersScreen(
     }
 }
 
-/*@Composable
-fun UserItem(
-    onOptionsClick : (userId : String) -> Unit = {}
-){
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(10.dp),
-        horizontalArrangement = Arrangement.SpaceBetween) {
-        Column {
-           // HorizontalDivider()
-            Text(text = "User Name")
-            Text(text = "Current role")
-        }
-        Row(
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Box(
-                modifier = Modifier
-                    // .padding(horizontal = 4.dp)
-                    .size(10.dp)
-                    .clip(CircleShape)
-                    .background(
-                        color = Color.Green
-                    )
-            )
-            IconButton(onClick = { onOptionsClick("test Id") }) {
-                Icon(imageVector = Icons.Default.MoreVert, contentDescription ="more" )
-            }
-        }
-    }
-    HorizontalDivider()
-}*/
 
 @Composable
 fun UserListItem(
