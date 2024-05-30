@@ -90,7 +90,7 @@ fun ManageUsersScreen(
                 modifier = Modifier.padding(it)
             ) {
 
-                items(manageUsersViewModel.listOfUsers){user->
+                items(manageUsersViewModel.listOfUsers.filter {user -> user.role.lowercase() != "super"   }){user->
                    // UserItem()
                     UserListItem(
                         user = user,

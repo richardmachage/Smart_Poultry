@@ -60,32 +60,36 @@ fun ManageUsersBottomSheet(
             modifier = Modifier.padding(10.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(
+            Text( //Tittle
                 text = "Edit Details",
                 style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.Bold),
                 color = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.padding(bottom = 8.dp)
             )
-            MyVerticalSpacer(height = 20)
 
+            //userName
+            MyVerticalSpacer(height = 20)
             if (user.name.isNotBlank()) {
                 UserInfoRow(Icons.Default.Person, "name", value = user.name, false)
             }
 
+            //user email
             MyVerticalSpacer(height = 10)
             UserInfoRow(Icons.Default.Email, "Email", value = user.email, false)
 
+            //userPhone
             if (user.phone.isNotBlank()) {
                 UserInfoRow(Icons.Default.Phone, "Phone", value = user.phone, false)
             }
 
+            //user role
             var shoeEditRole by remember { mutableStateOf(false) }
             UserInfoRow(
                 icon = ImageVector.vectorResource(id = R.drawable.verified_user),
                 label = "Role",
                 value = user.role,
-                editable = user.role.lowercase() != "super",
-                onEditClick = { shoeEditRole = true }
+                editable = true,
+                onEditClick = { shoeEditRole = !shoeEditRole }
             )
 
             if (shoeEditRole) {

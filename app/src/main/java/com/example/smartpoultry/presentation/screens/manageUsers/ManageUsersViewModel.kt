@@ -27,8 +27,9 @@ class ManageUsersViewModel @Inject constructor(
     val toastMessage = mutableStateOf("")
     val farmId = mutableStateOf("")
     val listOfUsers = mutableStateListOf<User>()
-    var  currentUser : User? = null
+    var  currentUser : User? = null //user selected for editing
     val showBottomSheet = mutableStateOf(false)
+
 
 
     init {
