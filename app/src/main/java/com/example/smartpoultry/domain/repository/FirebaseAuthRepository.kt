@@ -15,5 +15,6 @@ interface FirebaseAuthRepository {
     suspend fun updateIsPasswordChanged(): Result<Boolean>
     suspend fun getFarm() : String
     suspend fun getFarmEmployees (farmId: String): Result<List<User>>
+    suspend fun deleteUser(userId:String):Result<Boolean>
     fun logOut()
 }

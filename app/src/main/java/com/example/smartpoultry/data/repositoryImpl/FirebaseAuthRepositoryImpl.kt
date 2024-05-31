@@ -59,7 +59,7 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
                 newFarm.set(Farm(name = farmName, id = newFarm.id, superUserEmail = email)).await()
                 //step 3 add created user to the Main Users Collection
                 firebaseUser?.let {
-                    val user = User(email = email, role = role, farmId = newFarm.id, passwordReset = true)
+                    val user = User(userId = firebaseUser.uid, email = email, role = role, farmId = newFarm.id, passwordReset = true)
                     firebaseFirestore.collection(USERS_COLLECTION)
                         .document(firebaseUser.uid)
                         .set(user)
@@ -90,7 +90,7 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
 
                 firebaseUser?.let {
                     val user =
-                        User(email = email, role = role, farmId = farmId, phone = "", name = "", passwordReset = false)
+                        User(userId = firebaseUser.uid, email = email, role = role, farmId = farmId, phone = "", name = "", passwordReset = false)
                     firebaseFirestore.collection(USERS_COLLECTION)
                         .document(firebaseUser.uid)
                         .set(user)
@@ -317,6 +317,9 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun deleteUser(userId:String): Result<Boolean> {
+        TODO("Not yet implemented")
+    }
     override fun logOut() {
         firebaseAuth.signOut()
     }

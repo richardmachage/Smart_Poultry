@@ -1,6 +1,7 @@
 package com.example.smartpoultry.data.dataSource.remote.firebase.models
 
 data class User(
+    val userId : String = "",
     val name : String = "",
     val phone : String = "",
     val email : String = "",
