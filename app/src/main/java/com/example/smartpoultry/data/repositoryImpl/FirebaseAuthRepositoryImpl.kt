@@ -360,6 +360,8 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
                     completableDeferred.complete(Result.failure(it))
                 }
                 .await()
+        }?: run {
+            completableDeferred.complete(Result.failure(Throwable(message = "Deletion failed, Log into app afresh and try again")))
         }
 
 
