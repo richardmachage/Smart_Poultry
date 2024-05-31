@@ -338,23 +338,30 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun deleteUser(userId: String): Result<Boolean> {
-        // Create the data to pass to the Cloud Function
-        var completableDeferred = CompletableDeferred<Result<Boolean>>()
-        val data = hashMapOf(
-            "userId" to userId
-        )
+    override suspend fun deleteUser(userId: String): Result<String> {
+        var completableDeferred = CompletableDeferred<Result<String>>()
 
-        //call the cloud function
-        functions.getHttpsCallable("deleteUser")
-            .call()
-            .addOnSuccessListener {
-                completableDeferred.complete(Result.success(true))
-            }
-            .addOnFailureListener{
-                completableDeferred.complete(Result.failure(it))
-            }
-            .await()
+        // Ensure the current user is authenticated
+        val currentUser = firebaseAuth.currentUser
+        currentUser?.let {
+            //now delete employee
+            // Create the data to pass to the Cloud Function
+            val data = hashMapOf(
+                "userId" to userId
+            )
+
+            //call the cloud function
+            functions.getHttpsCallable("deleteUser")
+                .call(data)
+                .addOnSuccessListener {
+                    completableDeferred.complete(Result.success("User deleted successfully"))
+                }
+                .addOnFailureListener{
+                    completableDeferred.complete(Result.failure(it))
+                }
+                .await()
+        }
+
 
         return completableDeferred.await()
     }
