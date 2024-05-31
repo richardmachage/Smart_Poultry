@@ -15,11 +15,13 @@ import com.example.smartpoultry.data.dataSource.remote.firebase.USERS_COLLECTION
 import com.example.smartpoultry.data.dataSource.remote.firebase.models.Farm
 import com.example.smartpoultry.data.dataSource.remote.firebase.models.User
 import com.example.smartpoultry.domain.repository.FirebaseAuthRepository
+import com.google.firebase.Firebase
 import com.google.firebase.auth.EmailAuthCredential
 import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.toObject
+import com.google.firebase.functions.functions
 import com.google.protobuf.Internal.BooleanList
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
@@ -31,7 +33,8 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
-var isPasswordReset : Boolean? = null
+var isPasswordReset: Boolean? = null
+
 class FirebaseAuthRepositoryImpl @Inject constructor(
     private val firebaseAuth: FirebaseAuth,
     private val firebaseFirestore: FirebaseFirestore,
@@ -39,6 +42,7 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
     private val preferencesRepo: PreferencesRepo
 ) : FirebaseAuthRepository {
 
+    val functions = Firebase.functions
     override suspend fun signUp(
         email: String,
         password: String,
@@ -59,7 +63,13 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
                 newFarm.set(Farm(name = farmName, id = newFarm.id, superUserEmail = email)).await()
                 //step 3 add created user to the Main Users Collection
                 firebaseUser?.let {
-                    val user = User(userId = firebaseUser.uid, email = email, role = role, farmId = newFarm.id, passwordReset = true)
+                    val user = User(
+                        userId = firebaseUser.uid,
+                        email = email,
+                        role = role,
+                        farmId = newFarm.id,
+                        passwordReset = true
+                    )
                     firebaseFirestore.collection(USERS_COLLECTION)
                         .document(firebaseUser.uid)
                         .set(user)
@@ -90,7 +100,15 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
 
                 firebaseUser?.let {
                     val user =
-                        User(userId = firebaseUser.uid, email = email, role = role, farmId = farmId, phone = "", name = "", passwordReset = false)
+                        User(
+                            userId = firebaseUser.uid,
+                            email = email,
+                            role = role,
+                            farmId = farmId,
+                            phone = "",
+                            name = "",
+                            passwordReset = false
+                        )
                     firebaseFirestore.collection(USERS_COLLECTION)
                         .document(firebaseUser.uid)
                         .set(user)
@@ -125,12 +143,15 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
                             //check status of password reset
                             user?.let {
                                 //then also save to local
-                                preferencesRepo.saveData(IS_PASSWORD_RESET_KEY, it.passwordReset.toString())
+                                preferencesRepo.saveData(
+                                    IS_PASSWORD_RESET_KEY,
+                                    it.passwordReset.toString()
+                                )
                             }
 
                             //save user other details  to datastore
                             //user Farm
-                            preferencesRepo.saveData(FARM_ID_KEY,user?.farmId.toString())
+                            preferencesRepo.saveData(FARM_ID_KEY, user?.farmId.toString())
                             Log.d("Farm", "saving farm to datastore: ${user?.farmId}")
 
                             CoroutineScope(Dispatchers.IO).launch {
@@ -281,7 +302,7 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
             return farmName
         } else {
             //farm name does not exist locally so we red from remote source
-            val docsnapshot  = firebaseFirestore.collection(FARMS_COLLECTION).document(farmId)
+            val docsnapshot = firebaseFirestore.collection(FARMS_COLLECTION).document(farmId)
                 .get()
                 .addOnSuccessListener {
                     val farm = it.toObject(Farm::class.java)
@@ -290,7 +311,7 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
                     }
                 }
                 .await()
-            return  preferencesRepo.loadData(FARM_NAME_KEY)?:""
+            return preferencesRepo.loadData(FARM_NAME_KEY) ?: ""
         }
 
     }
@@ -300,26 +321,44 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
 
         try {
             val querySnapshot = firebaseFirestore.collection(USERS_COLLECTION)
-                .whereEqualTo("farmId" , farmId)
+                .whereEqualTo("farmId", farmId)
                 .get()
                 .await()
 
-            for (document in querySnapshot.documents){
+            for (document in querySnapshot.documents) {
                 val user = document.toObject<User>()
                 user?.let {
                     listOfEmployees.add(it)
                 }
             }
             return Result.success(listOfEmployees)
-        }catch (e : Exception){
+        } catch (e: Exception) {
             Log.d("get employees", e.message.toString())
             return Result.failure(e)
         }
     }
 
-    override suspend fun deleteUser(userId:String): Result<Boolean> {
-        TODO("Not yet implemented")
+    override suspend fun deleteUser(userId: String): Result<Boolean> {
+        // Create the data to pass to the Cloud Function
+        var completableDeferred = CompletableDeferred<Result<Boolean>>()
+        val data = hashMapOf(
+            "userId" to userId
+        )
+
+        //call the cloud function
+        functions.getHttpsCallable("deleteUser")
+            .call()
+            .addOnSuccessListener {
+                completableDeferred.complete(Result.success(true))
+            }
+            .addOnFailureListener{
+                completableDeferred.complete(Result.failure(it))
+            }
+            .await()
+
+        return completableDeferred.await()
     }
+
     override fun logOut() {
         firebaseAuth.signOut()
     }
