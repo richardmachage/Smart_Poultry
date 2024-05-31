@@ -48,4 +48,16 @@ class ManageUsersViewModel @Inject constructor(
         showBottomSheet.value = true
     }
 
+    fun onDeleteUser(userId:String){
+        viewModelScope.launch {
+           val result = firebaseAuthRepository.deleteUser(userId = userId)
+            result.onSuccess {
+                //Todo implement on succes
+            }
+            result.onFailure {
+                //Todo implement on failure
+            }
+        }
+    }
+
 }
