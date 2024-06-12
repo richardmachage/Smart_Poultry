@@ -28,8 +28,11 @@ class ManageUsersViewModel @Inject constructor(
     val toastMessage = mutableStateOf("")
     val farmId = mutableStateOf("")
     val listOfUsers = mutableStateListOf<User>()
-    var  currentUser : User? = null //user selected for editing
+    var currentUser : User? = null //user selected for editing
     val showBottomSheet = mutableStateOf(false)
+    val updateListOfEmployees = mutableStateOf("")
+    val isLoading = mutableStateOf(false)
+
 
 
 
@@ -43,6 +46,14 @@ class ManageUsersViewModel @Inject constructor(
         }
     }
 
+    suspend fun updateListOfUsers(){
+       farmId.value = preferencesRepo.loadData(FARM_ID_KEY).toString()
+        val result = firebaseAuthRepository.getFarmEmployees(farmId.value)
+        result.onSuccess {
+            listOfUsers.clear()
+            listOfUsers.addAll(it)
+        }
+    }
     fun onListItemClicked(user : User ){
         //toastMessage.value = "email for this user is ${item.email}"
         currentUser = user
@@ -51,13 +62,19 @@ class ManageUsersViewModel @Inject constructor(
 
     fun onDeleteUser(userId:String){
         viewModelScope.launch {
+            isLoading.value = true
            val result = firebaseAuthRepository.deleteUser(userId = userId)
             result.onSuccess {
                 //Todo implement on success
+                isLoading.value = false
+                updateListOfEmployees.value = "yes"
+                showBottomSheet.value = false
                 toastMessage.value = "Deleted successfully"
+
             }
             result.onFailure {
                 //Todo implement on failure
+                isLoading.value = false
                 toastMessage.value = "Failed to delete : ${it.localizedMessage?.toString()}"
                 Log.e("on delete user", it.stackTraceToString())
             }

@@ -39,6 +39,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.smartpoultry.data.dataSource.remote.firebase.models.User
+import com.example.smartpoultry.presentation.composables.MyCircularProgressBar
 import com.example.smartpoultry.presentation.composables.MyHorizontalSpacer
 import com.example.smartpoultry.presentation.composables.MyVerticalSpacer
 import com.example.smartpoultry.presentation.theme.SmartPoultryTheme
@@ -61,6 +62,13 @@ fun ManageUsersScreen(
             manageUsersViewModel.toastMessage.value = ""
         }
     }
+    
+    LaunchedEffect(manageUsersViewModel.updateListOfEmployees.value) {
+        if (manageUsersViewModel.updateListOfEmployees.value.isNotBlank()){
+            manageUsersViewModel.updateListOfUsers()
+            manageUsersViewModel.updateListOfEmployees.value = ""
+        }
+    }
     SmartPoultryTheme {
 
         Scaffold(
@@ -76,7 +84,7 @@ fun ManageUsersScreen(
                     }
                 )}
         ) {
-
+            MyCircularProgressBar(isLoading = manageUsersViewModel.isLoading.value)
             if (showBottomSheet){
                 ManageUsersBottomSheet(
                     user = manageUsersViewModel.currentUser!!,
@@ -140,7 +148,7 @@ fun UserListItem(
                 .background(MaterialTheme.colorScheme.primary)
         ) {
             Text(
-                text = if (user.name.isNotBlank())user.name.first().uppercaseChar().toString() else "",
+                text = if (user.name.isNotBlank())user.name.first().uppercaseChar().toString() else user.email.first().uppercase(),
                 style = MaterialTheme.typography.bodyLarge.copy(
                     color = MaterialTheme.colorScheme.onPrimary,
                     fontWeight = FontWeight.Bold,

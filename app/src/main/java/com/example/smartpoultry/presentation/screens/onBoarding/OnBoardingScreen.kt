@@ -10,6 +10,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -35,48 +37,55 @@ fun OnBoardingScreen(
 
     val onBoardingViewModel = hiltViewModel<OnBoardingViewModel>()
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
+    Surface(
+        color = MaterialTheme.colorScheme.background,
+        modifier = Modifier.fillMaxSize()
     ) {
-        val pagerState = rememberPagerState(initialPage = 0) { pages.size }
-        val currentPage = pagerState.currentPage
-        val scope = rememberCoroutineScope()
 
-        //Horizontal Pager
-        HorizontalPager(state = pagerState) {position->
-            OnBoardingPage(pages[position])
-        }
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+        ) {
+            val pagerState = rememberPagerState(initialPage = 0) { pages.size }
+            val currentPage = pagerState.currentPage
+            val scope = rememberCoroutineScope()
 
-        Spacer(modifier = Modifier.weight(1f))
+            //Horizontal Pager
+            HorizontalPager(state = pagerState) { position ->
+                OnBoardingPage(pages[position])
+            }
 
-        Row (modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 32.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-            ){
-            PageIndicator(pageSize = pages.size, selectedPage = currentPage)
-            NextBackButton(
-                currentPage = currentPage,
-                onNextClick = {
-                              scope.launch{
-                                  pagerState.animateScrollToPage(currentPage +1)
-                              }
-                },
-                onBackClick = {
-                    scope.launch {
-                        pagerState.animateScrollToPage(currentPage -1)
+            Spacer(modifier = Modifier.weight(1f))
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 32.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                PageIndicator(pageSize = pages.size, selectedPage = currentPage)
+                NextBackButton(
+                    currentPage = currentPage,
+                    onNextClick = {
+                        scope.launch {
+                            pagerState.animateScrollToPage(currentPage + 1)
+                        }
+                    },
+                    onBackClick = {
+                        scope.launch {
+                            pagerState.animateScrollToPage(currentPage - 1)
+                        }
+                    },
+                    onGetStartedClick = {
+                        onBoardingViewModel.saveAppEntry()
+                        navigator.navigate(LogInScreenDestination) {
+                            popUpTo(LogInScreenDestination) { inclusive = true }
+                        }
                     }
-                },
-                onGetStartedClick = {
-                    onBoardingViewModel.saveAppEntry()
-                    navigator.navigate(LogInScreenDestination){
-                        popUpTo(LogInScreenDestination){inclusive=true}
-                    }
-                }
-            )
+                )
 
+            }
         }
     }
 }

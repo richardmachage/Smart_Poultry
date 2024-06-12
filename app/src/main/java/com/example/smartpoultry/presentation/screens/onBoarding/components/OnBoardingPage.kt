@@ -13,6 +13,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.example.smartpoultry.presentation.composables.MyVerticalSpacer
 
 @Composable
 fun OnBoardingPage(page: Page) {
@@ -25,6 +26,7 @@ fun OnBoardingPage(page: Page) {
             contentDescription = null,
             contentScale = ContentScale.Crop
         )
+        MyVerticalSpacer(height = 10)
         Text(
             text = page.title,
             style = MaterialTheme.typography.headlineMedium.copy(
