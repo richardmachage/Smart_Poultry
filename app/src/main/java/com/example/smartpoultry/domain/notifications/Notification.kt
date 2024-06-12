@@ -12,7 +12,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.example.smartpoultry.R
 import com.example.smartpoultry.activity.MainActivity
-import com.example.smartpoultry.destinations.AlertScreenDestination
+import com.example.smartpoultry.presentation.destinations.AlertScreenDestination
 
 fun createNotificationChannel(context: Context, channelName : String, descriptionText : String, channelID : String){
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){

@@ -36,7 +36,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.smartpoultry.data.dataModels.DailyEggCollection
 import com.example.smartpoultry.data.dataSource.room.entities.cells.Cells
 import com.example.smartpoultry.data.dataSource.room.entities.eggCollection.EggCollection
-import com.example.smartpoultry.destinations.ViewRecordsScreenDestination
 import com.example.smartpoultry.domain.permissions.POST_NOTIFICATIONS
 import com.example.smartpoultry.domain.permissions.checkIfPermissionGranted
 import com.example.smartpoultry.presentation.composables.BlocksDropDownMenu
@@ -48,6 +47,7 @@ import com.example.smartpoultry.presentation.composables.MyVerticalSpacer
 import com.example.smartpoultry.presentation.composables.NormButton
 import com.example.smartpoultry.presentation.composables.RadioButtonGroup
 import com.example.smartpoultry.presentation.composables.YearsDropDownMenu
+import com.example.smartpoultry.presentation.destinations.ViewRecordsScreenDestination
 import com.example.smartpoultry.presentation.uiModels.ChartClass
 import com.example.smartpoultry.utils.localDateToJavaDate
 import com.example.smartpoultry.utils.toGraphDate

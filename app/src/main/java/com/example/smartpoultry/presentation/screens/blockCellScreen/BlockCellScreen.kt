@@ -37,10 +37,10 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.smartpoultry.destinations.CellsScreenDestination
 import com.example.smartpoultry.presentation.composables.MyInputDialog
 import com.example.smartpoultry.presentation.composables.MyOutlineTextFiled
 import com.example.smartpoultry.presentation.composables.MyVerticalSpacer
+import com.example.smartpoultry.presentation.destinations.CellsScreenDestination
 import com.example.smartpoultry.presentation.uiModels.BlockItem
 import com.example.smartpoultry.presentation.uiModels.BlockParse
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator

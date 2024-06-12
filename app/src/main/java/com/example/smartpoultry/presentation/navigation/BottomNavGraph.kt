@@ -7,11 +7,11 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.example.smartpoultry.destinations.AlertScreenDestination
-import com.example.smartpoultry.destinations.AnalyticsScreenDestination
-import com.example.smartpoultry.destinations.BlockCellScreenDestination
-import com.example.smartpoultry.destinations.EggScreenDestination
-import com.example.smartpoultry.destinations.HomeScreenDestination
+import com.example.smartpoultry.presentation.destinations.AlertScreenDestination
+import com.example.smartpoultry.presentation.destinations.AnalyticsScreenDestination
+import com.example.smartpoultry.presentation.destinations.BlockCellScreenDestination
+import com.example.smartpoultry.presentation.destinations.EggScreenDestination
+import com.example.smartpoultry.presentation.destinations.HomeScreenDestination
 import com.example.smartpoultry.presentation.screens.alerts.AlertScreen
 import com.example.smartpoultry.presentation.screens.analytics.AnalyticsScreen
 import com.example.smartpoultry.presentation.screens.blockCellScreen.BlockCellScreen
