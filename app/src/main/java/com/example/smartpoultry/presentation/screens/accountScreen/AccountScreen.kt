@@ -46,7 +46,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -57,7 +56,6 @@ import com.example.smartpoultry.presentation.composables.MyEditTextClear
 import com.example.smartpoultry.presentation.composables.MyInputDialog
 import com.example.smartpoultry.presentation.composables.MyOutlineTextFiled
 import com.example.smartpoultry.presentation.composables.UserTypeDropDownMenu
-import com.example.smartpoultry.presentation.theme.SmartPoultryTheme
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
@@ -270,17 +268,7 @@ fun AccountScreen(
                         ManageUsersScreenDestination
                     )  })
 
-                   /* NormButton(
-                        modifier = Modifier.fillMaxWidth(),
-                        onButtonClick = { showRegDialog = true },
-                        btnName = "Register new user"
-                    )*/
 
-                    /*NormButton(
-                        modifier = Modifier.fillMaxWidth(),
-                        onButtonClick = { },
-                        btnName = "Manage Users"
-                    )*/
                 }
             }
 
@@ -292,39 +280,7 @@ fun AccountScreen(
 
 
 
-/*
 
-@Composable
-fun AccountCard() {
-    Card(
-        shape = RoundedCornerShape(16.dp),
-        elevation = CardDefaults.cardElevation(8.dp),
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        Column(
-            modifier = Modifier
-                .background(MaterialTheme.colorScheme.surface)
-                .padding(16.dp)
-        ) {
-            Text(
-                text = "My Account",
-                style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.Bold),
-                color = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.padding(bottom = 8.dp)
-            )
-            UserInfoRow(ImageVector.vectorResource(id = R.drawable.verified_user), label = "Role", value = "Super")
-            Spacer(modifier = Modifier.height(16.dp))
-            UserInfoRow(Icons.Default.Person, "name", "John Doe", true){
-
-            }
-            Spacer(modifier = Modifier.height(16.dp))
-            UserInfoRow(Icons.Default.Email, "Email address", "johndoe@example.com", true)
-            Spacer(modifier = Modifier.height(16.dp))
-            UserInfoRow(Icons.Default.Phone, "Phone Number", "+1234567890", true)
-        }
-    }
-}
-*/
 
 @Composable
 fun UserInfoRow(icon: ImageVector, label: String, value: String, editable: Boolean = false, onEditClick : () -> Unit = {}) {
@@ -370,18 +326,4 @@ fun ActionButton(text: String, icon: ImageVector, onClick: ()-> Unit = {}) {
         Spacer(modifier = Modifier.width(8.dp))
         Text(text = text)
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-   // MyApp {
-    SmartPoultryTheme {
-        Surface(
-            color = MaterialTheme.colorScheme.background
-        ) {
-           // AccountDetailsScreen()
-        }
-    }
-
 }
