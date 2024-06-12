@@ -4,6 +4,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.smartpoultry.data.dataSource.datastore.AppDataStore
+import com.example.smartpoultry.data.dataSource.datastore.USER_NAME_KEY
+import com.example.smartpoultry.data.dataSource.datastore.USER_ROLE_KEY
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -79,7 +81,10 @@ class SettingsViewModel @Inject constructor (
     fun onLogOut(){
         firebaseAuth.signOut()
         viewModelScope.launch {
-            dataStore.clearDataStore()
+            //dataStore.clearDataStore()
+            dataStore.deleteData(USER_ROLE_KEY)
+            dataStore.deleteData(USER_NAME_KEY)
+
         }
     }
 }

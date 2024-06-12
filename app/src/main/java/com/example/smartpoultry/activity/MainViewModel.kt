@@ -1,6 +1,5 @@
 package com.example.smartpoultry.activity
 
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -47,7 +46,7 @@ class MainViewModel @Inject constructor(
     private fun checkIfFarmSaved(){
         viewModelScope.launch {
             dataStore.readData(FARM_ID_KEY).collect{
-                Log.d("Farm","Farm id from datastore :$it")
+               // Log.d("Farm","Farm id from datastore :$it")
             }
         }
     }

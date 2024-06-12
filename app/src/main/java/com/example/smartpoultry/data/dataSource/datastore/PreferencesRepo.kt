@@ -24,4 +24,11 @@ class PreferencesRepo @Inject constructor(
     fun loadData(key:String):String?{
         return sharedPreferences.getString(key,"")
     }
+
+    fun deleteData(key: String){
+        with(sharedPreferences.edit()){
+            remove(key)
+            apply()
+        }
+    }
 }

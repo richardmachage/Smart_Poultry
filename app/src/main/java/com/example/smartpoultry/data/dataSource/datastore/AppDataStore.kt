@@ -114,6 +114,13 @@ class AppDataStore @Inject constructor(
         }
     }
 
+    suspend  fun deleteData(key: String){
+        val dataStoreKey = stringPreferencesKey(key)
+        dataStore.edit {
+            it.remove(dataStoreKey)
+        }
+    }
+
     suspend fun clearDataStore() {
         dataStore.edit { myPreferences ->
             myPreferences.clear()
