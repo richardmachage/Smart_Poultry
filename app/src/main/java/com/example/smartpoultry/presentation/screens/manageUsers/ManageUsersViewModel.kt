@@ -1,5 +1,6 @@
 package com.example.smartpoultry.presentation.screens.manageUsers
 
+import android.util.Log
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -52,10 +53,13 @@ class ManageUsersViewModel @Inject constructor(
         viewModelScope.launch {
            val result = firebaseAuthRepository.deleteUser(userId = userId)
             result.onSuccess {
-                //Todo implement on succes
+                //Todo implement on success
+                toastMessage.value = "Deleted successfully"
             }
             result.onFailure {
                 //Todo implement on failure
+                toastMessage.value = "Failed to delete : ${it.localizedMessage?.toString()}"
+                Log.e("on delete user", it.stackTraceToString())
             }
         }
     }

@@ -32,6 +32,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.smartpoultry.R
 import com.example.smartpoultry.data.dataSource.remote.firebase.models.User
+import com.example.smartpoultry.presentation.composables.MyInputDialog
 import com.example.smartpoultry.presentation.composables.MyVerticalSpacer
 import com.example.smartpoultry.presentation.composables.UserTypeDropDownMenu
 import com.example.smartpoultry.presentation.screens.accountScreen.UserInfoRow
@@ -46,15 +47,17 @@ fun ManageUsersBottomSheet(
     sheetState: SheetState,
     scope: CoroutineScope,
     onDismiss: () -> Unit = {},
-    onDelete: (User)-> Unit = {}
+    onDelete: (User) -> Unit = {}
 ) {
     ModalBottomSheet(
         sheetState = sheetState,
-        onDismissRequest = { scope.launch { sheetState.hide() }.invokeOnCompletion {
-            if (!sheetState.isVisible) {
-                onDismiss() //set showBottomSheet = false
+        onDismissRequest = {
+            scope.launch { sheetState.hide() }.invokeOnCompletion {
+                if (!sheetState.isVisible) {
+                    onDismiss() //set showBottomSheet = false
+                }
             }
-        } }
+        }
     ) {
         Column(
             modifier = Modifier.padding(10.dp),
@@ -98,12 +101,32 @@ fun ManageUsersBottomSheet(
 
             MyVerticalSpacer(height = 10)
 
-            Button(
-                modifier = Modifier.fillMaxWidth().padding(10.dp),
-                onClick = { onDelete(user)},
-                colors = ButtonDefaults.buttonColors().copy(containerColor = Color.Red, contentColor = MaterialTheme.colorScheme.primary)
-            ){ //deleteButton
-                Icon(imageVector = Icons.Default.Delete, contentDescription = "delete", )//modifier = Modifier.size(24.dp))
+            var showDeleteDialog by remember { mutableStateOf(false) }
+            MyInputDialog(
+                showDialog = showDeleteDialog,
+                title = "Delete User",
+                onConfirm = {
+                    onDelete(user)
+                    showDeleteDialog = false
+                },
+                onDismiss = { showDeleteDialog = false }
+            ) {
+                Text(text = "Are you sure you want o delete this user? email: ${user.email}")
+            }
+            Button(//Delete user button
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(10.dp),
+                onClick = { showDeleteDialog = true },
+                colors = ButtonDefaults.buttonColors().copy(
+                    containerColor = Color.Red,
+                    contentColor = MaterialTheme.colorScheme.primary
+                )
+            ) { //deleteButton
+                Icon(
+                    imageVector = Icons.Default.Delete,
+                    contentDescription = "delete",
+                )//modifier = Modifier.size(24.dp))
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(text = "Deleter User")
             }

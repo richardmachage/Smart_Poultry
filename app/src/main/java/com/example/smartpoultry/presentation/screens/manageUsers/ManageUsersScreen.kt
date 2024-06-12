@@ -82,7 +82,10 @@ fun ManageUsersScreen(
                     user = manageUsersViewModel.currentUser!!,
                     sheetState = rememberModalBottomSheetState(),
                     scope = rememberCoroutineScope(),
-                    onDismiss = {showBottomSheet = false}
+                    onDismiss = {showBottomSheet = false},
+                    onDelete = {user->
+                        manageUsersViewModel.onDeleteUser(userId = user.userId)
+                    }
                 )
             }
 
@@ -94,8 +97,8 @@ fun ManageUsersScreen(
                    // UserItem()
                     UserListItem(
                         user = user,
-                        onClick = {
-                            manageUsersViewModel.onListItemClicked(it)
+                        onClick = {userClicked->
+                            manageUsersViewModel.onListItemClicked(userClicked)
                         }
                     )
                     //Text(text = "users: ${manageUsersViewModel.listOfUsers.size}")

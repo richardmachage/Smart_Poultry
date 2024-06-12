@@ -354,7 +354,18 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
             functions.getHttpsCallable("deleteUser")
                 .call(data)
                 .addOnSuccessListener {
-                    completableDeferred.complete(Result.success("User deleted successfully"))
+                    Log.d("Delete user", "successfully deleted on auth/Users")
+                    //now delete the user form firestore records
+                    firebaseFirestore.collection(USERS_COLLECTION)
+                        .document(userId)
+                        .delete()
+                        .addOnSuccessListener {
+                            Log.d("Delete user", "successfully deleted on firestore/Users")
+                            completableDeferred.complete(Result.success("User deleted successfully"))
+                        }
+                        .addOnFailureListener{
+                            completableDeferred.complete(Result.failure(it))
+                        }
                 }
                 .addOnFailureListener{
                     completableDeferred.complete(Result.failure(it))
