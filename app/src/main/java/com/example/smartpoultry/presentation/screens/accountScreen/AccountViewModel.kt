@@ -48,7 +48,7 @@ class AccountViewModel @Inject constructor(
         initialValue = ""
     )
 
-    fun registerUser(userRole: String, email: String) {
+    fun registerUser(userRole: String, email: String, name: String,phone: String) {
         viewModelScope.launch {
             isLoading.value = true
             if (!isValidEmail(email)){
@@ -58,8 +58,14 @@ class AccountViewModel @Inject constructor(
                 isLoading.value = false
                 toastMessage.value = "Please select a role"
             }else{
-                val result =
-                    fireBaseAuthRepo.registerUser(email = email, role = userRole, password = "0000000", farmId = dataStore.farmID)
+                val result = fireBaseAuthRepo.registerUser(
+                    email = email,
+                    role = userRole,
+                    password = "0000000",
+                    farmId = dataStore.farmID,
+                    name = name,
+                    phone = phone
+                )
                 result.onSuccess {
                     isLoading.value = false
                     toastMessage.value = "User registered successfully"

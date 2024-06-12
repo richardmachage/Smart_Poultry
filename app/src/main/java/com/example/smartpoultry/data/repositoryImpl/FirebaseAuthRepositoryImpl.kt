@@ -89,7 +89,9 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
         email: String,
         password: String,
         role: String,
-        farmId: String
+        farmId: String,
+        name: String,
+        phone: String
     ): Result<Boolean> = coroutineScope {
 
         val deferred = async(Dispatchers.IO) {
@@ -105,8 +107,8 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
                             email = email,
                             role = role,
                             farmId = farmId,
-                            phone = "",
-                            name = "",
+                            phone = name,
+                            name = phone,
                             passwordReset = false
                         )
                     firebaseFirestore.collection(USERS_COLLECTION)
