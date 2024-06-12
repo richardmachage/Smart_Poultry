@@ -4,7 +4,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.smartpoultry.data.dataSource.datastore.AppDataStore
+import com.example.smartpoultry.data.dataSource.datastore.FARM_ID_KEY
+import com.example.smartpoultry.data.dataSource.datastore.IS_PASSWORD_RESET_KEY
+import com.example.smartpoultry.data.dataSource.datastore.PreferencesRepo
+import com.example.smartpoultry.data.dataSource.datastore.USER_EMAIL_KEY
 import com.example.smartpoultry.data.dataSource.datastore.USER_NAME_KEY
+import com.example.smartpoultry.data.dataSource.datastore.USER_PHONE_KEY
 import com.example.smartpoultry.data.dataSource.datastore.USER_ROLE_KEY
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -23,7 +28,8 @@ const val IS_AUTOMATED_ANALYSIS_KEY = "is_automated_analysis"
 @HiltViewModel
 class SettingsViewModel @Inject constructor (
     private val dataStore: AppDataStore,
-    private val firebaseAuth: FirebaseAuth
+    private val firebaseAuth: FirebaseAuth,
+    private val preferencesRepo: PreferencesRepo
 ): ViewModel() {
 
     val toastMessage = mutableStateOf("")
@@ -84,7 +90,13 @@ class SettingsViewModel @Inject constructor (
             //dataStore.clearDataStore()
             dataStore.deleteData(USER_ROLE_KEY)
             dataStore.deleteData(USER_NAME_KEY)
+            dataStore.deleteData(FARM_ID_KEY)
+            dataStore.deleteData(USER_EMAIL_KEY)
+            dataStore.deleteData(USER_PHONE_KEY)
 
+            //preferences Repo clear
+            preferencesRepo.deleteData(FARM_ID_KEY)
+            preferencesRepo.deleteData(IS_PASSWORD_RESET_KEY)
         }
     }
 }

@@ -154,7 +154,7 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
                             //save user other details  to datastore
                             //user Farm
                             preferencesRepo.saveData(FARM_ID_KEY, user?.farmId.toString())
-                            Log.d("Farm", "saving farm to datastore: ${user?.farmId}")
+                            Log.d("Farm", "saving farm to shared preferences: ${user?.farmId}")
 
                             CoroutineScope(Dispatchers.IO).launch {
                                 user?.let { user ->
