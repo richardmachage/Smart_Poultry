@@ -31,26 +31,43 @@ class CellsRepositoryImpl @Inject constructor(
 ) : CellsRepository {
     // private val cellsCollectionPath = fireStoreDb.collection(FARMS_COLLECTION).document(dataStore.farmID).collection(CELLS_COLLECTION)
     private val farmsCollection = fireStoreDb.collection(FARMS_COLLECTION)
-    private lateinit var farmDocument : DocumentReference //farmsCollection.document("710uve6Bmd25yAXcnPfr")//dataStore.farmID)
-    private lateinit var cellsCollection : CollectionReference// farmDocument.collection(CELLS_COLLECTION)
+    private lateinit var farmDocument: DocumentReference //farmsCollection.document("710uve6Bmd25yAXcnPfr")//dataStore.farmID)
+    private lateinit var cellsCollection: CollectionReference// farmDocument.collection(CELLS_COLLECTION)
 
     init {
-        val farmID = preferencesRepo.loadData(FARM_ID_KEY)?:""
-        if (farmID.isNotBlank()){
+        val farmID = preferencesRepo.loadData(FARM_ID_KEY) ?: ""
+        if (farmID.isNotBlank()) {
             farmDocument = farmsCollection.document(farmID)
             cellsCollection = farmDocument.collection(CELLS_COLLECTION)
         }
+        else {
+            var id = ""
+            //try to retrieve farm Id first here
+            fireStoreDb.collection(USERS_COLLECTION)
+                .document(firebaseAuth.currentUser?.uid.toString())
+                .get()
+                .addOnSuccessListener { docSnapshot ->
+                    val user = docSnapshot.toObject(User::class.java)
+                    user?.let {
+                        id = it.farmId
+                        //proceed to the rest of the code after getting the ID
+                        farmDocument = farmsCollection.document(id)
+                        cellsCollection = farmDocument.collection(CELLS_COLLECTION)
+                        preferencesRepo.saveData(FARM_ID_KEY, id)
+                    }
 
-        listenForFireStoreChanges()
+                }
+            listenForFireStoreChanges()
 
+        }
     }
 
 
     private fun listenForFireStoreChanges() {
         //check if farmId exists
-        val farmId = preferencesRepo.loadData(FARM_ID_KEY)?:""
+        val farmId = preferencesRepo.loadData(FARM_ID_KEY) ?: ""
 
-        if (farmId.isNotBlank()){
+        if (farmId.isNotBlank()) {
             cellsCollection.addSnapshotListener { querySnapshot, exception ->
                 if (exception != null) { //if an error exists, it logs the error and returns early from the listener.
                     Log.w("Error", "Listen failed.", exception)
@@ -104,17 +121,17 @@ class CellsRepositoryImpl @Inject constructor(
                     }
                 }
             }
-        }else{
+        } else {
             // to retrieve farm Id first here
             fireStoreDb.collection(USERS_COLLECTION)
                 .document(firebaseAuth.currentUser?.uid.toString())
                 .get()
-                .addOnSuccessListener{docSnapshot->
+                .addOnSuccessListener { docSnapshot ->
                     val user = docSnapshot.toObject(User::class.java)
                     user?.let {
                         //store the id in preferences
                         preferencesRepo.saveData(FARM_ID_KEY, it.farmId)
-                        val farmID = preferencesRepo.loadData(FARM_ID_KEY)?:""
+                        val farmID = preferencesRepo.loadData(FARM_ID_KEY) ?: ""
                         val farmDoc = farmsCollection.document(farmID)
                         val cellsColle = farmDoc.collection(CELLS_COLLECTION)
 

@@ -2,6 +2,7 @@ package com.example.smartpoultry.data.repositoryImpl
 
 import android.util.Log
 import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.smartpoultry.data.dataSource.datastore.AppDataStore
 import com.example.smartpoultry.data.dataSource.datastore.FARM_ID_KEY
 import com.example.smartpoultry.data.dataSource.datastore.PreferencesRepo
@@ -23,6 +24,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.toObject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -39,201 +41,217 @@ class BlocksRepositoryImpl @Inject constructor(
 ) : BlocksRepository {
     // private var blocksCollection:CollectionReference = firestorePathProvider.blocksCollection
     private val farmsCollection = fireStoreDB.collection(FARMS_COLLECTION)
+    private var farmIdCache = ""
+    private lateinit var farmDocument: DocumentReference //farmsCollection.document("710uve6Bmd25yAXcnPfr")//dataStore.farmID)
+    private lateinit var blocksCollection: CollectionReference //= farmDocument.collection(BLOCKS_COLLECTION)
+    private lateinit var cellsCollection: CollectionReference// farmDocument.collection(CELLS_COLLECTION)
 
-    private lateinit var farmDocument : DocumentReference //farmsCollection.document("710uve6Bmd25yAXcnPfr")//dataStore.farmID)
-    private lateinit var blocksCollection : CollectionReference //= farmDocument.collection(BLOCKS_COLLECTION)
-    private lateinit var cellsCollection : CollectionReference// farmDocument.collection(CELLS_COLLECTION)
     //private lateinit var  blocksCollectionPath : CollectionReference//= fireStoreDB.collection(FARMS_COLLECTION).document(dataStore.farmID).collection(BLOCKS_COLLECTION)
     //private lateinit var cellsCollectionPath : CollectionReference// = fireStoreDB.collection(FARMS_COLLECTION).document(dataStore.farmID).collection(CELLS_COLLECTION)
     init {
-        val farmID = preferencesRepo.loadData(FARM_ID_KEY)?:""
-        if (farmID.isNotBlank()){
+        val farmID = preferencesRepo.loadData(FARM_ID_KEY) ?: ""
+        if (farmID.isNotBlank()) {
             farmDocument = farmsCollection.document(farmID)
             blocksCollection = farmDocument.collection(BLOCKS_COLLECTION)
             cellsCollection = farmDocument.collection(CELLS_COLLECTION)
-        }
-        listenForFireStoreChanges()
-
-    }
-
-
-    private fun listenForFireStoreChanges() {
-        //check if farmId exists
-        val farmId = preferencesRepo.loadData(FARM_ID_KEY)?:""
-
-        if (farmId.isNotBlank()){
-            blocksCollection.addSnapshotListener { querySnapshot, exception ->
-
-                if (exception != null) { //if an error exists, it logs the error and returns early from the listener.
-                    Log.w(
-                        "BlocksRepository",
-                        "Listening to Firestore changes failed.",
-                        exception
-                    )
-                    return@addSnapshotListener
-                }
-
-
-                for (docChange in querySnapshot!!.documentChanges) {
-                    val block =
-                        docChange.document.toObject(Blocks::class.java) //For each change, it converts the document to a Blocks object
-
-                    when (docChange.type) {
-                        DocumentChange.Type.ADDED,
-                        DocumentChange.Type.MODIFIED -> {
-                            CoroutineScope(Dispatchers.IO).launch {
-                                blocksDao.addNewBlock(block)
-
-                            }
-                        }
-
-                        DocumentChange.Type.REMOVED -> {
-                            CoroutineScope(Dispatchers.IO).launch {
-                                blocksDao.deleteBlock(block)
-                                blocksDao.deleteCellsForBlock(blockId = block.blockId)
-
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        else{
+        } else {
+            var id = ""
             //try to retrieve farm Id first here
             fireStoreDB.collection(USERS_COLLECTION)
                 .document(firebaseAuth.currentUser?.uid.toString())
                 .get()
                 .addOnSuccessListener { docSnapshot ->
                     val user = docSnapshot.toObject(User::class.java)
-
-                    //proceed to the rest of the code after getting the ID
                     user?.let {
-                        //store the id in preferences
-                        preferencesRepo.saveData(FARM_ID_KEY, user.farmId)
-                        //Log.d("Farm ID", "From Preferences: ${preferencesRepo.loadData(FARM_ID_KEY)}")
-                        val farmDoc = farmsCollection.document(it.farmId)
-                        val blockColle = farmDoc.collection(BLOCKS_COLLECTION)
-                        blockColle.addSnapshotListener { querySnapshot, exception ->
+                        id = it.farmId
+                        //proceed to the rest of the code after getting the ID
+                        farmDocument = farmsCollection.document(id)
+                        blocksCollection = farmDocument.collection(BLOCKS_COLLECTION)
+                        cellsCollection = farmDocument.collection(CELLS_COLLECTION)
+                    }
+                }
+        }
+        listenForFireStoreChanges()
 
-                            if (exception != null) { //if an error exists, it logs the error and returns early from the listener.
-                                Log.w(
-                                    "BlocksRepository",
-                                    "Listening to Firestore changes failed.",
-                                    exception
-                                )
-                                return@addSnapshotListener
+
+    }
+
+
+        private fun listenForFireStoreChanges() {
+            //check if farmId exists
+            val farmId = preferencesRepo.loadData(FARM_ID_KEY) ?: ""
+
+            if (farmId.isNotBlank()) {
+                blocksCollection.addSnapshotListener { querySnapshot, exception ->
+
+                    if (exception != null) { //if an error exists, it logs the error and returns early from the listener.
+                        Log.w(
+                            "BlocksRepository",
+                            "Listening to Firestore changes failed.",
+                            exception
+                        )
+                        return@addSnapshotListener
+                    }
+
+
+                    for (docChange in querySnapshot!!.documentChanges) {
+                        val block =
+                            docChange.document.toObject(Blocks::class.java) //For each change, it converts the document to a Blocks object
+
+                        when (docChange.type) {
+                            DocumentChange.Type.ADDED,
+                            DocumentChange.Type.MODIFIED -> {
+                                CoroutineScope(Dispatchers.IO).launch {
+                                    blocksDao.addNewBlock(block)
+
+                                }
                             }
 
+                            DocumentChange.Type.REMOVED -> {
+                                CoroutineScope(Dispatchers.IO).launch {
+                                    blocksDao.deleteBlock(block)
+                                    blocksDao.deleteCellsForBlock(blockId = block.blockId)
 
-                            for (docChange in querySnapshot!!.documentChanges) {
-                                val block =
-                                    docChange.document.toObject(Blocks::class.java) //For each change, it converts the document to a Blocks object
+                                }
+                            }
+                        }
+                    }
+                }
+            } else {
+                //try to retrieve farm Id first here
+                fireStoreDB.collection(USERS_COLLECTION)
+                    .document(firebaseAuth.currentUser?.uid.toString())
+                    .get()
+                    .addOnSuccessListener { docSnapshot ->
+                        val user = docSnapshot.toObject(User::class.java)
 
-                                when (docChange.type) {
-                                    DocumentChange.Type.ADDED,
-                                    DocumentChange.Type.MODIFIED -> {
-                                        CoroutineScope(Dispatchers.IO).launch {
-                                            blocksDao.addNewBlock(block)
+                        //proceed to the rest of the code after getting the ID
+                        user?.let {
+                            //store the id in preferences
+                            preferencesRepo.saveData(FARM_ID_KEY, user.farmId)
+                            farmIdCache = user.farmId
+                            //Log.d("Farm ID", "From Preferences: ${preferencesRepo.loadData(FARM_ID_KEY)}")
+                            val farmDoc = farmsCollection.document(it.farmId)
+                            val blockColle = farmDoc.collection(BLOCKS_COLLECTION)
+                            blockColle.addSnapshotListener { querySnapshot, exception ->
 
+                                if (exception != null) { //if an error exists, it logs the error and returns early from the listener.
+                                    Log.w(
+                                        "BlocksRepository",
+                                        "Listening to Firestore changes failed.",
+                                        exception
+                                    )
+                                    return@addSnapshotListener
+                                }
+
+
+                                for (docChange in querySnapshot!!.documentChanges) {
+                                    val block =
+                                        docChange.document.toObject(Blocks::class.java) //For each change, it converts the document to a Blocks object
+
+                                    when (docChange.type) {
+                                        DocumentChange.Type.ADDED,
+                                        DocumentChange.Type.MODIFIED -> {
+                                            CoroutineScope(Dispatchers.IO).launch {
+                                                blocksDao.addNewBlock(block)
+
+                                            }
                                         }
-                                    }
 
-                                    DocumentChange.Type.REMOVED -> {
-                                        CoroutineScope(Dispatchers.IO).launch {
-                                            blocksDao.deleteBlock(block)
-                                            blocksDao.deleteCellsForBlock(blockId = block.blockId)
+                                        DocumentChange.Type.REMOVED -> {
+                                            CoroutineScope(Dispatchers.IO).launch {
+                                                blocksDao.deleteBlock(block)
+                                                blocksDao.deleteCellsForBlock(blockId = block.blockId)
 
+                                            }
                                         }
                                     }
                                 }
                             }
                         }
-                    }
 
-                }
+                    }
+            }
+
+
         }
 
-
-
-
-    }
-
-    override suspend fun addNewBlock(block: Blocks): Long {
-        val blockId = blocksDao.addNewBlock(block)
-        //fireStoreDB.collection(blocksCollectionPath.path)
-        blocksCollection
-            .document(blockId.toString())
-            .set(
-                Blocks(
-                    blockId = blockId.toInt(),
-                    blockNum = block.blockNum,
-                    totalCells = block.totalCells
+        override suspend fun addNewBlock(block: Blocks): Long {
+            val blockId = blocksDao.addNewBlock(block)
+            //fireStoreDB.collection(blocksCollectionPath.path)
+            blocksCollection
+                .document(blockId.toString())
+                .set(
+                    Blocks(
+                        blockId = blockId.toInt(),
+                        blockNum = block.blockNum,
+                        totalCells = block.totalCells
+                    )
                 )
-            )
-            .addOnSuccessListener {
-
-            }
-            .addOnFailureListener {
-                Log.e("BlocksRepository", "Failed to add block to Firestore.", it)
-            }
-        return blockId
-    }
-
-    override suspend fun deleteBlock(block: Blocks) {
-        //this should delete the whole block, i.e block from block table and its cells from the cells table
-        //first we delete the block from the blocks table
-        blocksDao.deleteBlock(block = block)
-
-        //secondly, delete cells of the block from the cells table
-        blocksDao.deleteCellsForBlock(blockId = block.blockId)
-
-        //then delete the block in the remote data source to allow for synchronization
-        //fireStoreDB.collection(blocksCollectionPath.path)
-        blocksCollection
-            .document(block.blockId.toString())
-            .delete()
-            .addOnSuccessListener {
-
-            }
-            .addOnFailureListener {
-
-            }
-
-        //Then delete the cells of the block as well in the cells collection
-        //fireStoreDB.collection(cellsCollectionPath.path)
-        cellsCollection
-            .whereEqualTo("blockId", block.blockId)
-            .get()
-            .addOnSuccessListener { querySnapshot ->
-                Log.i("Firebase", "query successful")
-
-                fireStoreDB.runBatch { batch ->
-                    querySnapshot.documents.forEach { document ->
-                        // Log.i("Firebase", "deleting cell ${document.id}")
-                        batch.delete(cellsCollection.document(document.id))
-                    }
-                }.addOnCompleteListener {
+                .addOnSuccessListener {
 
                 }
-            }
-            .addOnFailureListener {
-                //Log.i("Firebase", "query failed")
+                .addOnFailureListener {
+                    Log.e("BlocksRepository", "Failed to add block to Firestore.", it)
+                }
+            return blockId
+        }
 
-            }
+        override suspend fun deleteBlock(block: Blocks) {
+            //this should delete the whole block, i.e block from block table and its cells from the cells table
+            //first we delete the block from the blocks table
+            blocksDao.deleteBlock(block = block)
 
+            //secondly, delete cells of the block from the cells table
+            blocksDao.deleteCellsForBlock(blockId = block.blockId)
+
+            //then delete the block in the remote data source to allow for synchronization
+            //fireStoreDB.collection(blocksCollectionPath.path)
+            blocksCollection
+                .document(block.blockId.toString())
+                .delete()
+                .addOnSuccessListener {
+
+                }
+                .addOnFailureListener {
+
+                }
+
+            //Then delete the cells of the block as well in the cells collection
+            //fireStoreDB.collection(cellsCollectionPath.path)
+            cellsCollection
+                .whereEqualTo("blockId", block.blockId)
+                .get()
+                .addOnSuccessListener { querySnapshot ->
+                    Log.i("Firebase", "query successful")
+
+                    fireStoreDB.runBatch { batch ->
+                        querySnapshot.documents.forEach { document ->
+                            // Log.i("Firebase", "deleting cell ${document.id}")
+                            batch.delete(cellsCollection.document(document.id))
+                        }
+                    }.addOnCompleteListener {
+
+                    }
+                }
+                .addOnFailureListener {
+                    //Log.i("Firebase", "query failed")
+
+                }
+
+
+        }
+
+        override fun getAllBlocks(): Flow<List<Blocks>> {
+            return blocksDao.getAllBlocks()
+        }
+
+        override fun getBlock(block: Blocks): Flow<List<Blocks>> {
+            return blocksDao.getBlock(block.blockId)
+        }
+
+        override fun getBlocksWithCells(): Flow<List<BlocksWithCells>> {
+            return blocksDao.getBlocksWithCells()
+        }
 
     }
-
-    override fun getAllBlocks(): Flow<List<Blocks>> {
-        return blocksDao.getAllBlocks()
-    }
-
-    override fun getBlock(block: Blocks): Flow<List<Blocks>> {
-        return blocksDao.getBlock(block.blockId)
-    }
-
-    override fun getBlocksWithCells(): Flow<List<BlocksWithCells>> {
-        return blocksDao.getBlocksWithCells()
-    }
-
-}
