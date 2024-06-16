@@ -38,6 +38,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.smartpoultry.domain.permissions.POST_NOTIFICATIONS
 import com.example.smartpoultry.domain.permissions.checkIfPermissionGranted
 import com.example.smartpoultry.presentation.NavGraphs
@@ -50,6 +51,7 @@ import com.example.smartpoultry.presentation.destinations.LogInScreenDestination
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.navigation.popUpTo
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Destination
@@ -385,10 +387,12 @@ fun SettingsScreen(
                     showDialog = showLogOutDialog,
                     title = "Log Out",
                     onConfirm = {
-                        settingsViewModel.onLogOut()
-                        showLogOutDialog = false
-                        navigator.navigate(LogInScreenDestination) {
-                            popUpTo(NavGraphs.root) { inclusive = true }
+                        settingsViewModel.viewModelScope.launch {
+                            settingsViewModel.onLogOut()
+                            showLogOutDialog = false
+                            navigator.navigate(LogInScreenDestination) {
+                                popUpTo(NavGraphs.root) { inclusive = true }
+                            }
                         }
                     },
                     onDismiss = {

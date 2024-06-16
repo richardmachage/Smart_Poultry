@@ -84,7 +84,6 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
         deffered.await()
     }
 
-
     override suspend fun registerUser(
         email: String,
         password: String,

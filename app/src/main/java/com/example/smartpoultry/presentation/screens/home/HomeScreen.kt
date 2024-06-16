@@ -87,6 +87,9 @@ fun HomeScreen(
             }
         }
 
+    LaunchedEffect(key1 = "") {
+        homeViewModel.syncWithRemote()
+    }
     LaunchedEffect(homeViewModel.toastMessage) {
         if (homeViewModel.toastMessage.isNotBlank()){
             Toast.makeText(context, homeViewModel.toastMessage,Toast.LENGTH_SHORT).show()

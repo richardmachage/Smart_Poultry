@@ -11,11 +11,15 @@ import com.example.smartpoultry.data.dataSource.datastore.USER_EMAIL_KEY
 import com.example.smartpoultry.data.dataSource.datastore.USER_NAME_KEY
 import com.example.smartpoultry.data.dataSource.datastore.USER_PHONE_KEY
 import com.example.smartpoultry.data.dataSource.datastore.USER_ROLE_KEY
+import com.example.smartpoultry.data.dataSource.room.database.SmartPoultryDatabase
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 
@@ -29,11 +33,13 @@ const val IS_AUTOMATED_ANALYSIS_KEY = "is_automated_analysis"
 class SettingsViewModel @Inject constructor (
     private val dataStore: AppDataStore,
     private val firebaseAuth: FirebaseAuth,
-    private val preferencesRepo: PreferencesRepo
+    private val preferencesRepo: PreferencesRepo,
+    private val smartPoultryDatabase: SmartPoultryDatabase
 ): ViewModel() {
 
     val toastMessage = mutableStateOf("")
     val myDataStore = dataStore
+    val isLoading = mutableStateOf(false)
     // Initialize StateFlows with default values
     private val _pastDays = MutableStateFlow("")
     val pastDays: StateFlow<String> = _pastDays
@@ -84,19 +90,31 @@ class SettingsViewModel @Inject constructor (
     }
 
 
-    fun onLogOut(){
-        firebaseAuth.signOut()
+    suspend fun onLogOut(){
+        isLoading.value = true
+
+        // Clear DataStore values
         viewModelScope.launch {
-            //dataStore.clearDataStore()
             dataStore.deleteData(USER_ROLE_KEY)
             dataStore.deleteData(USER_NAME_KEY)
             dataStore.deleteData(FARM_ID_KEY)
             dataStore.deleteData(USER_EMAIL_KEY)
             dataStore.deleteData(USER_PHONE_KEY)
+        }
 
-            //preferences Repo clear
+        // Clear preferences and database in the IO context
+        withContext(Dispatchers.IO) {
             preferencesRepo.deleteData(FARM_ID_KEY)
             preferencesRepo.deleteData(IS_PASSWORD_RESET_KEY)
+
+            // Clear database and sign out concurrently
+            val clearDatabaseJob = async { smartPoultryDatabase.clearAllTables() }
+            val signOutJob = async { firebaseAuth.signOut() }
+
+            clearDatabaseJob.await()
+            signOutJob.await()
         }
+
+        isLoading.value = false
     }
 }

@@ -24,6 +24,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.toObject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
@@ -175,6 +176,29 @@ class BlocksRepositoryImpl @Inject constructor(
 
 
         }
+
+    override suspend fun fetchAndUpdateBlocks() {
+        try {
+            blocksCollection.get()
+                .addOnSuccessListener {querySnapShot->
+                    if (!querySnapShot.isEmpty){
+                        val listOfBlocks = querySnapShot.documents.map { it.toObject(Blocks::class.java)!! }
+                        GlobalScope.launch {
+                            //insert the blocks to room
+                            blocksDao.insertAll(listOfBlocks) }
+
+                    }
+                }
+                .addOnFailureListener {
+                    Throwable(it)
+                }
+        }
+        catch (e :Exception){
+            //todo handle exception
+            Log.e("FirestoreFetch", "Error fetching blocks: ", e)
+        }
+
+    }
 
         override suspend fun addNewBlock(block: Blocks): Long {
             val blockId = blocksDao.addNewBlock(block)

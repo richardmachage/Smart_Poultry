@@ -55,6 +55,12 @@ class HomeViewModel @Inject constructor(
         passwordReset.value = preferencesRepo.loadData(IS_PASSWORD_RESET_KEY)?:""
     }
 
+    suspend fun syncWithRemote(){
+        //later on you should check first if it does not match the "previousFarmId"
+        isLoading = true
+        blocksRepository.fetchAndUpdateBlocks()
+        isLoading = false
+    }
 
     fun onPasswordReset(email : String){
         if (email.isNotEmpty()){

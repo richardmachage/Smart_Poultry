@@ -13,7 +13,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LogInViewModel @Inject constructor(
-    private val firebaseAuthRepository: FirebaseAuthRepository
+    private val firebaseAuthRepository: FirebaseAuthRepository,
 ): ViewModel() {
     var email = mutableStateOf("")
     var password = mutableStateOf("")

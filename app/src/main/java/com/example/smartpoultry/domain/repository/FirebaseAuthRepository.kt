@@ -1,6 +1,7 @@
 package com.example.smartpoultry.domain.repository
 
 import com.example.smartpoultry.data.dataSource.remote.firebase.models.User
+import com.example.smartpoultry.data.dataSource.room.entities.blocks.Blocks
 
 interface FirebaseAuthRepository {
     suspend fun signUp(email: String, password: String, role: String, farmName:String): Result<Boolean>
