@@ -15,6 +15,7 @@ import com.example.smartpoultry.data.dataSource.remote.firebase.USERS_COLLECTION
 import com.example.smartpoultry.data.dataSource.remote.firebase.models.Farm
 import com.example.smartpoultry.data.dataSource.remote.firebase.models.User
 import com.example.smartpoultry.domain.repository.FirebaseAuthRepository
+import com.example.smartpoultry.utils.USER
 import com.google.firebase.Firebase
 import com.google.firebase.auth.EmailAuthCredential
 import com.google.firebase.auth.EmailAuthProvider
@@ -134,7 +135,7 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
 
 
                 if (firebaseUser != null) {
-                    // Perform additional checks or fetch user details from Firestore if needed.
+                    //  fetch user details from Firestore .
                     firebaseFirestore
                         .collection(USERS_COLLECTION)
                         .document(firebaseUser.uid)
@@ -148,12 +149,18 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
                                     IS_PASSWORD_RESET_KEY,
                                     it.passwordReset.toString()
                                 )
+
+                                preferencesRepo.saveData(FARM_ID_KEY, it.farmId)
+                                Log.d("Farm", "saving farm to shared preferences: ${user?.farmId}")
+
+                                //set user
+                                USER = it
                             }
 
                             //save user other details  to datastore
                             //user Farm
-                            preferencesRepo.saveData(FARM_ID_KEY, user?.farmId.toString())
-                            Log.d("Farm", "saving farm to shared preferences: ${user?.farmId}")
+                            /*preferencesRepo.saveData(FARM_ID_KEY, user?.farmId.toString())
+                            Log.d("Farm", "saving farm to shared preferences: ${user?.farmId}")*/
 
                             CoroutineScope(Dispatchers.IO).launch {
                                 user?.let { user ->

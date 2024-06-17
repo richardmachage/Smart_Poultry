@@ -49,6 +49,7 @@ fun LogInScreen(
     val logInViewModel = hiltViewModel<LogInViewModel>()
     val context = LocalContext.current
 
+
     //observing the viewmodel state and show toast when validation error message changes
     LaunchedEffect(key1 = logInViewModel.validateError.value){
         logInViewModel.validateError.value.let {toastMessage->

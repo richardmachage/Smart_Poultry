@@ -26,9 +26,9 @@ class PreferencesRepo @Inject constructor(
     }
 
     fun deleteData(key: String){
-        with(sharedPreferences.edit()){
-            remove(key)
-            apply()
-        }
+        sharedPreferences
+            .edit()
+            .remove(key)
+            .apply()
     }
 }

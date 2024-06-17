@@ -1,5 +1,6 @@
 package com.example.smartpoultry.presentation.screens.settingsScreen
 
+import android.content.Context
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -14,6 +15,7 @@ import com.example.smartpoultry.data.dataSource.datastore.USER_ROLE_KEY
 import com.example.smartpoultry.data.dataSource.room.database.SmartPoultryDatabase
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -31,6 +33,7 @@ const val IS_AUTOMATED_ANALYSIS_KEY = "is_automated_analysis"
 
 @HiltViewModel
 class SettingsViewModel @Inject constructor (
+    @ApplicationContext private val context: Context,
     private val dataStore: AppDataStore,
     private val firebaseAuth: FirebaseAuth,
     private val preferencesRepo: PreferencesRepo,
@@ -113,8 +116,7 @@ class SettingsViewModel @Inject constructor (
 
             clearDatabaseJob.await()
             signOutJob.await()
+            isLoading.value = false
         }
-
-        isLoading.value = false
     }
 }

@@ -1,5 +1,6 @@
 package com.example.smartpoultry.presentation.screens.settingsScreen
 
+import android.app.Activity
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -51,7 +52,9 @@ import com.example.smartpoultry.presentation.destinations.LogInScreenDestination
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.navigation.popUpTo
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Destination
@@ -387,12 +390,16 @@ fun SettingsScreen(
                     showDialog = showLogOutDialog,
                     title = "Log Out",
                     onConfirm = {
-                        settingsViewModel.viewModelScope.launch {
+                        settingsViewModel.viewModelScope.launch{
                             settingsViewModel.onLogOut()
                             showLogOutDialog = false
                             navigator.navigate(LogInScreenDestination) {
                                 popUpTo(NavGraphs.root) { inclusive = true }
                             }
+                            withContext(Dispatchers.Main){
+                                (context as Activity).finish()
+                            }
+
                         }
                     },
                     onDismiss = {
