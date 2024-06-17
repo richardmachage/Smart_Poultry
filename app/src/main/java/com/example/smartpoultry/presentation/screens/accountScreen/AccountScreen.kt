@@ -34,7 +34,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -67,10 +66,18 @@ fun AccountScreen(
 ) {
     val accountViewModel = hiltViewModel<AccountViewModel>()
     val context = LocalContext.current
-    val userRole by accountViewModel.userRole.collectAsState()
-    val userName by accountViewModel.userName.collectAsState()
-    val userEmail by accountViewModel.userEmail.collectAsState()
-    val userPhone by accountViewModel.userPhone.collectAsState()
+    val userRole by remember {
+        mutableStateOf(accountViewModel.user.role)
+    }//accountViewModel.userRole.collectAsState()
+    val userName by remember {
+        mutableStateOf(accountViewModel.user.name)
+    }//accountViewModel.userName.collectAsState()
+    val userEmail by remember {
+        mutableStateOf(accountViewModel.user.email)
+    }//accountViewModel.userEmail.collectAsState()
+    val userPhone by remember {
+        mutableStateOf(accountViewModel.user.phone)
+    }//accountViewModel.userPhone.collectAsState()
 
     LaunchedEffect(key1 = accountViewModel.toastMessage.value) {
         if (accountViewModel.toastMessage.value.isNotBlank()) Toast.makeText(

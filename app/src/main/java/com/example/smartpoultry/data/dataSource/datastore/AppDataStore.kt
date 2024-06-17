@@ -1,31 +1,14 @@
 package com.example.smartpoultry.data.dataSource.datastore
 
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
-import androidx.datastore.preferences.core.stringPreferencesKey
-import com.example.smartpoultry.data.dataSource.remote.firebase.USERS_COLLECTION
-import com.example.smartpoultry.data.dataSource.remote.firebase.models.User
-import com.example.smartpoultry.utils.FARM_ID_KEY
-import com.example.smartpoultry.utils.IS_PASSWORD_RESET_KEY
-import com.example.smartpoultry.utils.USER_EMAIL_KEY
-import com.example.smartpoultry.utils.USER_NAME_KEY
-import com.example.smartpoultry.utils.USER_PHONE_KEY
-import com.example.smartpoultry.utils.USER_ROLE_KEY
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
-
 
 
 //@Singleton
@@ -38,19 +21,19 @@ class AppDataStore @Inject constructor(
     var farmID by mutableStateOf("")
 
     init {
-        listenForFireStoreChanges()
-        CoroutineScope(Dispatchers.IO).launch {
+        //listenForFireStoreChanges()
+        /*CoroutineScope(Dispatchers.IO).launch {
             readData(FARM_ID_KEY).collect {theId->
                 withContext(Dispatchers.Main){
                     farmID = theId
                 }
             }
-        }
+        }*/
     }
 
 
 
-    private fun listenForFireStoreChanges() {
+   /* private fun listenForFireStoreChanges() {
         fireStoreDB.collection(USERS_COLLECTION)
             .document(fireBaseAuth.currentUser?.uid.toString())
             .addSnapshotListener { snapshot, exception ->
@@ -97,7 +80,7 @@ class AppDataStore @Inject constructor(
 
             }
     }
-
+*/
    /* suspend fun saveData(key: String, value: String) {
         val dataStoreKey = stringPreferencesKey(key)
         dataStore.edit { myPreferences ->

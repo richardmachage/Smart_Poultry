@@ -17,7 +17,7 @@ class PreferencesRepo @Inject constructor(
     fun saveData(key:String, value:String){
         with(sharedPreferences.edit()){
          putString(key, value)
-         apply()
+         commit()
         }
     }
 
@@ -29,6 +29,6 @@ class PreferencesRepo @Inject constructor(
         sharedPreferences
             .edit()
             .remove(key)
-            .apply()
+            .commit()
     }
 }

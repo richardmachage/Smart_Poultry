@@ -43,6 +43,7 @@ import com.example.smartpoultry.presentation.composables.MyVerticalSpacer
 import com.example.smartpoultry.presentation.destinations.CellsScreenDestination
 import com.example.smartpoultry.presentation.uiModels.BlockItem
 import com.example.smartpoultry.presentation.uiModels.BlockParse
+import com.example.smartpoultry.utils.THIS_USER
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -56,7 +57,9 @@ fun BlockCellScreen(
 ) {
     val context = LocalContext.current
     val blockCellViewModel: BlockCellViewModel = hiltViewModel()
-    val userRole by blockCellViewModel.userRole.collectAsState()
+    val userRole by remember {
+        mutableStateOf(THIS_USER?.role)
+    }//by blockCellViewModel.userRole.collectAsState()
     //val listOfBlocks by blockCellViewModel.listOfBlocks.collectAsState()
     val listOfBlocksWithCells by blockCellViewModel.listOfBlocksWithCells.collectAsState()
 

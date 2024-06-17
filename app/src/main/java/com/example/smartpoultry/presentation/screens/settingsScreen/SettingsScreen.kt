@@ -1,6 +1,5 @@
 package com.example.smartpoultry.presentation.screens.settingsScreen
 
-import android.app.Activity
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -49,12 +48,15 @@ import com.example.smartpoultry.presentation.composables.MyOutlineTextFiled
 import com.example.smartpoultry.presentation.composables.MyVerticalSpacer
 import com.example.smartpoultry.presentation.composables.ToggleButton
 import com.example.smartpoultry.presentation.destinations.LogInScreenDestination
+import com.example.smartpoultry.utils.CONSUCUTIVE_DAYS_KEY
+import com.example.smartpoultry.utils.IS_AUTOMATED_ANALYSIS_KEY
+import com.example.smartpoultry.utils.PAST_DAYS_KEY
+import com.example.smartpoultry.utils.REPEAT_INTERVAL_KEY
+import com.example.smartpoultry.utils.THRESHOLD_RATIO_KEY
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.navigation.popUpTo
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Destination
@@ -65,7 +67,7 @@ fun SettingsScreen(
     //val navController = rememberNavController()
     val context = LocalContext.current
     val settingsViewModel = hiltViewModel<SettingsViewModel>()
-    val pastDays =
+    /*val pastDays =
         remember { settingsViewModel.myDataStore.readData(PAST_DAYS_KEY) }.collectAsState(initial = "0")
     val consucutiveDays =
         remember { settingsViewModel.myDataStore.readData(CONSUCUTIVE_DAYS_KEY) }.collectAsState(
@@ -81,7 +83,7 @@ fun SettingsScreen(
         )
     val isAutomatedAnalysis = remember {
         settingsViewModel.myDataStore.readData(IS_AUTOMATED_ANALYSIS_KEY)
-    }.collectAsState(initial = "0")
+    }.collectAsState(initial = "0")*/
 
     LaunchedEffect(settingsViewModel.toastMessage.value) {
         val toastMessage = settingsViewModel.toastMessage.value
@@ -137,7 +139,7 @@ fun SettingsScreen(
                             mutableStateOf(false)
                         }
                         var newPastDays by remember {
-                            mutableStateOf(pastDays.value)
+                            mutableStateOf(settingsViewModel.pastDays.value)
                         }
                         MyInputDialog(
                             showDialog = showDialog,
@@ -156,13 +158,13 @@ fun SettingsScreen(
                                 modifier = Modifier.fillMaxWidth(),
                                 label = "Default Past Days",
                                 keyboardType = KeyboardType.Number,
-                                initialText = pastDays.value,
+                                initialText = settingsViewModel.pastDays.collectAsState().toString(),
                                 onValueChange = {
                                     newPastDays = it
                                 }
                             )
                         }
-                        Text(text = pastDays.value)
+                        Text(text = settingsViewModel.pastDays.collectAsState().toString())
                         IconButton(onClick = { showDialog = true }) {
                             Icon(imageVector = Icons.Default.Edit, contentDescription = "edit")
                         }
@@ -184,7 +186,7 @@ fun SettingsScreen(
                             mutableStateOf(false)
                         }
                         var newConsucutiveDays by remember {
-                            mutableStateOf(consucutiveDays.value)
+                            mutableStateOf(settingsViewModel.consucutiveNumberOfDays.value)
                         }
                         MyInputDialog(
                             showDialog = showDialog,
@@ -202,13 +204,13 @@ fun SettingsScreen(
                                 modifier = Modifier.fillMaxWidth(),
                                 label = "Consecutive Days",
                                 keyboardType = KeyboardType.Number,
-                                initialText = consucutiveDays.value,
+                                initialText = settingsViewModel.consucutiveNumberOfDays.collectAsState().toString(),
                                 onValueChange = {
                                     newConsucutiveDays = it
                                 }
                             )
                         }
-                        Text(text = consucutiveDays.value)
+                        Text(text = settingsViewModel.consucutiveNumberOfDays.collectAsState().toString())
                         IconButton(onClick = { showDialog = true }) {
                             Icon(imageVector = Icons.Default.Edit, contentDescription = "edit")
                         }
@@ -230,7 +232,7 @@ fun SettingsScreen(
                             mutableStateOf(false)
                         }
                         var newThreshold by remember {
-                            mutableStateOf(thresholdRatio.value)
+                            mutableStateOf(settingsViewModel.thresholdRatio.value)
                         }
                         MyInputDialog(
                             showDialog = showDialog,
@@ -238,10 +240,8 @@ fun SettingsScreen(
                             onConfirm = {
                                 if (validateThresholdInput(newThreshold)) {
                                     showDialog = false
-                                    settingsViewModel.saveToDataStore(
-                                        THRESHOLD_RATIO_KEY,
-                                        newThreshold
-                                    )
+                                    settingsViewModel.saveToDataStore(THRESHOLD_RATIO_KEY, newThreshold)
+
                                 } else {
                                     Toast.makeText(
                                         context,
@@ -256,13 +256,13 @@ fun SettingsScreen(
                                 modifier = Modifier.fillMaxWidth(),
                                 label = "Threshold Ratio",
                                 keyboardType = KeyboardType.Decimal,
-                                initialText = thresholdRatio.value,
+                                initialText = settingsViewModel.thresholdRatio.collectAsState().toString(),
                                 onValueChange = {
                                     newThreshold = it
                                 }
                             )
                         }
-                        Text(text = thresholdRatio.value)
+                        Text(text = settingsViewModel.thresholdRatio.collectAsState().toString())
                         IconButton(onClick = { showDialog = true }) {
                             Icon(imageVector = Icons.Default.Edit, contentDescription = "edit")
                         }
@@ -321,7 +321,7 @@ fun SettingsScreen(
 
                         ToggleButton(
                             modifier = Modifier.align(Alignment.CenterVertically),
-                            isChecked = isAutomatedAnalysis.value == "1",
+                            isChecked = settingsViewModel.isAutomatedAnalysis.collectAsState().toString() == "1",
                             onCheckedChange = {
                                 if (it) {
                                     if (!isNotificationPermissionGranted) {
@@ -337,7 +337,7 @@ fun SettingsScreen(
 
                     }
                     //edit part
-                    if (isAutomatedAnalysis.value == "1") {
+                    if (settingsViewModel.isAutomatedAnalysis.collectAsState().toString() == "1") {
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -349,16 +349,13 @@ fun SettingsScreen(
                                 mutableStateOf(false)
                             }
                             var newRepeatInterval by remember {
-                                mutableStateOf(repeatInterval.value)
+                                mutableStateOf(settingsViewModel.repeatInterval.value)
                             }
                             MyInputDialog(
                                 showDialog = showDialog,
                                 title = "Repeat Interval",
                                 onConfirm = {
-                                    settingsViewModel.saveToDataStore(
-                                        REPEAT_INTERVAL_KEY,
-                                        newRepeatInterval
-                                    )
+                                    settingsViewModel.saveToDataStore(REPEAT_INTERVAL_KEY, newRepeatInterval)
                                     showDialog = false
                                     //Log.i(PAST_DAYS_KEY + "on dialog click",newPastDays)
                                 },
@@ -368,13 +365,13 @@ fun SettingsScreen(
                                     modifier = Modifier.fillMaxWidth(),
                                     label = "Time in Hours",
                                     keyboardType = KeyboardType.Number,
-                                    initialText = repeatInterval.value,
+                                    initialText = settingsViewModel.repeatInterval.collectAsState().toString(),
                                     onValueChange = {
                                         newRepeatInterval = it
                                     }
                                 )
                             }
-                            Text(text = "Time in hours: ${repeatInterval.value}")
+                            Text(text = "Time in hours: ${settingsViewModel.repeatInterval.collectAsState()}")
                             IconButton(onClick = { showDialog = true }) {
                                 Icon(imageVector = Icons.Default.Edit, contentDescription = "edit")
                             }
@@ -396,9 +393,9 @@ fun SettingsScreen(
                             navigator.navigate(LogInScreenDestination) {
                                 popUpTo(NavGraphs.root) { inclusive = true }
                             }
-                            withContext(Dispatchers.Main){
+                            /*withContext(Dispatchers.Main){
                                 (context as Activity).finish()
-                            }
+                            }*/
 
                         }
                     },

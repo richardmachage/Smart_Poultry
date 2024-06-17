@@ -4,15 +4,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.smartpoultry.data.dataSource.datastore.AppDataStore
-import com.example.smartpoultry.data.dataSource.datastore.USER_EMAIL_KEY
-import com.example.smartpoultry.data.dataSource.datastore.USER_NAME_KEY
-import com.example.smartpoultry.data.dataSource.datastore.USER_PHONE_KEY
-import com.example.smartpoultry.data.dataSource.datastore.USER_ROLE_KEY
+import com.example.smartpoultry.data.dataSource.datastore.PreferencesRepo
 import com.example.smartpoultry.domain.repository.FirebaseAuthRepository
+import com.example.smartpoultry.utils.getThisUser
 import com.example.smartpoultry.utils.isValidEmail
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -20,13 +16,15 @@ import javax.inject.Inject
 class AccountViewModel @Inject constructor(
     private val fireBaseAuthRepo: FirebaseAuthRepository,
     private val dataStore: AppDataStore,
+    private val preferencesRepo: PreferencesRepo
 ) : ViewModel() {
     //val myDataStore = dataStore
     var isLoading = mutableStateOf(false)
     var toastMessage = mutableStateOf("")
+    val user = getThisUser(preferencesRepo)
 
 
-    val userRole = dataStore.readData(USER_ROLE_KEY).stateIn(
+   /* val userRole = dataStore.readData(USER_ROLE_KEY).stateIn(
         scope = viewModelScope,
         started = SharingStarted.Eagerly,
         initialValue = ""
@@ -46,7 +44,7 @@ class AccountViewModel @Inject constructor(
         scope = viewModelScope,
         started = SharingStarted.Eagerly,
         initialValue = ""
-    )
+    )*/
 
     fun registerUser(userRole: String, email: String, name: String,phone: String) {
         viewModelScope.launch {

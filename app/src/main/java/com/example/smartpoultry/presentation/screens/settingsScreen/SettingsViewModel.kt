@@ -1,18 +1,24 @@
 package com.example.smartpoultry.presentation.screens.settingsScreen
 
 import android.content.Context
+import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.smartpoultry.data.dataSource.datastore.AppDataStore
-import com.example.smartpoultry.data.dataSource.datastore.FARM_ID_KEY
-import com.example.smartpoultry.data.dataSource.datastore.IS_PASSWORD_RESET_KEY
 import com.example.smartpoultry.data.dataSource.datastore.PreferencesRepo
-import com.example.smartpoultry.data.dataSource.datastore.USER_EMAIL_KEY
-import com.example.smartpoultry.data.dataSource.datastore.USER_NAME_KEY
-import com.example.smartpoultry.data.dataSource.datastore.USER_PHONE_KEY
-import com.example.smartpoultry.data.dataSource.datastore.USER_ROLE_KEY
 import com.example.smartpoultry.data.dataSource.room.database.SmartPoultryDatabase
+import com.example.smartpoultry.utils.CONSUCUTIVE_DAYS_KEY
+import com.example.smartpoultry.utils.FARM_ID_KEY
+import com.example.smartpoultry.utils.IS_AUTOMATED_ANALYSIS_KEY
+import com.example.smartpoultry.utils.IS_PASSWORD_RESET_KEY
+import com.example.smartpoultry.utils.PAST_DAYS_KEY
+import com.example.smartpoultry.utils.REPEAT_INTERVAL_KEY
+import com.example.smartpoultry.utils.THRESHOLD_RATIO_KEY
+import com.example.smartpoultry.utils.USER_EMAIL_KEY
+import com.example.smartpoultry.utils.USER_NAME_KEY
+import com.example.smartpoultry.utils.USER_PHONE_KEY
+import com.example.smartpoultry.utils.USER_ROLE_KEY
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -24,12 +30,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-
-const val PAST_DAYS_KEY = "past_days"
-const val CONSUCUTIVE_DAYS_KEY = "consucutive_days"
-const val THRESHOLD_RATIO_KEY = "threshold_ratio"
-const val REPEAT_INTERVAL_KEY = "repeat_interval"
-const val IS_AUTOMATED_ANALYSIS_KEY = "is_automated_analysis"
 
 @HiltViewModel
 class SettingsViewModel @Inject constructor (
@@ -67,52 +67,64 @@ class SettingsViewModel @Inject constructor (
 
     private fun loadInitialValues() {
         viewModelScope.launch {
-            _pastDays.value = getFromDataStore(PAST_DAYS_KEY).ifBlank { "0" }
-            _thresholdRatio.value = getFromDataStore(THRESHOLD_RATIO_KEY).ifBlank { "0" }
-            _consucutiveNumberOfDays.value = getFromDataStore(CONSUCUTIVE_DAYS_KEY).ifBlank { "0" }
-            _repeatInterval.value = getFromDataStore(REPEAT_INTERVAL_KEY).ifBlank { "0" }
-            _isAutomatedAnalysis.value = getFromDataStore(IS_AUTOMATED_ANALYSIS_KEY).ifBlank { "0" }
+            _pastDays.value = preferencesRepo.loadData(PAST_DAYS_KEY)!!//getFromDataStore(PAST_DAYS_KEY).ifBlank { "0" }
+            _thresholdRatio.value = preferencesRepo.loadData(THRESHOLD_RATIO_KEY)!!//getFromDataStore(THRESHOLD_RATIO_KEY).ifBlank { "0" }
+            _consucutiveNumberOfDays.value = preferencesRepo.loadData(CONSUCUTIVE_DAYS_KEY)!!//getFromDataStore(CONSUCUTIVE_DAYS_KEY).ifBlank { "0" }
+            _repeatInterval.value = preferencesRepo.loadData(REPEAT_INTERVAL_KEY)!!//getFromDataStore(REPEAT_INTERVAL_KEY).ifBlank { "0" }
+            _isAutomatedAnalysis.value = preferencesRepo.loadData(IS_AUTOMATED_ANALYSIS_KEY)!!//getFromDataStore(IS_AUTOMATED_ANALYSIS_KEY).ifBlank { "0" }
         }
     }
 
     fun saveToDataStore(key: String, value : String){
-        viewModelScope.launch {
-            dataStore.saveData(key, value)
-
-        }
+        preferencesRepo.saveData(key=key,value=value)
+        loadInitialValues()
     }
 
     fun getFromDataStore(key: String) : String{
-        var data = ""
-        viewModelScope.launch {
-            dataStore.readData(key).collect{
-                data = it
-            }
-        }
-        return data
+        return preferencesRepo.loadData(key)!!
     }
 
 
     suspend fun onLogOut(){
         isLoading.value = true
-
-        // Clear DataStore values
-        viewModelScope.launch {
-            dataStore.deleteData(USER_ROLE_KEY)
-            dataStore.deleteData(USER_NAME_KEY)
-            dataStore.deleteData(FARM_ID_KEY)
-            dataStore.deleteData(USER_EMAIL_KEY)
-            dataStore.deleteData(USER_PHONE_KEY)
-        }
-
         // Clear preferences and database in the IO context
         withContext(Dispatchers.IO) {
+            //clear preferences
+            Log.d("Clear Preferences", "onLogOut called: Start clearing... ")
             preferencesRepo.deleteData(FARM_ID_KEY)
-            preferencesRepo.deleteData(IS_PASSWORD_RESET_KEY)
+            Log.d("Clear Preferences", "cleared farm id ")
 
+            preferencesRepo.deleteData(USER_NAME_KEY)
+            Log.d("Clear Preferences", "cleared user name")
+
+            preferencesRepo.deleteData(USER_EMAIL_KEY)
+            Log.d("Clear Preferences", "cleared email ")
+
+            preferencesRepo.deleteData(USER_ROLE_KEY)
+            Log.d("Clear Preferences", "cleared user role ")
+
+            preferencesRepo.deleteData(USER_PHONE_KEY)
+            Log.d("Clear Preferences", "cleared user phone ")
+
+            preferencesRepo.deleteData(IS_PASSWORD_RESET_KEY)
+            Log.d("Clear Preferences", "cleared is password reset ")
+
+
+            //check if preferences is cleared
+            val ema = preferencesRepo.loadData(USER_EMAIL_KEY)!!
+            Log.d("Clear Preferences", "The user email now is : $ema")
             // Clear database and sign out concurrently
-            val clearDatabaseJob = async { smartPoultryDatabase.clearAllTables() }
-            val signOutJob = async { firebaseAuth.signOut() }
+            Log.d("Clear Database", "Clearing Database begins ")
+            val clearDatabaseJob = async {
+                smartPoultryDatabase.clearAllTables()
+                Log.d("Clear Database", "Clearing Database finish ")
+
+            }
+            val signOutJob = async {
+                firebaseAuth.signOut()
+                Log.d("Clear Database", "Clearing finish, sign outs ")
+
+            }
 
             clearDatabaseJob.await()
             signOutJob.await()

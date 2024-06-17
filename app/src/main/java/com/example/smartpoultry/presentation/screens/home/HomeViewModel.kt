@@ -11,15 +11,16 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.smartpoultry.data.dataModels.DailyEggCollection
 import com.example.smartpoultry.data.dataSource.datastore.AppDataStore
-import com.example.smartpoultry.data.dataSource.datastore.IS_PASSWORD_RESET_KEY
 import com.example.smartpoultry.data.dataSource.datastore.PreferencesRepo
-import com.example.smartpoultry.data.dataSource.datastore.USER_NAME_KEY
-import com.example.smartpoultry.data.dataSource.datastore.USER_ROLE_KEY
 import com.example.smartpoultry.domain.reports.Report
 import com.example.smartpoultry.domain.repository.BlocksRepository
 import com.example.smartpoultry.domain.repository.CellsRepository
 import com.example.smartpoultry.domain.repository.EggCollectionRepository
 import com.example.smartpoultry.domain.repository.FirebaseAuthRepository
+import com.example.smartpoultry.utils.IS_PASSWORD_RESET_KEY
+import com.example.smartpoultry.utils.USER_EMAIL_KEY
+import com.example.smartpoultry.utils.USER_NAME_KEY
+import com.example.smartpoultry.utils.USER_ROLE_KEY
 import com.example.smartpoultry.utils.localDateToJavaDate
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
@@ -95,17 +96,20 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    val userRole = dataStore.readData(USER_ROLE_KEY).stateIn(
+    /*val userRole = dataStore.readData(USER_ROLE_KEY).stateIn(
         scope = viewModelScope,
         started = SharingStarted.Eagerly,
         initialValue = ""
-    )
+    )*/
+    fun getUserRole() = preferencesRepo.loadData(USER_ROLE_KEY)
 
-    val userName = dataStore.readData(USER_NAME_KEY).stateIn(
+    /*val userName = dataStore.readData(USER_NAME_KEY).stateIn(
         scope = viewModelScope,
         started = SharingStarted.Eagerly,
         initialValue = ""
-    )
+    )*/
+    fun getName() = preferencesRepo.loadData(USER_NAME_KEY)
+    fun getEmail() = preferencesRepo.loadData(USER_EMAIL_KEY)
 
     val totalBlocks = blocksRepository.getAllBlocks().stateIn(
         scope = viewModelScope,

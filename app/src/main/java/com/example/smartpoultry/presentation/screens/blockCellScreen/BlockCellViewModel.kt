@@ -4,7 +4,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.smartpoultry.data.dataSource.datastore.AppDataStore
-import com.example.smartpoultry.data.dataSource.datastore.USER_ROLE_KEY
 import com.example.smartpoultry.data.dataSource.room.entities.blocks.Blocks
 import com.example.smartpoultry.data.dataSource.room.entities.cells.Cells
 import com.example.smartpoultry.domain.repository.BlocksRepository
@@ -23,11 +22,11 @@ class BlockCellViewModel @Inject constructor(
     private val dataStore: AppDataStore
 ) : ViewModel() {
 
-    val userRole = dataStore.readData(USER_ROLE_KEY).stateIn(
+    /*val userRole = dataStore.readData(USER_ROLE_KEY).stateIn(
         viewModelScope,
         started = SharingStarted.Eagerly,
         initialValue = ""
-    )
+    )*/
     //exposing flow as state
     val listOfBlocks = blocksRepository.getAllBlocks().stateIn(
         scope = viewModelScope,

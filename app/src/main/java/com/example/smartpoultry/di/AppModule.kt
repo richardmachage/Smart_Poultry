@@ -98,7 +98,7 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun providesTrendAnalysis(eggCollectionRepository: EggCollectionRepository, cellsRepository: CellsRepository,dataStore: AppDataStore) : TrendAnalysis{
-        return TrendAnalysis(eggCollectionRepository,cellsRepository, dataStore)
+    fun providesTrendAnalysis(eggCollectionRepository: EggCollectionRepository, cellsRepository: CellsRepository,dataStore: AppDataStore, preferencesRepo: PreferencesRepo) : TrendAnalysis{
+        return TrendAnalysis(eggCollectionRepository,cellsRepository, dataStore, preferencesRepo)
     }
 }

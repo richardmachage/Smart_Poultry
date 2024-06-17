@@ -2,14 +2,7 @@ package com.example.smartpoultry.data.repositoryImpl
 
 import android.util.Log
 import com.example.smartpoultry.data.dataSource.datastore.AppDataStore
-import com.example.smartpoultry.data.dataSource.datastore.FARM_ID_KEY
-import com.example.smartpoultry.data.dataSource.datastore.FARM_NAME_KEY
-import com.example.smartpoultry.data.dataSource.datastore.IS_PASSWORD_RESET_KEY
 import com.example.smartpoultry.data.dataSource.datastore.PreferencesRepo
-import com.example.smartpoultry.data.dataSource.datastore.USER_EMAIL_KEY
-import com.example.smartpoultry.data.dataSource.datastore.USER_NAME_KEY
-import com.example.smartpoultry.data.dataSource.datastore.USER_PHONE_KEY
-import com.example.smartpoultry.data.dataSource.datastore.USER_ROLE_KEY
 import com.example.smartpoultry.data.dataSource.remote.firebase.FARMS_COLLECTION
 import com.example.smartpoultry.data.dataSource.remote.firebase.USERS_COLLECTION
 import com.example.smartpoultry.data.dataSource.remote.firebase.models.Farm
@@ -18,11 +11,11 @@ import com.example.smartpoultry.domain.repository.FirebaseAuthRepository
 import com.example.smartpoultry.utils.FARM_ID_KEY
 import com.example.smartpoultry.utils.FARM_NAME_KEY
 import com.example.smartpoultry.utils.IS_PASSWORD_RESET_KEY
-import com.example.smartpoultry.utils.USER
 import com.example.smartpoultry.utils.USER_EMAIL_KEY
 import com.example.smartpoultry.utils.USER_NAME_KEY
 import com.example.smartpoultry.utils.USER_PHONE_KEY
 import com.example.smartpoultry.utils.USER_ROLE_KEY
+import com.example.smartpoultry.utils.getThisUser
 import com.google.firebase.Firebase
 import com.google.firebase.auth.EmailAuthCredential
 import com.google.firebase.auth.EmailAuthProvider
@@ -140,7 +133,6 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
                 val authResult = firebaseAuth.signInWithEmailAndPassword(email, password).await()
                 val firebaseUser = authResult.user
 
-
                 if (firebaseUser != null) {
                     //  fetch user details from Firestore .
                     firebaseFirestore
@@ -170,10 +162,14 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
                                 preferencesRepo.saveData(USER_PHONE_KEY, it.phone)
                                 //user role
                                 preferencesRepo.saveData(USER_ROLE_KEY, it.role)
+
+                                getThisUser(preferencesRepo)
                             }
 
                         }
-                    getFarm()
+                        .await()
+                    //getFarm()
+                    //getThisUser(preferencesRepo)
                     Result.success(true)
                 } else {
                     Result.failure(Exception("Firebase user is null"))

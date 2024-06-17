@@ -4,7 +4,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.smartpoultry.data.dataSource.datastore.AppDataStore
-import com.example.smartpoultry.data.dataSource.datastore.USER_ROLE_KEY
 import com.example.smartpoultry.data.dataSource.room.entities.cells.Cells
 import com.example.smartpoultry.domain.repository.BlocksRepository
 import com.example.smartpoultry.domain.repository.CellsRepository
@@ -22,11 +21,11 @@ class CellsViewModel @Inject constructor(
     dataStore: AppDataStore
 ) : ViewModel() {
 
-    val userRole = dataStore.readData(USER_ROLE_KEY).stateIn(
+    /*val userRole = dataStore.readData(USER_ROLE_KEY).stateIn(
         viewModelScope,
         SharingStarted.Eagerly,
         ""
-    )
+    )*/
 
     var showDialog = mutableStateOf(false)
     lateinit var selectedCell: Cells

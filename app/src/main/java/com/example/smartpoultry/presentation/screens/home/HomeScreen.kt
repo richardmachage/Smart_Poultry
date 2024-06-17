@@ -38,7 +38,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.smartpoultry.data.dataModels.DailyEggCollection
-import com.example.smartpoultry.data.dataSource.datastore.USER_EMAIL_KEY
 import com.example.smartpoultry.data.dataSource.room.entities.cells.Cells
 import com.example.smartpoultry.presentation.NavGraphs
 import com.example.smartpoultry.presentation.composables.MyCard
@@ -49,7 +48,8 @@ import com.example.smartpoultry.presentation.composables.NormButton
 import com.example.smartpoultry.presentation.composables.NormText
 import com.example.smartpoultry.presentation.composables.RecentEggsLineChart
 import com.example.smartpoultry.presentation.destinations.LogInScreenDestination
-import com.example.smartpoultry.presentation.screens.settingsScreen.PAST_DAYS_KEY
+import com.example.smartpoultry.utils.PAST_DAYS_KEY
+import com.example.smartpoultry.utils.THIS_USER
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.navigation.popUpTo
@@ -69,14 +69,12 @@ fun HomeScreen(
     //viewmodel initialization
     val homeViewModel: HomeViewModel = hiltViewModel()
     val totalBlocks = homeViewModel.totalBlocks.collectAsState()
-    val totalCells = homeViewModel.totalCells.collectAsState()
-   // val userRole by homeViewModel.userRole.collectAsState()
-    val userName by homeViewModel.userName.collectAsState()
-    val emailAddress by homeViewModel.dataStore.readData(USER_EMAIL_KEY).collectAsState(initial = "")
+    val totalCells = homeViewModel.totalCells.collectAsState() // val userRole by homeViewModel.userRole.collectAsState()
+    val userName = homeViewModel.getName()!!
+    val emailAddress = homeViewModel.getEmail()!!//by homeViewModel.dataStore.readData(USER_EMAIL_KEY).collectAsState(initial = "")
 
-    val pastDaysState =
-        remember { homeViewModel.dataStore.readData(PAST_DAYS_KEY) }.collectAsState(initial = "0")
-    val pastDays = pastDaysState.value.toIntOrNull() ?: 0
+    val pastDaysState = homeViewModel.preferencesRepo.loadData(PAST_DAYS_KEY)//remember { homeViewModel.dataStore.readData(PAST_DAYS_KEY) }.collectAsState(initial = "0")
+    val pastDays = pastDaysState?.toIntOrNull() ?: 0
 
     val dailyEggsForPastDays: State<List<DailyEggCollection>> =
         produceState(initialValue = emptyList(), key1 = pastDays) {
@@ -165,6 +163,10 @@ fun HomeScreen(
             }
 
             //Greeting card
+            MyVerticalSpacer(height = 5)
+            Text(text = "This user : ${THIS_USER?.email}")
+            MyVerticalSpacer(height = 5)
+
             if (userName.isNotBlank()) {
                 MyCard(
                     modifier = Modifier

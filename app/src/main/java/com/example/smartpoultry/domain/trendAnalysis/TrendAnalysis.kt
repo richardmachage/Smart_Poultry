@@ -4,11 +4,12 @@ import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
 import com.example.smartpoultry.data.dataSource.datastore.AppDataStore
+import com.example.smartpoultry.data.dataSource.datastore.PreferencesRepo
 import com.example.smartpoultry.data.dataSource.room.entities.cells.Cells
 import com.example.smartpoultry.domain.repository.CellsRepository
 import com.example.smartpoultry.domain.repository.EggCollectionRepository
-import com.example.smartpoultry.presentation.screens.settingsScreen.CONSUCUTIVE_DAYS_KEY
-import com.example.smartpoultry.presentation.screens.settingsScreen.THRESHOLD_RATIO_KEY
+import com.example.smartpoultry.utils.CONSUCUTIVE_DAYS_KEY
+import com.example.smartpoultry.utils.THRESHOLD_RATIO_KEY
 import com.example.smartpoultry.utils.localDateToJavaDate
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
@@ -22,36 +23,22 @@ import kotlinx.coroutines.launch
 import java.sql.Date
 import java.time.LocalDate
 import javax.inject.Inject
-import kotlin.properties.Delegates
 
 class TrendAnalysis @Inject constructor(
     private val eggCollectionRepository: EggCollectionRepository,
     private val cellsRepository: CellsRepository,
     private val dataStore: AppDataStore,
+    private val preferencesRepo: PreferencesRepo
 ) {
 
-    var THRESHOLD_RATIO by Delegates.notNull<Float>()
-    var CONSUCUTIVE_DAYS by Delegates.notNull<Int>()
+    var THRESHOLD_RATIO = preferencesRepo.loadData(THRESHOLD_RATIO_KEY)!!.toFloatOrNull() ?: 0.0f//by Delegates.notNull<Float>()
+    var CONSUCUTIVE_DAYS = preferencesRepo.loadData(CONSUCUTIVE_DAYS_KEY)!!.toIntOrNull()?: 0//by Delegates.notNull<Int>()
 
     //first get all cells
     var listOfAllCells = mutableListOf<Cells>()
     //private var listOfFlaggedCells = mutableListOf<Cells>()
 
     init {
-        CoroutineScope(Dispatchers.IO).launch {
-            dataStore.readData(THRESHOLD_RATIO_KEY).collect {
-                THRESHOLD_RATIO = it.toFloatOrNull() ?: 0.0f
-                Log.d("ratio from datastore", THRESHOLD_RATIO.toString())
-            }
-
-        }
-
-        CoroutineScope(Dispatchers.IO).launch {
-            dataStore.readData(CONSUCUTIVE_DAYS_KEY).collect() {
-                CONSUCUTIVE_DAYS = it.toIntOrNull() ?: 0
-            }
-        }
-
         getAllCells()
     }
 
