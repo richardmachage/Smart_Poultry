@@ -10,6 +10,12 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import com.example.smartpoultry.data.dataSource.remote.firebase.USERS_COLLECTION
 import com.example.smartpoultry.data.dataSource.remote.firebase.models.User
+import com.example.smartpoultry.utils.FARM_ID_KEY
+import com.example.smartpoultry.utils.IS_PASSWORD_RESET_KEY
+import com.example.smartpoultry.utils.USER_EMAIL_KEY
+import com.example.smartpoultry.utils.USER_NAME_KEY
+import com.example.smartpoultry.utils.USER_PHONE_KEY
+import com.example.smartpoultry.utils.USER_ROLE_KEY
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.CoroutineScope
@@ -20,14 +26,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-const val USER_ROLE_KEY = "user_role"
-const val USER_NAME_KEY = "user_name"
-const val USER_PHONE_KEY = "user_phone"
-const val USER_EMAIL_KEY = "user_email"
-const val FIRST_INSTALL = "first_install"
-const val FARM_ID_KEY = "farm_id"
-const val FARM_NAME_KEY = "farm_name"
-const val IS_PASSWORD_RESET_KEY = "is_password_reset"
+
 
 //@Singleton
 class AppDataStore @Inject constructor(
@@ -99,7 +98,7 @@ class AppDataStore @Inject constructor(
             }
     }
 
-    suspend fun saveData(key: String, value: String) {
+   /* suspend fun saveData(key: String, value: String) {
         val dataStoreKey = stringPreferencesKey(key)
         dataStore.edit { myPreferences ->
             myPreferences[dataStoreKey] = value
@@ -120,7 +119,7 @@ class AppDataStore @Inject constructor(
             it.remove(dataStoreKey)
         }
     }
-
+*/
     suspend fun clearDataStore() {
         dataStore.edit { myPreferences ->
             myPreferences.clear()

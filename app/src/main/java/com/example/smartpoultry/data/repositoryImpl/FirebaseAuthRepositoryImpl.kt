@@ -15,7 +15,14 @@ import com.example.smartpoultry.data.dataSource.remote.firebase.USERS_COLLECTION
 import com.example.smartpoultry.data.dataSource.remote.firebase.models.Farm
 import com.example.smartpoultry.data.dataSource.remote.firebase.models.User
 import com.example.smartpoultry.domain.repository.FirebaseAuthRepository
+import com.example.smartpoultry.utils.FARM_ID_KEY
+import com.example.smartpoultry.utils.FARM_NAME_KEY
+import com.example.smartpoultry.utils.IS_PASSWORD_RESET_KEY
 import com.example.smartpoultry.utils.USER
+import com.example.smartpoultry.utils.USER_EMAIL_KEY
+import com.example.smartpoultry.utils.USER_NAME_KEY
+import com.example.smartpoultry.utils.USER_PHONE_KEY
+import com.example.smartpoultry.utils.USER_ROLE_KEY
 import com.google.firebase.Firebase
 import com.google.firebase.auth.EmailAuthCredential
 import com.google.firebase.auth.EmailAuthProvider
@@ -150,53 +157,23 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
                                     it.passwordReset.toString()
                                 )
 
+                                //Farm Id
                                 preferencesRepo.saveData(FARM_ID_KEY, it.farmId)
                                 Log.d("Farm", "saving farm to shared preferences: ${user?.farmId}")
 
-                                //set user
-                                USER = it
-                            }
+                                //user name
+                                preferencesRepo.saveData(USER_NAME_KEY, it.name)
 
-                            //save user other details  to datastore
-                            //user Farm
-                            /*preferencesRepo.saveData(FARM_ID_KEY, user?.farmId.toString())
-                            Log.d("Farm", "saving farm to shared preferences: ${user?.farmId}")*/
-
-                            CoroutineScope(Dispatchers.IO).launch {
-                                user?.let { user ->
-                                    dataStore.saveData(FARM_ID_KEY, user.farmId)
-                                    Log.d("Farm", "saving farm to datastore: ${user.farmId}")
-                                }
-                            }
-
-                            //user Role
-                            CoroutineScope(Dispatchers.IO).launch {
-                                user?.let { user ->
-                                    dataStore.saveData(USER_ROLE_KEY, user.role)
-                                }
-                            }
-
-                            //User Name
-                            CoroutineScope(Dispatchers.IO).launch {
-                                user?.let { user ->
-                                    dataStore.saveData(USER_NAME_KEY, user.name)
-                                }
-                            }
-                            //User email
-                            CoroutineScope(Dispatchers.IO).launch {
-                                user?.let { user ->
-                                    dataStore.saveData(USER_EMAIL_KEY, user.email)
-                                }
-                            }
-                            //User phone
-                            CoroutineScope(Dispatchers.IO).launch {
-                                user?.let { user ->
-                                    dataStore.saveData(USER_PHONE_KEY, user.phone)
-                                }
+                                //user email
+                                preferencesRepo.saveData(USER_EMAIL_KEY, it.email)
+                                //user phone
+                                preferencesRepo.saveData(USER_PHONE_KEY, it.phone)
+                                //user role
+                                preferencesRepo.saveData(USER_ROLE_KEY, it.role)
                             }
 
                         }
-
+                    getFarm()
                     Result.success(true)
                 } else {
                     Result.failure(Exception("Firebase user is null"))
@@ -301,26 +278,34 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
         //1. check if name exists locally
         //2. if not, read from remote and store locally
         //3. return value from local
+        try {
+            var farmName = preferencesRepo.loadData(FARM_NAME_KEY) ?: ""
+            var farmId = preferencesRepo.loadData(FARM_ID_KEY) ?: ""
 
-        var farmName = preferencesRepo.loadData(FARM_NAME_KEY) ?: ""
-        var farmId = preferencesRepo.loadData(FARM_ID_KEY) ?: ""
-
-        if (farmName.isNotBlank()) {
-            //farm name exists locally, we return here
-            return farmName
-        } else {
-            //farm name does not exist locally so we red from remote source
-            val docsnapshot = firebaseFirestore.collection(FARMS_COLLECTION).document(farmId)
-                .get()
-                .addOnSuccessListener {
-                    val farm = it.toObject(Farm::class.java)
-                    farm?.let {
-                        preferencesRepo.saveData(FARM_NAME_KEY, it.name)
+            if (farmName.isNotBlank()) {
+                //farm name exists locally, we return here
+                return farmName
+            } else {
+                //farm name does not exist locally so we read from remote source
+                val docsnapshot = firebaseFirestore.collection(FARMS_COLLECTION).document(farmId)
+                    .get()
+                    .addOnSuccessListener {
+                        val farm = it.toObject(Farm::class.java)
+                        farm?.let {
+                            preferencesRepo.saveData(FARM_NAME_KEY, it.name)
+                        }
                     }
-                }
-                .await()
-            return preferencesRepo.loadData(FARM_NAME_KEY) ?: ""
+                    .addOnFailureListener {
+                        Throwable(it)
+                    }
+                    .await()
+                return preferencesRepo.loadData(FARM_NAME_KEY) ?: ""
+            }
+        } catch (e: Exception) {
+            Log.e("getting farm name", "getFarm failed: ${e.message.toString()} ", e)
+            return ""
         }
+
 
     }
 
@@ -371,15 +356,15 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
                             Log.d("Delete user", "successfully deleted on firestore/Users")
                             completableDeferred.complete(Result.success("User deleted successfully"))
                         }
-                        .addOnFailureListener{
+                        .addOnFailureListener {
                             completableDeferred.complete(Result.failure(it))
                         }
                 }
-                .addOnFailureListener{
+                .addOnFailureListener {
                     completableDeferred.complete(Result.failure(it))
                 }
                 .await()
-        }?: run {
+        } ?: run {
             completableDeferred.complete(Result.failure(Throwable(message = "Deletion failed, Log into app afresh and try again")))
         }
 
