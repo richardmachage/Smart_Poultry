@@ -162,10 +162,6 @@ fun HomeScreen(
             }
 
             //Greeting card
-            MyVerticalSpacer(height = 5)
-            Text(text = "This user : ${homeViewModel.getEmail()}")
-            MyVerticalSpacer(height = 5)
-
             if (userName.isNotBlank()) {
                 MyCard(
                     modifier = Modifier

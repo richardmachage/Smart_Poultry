@@ -4,28 +4,6 @@ import com.example.smartpoultry.data.dataSource.datastore.PreferencesRepo
 import com.example.smartpoultry.data.dataSource.remote.firebase.models.User
 
 
-var THIS_USER : User? = null
-fun getThisUser(preferencesRepo: PreferencesRepo) : User{
-    THIS_USER?.let { return it }
-    //collect user data from shared preferences and build the user class
-    val userName = preferencesRepo.loadData(USER_NAME_KEY)!!
-    val userEmail = preferencesRepo.loadData(USER_EMAIL_KEY)!!
-    val userPhone = preferencesRepo.loadData(USER_PHONE_KEY)!!
-    val userRole = preferencesRepo.loadData(USER_ROLE_KEY)!!
-    val userFarmId = preferencesRepo.loadData(FARM_ID_KEY)!!
-    val isPassWordReset = preferencesRepo.loadData(IS_PASSWORD_RESET_KEY)!!
-
-    THIS_USER = User(
-        //userId = firebaseAuth.currentUser?.uid.toString(),
-        name = userName,
-        email = userEmail,
-        role = userRole,
-        phone = userPhone,
-        farmId = userFarmId,
-        passwordReset = isPassWordReset == "true"
-    )
-    return THIS_USER!!
-}
 
 const val USER_ROLE_KEY = "user_role"
 const val USER_NAME_KEY = "user_name"
