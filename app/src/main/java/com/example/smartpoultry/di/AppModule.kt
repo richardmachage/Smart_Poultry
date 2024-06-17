@@ -8,7 +8,6 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStoreFile
 import com.example.smartpoultry.data.dataSource.datastore.AppDataStore
 import com.example.smartpoultry.data.dataSource.datastore.PreferencesRepo
-import com.example.smartpoultry.data.dataSource.remote.firebase.FirestorePathProvider
 import com.example.smartpoultry.data.dataSource.room.database.SmartPoultryDatabase
 import com.example.smartpoultry.data.repositoryImpl.AlertsRepositoryImpl
 import com.example.smartpoultry.data.repositoryImpl.BlocksRepositoryImpl
@@ -49,8 +48,8 @@ object AppModule {
 
         @Provides
     @Singleton
-    fun providesBlocksRepository(database: SmartPoultryDatabase, firestore: FirebaseFirestore, firestorePathProvider: FirestorePathProvider, firebaseAuth: FirebaseAuth, preferencesRepo: PreferencesRepo): BlocksRepository{
-        return BlocksRepositoryImpl(database.blocksDao(), firestore ,firebaseAuth = firebaseAuth, firestorePathProvider= firestorePathProvider, preferencesRepo)
+    fun providesBlocksRepository(database: SmartPoultryDatabase, firestore: FirebaseFirestore, firebaseAuth: FirebaseAuth, preferencesRepo: PreferencesRepo): BlocksRepository{
+        return BlocksRepositoryImpl(database.blocksDao(), firestore ,firebaseAuth = firebaseAuth, preferencesRepo=preferencesRepo)
     }
 
     @Provides
@@ -93,7 +92,7 @@ object AppModule {
     @Provides
     @Singleton
     fun providesFirebaseAuthRepository(firebaseAuth: FirebaseAuth, fireStoreDb: FirebaseFirestore, dataStore: AppDataStore, preferencesRepo: PreferencesRepo) : FirebaseAuthRepository{
-        return FirebaseAuthRepositoryImpl(firebaseAuth = firebaseAuth, firebaseFirestore = fireStoreDb, dataStore= dataStore, preferencesRepo = preferencesRepo)
+        return FirebaseAuthRepositoryImpl(firebaseAuth = firebaseAuth, firebaseFirestore = fireStoreDb, /*dataStore= dataStore,*/ preferencesRepo = preferencesRepo)
     }
 
     @Provides

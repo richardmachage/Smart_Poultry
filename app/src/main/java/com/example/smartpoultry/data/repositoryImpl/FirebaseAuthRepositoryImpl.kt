@@ -15,7 +15,6 @@ import com.example.smartpoultry.utils.USER_EMAIL_KEY
 import com.example.smartpoultry.utils.USER_NAME_KEY
 import com.example.smartpoultry.utils.USER_PHONE_KEY
 import com.example.smartpoultry.utils.USER_ROLE_KEY
-import com.example.smartpoultry.utils.getThisUser
 import com.google.firebase.Firebase
 import com.google.firebase.auth.EmailAuthCredential
 import com.google.firebase.auth.EmailAuthProvider
@@ -39,7 +38,7 @@ var isPasswordReset: Boolean? = null
 class FirebaseAuthRepositoryImpl @Inject constructor(
     private val firebaseAuth: FirebaseAuth,
     private val firebaseFirestore: FirebaseFirestore,
-    private val dataStore: AppDataStore,
+   // private val dataStore: AppDataStore,
     private val preferencesRepo: PreferencesRepo
 ) : FirebaseAuthRepository {
 
@@ -163,7 +162,7 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
                                 //user role
                                 preferencesRepo.saveData(USER_ROLE_KEY, it.role)
 
-                                getThisUser(preferencesRepo)
+                                //getThisUser(preferencesRepo)
                             }
 
                         }

@@ -4,10 +4,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import com.example.smartpoultry.data.dataSource.datastore.AppDataStore
 import com.example.smartpoultry.data.dataSource.datastore.PreferencesRepo
+import com.example.smartpoultry.domain.repository.BlocksRepository
+import com.example.smartpoultry.domain.repository.CellsRepository
+import com.example.smartpoultry.utils.FARM_ID_KEY
 import com.example.smartpoultry.utils.FIRST_INSTALL
-import com.example.smartpoultry.utils.getThisUser
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -15,8 +16,10 @@ import javax.inject.Inject
 @HiltViewModel
 class MainViewModel @Inject constructor(
     val firebaseAuth: FirebaseAuth,
-    val dataStore: AppDataStore,
-    val preferencesRepo: PreferencesRepo
+   // val dataStore: AppDataStore,
+    val preferencesRepo: PreferencesRepo,
+    val blocksRepository: BlocksRepository,
+    val cellsRepository: CellsRepository
 ) : ViewModel() {
     var isLoggedIn by mutableStateOf(false)
     var isFirstInstall by mutableStateOf(false)
@@ -24,7 +27,7 @@ class MainViewModel @Inject constructor(
     init {
         checkFirstInstall()
         checkIfLoggedIn()
-        getThisUser(preferencesRepo)
+       // getThisUser(preferencesRepo)
         //checkIfFarmSaved()
     }
 
@@ -32,9 +35,13 @@ class MainViewModel @Inject constructor(
     private fun checkIfLoggedIn() {
         firebaseAuth.currentUser?.let {
             isLoggedIn = true
+            //val farmId = getFarmId()
+            blocksRepository.listenForFireStoreChanges()
+            cellsRepository.listenForFireStoreChanges()
         }
     }
 
+    private fun getFarmId() = preferencesRepo.loadData(FARM_ID_KEY)!!
     private fun checkFirstInstall() {
         /*viewModelScope.launch {
             dataStore.readData(FIRST_INSTALL)

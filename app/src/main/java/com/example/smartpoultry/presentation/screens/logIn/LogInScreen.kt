@@ -77,7 +77,10 @@ fun LogInScreen(
             .fillMaxSize(),
         color = MaterialTheme.colorScheme.background
     ) {
-        MyCircularProgressBar(isLoading = logInViewModel.isLoading.value)
+        MyCircularProgressBar(
+            isLoading = logInViewModel.isLoading.value,
+            displayText = "Loading..."
+        )
         
         Column(
             verticalArrangement = Arrangement.SpaceBetween,

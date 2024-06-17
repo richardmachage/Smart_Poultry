@@ -4,9 +4,7 @@ import android.util.Log
 import com.example.smartpoultry.data.dataSource.datastore.PreferencesRepo
 import com.example.smartpoultry.data.dataSource.remote.firebase.CELLS_COLLECTION
 import com.example.smartpoultry.data.dataSource.remote.firebase.FARMS_COLLECTION
-import com.example.smartpoultry.data.dataSource.remote.firebase.USERS_COLLECTION
 import com.example.smartpoultry.data.dataSource.remote.firebase.models.Cell
-import com.example.smartpoultry.data.dataSource.remote.firebase.models.User
 import com.example.smartpoultry.data.dataSource.room.entities.cells.Cells
 import com.example.smartpoultry.data.dataSource.room.entities.cells.CellsDao
 import com.example.smartpoultry.domain.repository.CellsRepository
@@ -30,17 +28,17 @@ class CellsRepositoryImpl @Inject constructor(
     private val firebaseAuth: FirebaseAuth
 ) : CellsRepository {
     // private val cellsCollectionPath = fireStoreDb.collection(FARMS_COLLECTION).document(dataStore.farmID).collection(CELLS_COLLECTION)
+    /*private val farmId = preferencesRepo.loadData(FARM_ID_KEY)!!
     private val farmsCollection = fireStoreDb.collection(FARMS_COLLECTION)
-    private lateinit var farmDocument: DocumentReference //farmsCollection.document("710uve6Bmd25yAXcnPfr")//dataStore.farmID)
-    private lateinit var cellsCollection: CollectionReference// farmDocument.collection(CELLS_COLLECTION)
-
+    *//*private lateinit*//* private var farmDocument: DocumentReference = farmsCollection.document(farmId) //farmsCollection.document("710uve6Bmd25yAXcnPfr")//dataStore.farmID)
+    *//*private lateinit *//*private var cellsCollection: CollectionReference =  farmDocument.collection(CELLS_COLLECTION)// farmDocument.collection(CELLS_COLLECTION)
+*/
+/*
     init {
-        val farmID = preferencesRepo.loadData(FARM_ID_KEY) ?: ""
         if (farmID.isNotBlank()) {
             farmDocument = farmsCollection.document(farmID)
             cellsCollection = farmDocument.collection(CELLS_COLLECTION)
-        }
-        else {
+        } else {
             var id = ""
             //try to retrieve farm Id first here
             fireStoreDb.collection(USERS_COLLECTION)
@@ -61,13 +59,17 @@ class CellsRepositoryImpl @Inject constructor(
 
         }
     }
+*/
 
 
-    private fun listenForFireStoreChanges() {
+    override  fun listenForFireStoreChanges() {
         //check if farmId exists
-        val farmId = preferencesRepo.loadData(FARM_ID_KEY) ?: ""
+      //  val farmId = preferencesRepo.loadData(FARM_ID_KEY) ?: ""
 
-        if (farmId.isNotBlank()) {
+        //if (farmId.isNotBlank()) {
+        val farmsCollection = fireStoreDb.collection(FARMS_COLLECTION)
+        val farmDocument: DocumentReference = farmsCollection.document(getFarmId())
+        val cellsCollection: CollectionReference = farmDocument.collection(CELLS_COLLECTION)
             cellsCollection.addSnapshotListener { querySnapshot, exception ->
                 if (exception != null) { //if an error exists, it logs the error and returns early from the listener.
                     Log.w("Error", "Listen failed.", exception)
@@ -121,7 +123,9 @@ class CellsRepositoryImpl @Inject constructor(
                     }
                 }
             }
-        } else {
+        //}
+
+        /*else {
             // to retrieve farm Id first here
             fireStoreDb.collection(USERS_COLLECTION)
                 .document(firebaseAuth.currentUser?.uid.toString())
@@ -193,12 +197,15 @@ class CellsRepositoryImpl @Inject constructor(
 
                 }
 
-        }
+        }*/
     }
 
     override suspend fun addNewCell(cell: Cells) {
         val cellId = cellsDao.addNewCell(cell = cell)
         //fireStoreDb.collection(cellsCollectionPath.path)
+        val farmsCollection = fireStoreDb.collection(FARMS_COLLECTION)
+        val farmDocument: DocumentReference = farmsCollection.document(getFarmId())
+        val cellsCollection: CollectionReference = farmDocument.collection(CELLS_COLLECTION)
         cellsCollection.document(cellId.toString())
             .set(
                 Cell(
@@ -217,8 +224,12 @@ class CellsRepositoryImpl @Inject constructor(
     }
 
     override suspend fun deleteCell(cell: Cells) {
+
         cellsDao.deleteCell(cell = cell)
         //fireStoreDb.collection(cellsCollectionPath.path)
+        val farmsCollection = fireStoreDb.collection(FARMS_COLLECTION)
+        val farmDocument: DocumentReference = farmsCollection.document(getFarmId())
+        val cellsCollection: CollectionReference = farmDocument.collection(CELLS_COLLECTION)
         cellsCollection.document(cell.cellId.toString())
             .delete()
             .addOnSuccessListener {
@@ -248,8 +259,13 @@ class CellsRepositoryImpl @Inject constructor(
     override suspend fun updateCellInfo(cell: Cells) {
         cellsDao.updateCellInfo(cell)
         // fireStoreDb.collection(cellsCollectionPath.path)
+        val farmsCollection = fireStoreDb.collection(FARMS_COLLECTION)
+        val farmDocument: DocumentReference = farmsCollection.document(getFarmId())
+        val cellsCollection: CollectionReference = farmDocument.collection(CELLS_COLLECTION)
         cellsCollection.document(cell.cellId.toString())
             .set(cell, SetOptions.merge())
 
     }
+
+    private fun getFarmId() = preferencesRepo.loadData(FARM_ID_KEY)!!
 }

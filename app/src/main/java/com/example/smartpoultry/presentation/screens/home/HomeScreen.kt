@@ -42,6 +42,7 @@ import com.example.smartpoultry.data.dataSource.room.entities.cells.Cells
 import com.example.smartpoultry.presentation.NavGraphs
 import com.example.smartpoultry.presentation.composables.MyCard
 import com.example.smartpoultry.presentation.composables.MyCardInventory
+import com.example.smartpoultry.presentation.composables.MyCircularProgressBar
 import com.example.smartpoultry.presentation.composables.MyInputDialog
 import com.example.smartpoultry.presentation.composables.MyVerticalSpacer
 import com.example.smartpoultry.presentation.composables.NormButton
@@ -107,6 +108,10 @@ fun HomeScreen(
             .fillMaxSize(),
         color = MaterialTheme.colorScheme.background
     ) {
+        MyCircularProgressBar(
+            isLoading = homeViewModel.isLoading,
+            displayText = "Syncing..."
+        )
 
         Column( //Full Screen column
             modifier = Modifier

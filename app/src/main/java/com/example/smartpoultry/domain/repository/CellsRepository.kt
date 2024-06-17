@@ -18,4 +18,6 @@ interface CellsRepository {
     fun getCellsForBlock(blockId : Int):Flow<List<Cells>>
 
     suspend fun updateCellInfo(cell: Cells)
+
+    fun listenForFireStoreChanges()
 }

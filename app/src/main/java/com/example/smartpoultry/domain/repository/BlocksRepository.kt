@@ -11,7 +11,7 @@ interface BlocksRepository {
     fun getAllBlocks() : Flow<List<Blocks>>
     fun getBlock(block: Blocks) : Flow<List<Blocks>>
     suspend fun fetchAndUpdateBlocks()
-
     fun getBlocksWithCells() : Flow<List<BlocksWithCells>>
+    fun listenForFireStoreChanges()
 
 }

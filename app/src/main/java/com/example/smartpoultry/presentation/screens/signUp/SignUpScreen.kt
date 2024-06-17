@@ -98,7 +98,10 @@ fun SignUpScreen(
                 .fillMaxSize(),
             color = MaterialTheme.colorScheme.background
         ) {
-            MyCircularProgressBar(isLoading = isLoading)
+            MyCircularProgressBar(
+                isLoading = isLoading,
+                displayText = "Signing In..."
+            )
 
             Column {
                 MyVerticalSpacer(height = 10)
