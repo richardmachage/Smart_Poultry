@@ -49,7 +49,6 @@ import com.example.smartpoultry.presentation.composables.NormText
 import com.example.smartpoultry.presentation.composables.RecentEggsLineChart
 import com.example.smartpoultry.presentation.destinations.LogInScreenDestination
 import com.example.smartpoultry.utils.PAST_DAYS_KEY
-import com.example.smartpoultry.utils.THIS_USER
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.navigation.popUpTo
@@ -164,7 +163,7 @@ fun HomeScreen(
 
             //Greeting card
             MyVerticalSpacer(height = 5)
-            Text(text = "This user : ${THIS_USER?.email}")
+            Text(text = "This user : ${homeViewModel.getEmail()}")
             MyVerticalSpacer(height = 5)
 
             if (userName.isNotBlank()) {
