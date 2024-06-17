@@ -45,7 +45,6 @@ import com.example.smartpoultry.presentation.composables.MyInputDialog
 import com.example.smartpoultry.presentation.composables.MyOutlineTextFiled
 import com.example.smartpoultry.presentation.composables.MyVerticalSpacer
 import com.example.smartpoultry.presentation.uiModels.BlockParse
-import com.example.smartpoultry.utils.THIS_USER
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
@@ -59,7 +58,7 @@ fun CellsScreen(
 ) {
     val cellsViewModel = hiltViewModel<CellsViewModel>()
     val userRole by remember {
-        mutableStateOf(THIS_USER?.role)
+        mutableStateOf(cellsViewModel.getUserRole())
     }//by cellsViewModel.userRole.collectAsState()
     val listOfCells by remember {
         cellsViewModel.getCellsForBLock(block.blockId)

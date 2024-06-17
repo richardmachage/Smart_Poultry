@@ -5,8 +5,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.smartpoultry.data.dataSource.datastore.AppDataStore
 import com.example.smartpoultry.data.dataSource.datastore.PreferencesRepo
+import com.example.smartpoultry.data.dataSource.remote.firebase.models.User
 import com.example.smartpoultry.domain.repository.FirebaseAuthRepository
-import com.example.smartpoultry.utils.getThisUser
+import com.example.smartpoultry.utils.USER_EMAIL_KEY
+import com.example.smartpoultry.utils.USER_NAME_KEY
+import com.example.smartpoultry.utils.USER_PHONE_KEY
+import com.example.smartpoultry.utils.USER_ROLE_KEY
 import com.example.smartpoultry.utils.isValidEmail
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -21,8 +25,17 @@ class AccountViewModel @Inject constructor(
     //val myDataStore = dataStore
     var isLoading = mutableStateOf(false)
     var toastMessage = mutableStateOf("")
-    val user = getThisUser(preferencesRepo)
+    val user = User(
+        name = getUserName(),
+        role = getUserRole(),
+        email = getUserEmail(),
+        phone = getUserPhone(),
+    )
 
+    private fun getUserName() = preferencesRepo.loadData(USER_NAME_KEY)!!
+    private fun getUserRole() = preferencesRepo.loadData(USER_ROLE_KEY)!!
+    private fun getUserEmail() = preferencesRepo.loadData(USER_EMAIL_KEY)!!
+    private fun getUserPhone() = preferencesRepo.loadData(USER_PHONE_KEY)!!
 
    /* val userRole = dataStore.readData(USER_ROLE_KEY).stateIn(
         scope = viewModelScope,

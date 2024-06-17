@@ -3,12 +3,13 @@ package com.example.smartpoultry.presentation.screens.blockCellScreen
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.smartpoultry.data.dataSource.datastore.AppDataStore
+import com.example.smartpoultry.data.dataSource.datastore.PreferencesRepo
 import com.example.smartpoultry.data.dataSource.room.entities.blocks.Blocks
 import com.example.smartpoultry.data.dataSource.room.entities.cells.Cells
 import com.example.smartpoultry.domain.repository.BlocksRepository
 import com.example.smartpoultry.domain.repository.CellsRepository
 import com.example.smartpoultry.presentation.uiModels.BlockItem
+import com.example.smartpoultry.utils.USER_ROLE_KEY
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
@@ -19,7 +20,7 @@ import javax.inject.Inject
 class BlockCellViewModel @Inject constructor(
     private val blocksRepository: BlocksRepository,
     private val cellsRepository: CellsRepository,
-    private val dataStore: AppDataStore
+    private val preferencesRepo: PreferencesRepo
 ) : ViewModel() {
 
     /*val userRole = dataStore.readData(USER_ROLE_KEY).stateIn(
@@ -46,6 +47,7 @@ class BlockCellViewModel @Inject constructor(
     var blockNumText = mutableStateOf("")
     var cellsText = mutableStateOf("")
 
+    fun getUserRole() = preferencesRepo.loadData(USER_ROLE_KEY)!!
 
     fun onAddNewBlock(blockItem: BlockItem) {
         viewModelScope.launch {
