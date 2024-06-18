@@ -1,7 +1,9 @@
 package com.example.smartpoultry.presentation.composables
 
+import android.content.Intent
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -11,11 +13,9 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.example.smartpoultry.R
 import com.example.smartpoultry.presentation.destinations.AccountScreenDestination
 import com.example.smartpoultry.presentation.destinations.AlertScreenDestination
 import com.example.smartpoultry.presentation.destinations.AnalyticsScreenDestination
@@ -23,6 +23,7 @@ import com.example.smartpoultry.presentation.destinations.BlockCellScreenDestina
 import com.example.smartpoultry.presentation.destinations.EggScreenDestination
 import com.example.smartpoultry.presentation.destinations.HomeScreenDestination
 import com.example.smartpoultry.presentation.destinations.SettingsScreenDestination
+import com.example.smartpoultry.presentation.screens.alerts.AlertsActivity
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
@@ -33,6 +34,7 @@ fun MyTopAppBar(
     navController: NavController,
     navigator: DestinationsNavigator
 ) {
+    val context = LocalContext.current
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
@@ -61,9 +63,12 @@ fun MyTopAppBar(
             }
         },
         actions = {
-            IconButton(onClick = { navigator.navigate(AlertScreenDestination) }) {
+            IconButton(onClick = {
+               // navigator.navigate(AlertScreenDestination)
+                context.startActivity(Intent(context,AlertsActivity::class.java))
+            }) {
                 Icon(
-                    imageVector = ImageVector.vectorResource(R.drawable.notification_filled),
+                    imageVector =Icons.Default.Notifications ,//ImageVector.vectorResource(R.drawable.notification_filled),
                     contentDescription = "Notifications"
                 )
             }

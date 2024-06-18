@@ -42,7 +42,7 @@ class BlocksRepositoryImpl @Inject constructor(
 ) : BlocksRepository {
 
     init {
-        listenForFireStoreChanges()
+        firebaseAuth.currentUser?.let { listenForFireStoreChanges() }
     }
 
 

@@ -1,4 +1,4 @@
-package com.example.smartpoultry.activity
+package com.example.smartpoultry.presentation.screens.mainActivity
 
 import android.os.Bundle
 import android.util.Log

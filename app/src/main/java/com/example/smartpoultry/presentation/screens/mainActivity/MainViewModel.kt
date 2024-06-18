@@ -1,4 +1,4 @@
-package com.example.smartpoultry.activity
+package com.example.smartpoultry.presentation.screens.mainActivity
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -38,6 +38,7 @@ class MainViewModel @Inject constructor(
         firebaseAuth.currentUser?.let {
             isLoggedIn = true
             //val farmId = getFarmId()
+
             blocksRepository.listenForFireStoreChanges()
             cellsRepository.listenForFireStoreChanges()
             eggCollectionRepository.listenForFireStoreChanges()

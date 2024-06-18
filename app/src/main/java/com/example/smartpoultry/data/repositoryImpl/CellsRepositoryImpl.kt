@@ -30,7 +30,7 @@ class CellsRepositoryImpl @Inject constructor(
 ) : CellsRepository {
 
     init {
-        listenForFireStoreChanges()
+        firebaseAuth.currentUser?.let { listenForFireStoreChanges() }
     }
 
 

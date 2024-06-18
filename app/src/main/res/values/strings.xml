@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Smart Poultry</string>
+    <string name="title_activity_alerts">AlertsActivity</string>
 </resources>

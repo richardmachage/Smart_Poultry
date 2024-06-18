@@ -11,6 +11,7 @@ import com.example.smartpoultry.data.dataSource.room.entities.eggCollection.EggC
 import com.example.smartpoultry.data.dataSource.room.entities.eggCollection.EggCollectionDao
 import com.example.smartpoultry.domain.repository.EggCollectionRepository
 import com.example.smartpoultry.utils.FARM_ID_KEY
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.DocumentReference
@@ -26,12 +27,12 @@ import javax.inject.Inject
 class EggCollectionRepositoryImpl @Inject constructor(
     private val eggCollectionDao: EggCollectionDao,
     private val fireStoreDb: FirebaseFirestore,
-    //dataStore: AppDataStore,
+    private val firebaseAuth: FirebaseAuth,
     private val preferencesRepo: PreferencesRepo
 ) : EggCollectionRepository {
 
     init {
-        listenForFireStoreChanges()
+        firebaseAuth.currentUser?.let { listenForFireStoreChanges() }
     }
     override  fun listenForFireStoreChanges() {
         //fireStoreDb.collection(eggsCollectionPath.path)
