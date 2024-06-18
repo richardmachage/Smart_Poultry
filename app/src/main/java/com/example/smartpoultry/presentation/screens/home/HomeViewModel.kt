@@ -49,6 +49,7 @@ class HomeViewModel @Inject constructor(
     var isLoading by  mutableStateOf(false)
     var toastMessage by mutableStateOf("")
     var navigateToLogin by mutableStateOf("")
+    var isLoadingText by mutableStateOf("")
     init {
         viewModelScope.launch {
              //   getFarmName()
@@ -58,8 +59,13 @@ class HomeViewModel @Inject constructor(
 
     suspend fun syncWithRemote(){
         //later on you should check first if it does not match the "previousFarmId"
+        isLoadingText = "Loading"
         isLoading = true
+        isLoadingText = "Syncing blocks data..."
         blocksRepository.fetchAndUpdateBlocks()
+        isLoadingText = "Syncing Cells data.."
+        cellsRepository.fetchAndUpdateCells()
+
         isLoading = false
     }
 
@@ -80,7 +86,6 @@ class HomeViewModel @Inject constructor(
 
                         //then navigate to login
                         navigateToLogin = "yes"
-
 
                     }
                 }

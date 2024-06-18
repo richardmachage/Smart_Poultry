@@ -110,7 +110,7 @@ fun HomeScreen(
     ) {
         MyCircularProgressBar(
             isLoading = homeViewModel.isLoading,
-            displayText = "Syncing..."
+            displayText = homeViewModel.isLoadingText
         )
 
         Column( //Full Screen column

@@ -34,7 +34,6 @@ class MainActivity() : ComponentActivity() {
         }
 
         setContent {
-
             Log.d("Destination", destination.toString())
             SmartPoultryTheme {
                 //DestinationsNavHost(navGraph = NavGraphs.root)
