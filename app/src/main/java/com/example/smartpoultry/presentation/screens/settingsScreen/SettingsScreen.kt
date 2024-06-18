@@ -67,23 +67,6 @@ fun SettingsScreen(
     //val navController = rememberNavController()
     val context = LocalContext.current
     val settingsViewModel = hiltViewModel<SettingsViewModel>()
-    /*val pastDays =
-        remember { settingsViewModel.myDataStore.readData(PAST_DAYS_KEY) }.collectAsState(initial = "0")
-    val consucutiveDays =
-        remember { settingsViewModel.myDataStore.readData(CONSUCUTIVE_DAYS_KEY) }.collectAsState(
-            initial = "0"
-        )
-    val thresholdRatio =
-        remember { settingsViewModel.myDataStore.readData(THRESHOLD_RATIO_KEY) }.collectAsState(
-            initial = "0"
-        )
-    val repeatInterval =
-        remember { settingsViewModel.myDataStore.readData(REPEAT_INTERVAL_KEY) }.collectAsState(
-            initial = "0"
-        )
-    val isAutomatedAnalysis = remember {
-        settingsViewModel.myDataStore.readData(IS_AUTOMATED_ANALYSIS_KEY)
-    }.collectAsState(initial = "0")*/
 
     LaunchedEffect(settingsViewModel.toastMessage.value) {
         val toastMessage = settingsViewModel.toastMessage.value
@@ -158,13 +141,13 @@ fun SettingsScreen(
                                 modifier = Modifier.fillMaxWidth(),
                                 label = "Default Past Days",
                                 keyboardType = KeyboardType.Number,
-                                initialText = settingsViewModel.pastDays.collectAsState().toString(),
+                                initialText = settingsViewModel.pastDays.collectAsState().value,
                                 onValueChange = {
                                     newPastDays = it
                                 }
                             )
                         }
-                        Text(text = settingsViewModel.pastDays.collectAsState().toString())
+                        Text(text = settingsViewModel.pastDays.collectAsState().value)
                         IconButton(onClick = { showDialog = true }) {
                             Icon(imageVector = Icons.Default.Edit, contentDescription = "edit")
                         }
@@ -204,13 +187,13 @@ fun SettingsScreen(
                                 modifier = Modifier.fillMaxWidth(),
                                 label = "Consecutive Days",
                                 keyboardType = KeyboardType.Number,
-                                initialText = settingsViewModel.consucutiveNumberOfDays.collectAsState().toString(),
+                                initialText = settingsViewModel.consucutiveNumberOfDays.collectAsState().value,
                                 onValueChange = {
                                     newConsucutiveDays = it
                                 }
                             )
                         }
-                        Text(text = settingsViewModel.consucutiveNumberOfDays.collectAsState().toString())
+                        Text(text = settingsViewModel.consucutiveNumberOfDays.collectAsState().value)
                         IconButton(onClick = { showDialog = true }) {
                             Icon(imageVector = Icons.Default.Edit, contentDescription = "edit")
                         }
@@ -256,13 +239,13 @@ fun SettingsScreen(
                                 modifier = Modifier.fillMaxWidth(),
                                 label = "Threshold Ratio",
                                 keyboardType = KeyboardType.Decimal,
-                                initialText = settingsViewModel.thresholdRatio.collectAsState().toString(),
+                                initialText = settingsViewModel.thresholdRatio.collectAsState().value,
                                 onValueChange = {
                                     newThreshold = it
                                 }
                             )
                         }
-                        Text(text = settingsViewModel.thresholdRatio.collectAsState().toString())
+                        Text(text = settingsViewModel.thresholdRatio.collectAsState().value)
                         IconButton(onClick = { showDialog = true }) {
                             Icon(imageVector = Icons.Default.Edit, contentDescription = "edit")
                         }
