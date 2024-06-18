@@ -40,28 +40,10 @@ class BlocksRepositoryImpl @Inject constructor(
     //firestorePathProvider: FirestorePathProvider,
     private val preferencesRepo: PreferencesRepo
 ) : BlocksRepository {
-    // private var blocksCollection:CollectionReference = firestorePathProvider.blocksCollection
-/*
-    private var farmId = preferencesRepo.loadData(FARM_ID_KEY)!!
-    private val farmsCollection = fireStoreDB.collection(FARMS_COLLECTION)
-    */
-/*private lateinit*//*
- var farmDocument: DocumentReference = farmsCollection.document(farmId) //farmsCollection.document("710uve6Bmd25yAXcnPfr")//dataStore.farmID)
-    */
-/* private lateinit*//*
- var blocksCollection: CollectionReference =
-        farmDocument.collection(BLOCKS_COLLECTION) //= farmDocument.collection(BLOCKS_COLLECTION)
-    */
-/*private lateinit*//*
- var cellsCollection: CollectionReference =
-        farmDocument.collection(CELLS_COLLECTION)// farmDocument.collection(CELLS_COLLECTION)
-*/
 
-    //private lateinit var  blocksCollectionPath : CollectionReference//= fireStoreDB.collection(FARMS_COLLECTION).document(dataStore.farmID).collection(BLOCKS_COLLECTION)
-    //private lateinit var cellsCollectionPath : CollectionReference// = fireStoreDB.collection(FARMS_COLLECTION).document(dataStore.farmID).collection(CELLS_COLLECTION)
-    /*init {
+    init {
         listenForFireStoreChanges()
-    }*/
+    }
 
 
     override fun listenForFireStoreChanges() {

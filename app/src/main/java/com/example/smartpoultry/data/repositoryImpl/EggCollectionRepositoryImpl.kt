@@ -4,7 +4,6 @@ import android.util.Log
 import com.example.smartpoultry.data.dataModels.DailyEggCollection
 import com.example.smartpoultry.data.dataModels.EggRecordFull
 import com.example.smartpoultry.data.dataSource.datastore.PreferencesRepo
-import com.example.smartpoultry.data.dataSource.remote.firebase.BLOCKS_COLLECTION
 import com.example.smartpoultry.data.dataSource.remote.firebase.EGGS_COLLECTION
 import com.example.smartpoultry.data.dataSource.remote.firebase.FARMS_COLLECTION
 import com.example.smartpoultry.data.dataSource.remote.firebase.models.EggCollectionFb
@@ -18,6 +17,7 @@ import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import java.sql.Date
@@ -30,11 +30,14 @@ class EggCollectionRepositoryImpl @Inject constructor(
     private val preferencesRepo: PreferencesRepo
 ) : EggCollectionRepository {
 
+    init {
+        listenForFireStoreChanges()
+    }
     override  fun listenForFireStoreChanges() {
         //fireStoreDb.collection(eggsCollectionPath.path)
         val farmsCollection = fireStoreDb.collection(FARMS_COLLECTION)
         val farmDocument: DocumentReference = farmsCollection.document(getFarmId())
-        val eggsCollection: CollectionReference = farmDocument.collection(BLOCKS_COLLECTION)
+        val eggsCollection: CollectionReference = farmDocument.collection(EGGS_COLLECTION)
         eggsCollection
             .addSnapshotListener { querySnapShot, exception ->
 
@@ -96,6 +99,29 @@ class EggCollectionRepositoryImpl @Inject constructor(
             }
     }
 
+    override suspend fun fetchAndUpdateEggRecords() {
+        try {
+            val farmsCollection = fireStoreDb.collection(FARMS_COLLECTION)
+            val farmDocument: DocumentReference = farmsCollection.document(getFarmId())
+            val eggsCollection: CollectionReference = farmDocument.collection(EGGS_COLLECTION)
+            eggsCollection.get()
+                .addOnSuccessListener { querySnapShot ->
+                    if (!querySnapShot.isEmpty) {
+                        val listOfEggCollections =
+                            querySnapShot.documents.map { it.toObject(EggCollection::class.java)!! }
+                        GlobalScope.launch {
+                            //insert the egg collection records to room
+                            eggCollectionDao.insertAll(listOfEggCollections)
+                        }
+                    }
+                }
+                .addOnFailureListener { Throwable(it) }
+        } catch (e: Exception) {
+            //todo handle exception
+            Log.e("FirestoreFetch", "Error fetching egg records: ", e)
+        }
+    }
+
     override suspend fun addNewRecord(eggCollection: EggCollection): Boolean {
         var insertStatus = true
         try {
@@ -127,9 +153,9 @@ class EggCollectionRepositoryImpl @Inject constructor(
     override suspend fun deleteRecord(recordId: Int) {
         eggCollectionDao.deleteCollectionRecord(recordId)
         //fireStoreDb.collection(eggsCollectionPath.path)
-         val farmsCollection = fireStoreDb.collection(FARMS_COLLECTION)
-         val farmDocument = farmsCollection.document("710uve6Bmd25yAXcnPfr")
-         val eggsCollection = farmDocument.collection(EGGS_COLLECTION)
+        val farmsCollection = fireStoreDb.collection(FARMS_COLLECTION)
+        val farmDocument: DocumentReference = farmsCollection.document(getFarmId())
+        val eggsCollection: CollectionReference = farmDocument.collection(EGGS_COLLECTION)
         eggsCollection.document(recordId.toString())
             .delete()
     }

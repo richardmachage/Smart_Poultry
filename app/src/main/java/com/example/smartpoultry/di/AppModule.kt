@@ -54,8 +54,8 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun providesEggCollectionRepository(database: SmartPoultryDatabase, fireStoreDb: FirebaseFirestore, dataStore: AppDataStore): EggCollectionRepository{
-        return EggCollectionRepositoryImpl(database.eggCollectionDao(), fireStoreDb = fireStoreDb, dataStore = dataStore)
+    fun providesEggCollectionRepository(database: SmartPoultryDatabase, fireStoreDb: FirebaseFirestore, preferencesRepo: PreferencesRepo): EggCollectionRepository{
+        return EggCollectionRepositoryImpl(database.eggCollectionDao(), fireStoreDb = fireStoreDb, preferencesRepo = preferencesRepo)
     }
 
     @Provides

@@ -15,6 +15,9 @@ import java.sql.Date
 interface EggCollectionDao {
     //here goes all functions needed to modify the EggCollection table
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertAll(eggCollections: List<EggCollection>)
+
     @Insert(onConflict = OnConflictStrategy.ABORT)
     suspend  fun insertCollectionRecord(eggCollection: EggCollection) : Long
 

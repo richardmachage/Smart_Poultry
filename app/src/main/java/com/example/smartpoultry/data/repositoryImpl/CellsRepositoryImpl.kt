@@ -28,102 +28,73 @@ class CellsRepositoryImpl @Inject constructor(
     private val preferencesRepo: PreferencesRepo,
     private val firebaseAuth: FirebaseAuth
 ) : CellsRepository {
-    // private val cellsCollectionPath = fireStoreDb.collection(FARMS_COLLECTION).document(dataStore.farmID).collection(CELLS_COLLECTION)
-    /*private val farmId = preferencesRepo.loadData(FARM_ID_KEY)!!
-    private val farmsCollection = fireStoreDb.collection(FARMS_COLLECTION)
-    *//*private lateinit*//* private var farmDocument: DocumentReference = farmsCollection.document(farmId) //farmsCollection.document("710uve6Bmd25yAXcnPfr")//dataStore.farmID)
-    *//*private lateinit *//*private var cellsCollection: CollectionReference =  farmDocument.collection(CELLS_COLLECTION)// farmDocument.collection(CELLS_COLLECTION)
-*/
-/*
+
     init {
-        if (farmID.isNotBlank()) {
-            farmDocument = farmsCollection.document(farmID)
-            cellsCollection = farmDocument.collection(CELLS_COLLECTION)
-        } else {
-            var id = ""
-            //try to retrieve farm Id first here
-            fireStoreDb.collection(USERS_COLLECTION)
-                .document(firebaseAuth.currentUser?.uid.toString())
-                .get()
-                .addOnSuccessListener { docSnapshot ->
-                    val user = docSnapshot.toObject(User::class.java)
-                    user?.let {
-                        id = it.farmId
-                        //proceed to the rest of the code after getting the ID
-                        farmDocument = farmsCollection.document(id)
-                        cellsCollection = farmDocument.collection(CELLS_COLLECTION)
-                        preferencesRepo.saveData(FARM_ID_KEY, id)
-                    }
-
-                }
-            listenForFireStoreChanges()
-
-        }
+        listenForFireStoreChanges()
     }
-*/
 
 
-    override  fun listenForFireStoreChanges() {
+    override fun listenForFireStoreChanges() {
         //check if farmId exists
-      //  val farmId = preferencesRepo.loadData(FARM_ID_KEY) ?: ""
+        //  val farmId = preferencesRepo.loadData(FARM_ID_KEY) ?: ""
 
         //if (farmId.isNotBlank()) {
         val farmsCollection = fireStoreDb.collection(FARMS_COLLECTION)
         val farmDocument: DocumentReference = farmsCollection.document(getFarmId())
         val cellsCollection: CollectionReference = farmDocument.collection(CELLS_COLLECTION)
-            cellsCollection.addSnapshotListener { querySnapshot, exception ->
-                if (exception != null) { //if an error exists, it logs the error and returns early from the listener.
-                    Log.w("Error", "Listen failed.", exception)
-                    return@addSnapshotListener
-                }
+        cellsCollection.addSnapshotListener { querySnapshot, exception ->
+            if (exception != null) { //if an error exists, it logs the error and returns early from the listener.
+                Log.w("Error", "Listen failed.", exception)
+                return@addSnapshotListener
+            }
 
-                for (docChange in querySnapshot!!.documentChanges) {
-                    val cell =
-                        docChange.document.toObject(Cell::class.java) // converting the doc to cell object
+            for (docChange in querySnapshot!!.documentChanges) {
+                val cell =
+                    docChange.document.toObject(Cell::class.java) // converting the doc to cell object
 
-                    when (docChange.type) {
-                        DocumentChange.Type.ADDED -> {
-                            CoroutineScope(Dispatchers.IO).launch {
-                                cellsDao.addNewCell(
-                                    Cells(
-                                        cellId = cell.cellId,
-                                        cellNum = cell.cellNum,
-                                        blockId = cell.blockId,
-                                        henCount = cell.henCount
-                                    )
+                when (docChange.type) {
+                    DocumentChange.Type.ADDED -> {
+                        CoroutineScope(Dispatchers.IO).launch {
+                            cellsDao.addNewCell(
+                                Cells(
+                                    cellId = cell.cellId,
+                                    cellNum = cell.cellNum,
+                                    blockId = cell.blockId,
+                                    henCount = cell.henCount
                                 )
-                            }
+                            )
                         }
-
-                        DocumentChange.Type.MODIFIED -> {
-                            CoroutineScope(Dispatchers.IO).launch {
-                                cellsDao.updateCellInfo(
-                                    Cells(
-                                        cellId = cell.cellId,
-                                        cellNum = cell.cellNum,
-                                        blockId = cell.blockId,
-                                        henCount = cell.henCount
-                                    )
-                                )
-                            }
-                        }
-
-                        DocumentChange.Type.REMOVED -> {
-                            CoroutineScope(Dispatchers.IO).launch {
-                                cellsDao.deleteCell(
-                                    Cells(
-                                        cellId = cell.cellId,
-                                        cellNum = cell.cellNum,
-                                        blockId = cell.blockId,
-                                        henCount = cell.henCount
-                                    )
-                                )
-                            }
-                        }
-
                     }
+
+                    DocumentChange.Type.MODIFIED -> {
+                        CoroutineScope(Dispatchers.IO).launch {
+                            cellsDao.updateCellInfo(
+                                Cells(
+                                    cellId = cell.cellId,
+                                    cellNum = cell.cellNum,
+                                    blockId = cell.blockId,
+                                    henCount = cell.henCount
+                                )
+                            )
+                        }
+                    }
+
+                    DocumentChange.Type.REMOVED -> {
+                        CoroutineScope(Dispatchers.IO).launch {
+                            cellsDao.deleteCell(
+                                Cells(
+                                    cellId = cell.cellId,
+                                    cellNum = cell.cellNum,
+                                    blockId = cell.blockId,
+                                    henCount = cell.henCount
+                                )
+                            )
+                        }
+                    }
+
                 }
             }
+        }
         //}
 
         /*else {
