@@ -284,7 +284,6 @@ fun SettingsScreen(
                                     showDialog = false
                                 }
                             }
-
                         )
                         MyInputDialog(
                             showDialog = showDialog,
@@ -304,7 +303,7 @@ fun SettingsScreen(
 
                         ToggleButton(
                             modifier = Modifier.align(Alignment.CenterVertically),
-                            isChecked = settingsViewModel.isAutomatedAnalysis.collectAsState().toString() == "1",
+                            isChecked = settingsViewModel.isAutomatedAnalysis.collectAsState().value == "1",
                             onCheckedChange = {
                                 if (it) {
                                     if (!isNotificationPermissionGranted) {
@@ -320,7 +319,7 @@ fun SettingsScreen(
 
                     }
                     //edit part
-                    if (settingsViewModel.isAutomatedAnalysis.collectAsState().toString() == "1") {
+                    if (settingsViewModel.isAutomatedAnalysis.collectAsState().value == "1") {
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -348,13 +347,13 @@ fun SettingsScreen(
                                     modifier = Modifier.fillMaxWidth(),
                                     label = "Time in Hours",
                                     keyboardType = KeyboardType.Number,
-                                    initialText = settingsViewModel.repeatInterval.collectAsState().toString(),
+                                    initialText = settingsViewModel.repeatInterval.collectAsState().value,
                                     onValueChange = {
                                         newRepeatInterval = it
                                     }
                                 )
                             }
-                            Text(text = "Time in hours: ${settingsViewModel.repeatInterval.collectAsState()}")
+                            Text(text = "Time in hours: ${settingsViewModel.repeatInterval.collectAsState().value}")
                             IconButton(onClick = { showDialog = true }) {
                                 Icon(imageVector = Icons.Default.Edit, contentDescription = "edit")
                             }
