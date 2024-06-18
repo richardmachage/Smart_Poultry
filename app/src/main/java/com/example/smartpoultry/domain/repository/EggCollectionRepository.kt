@@ -11,6 +11,8 @@ interface EggCollectionRepository{
 
     suspend fun deleteRecord(recordId: Int)
 
+    fun listenForFireStoreChanges()
+
     fun getAllRecords() : Flow<List<EggCollection>>
 
     fun getRecord(date: Date) : Flow<List<EggCollection>>

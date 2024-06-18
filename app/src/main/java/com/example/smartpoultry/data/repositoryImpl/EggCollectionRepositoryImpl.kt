@@ -3,14 +3,18 @@ package com.example.smartpoultry.data.repositoryImpl
 import android.util.Log
 import com.example.smartpoultry.data.dataModels.DailyEggCollection
 import com.example.smartpoultry.data.dataModels.EggRecordFull
-import com.example.smartpoultry.data.dataSource.datastore.AppDataStore
+import com.example.smartpoultry.data.dataSource.datastore.PreferencesRepo
+import com.example.smartpoultry.data.dataSource.remote.firebase.BLOCKS_COLLECTION
 import com.example.smartpoultry.data.dataSource.remote.firebase.EGGS_COLLECTION
 import com.example.smartpoultry.data.dataSource.remote.firebase.FARMS_COLLECTION
 import com.example.smartpoultry.data.dataSource.remote.firebase.models.EggCollectionFb
 import com.example.smartpoultry.data.dataSource.room.entities.eggCollection.EggCollection
 import com.example.smartpoultry.data.dataSource.room.entities.eggCollection.EggCollectionDao
 import com.example.smartpoultry.domain.repository.EggCollectionRepository
+import com.example.smartpoultry.utils.FARM_ID_KEY
+import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentChange
+import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -22,20 +26,15 @@ import javax.inject.Inject
 class EggCollectionRepositoryImpl @Inject constructor(
     private val eggCollectionDao: EggCollectionDao,
     private val fireStoreDb: FirebaseFirestore,
-    dataStore: AppDataStore
+    //dataStore: AppDataStore,
+    private val preferencesRepo: PreferencesRepo
 ) : EggCollectionRepository {
-   // private val eggsCollectionPath = fireStoreDb.collection(FARMS_COLLECTION).document(dataStore.farmID).collection(EGGS_COLLECTION)
 
-    private val farmsCollection = fireStoreDb.collection(FARMS_COLLECTION)
-    private val farmDocument = farmsCollection.document("710uve6Bmd25yAXcnPfr")
-    private val eggsCollection = farmDocument.collection(EGGS_COLLECTION)
-
-    init {
-       listenForFireStoreChanges()
-    }
-
-    private fun listenForFireStoreChanges() {
+    override  fun listenForFireStoreChanges() {
         //fireStoreDb.collection(eggsCollectionPath.path)
+        val farmsCollection = fireStoreDb.collection(FARMS_COLLECTION)
+        val farmDocument: DocumentReference = farmsCollection.document(getFarmId())
+        val eggsCollection: CollectionReference = farmDocument.collection(BLOCKS_COLLECTION)
         eggsCollection
             .addSnapshotListener { querySnapShot, exception ->
 
@@ -61,8 +60,8 @@ class EggCollectionRepositoryImpl @Inject constructor(
                                             henCount = eggCollection.henCount
                                         )
                                     )
-                                }catch (e : Exception){
-                                   // Log.i("Error : ", "record with date ")
+                                } catch (e: Exception) {
+                                    // Log.i("Error : ", "record with date ")
                                 }
                             }
                         }
@@ -70,17 +69,18 @@ class EggCollectionRepositoryImpl @Inject constructor(
                         DocumentChange.Type.MODIFIED -> {
                             CoroutineScope(Dispatchers.IO).launch {
                                 try {
-                                eggCollectionDao.updateCollectionRecord(
-                                    EggCollection(
-                                        eggCollection.productionId,
-                                        date = Date(eggCollection.date.time),                                        eggCollection.cellId,
-                                        eggCollection.eggCount,
-                                        eggCollection.henCount
+                                    eggCollectionDao.updateCollectionRecord(
+                                        EggCollection(
+                                            eggCollection.productionId,
+                                            date = Date(eggCollection.date.time),
+                                            eggCollection.cellId,
+                                            eggCollection.eggCount,
+                                            eggCollection.henCount
+                                        )
                                     )
-                                )
-                            } catch (e : Exception){
-                                //Log.i("error","record with date exists")
-                            }
+                                } catch (e: Exception) {
+                                    //Log.i("error","record with date exists")
+                                }
                             }
                         }
 
@@ -95,13 +95,19 @@ class EggCollectionRepositoryImpl @Inject constructor(
                 }
             }
     }
+
     override suspend fun addNewRecord(eggCollection: EggCollection): Boolean {
         var insertStatus = true
         try {
 
             val recordId = eggCollectionDao.insertCollectionRecord(eggCollection)
             //fireStoreDb.collection(eggsCollectionPath.path)
-              eggsCollection.document(recordId.toString())
+
+            //now update remote
+            val farmsCollection = fireStoreDb.collection(FARMS_COLLECTION)
+            val farmDocument = farmsCollection.document(getFarmId())
+            val eggsCollection = farmDocument.collection(EGGS_COLLECTION)
+            eggsCollection.document(recordId.toString())
                 .set(
                     EggCollection(
                         productionId = recordId.toInt(),
@@ -121,7 +127,10 @@ class EggCollectionRepositoryImpl @Inject constructor(
     override suspend fun deleteRecord(recordId: Int) {
         eggCollectionDao.deleteCollectionRecord(recordId)
         //fireStoreDb.collection(eggsCollectionPath.path)
-            eggsCollection.document(recordId.toString())
+         val farmsCollection = fireStoreDb.collection(FARMS_COLLECTION)
+         val farmDocument = farmsCollection.document("710uve6Bmd25yAXcnPfr")
+         val eggsCollection = farmDocument.collection(EGGS_COLLECTION)
+        eggsCollection.document(recordId.toString())
             .delete()
     }
 
@@ -211,4 +220,6 @@ class EggCollectionRepositoryImpl @Inject constructor(
     override fun getOverallCollectionByMonth(yearMonth: String): Flow<List<DailyEggCollection>> {
         return eggCollectionDao.getOverallCollectionByMonth(yearMonth = yearMonth)
     }
+
+    private fun getFarmId() = preferencesRepo.loadData(FARM_ID_KEY)!!
 }

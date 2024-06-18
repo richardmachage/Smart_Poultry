@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import com.example.smartpoultry.data.dataSource.datastore.PreferencesRepo
 import com.example.smartpoultry.domain.repository.BlocksRepository
 import com.example.smartpoultry.domain.repository.CellsRepository
+import com.example.smartpoultry.domain.repository.EggCollectionRepository
 import com.example.smartpoultry.utils.FARM_ID_KEY
 import com.example.smartpoultry.utils.FIRST_INSTALL
 import com.google.firebase.auth.FirebaseAuth
@@ -19,7 +20,8 @@ class MainViewModel @Inject constructor(
    // val dataStore: AppDataStore,
     val preferencesRepo: PreferencesRepo,
     val blocksRepository: BlocksRepository,
-    val cellsRepository: CellsRepository
+    val cellsRepository: CellsRepository,
+    val eggCollectionRepository: EggCollectionRepository
 ) : ViewModel() {
     var isLoggedIn by mutableStateOf(false)
     var isFirstInstall by mutableStateOf(false)
@@ -38,6 +40,7 @@ class MainViewModel @Inject constructor(
             //val farmId = getFarmId()
             blocksRepository.listenForFireStoreChanges()
             cellsRepository.listenForFireStoreChanges()
+            eggCollectionRepository.listenForFireStoreChanges()
         }
     }
 
