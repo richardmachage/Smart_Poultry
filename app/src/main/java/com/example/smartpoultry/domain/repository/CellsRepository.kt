@@ -19,5 +19,7 @@ interface CellsRepository {
 
     suspend fun updateCellInfo(cell: Cells)
 
+    suspend fun fetchAndUpdateCells()
+
     fun listenForFireStoreChanges()
 }

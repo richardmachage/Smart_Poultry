@@ -17,6 +17,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -265,6 +266,32 @@ class CellsRepositoryImpl @Inject constructor(
         cellsCollection.document(cell.cellId.toString())
             .set(cell, SetOptions.merge())
 
+    }
+
+    override suspend fun fetchAndUpdateCells() {
+        try {
+            val farmsCollection = fireStoreDb.collection(FARMS_COLLECTION)
+            val farmDocument: DocumentReference = farmsCollection.document(getFarmId())
+            val cellsCollection: CollectionReference = farmDocument.collection(CELLS_COLLECTION)
+
+            cellsCollection.get()
+                .addOnSuccessListener { querySnapShot ->
+                    if (!querySnapShot.isEmpty) {
+                        val listOfCells =
+                            querySnapShot.documents.map { it.toObject(Cells::class.java)!! }
+                        GlobalScope.launch {
+                            //insert the blocks to room
+                            cellsDao.insertAll(listOfCells)
+                        }
+                    }
+                }
+                .addOnFailureListener {
+                    Throwable(it)
+                }
+        } catch (e: Exception) {
+            //todo handle exception
+            Log.e("FirestoreFetch", "Error fetching Cells: ", e)
+        }
     }
 
     private fun getFarmId() = preferencesRepo.loadData(FARM_ID_KEY)!!

@@ -27,8 +27,8 @@ class MainViewModel @Inject constructor(
     init {
         checkFirstInstall()
         checkIfLoggedIn()
-       // getThisUser(preferencesRepo)
-        //checkIfFarmSaved()
+    // getThisUser(preferencesRepo)
+    //checkIfFarmSaved()
     }
 
 

@@ -2,6 +2,7 @@ package com.example.smartpoultry.data.dataSource.room.entities.cells
 
 import androidx.room.Dao
 import androidx.room.Delete
+import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
 import androidx.room.Upsert
@@ -10,8 +11,12 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface CellsDao{
 
+    @Insert
+    suspend fun insertAll(cell : List<Cells>)
+
     @Upsert
     suspend fun addNewCell(cell: Cells) : Long
+
     @Delete
     suspend fun deleteCell(cell: Cells)
 

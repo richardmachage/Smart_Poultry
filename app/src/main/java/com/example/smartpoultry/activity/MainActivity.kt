@@ -38,7 +38,7 @@ class MainActivity() : ComponentActivity() {
             Log.d("Destination", destination.toString())
             SmartPoultryTheme {
                 //DestinationsNavHost(navGraph = NavGraphs.root)
-                if (mainViewModel.isFirstInstall) {// first time installed
+                if (mainViewModel.isFirstInstall) { // first time installed
                     DestinationsNavHost(
                         startRoute = OnBoardingScreenDestination,
                         navGraph = NavGraphs.root
