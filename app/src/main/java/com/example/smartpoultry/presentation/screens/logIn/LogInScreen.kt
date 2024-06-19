@@ -79,7 +79,7 @@ fun LogInScreen(
     ) {
         MyCircularProgressBar(
             isLoading = logInViewModel.isLoading.value,
-            displayText = "Loading..."
+            displayText = logInViewModel.isLoadingDisplayText.value
         )
         
         Column(

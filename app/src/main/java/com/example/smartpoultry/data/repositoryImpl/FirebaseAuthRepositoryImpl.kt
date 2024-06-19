@@ -3,14 +3,14 @@ package com.example.smartpoultry.data.repositoryImpl
 import android.util.Log
 import com.example.smartpoultry.data.dataSource.datastore.AppDataStore
 import com.example.smartpoultry.data.dataSource.datastore.PreferencesRepo
-import com.example.smartpoultry.data.dataSource.remote.firebase.FARMS_COLLECTION
-import com.example.smartpoultry.data.dataSource.remote.firebase.USERS_COLLECTION
 import com.example.smartpoultry.data.dataSource.remote.firebase.models.Farm
 import com.example.smartpoultry.data.dataSource.remote.firebase.models.User
 import com.example.smartpoultry.domain.repository.FirebaseAuthRepository
+import com.example.smartpoultry.utils.FARMS_COLLECTION
 import com.example.smartpoultry.utils.FARM_ID_KEY
 import com.example.smartpoultry.utils.FARM_NAME_KEY
 import com.example.smartpoultry.utils.IS_PASSWORD_RESET_KEY
+import com.example.smartpoultry.utils.USERS_COLLECTION
 import com.example.smartpoultry.utils.USER_EMAIL_KEY
 import com.example.smartpoultry.utils.USER_NAME_KEY
 import com.example.smartpoultry.utils.USER_PHONE_KEY

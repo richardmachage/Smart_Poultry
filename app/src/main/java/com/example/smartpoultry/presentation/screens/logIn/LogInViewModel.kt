@@ -8,6 +8,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.smartpoultry.domain.repository.BlocksRepository
+import com.example.smartpoultry.domain.repository.CellsRepository
+import com.example.smartpoultry.domain.repository.EggCollectionRepository
 import com.example.smartpoultry.domain.repository.FirebaseAuthRepository
 import com.example.smartpoultry.utils.isValidEmail
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -17,34 +20,50 @@ import javax.inject.Inject
 @HiltViewModel
 class LogInViewModel @Inject constructor(
     private val firebaseAuthRepository: FirebaseAuthRepository,
-): ViewModel() {
+    private val blocksRepository: BlocksRepository,
+    private val cellsRepository: CellsRepository,
+    private val eggCollectionRepository: EggCollectionRepository
+) : ViewModel() {
     var email = mutableStateOf("")
     var password = mutableStateOf("")
     var validateError = mutableStateOf("")
     var isLoading = mutableStateOf(false)
+    var isLoadingDisplayText = mutableStateOf("")
     var isLogInSuccess by mutableStateOf(false)
 
-    fun onLogIn(){
+    fun onLogIn() {
         viewModelScope.launch {
             isLoading.value = true
-            if (validateInputs()){
+            isLoadingDisplayText.value = "Authenticating"
+            if (validateInputs()) {
                 val result = firebaseAuthRepository.logIn(email.value, password = password.value)
                 result.onSuccess {
-                    validateError.value = "Log In successful"
+                    isLoadingDisplayText.value = "Log in success"
+                    //if the log in is a success, we sync
+                    //suspend fun syncWithRemote(){
+                    //TODO later on you should check first if it does not match the "previousFarmId"
+
+                    isLoadingDisplayText.value = "Syncing blocks data..."
+                    blocksRepository.fetchAndUpdateBlocks()
+                    isLoadingDisplayText.value = "Syncing Cells data.."
+                    cellsRepository.fetchAndUpdateCells()
+                    isLoadingDisplayText.value = "Syncing Egg collection records.."
+                    eggCollectionRepository.fetchAndUpdateEggRecords()
+
                     isLogInSuccess = true
-                    //isLoading.value = false
+
                 }
                 result.onFailure {
                     validateError.value = "Log in failed: ${it.message.toString()}"
-                   //isLoading.value = false
+                    //isLoading.value = false
                 }
             }
             isLoading.value = false
         }
     }
 
-    fun onPasswordReset(){
-        if (email.value.isNotBlank() && isValidEmail(email.value)){
+    fun onPasswordReset() {
+        if (email.value.isNotBlank() && isValidEmail(email.value)) {
             viewModelScope.launch {
                 isLoading.value = true
                 val result = firebaseAuthRepository.resetPassword(email.value)
@@ -58,23 +77,23 @@ class LogInViewModel @Inject constructor(
 
                 }
             }
-        }else{
+        } else {
             validateError.value = "Invalid email address"
         }
     }
 
-    private fun validateInputs() : Boolean{
-        if (email.value.isBlank()){
+    private fun validateInputs(): Boolean {
+        if (email.value.isBlank()) {
             validateError.value = "Email field is empty"
             return false
         }
 
-        if (password.value.isBlank()){
+        if (password.value.isBlank()) {
             validateError.value = "Password field is empty"
             return false
         }
 
-        if (!isValidEmail(email.value)){
+        if (!isValidEmail(email.value)) {
             validateError.value = "Invalid email address"
             return false
         }

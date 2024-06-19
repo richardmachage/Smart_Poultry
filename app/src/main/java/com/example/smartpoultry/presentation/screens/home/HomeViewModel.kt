@@ -65,7 +65,8 @@ class HomeViewModel @Inject constructor(
         blocksRepository.fetchAndUpdateBlocks()
         isLoadingText = "Syncing Cells data.."
         cellsRepository.fetchAndUpdateCells()
-
+        isLoadingText = "Syncing Egg collection records.."
+        eggCollectionRepository.fetchAndUpdateEggRecords()
         isLoading = false
     }
 

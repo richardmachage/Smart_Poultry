@@ -368,7 +368,7 @@ fun AnalyticsScreen(
                         val turnToChartData = listOfRecords.map { record ->
                             when (record) {
                                 is EggCollection -> ChartClass(
-                                    xDateValue = toGraphDate(record.date),
+                                    xDateValue = toGraphDate(record.date as java.sql.Date),
                                     yNumOfEggs = record.eggCount,
                                     numOfChicken = record.henCount
 

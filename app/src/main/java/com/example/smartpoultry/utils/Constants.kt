@@ -16,7 +16,7 @@ const val THRESHOLD_RATIO_KEY = "threshold_ratio"
 const val REPEAT_INTERVAL_KEY = "repeat_interval"
 const val IS_AUTOMATED_ANALYSIS_KEY = "is_automated_analysis"
 
-//Firstore Collections
+//Firestore Collections
 const val FARMS_COLLECTION = "Farms"
 const val USERS_COLLECTION = "Users"
 const val EGGS_COLLECTION = "EggCollections"

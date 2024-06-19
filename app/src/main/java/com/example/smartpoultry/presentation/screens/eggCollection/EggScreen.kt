@@ -68,7 +68,10 @@ fun EggScreen(
         }
     }
 
-    MyCircularProgressBar(isLoading = eggViewModel.isLoading.value)
+    MyCircularProgressBar(
+        isLoading = eggViewModel.isLoading.value,
+        displayText = "saving"
+    )
 
     Surface(
         modifier = Modifier

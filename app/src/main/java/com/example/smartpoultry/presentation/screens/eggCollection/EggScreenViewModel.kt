@@ -115,7 +115,7 @@ class EggScreenViewModel @Inject constructor(
         viewModelScope.launch {
             isLoading.value = true
             run loop@{
-                cellsInput.forEachIndexed{ index,record ->
+                cellsInput.forEachIndexed{ _,record ->
                     if(
                         eggCollectionRepository.addNewRecord(EggCollection(
                             date = chosenDateValue,  //Date.valueOf(selectedDate.value.toString()), //Date.valueOf(myDateFormatter(selectedDate.value)),

@@ -3,7 +3,6 @@ package com.example.smartpoultry.utils
 import android.annotation.SuppressLint
 import android.os.Build
 import androidx.annotation.RequiresApi
-import java.sql.Date
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.ZoneId
@@ -27,7 +26,7 @@ fun localDateToJavaDate(localDate: LocalDate): Long {
 }
 
 @SuppressLint("SimpleDateFormat")
-fun toGraphDate(date: Date): String {
+fun toGraphDate(date: java.sql.Date): String {
     return SimpleDateFormat("dd-MMM").format(date)
 }
 
