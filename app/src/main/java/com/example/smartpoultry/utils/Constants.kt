@@ -1,8 +1,5 @@
 package com.example.smartpoultry.utils
 
-import com.example.smartpoultry.data.dataSource.datastore.PreferencesRepo
-import com.example.smartpoultry.data.dataSource.remote.firebase.models.User
-
 
 
 const val USER_ROLE_KEY = "user_role"
@@ -18,3 +15,10 @@ const val CONSUCUTIVE_DAYS_KEY = "consucutive_days"
 const val THRESHOLD_RATIO_KEY = "threshold_ratio"
 const val REPEAT_INTERVAL_KEY = "repeat_interval"
 const val IS_AUTOMATED_ANALYSIS_KEY = "is_automated_analysis"
+
+//Firstore Collections
+const val FARMS_COLLECTION = "Farms"
+const val USERS_COLLECTION = "Users"
+const val EGGS_COLLECTION = "EggCollections"
+const val BLOCKS_COLLECTION = "Blocks"
+const val CELLS_COLLECTION = "Cells"

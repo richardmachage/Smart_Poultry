@@ -4,12 +4,12 @@ import android.util.Log
 import com.example.smartpoultry.data.dataModels.DailyEggCollection
 import com.example.smartpoultry.data.dataModels.EggRecordFull
 import com.example.smartpoultry.data.dataSource.datastore.PreferencesRepo
-import com.example.smartpoultry.data.dataSource.remote.firebase.EGGS_COLLECTION
-import com.example.smartpoultry.data.dataSource.remote.firebase.FARMS_COLLECTION
 import com.example.smartpoultry.data.dataSource.remote.firebase.models.EggCollectionFb
 import com.example.smartpoultry.data.dataSource.room.entities.eggCollection.EggCollection
 import com.example.smartpoultry.data.dataSource.room.entities.eggCollection.EggCollectionDao
 import com.example.smartpoultry.domain.repository.EggCollectionRepository
+import com.example.smartpoultry.utils.EGGS_COLLECTION
+import com.example.smartpoultry.utils.FARMS_COLLECTION
 import com.example.smartpoultry.utils.FARM_ID_KEY
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
