@@ -2,12 +2,12 @@ package com.example.smartpoultry.data.repositoryImpl
 
 import android.util.Log
 import com.example.smartpoultry.data.dataSource.datastore.PreferencesRepo
-import com.example.smartpoultry.data.dataSource.remote.firebase.CELLS_COLLECTION
-import com.example.smartpoultry.data.dataSource.remote.firebase.FARMS_COLLECTION
 import com.example.smartpoultry.data.dataSource.remote.firebase.models.Cell
 import com.example.smartpoultry.data.dataSource.room.entities.cells.Cells
 import com.example.smartpoultry.data.dataSource.room.entities.cells.CellsDao
 import com.example.smartpoultry.domain.repository.CellsRepository
+import com.example.smartpoultry.utils.CELLS_COLLECTION
+import com.example.smartpoultry.utils.FARMS_COLLECTION
 import com.example.smartpoultry.utils.FARM_ID_KEY
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference

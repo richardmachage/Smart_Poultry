@@ -42,7 +42,7 @@ class EggCollectionRepositoryImpl @Inject constructor(
         eggsCollection
             .addSnapshotListener { querySnapShot, exception ->
 
-                if (exception != null) { //f an error exists, it logs the error and returns early from the listener.
+                if (exception != null) { //if an error exists, it logs the error and returns early from the listener.
                     Log.w("Error", "Listen failed.", exception)
                     return@addSnapshotListener
                 }
@@ -126,7 +126,6 @@ class EggCollectionRepositoryImpl @Inject constructor(
     override suspend fun addNewRecord(eggCollection: EggCollection): Boolean {
         var insertStatus = true
         try {
-
             val recordId = eggCollectionDao.insertCollectionRecord(eggCollection)
             //fireStoreDb.collection(eggsCollectionPath.path)
 
