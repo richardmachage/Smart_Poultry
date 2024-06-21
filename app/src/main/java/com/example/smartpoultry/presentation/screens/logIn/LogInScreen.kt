@@ -135,7 +135,7 @@ fun LogInScreen(
 
                     MyTextButton(
                         onButtonClick = { logInViewModel.onPasswordReset() },
-                        btnText = "Forgotten Password?",
+                        btnText = "Forgot Password?",
                         modifier = Modifier
                     )
                 }
@@ -150,13 +150,15 @@ fun LogInScreen(
                     modifier = Modifier.fillMaxWidth()
                 )
 
-            }
+                MyVerticalSpacer(height = 20)
 
-            MyTextButton( //Not registered button
-                onButtonClick = { navigator.navigate(SignUpScreenDestination) },
-                btnText = "You don't have an account? Click to sign up",
-                modifier = Modifier
-            )
+                MyTextButton( //Not registered button
+                    onButtonClick = { navigator.navigate(SignUpScreenDestination) },
+                    btnText = "You don't have an account?\nClick to sign up",
+                    modifier = Modifier.fillMaxWidth()
+                )
+
+            }
         }
     }
 }

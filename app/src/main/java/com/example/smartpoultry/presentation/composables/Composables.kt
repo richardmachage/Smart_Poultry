@@ -94,7 +94,10 @@ fun MyOutlineTextFiled(
 @Composable
 fun MyTextButton(onButtonClick: () -> Unit, btnText: String, modifier: Modifier = Modifier) {
     TextButton(onClick = onButtonClick) {
-        NormText(text = btnText)
+        Text(
+            text = btnText,
+            textAlign = TextAlign.Center
+        )
     }
 }
 
