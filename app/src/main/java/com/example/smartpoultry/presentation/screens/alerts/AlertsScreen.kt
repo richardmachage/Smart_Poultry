@@ -1,6 +1,10 @@
 package com.example.smartpoultry.presentation.screens.alerts
 
 import android.annotation.SuppressLint
+import android.app.Activity
+import android.content.Intent
+import androidx.activity.OnBackPressedCallback
+import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -32,6 +36,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -39,6 +45,7 @@ import com.example.smartpoultry.presentation.composables.MyBorderedRow
 import com.example.smartpoultry.presentation.composables.MyCard
 import com.example.smartpoultry.presentation.composables.MyInputDialog
 import com.example.smartpoultry.presentation.composables.MyVerticalSpacer
+import com.example.smartpoultry.presentation.screens.mainActivity.MainActivity
 import com.ramcosta.composedestinations.annotation.Destination
 import java.text.SimpleDateFormat
 
@@ -52,7 +59,16 @@ fun AlertScreen(
 ) {
     val alertsViewModel = hiltViewModel<AlertsViewModel>()
     val listOfAlerts by remember { alertsViewModel.getFlaggedCells() }.collectAsState(initial = emptyList())
+    val context = LocalContext.current
+    LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher?.addCallback(
+        LocalLifecycleOwner.current,object  : OnBackPressedCallback(true){
+        override fun handleOnBackPressed() {
+            //navigate to main activity
+            context.startActivity(Intent(context,MainActivity::class.java))
+            (context as Activity).finish()
+        }
 
+    })
     var showDeleteDialog by remember { mutableStateOf(false) }
     MyInputDialog(
         showDialog = showDeleteDialog,
@@ -72,8 +88,9 @@ fun AlertScreen(
                 title = { Text(text = "Alerts") },
                 navigationIcon = {
                     IconButton(onClick = {
-                       // navigator.navigateUp()
-
+                        //navigate back to Main Activity
+                        context.startActivity(Intent(context,MainActivity::class.java))
+                        (context as Activity).finish()
                     }) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,

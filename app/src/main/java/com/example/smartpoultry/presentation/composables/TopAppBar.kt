@@ -1,5 +1,6 @@
 package com.example.smartpoultry.presentation.composables
 
+import android.app.Activity
 import android.content.Intent
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
@@ -66,6 +67,8 @@ fun MyTopAppBar(
             IconButton(onClick = {
                // navigator.navigate(AlertScreenDestination)
                 context.startActivity(Intent(context,AlertsActivity::class.java))
+                (context as Activity).finish()
+
             }) {
                 Icon(
                     imageVector =Icons.Default.Notifications ,//ImageVector.vectorResource(R.drawable.notification_filled),
