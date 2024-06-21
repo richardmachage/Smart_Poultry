@@ -14,8 +14,13 @@ import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -28,6 +33,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.smartpoultry.R
 import com.example.smartpoultry.presentation.composables.MyCircularProgressBar
 import com.example.smartpoultry.presentation.composables.MyEditTextClear
+import com.example.smartpoultry.presentation.composables.MyInputDialog
 import com.example.smartpoultry.presentation.composables.MyPasswordEditText
 import com.example.smartpoultry.presentation.composables.MyTextButton
 import com.example.smartpoultry.presentation.composables.MyVerticalSpacer
@@ -36,6 +42,7 @@ import com.example.smartpoultry.presentation.composables.NormText
 import com.example.smartpoultry.presentation.destinations.LogInScreenDestination
 import com.example.smartpoultry.presentation.destinations.MainScreenDestination
 import com.example.smartpoultry.presentation.destinations.SignUpScreenDestination
+import com.example.smartpoultry.utils.isValidEmail
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.navigation.popUpTo
@@ -133,8 +140,48 @@ fun LogInScreen(
                     )
 
 
+                    var showPasswordResetDialog by remember { mutableStateOf(false) }
+                    MyInputDialog(
+                        showDialog = showPasswordResetDialog,
+                        title = "Reset Password" ,
+                        onConfirm = {
+                            if (logInViewModel.email.value.isNotBlank() && isValidEmail(logInViewModel.email.value)) {
+                                logInViewModel.onPasswordReset()
+                                showPasswordResetDialog = false
+                            }else{
+                                logInViewModel.validateError.value = "Invalid email address"
+                            }
+
+                        },
+                        onDismiss = {
+                            showPasswordResetDialog = false
+                        }
+                    ) {
+                        //Dialog body content
+                        Column {
+                            Text(text = "A password reset link will be sent to the email address you enter below if it is registered")
+
+                            MyVerticalSpacer(height = 10)
+
+                            MyEditTextClear( //Input email address
+                                label = "Email",
+                                keyboardType = KeyboardType.Email,
+                                iconLeading = Icons.Default.Email,
+                                iconLeadingDescription = "Email",
+                                hint = "Enter Email",
+                                onValueChange = {newText->
+                                    logInViewModel.email.value = newText
+                                }
+                            )
+                            MyVerticalSpacer(height = 10)
+                            Text(text = "After clicking okay, follow these steps \n" +
+                                    "1.Go to your email inbox \n" +
+                                    "2.Click on link sent to reset your password \n" +
+                                    "3.Now open Smart Poultry and log in using your new password")
+                        }
+                    }
                     MyTextButton(
-                        onButtonClick = { logInViewModel.onPasswordReset() },
+                        onButtonClick = { showPasswordResetDialog = true },
                         btnText = "Forgot Password?",
                         modifier = Modifier
                     )
