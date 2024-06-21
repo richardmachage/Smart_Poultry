@@ -5,14 +5,15 @@ import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
+import android.app.UiModeManager
 import android.content.Context
 import android.content.Intent
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.example.smartpoultry.R
-import com.example.smartpoultry.presentation.screens.mainActivity.MainActivity
 import com.example.smartpoultry.presentation.destinations.AlertScreenDestination
+import com.example.smartpoultry.presentation.screens.mainActivity.MainActivity
 
 fun createNotificationChannel(context: Context, channelName : String, descriptionText : String, channelID : String){
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
@@ -33,12 +34,17 @@ channelID: String,
 title: String,
 contentText : String
 ) : Notification{
+    val uiModeManager = context.getSystemService(Context.UI_MODE_SERVICE) as UiModeManager
+
     val builder = NotificationCompat.Builder(context,channelID)
-        .setSmallIcon(R.drawable.chicken_white)
+        .setSmallIcon(
+            if (uiModeManager.nightMode == UiModeManager.MODE_NIGHT_YES)R.drawable.chicken_white else R.drawable.chicken
+        )
         .setContentTitle(title)
         .setContentText(contentText)
         .setPriority(NotificationCompat.PRIORITY_HIGH)
         .setContentIntent(onNotificationTap(context))
+
 
     return builder.build()
 }
