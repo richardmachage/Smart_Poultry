@@ -253,7 +253,8 @@ fun SignUpScreen(
                 NormButton( //The sign up Button
                     onButtonClick = { singUpViewModel.onSignUp() },
                     btnName = "Sign Up",
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
+                    enabled = singUpViewModel.terms.value
                 )
                MyVerticalSpacer(height = 10)
 
