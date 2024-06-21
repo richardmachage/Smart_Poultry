@@ -12,8 +12,7 @@ import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.example.smartpoultry.R
-import com.example.smartpoultry.presentation.destinations.AlertScreenDestination
-import com.example.smartpoultry.presentation.screens.mainActivity.MainActivity
+import com.example.smartpoultry.presentation.screens.alerts.AlertsActivity
 
 fun createNotificationChannel(context: Context, channelName : String, descriptionText : String, channelID : String){
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
@@ -53,10 +52,7 @@ fun onNotificationTap(
     context: Context
 ): PendingIntent{
     //Create an explicit intent for activity in app
-    val intent = Intent(context, MainActivity::class.java).apply {
-        flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
-        putExtra("destination", AlertScreenDestination.route)
-    }
+    val intent = Intent(context, AlertsActivity::class.java)
 
     return PendingIntent.getActivity(context, 0,intent, PendingIntent.FLAG_IMMUTABLE)
 }
