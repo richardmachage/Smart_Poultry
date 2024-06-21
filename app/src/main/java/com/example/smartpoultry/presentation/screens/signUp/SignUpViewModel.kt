@@ -1,9 +1,11 @@
 package com.example.smartpoultry.presentation.screens.signUp
 
 import android.util.Log
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.smartpoultry.domain.repository.FirebaseAuthRepository
@@ -23,6 +25,8 @@ class SignUpViewModel @Inject constructor(
 
     var farmName = mutableStateOf("")
     var email = mutableStateOf("")
+    var phone = mutableStateOf("")
+    var name = mutableStateOf("")
     var password = mutableStateOf("")
     var confirmPassword = mutableStateOf("")
 
@@ -38,7 +42,14 @@ class SignUpViewModel @Inject constructor(
             if (validateSignUp()) {
                 isLoading.value = true
                 val result =
-                    firebaseAuthRepository.signUp(email=email.value.trim(), password = password.value, role = "Super", farmName = farmName.value.trim())
+                    firebaseAuthRepository.signUp(
+                        email = email.value.trim(),
+                        password = password.value,
+                        role = "Super",
+                        farmName = farmName.value.trim(),
+                        userName = name.value,
+                        phone = phone.value
+                    )
                    // firebaseAuthRepository.registerUser(email.value, password.value, userType.value)
                 result.onSuccess {
                     validationError.value = "Account created successfully, proceed to log in"
@@ -88,6 +99,7 @@ class SignUpViewModel @Inject constructor(
     }
 
     private fun checkEmptyFields() : Boolean{
-        return  farmName.value.isBlank() || email.value.isBlank() || password.value.isBlank() || confirmPassword.value.isBlank()
+        return  farmName.value.isBlank() || email.value.isBlank() || password.value.isBlank() || confirmPassword.value.isBlank() || name.value.isBlank() || phone.value.isBlank()
     }
 }
+

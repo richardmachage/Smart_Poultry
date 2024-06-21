@@ -1,16 +1,24 @@
 package com.example.smartpoultry.presentation.screens.signUp
 
 import android.widget.Toast
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
-import androidx.compose.material.icons.filled.Place
+import androidx.compose.material.icons.filled.Phone
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -22,11 +30,18 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.smartpoultry.R
 import com.example.smartpoultry.presentation.composables.MyCircularProgressBar
 import com.example.smartpoultry.presentation.composables.MyEditTextClear
 import com.example.smartpoultry.presentation.composables.MyPasswordEditText
@@ -103,75 +118,159 @@ fun SignUpScreen(
                 displayText = "Signing In..."
             )
 
-            Column {
-                MyVerticalSpacer(height = 10)
+           Column(
+               modifier = Modifier.fillMaxSize(),
+               verticalArrangement = Arrangement.SpaceBetween
 
-
+           ) {
                 Column(
-                    verticalArrangement = Arrangement.Center
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .fillMaxHeight(0.9f)
+                        .padding(8.dp)
+                        .verticalScroll(rememberScrollState()),
+                    horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
-                    MyEditTextClear(
-                        label = "Farm Name",
-                        hint = "eg. Abuya Poultry Farm",
-                        iconLeading = Icons.Default.Place,
-                        iconLeadingDescription = "place",
-                        keyboardType = KeyboardType.Text,
-                        onValueChange = {
-                            singUpViewModel.farmName.value = it
-                        }
-                    )
 
-                    MyEditTextClear( // Input Email address
-                        label = "Email",
-                        hint = "eg. smartPoultry@gmail.com",
-                        iconLeading = Icons.Default.Email,
-                        iconLeadingDescription = "Email",
-                        keyboardType = KeyboardType.Email,
-                        onValueChange = { text ->
-                            singUpViewModel.email.value = text
-                        }
-                    )
+                    Card( //Personal details
+                        shape = RoundedCornerShape(16.dp),
+                        elevation = CardDefaults.cardElevation(8.dp),
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Column(
+                            modifier = Modifier
+                                .background(MaterialTheme.colorScheme.surface)
+                                .padding(16.dp)
+                        ) {
+                            MyText(text = "Name and Contact details")
+                            MyEditTextClear( // Input user name
+                                label = "Name",
+                                hint = "eg. smartPoultry@gmail.com",
+                                iconLeading = Icons.Default.AccountCircle,
+                                iconLeadingDescription = "account",
+                                keyboardType = KeyboardType.Text,
+                                onValueChange = { text ->
+                                    singUpViewModel.name.value = text.trim()
+                                }
+                            )
+                            MyEditTextClear( // Input Email address
+                                label = "Email",
+                                hint = "eg. john",
+                                iconLeading = Icons.Default.Email,
+                                iconLeadingDescription = "Email",
+                                keyboardType = KeyboardType.Email,
+                                onValueChange = { text ->
+                                    singUpViewModel.email.value = text.trim()
+                                }
+                            )
 
-                    MyPasswordEditText( // Input new Password
-                        label = "Password",
-                       // hint = "New Password",
-                        iconLeading = Icons.Default.Lock,
-                        iconLeadingDescription = "Password",
-                        keyboardType = KeyboardType.Password,
-                        onValueChange = { text ->
-                            singUpViewModel.password.value = text
+                            MyEditTextClear( // Input Phone number
+                                label = "Phone",
+                                hint = "eg. 0718672654",
+                                iconLeading = Icons.Default.Phone,
+                                iconLeadingDescription = "phone",
+                                keyboardType = KeyboardType.Phone,
+                                onValueChange = { text ->
+                                    singUpViewModel.phone.value = text.trim()
+                                }
+                            )
                         }
-                    )
+                    }
 
-                    MyPasswordEditText( // Confirm Password
-                        label = "Confirm Password",
-                        //hint = "Confirm Password",
-                        iconLeading = Icons.Default.Lock,
-                        iconLeadingDescription = "Password",
-                        keyboardType = KeyboardType.Password,
-                        onValueChange = { text ->
-                            singUpViewModel.confirmPassword.value = text
+                    MyVerticalSpacer(height = 10)
+                    Card( //Farm details
+                        shape = RoundedCornerShape(16.dp),
+                        elevation = CardDefaults.cardElevation(8.dp),
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Column(
+                            modifier = Modifier
+                                .background(MaterialTheme.colorScheme.surface)
+                                .padding(16.dp)
+                        ) {
+                            MyText(text = "Your Poultry Farm")
+                            MyEditTextClear(
+                                label = "Farm Name",
+                                hint = "eg. Abuya Poultry Farm",
+                                iconLeading = ImageVector.vectorResource(id = R.drawable.egg_outline),// painterResource(id = R.drawable.egg_outline),//Image(imageVector =, contentDescription = ),
+                                iconLeadingDescription = "place",
+                                keyboardType = KeyboardType.Text,
+                                onValueChange = {
+                                    singUpViewModel.farmName.value = it
+                                }
+                            )
                         }
-                    )
+                    }
+
+                    MyVerticalSpacer(height = 10)
+
+                    Card( //Set Password card
+                        shape = RoundedCornerShape(16.dp),
+                        elevation = CardDefaults.cardElevation(8.dp),
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Column(
+                            modifier = Modifier
+                                .background(MaterialTheme.colorScheme.surface)
+                                .padding(16.dp)
+                        ) {
+                            MyText(text = "Set Password")
+                            MyPasswordEditText( // Input new Password
+                                label = "Password",
+                                // hint = "New Password",
+                                iconLeading = Icons.Default.Lock,
+                                iconLeadingDescription = "Password",
+                                keyboardType = KeyboardType.Password,
+                                onValueChange = { text ->
+                                    singUpViewModel.password.value = text
+                                }
+                            )
+
+                            MyPasswordEditText( // Confirm Password
+                                label = "Confirm Password",
+                                //hint = "Confirm Password",
+                                iconLeading = Icons.Default.Lock,
+                                iconLeadingDescription = "Password",
+                                keyboardType = KeyboardType.Password,
+                                onValueChange = { text ->
+                                    singUpViewModel.confirmPassword.value = text
+                                }
+                            )
+                        }
+                    }
                 }
 
-                MyVerticalSpacer(height = 30)
-
-                //NormButton(onButtonClick = { isLoading = true }, btnName = "Show Loading")
 
                 NormButton( //The sign up Button
                     onButtonClick = { singUpViewModel.onSignUp() },
                     btnName = "Sign Up",
                     modifier = Modifier.fillMaxWidth()
                 )
+               MyVerticalSpacer(height = 10)
 
             }
         }
     }
 }
 
+@Composable
+fun MyText(
+    text:String,
+    modifier: Modifier = Modifier
+){
+    Text(
+        modifier = modifier,
+        text = text,
+        fontStyle = FontStyle.Italic,
+        fontWeight = FontWeight.Bold,
+        style = MaterialTheme.typography.bodyLarge
+    )
+}
+
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
-fun SignUpPreview() {
+@Destination
+fun SignUpPreview(
+) {
     //SignUpScreen()
 }

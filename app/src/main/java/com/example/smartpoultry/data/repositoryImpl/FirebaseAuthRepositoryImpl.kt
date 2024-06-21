@@ -47,7 +47,9 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
         email: String,
         password: String,
         role: String,
-        farmName: String
+        farmName: String,
+        userName: String,
+        phone: String
     ): Result<Boolean> = coroutineScope {
         //step 1. Create user -> using email and password
         //step 2. create farm and retrieve farm ID
@@ -65,6 +67,8 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
                 firebaseUser?.let {
                     val user = User(
                         userId = firebaseUser.uid,
+                        name = userName,
+                        phone = phone,
                         email = email,
                         role = role,
                         farmId = newFarm.id,
