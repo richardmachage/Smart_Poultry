@@ -40,7 +40,6 @@ import com.example.smartpoultry.presentation.composables.MyCard
 import com.example.smartpoultry.presentation.composables.MyInputDialog
 import com.example.smartpoultry.presentation.composables.MyVerticalSpacer
 import com.ramcosta.composedestinations.annotation.Destination
-import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import java.text.SimpleDateFormat
 
 @SuppressLint("SimpleDateFormat")
@@ -49,7 +48,7 @@ import java.text.SimpleDateFormat
 @Composable
 fun AlertScreen(
     //modifier:Modifier
-    navigator: DestinationsNavigator
+    //navigator: DestinationsNavigator
 ) {
     val alertsViewModel = hiltViewModel<AlertsViewModel>()
     val listOfAlerts by remember { alertsViewModel.getFlaggedCells() }.collectAsState(initial = emptyList())
@@ -72,7 +71,10 @@ fun AlertScreen(
             TopAppBar(
                 title = { Text(text = "Alerts") },
                 navigationIcon = {
-                    IconButton(onClick = { navigator.navigateUp() }) {
+                    IconButton(onClick = {
+                       // navigator.navigateUp()
+
+                    }) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = "back"
