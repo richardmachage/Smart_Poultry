@@ -29,6 +29,7 @@ class SignUpViewModel @Inject constructor(
     var name = mutableStateOf("")
     var password = mutableStateOf("")
     var confirmPassword = mutableStateOf("")
+    var terms = mutableStateOf(false)
 
     var toastMessage = mutableStateOf("")
     var validationError = mutableStateOf("")
