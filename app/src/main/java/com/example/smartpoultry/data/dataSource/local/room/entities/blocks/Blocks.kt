@@ -1,4 +1,4 @@
-package com.example.smartpoultry.data.dataSource.room.entities.blocks
+package com.example.smartpoultry.data.dataSource.local.room.entities.blocks
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

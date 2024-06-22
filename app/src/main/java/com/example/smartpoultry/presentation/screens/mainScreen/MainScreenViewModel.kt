@@ -1,8 +1,8 @@
 package com.example.smartpoultry.presentation.screens.mainScreen
 
 import androidx.lifecycle.ViewModel
-import com.example.smartpoultry.data.dataSource.datastore.AppDataStore
-import com.example.smartpoultry.data.dataSource.datastore.PreferencesRepo
+import com.example.smartpoultry.data.dataSource.local.datastore.AppDataStore
+import com.example.smartpoultry.data.dataSource.local.datastore.PreferencesRepo
 import com.example.smartpoultry.utils.USER_ROLE_KEY
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject

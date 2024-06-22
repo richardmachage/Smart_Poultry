@@ -3,8 +3,8 @@ package com.example.smartpoultry.presentation.screens.cells
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.smartpoultry.data.dataSource.datastore.PreferencesRepo
-import com.example.smartpoultry.data.dataSource.room.entities.cells.Cells
+import com.example.smartpoultry.data.dataSource.local.datastore.PreferencesRepo
+import com.example.smartpoultry.data.dataSource.local.room.entities.cells.Cells
 import com.example.smartpoultry.domain.repository.BlocksRepository
 import com.example.smartpoultry.domain.repository.CellsRepository
 import com.example.smartpoultry.utils.USER_ROLE_KEY
@@ -53,7 +53,7 @@ class CellsViewModel @Inject constructor(
         }
     }
 
-    fun onDeleteCell(cell:Cells){
+    fun onDeleteCell(cell: Cells){
         viewModelScope.launch {
             cellsRepository.deleteCell(cell)
         }

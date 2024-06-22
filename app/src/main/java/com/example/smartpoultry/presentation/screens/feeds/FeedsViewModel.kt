@@ -6,8 +6,8 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.smartpoultry.data.dataSource.room.entities.feeds.FeedTrack
-import com.example.smartpoultry.data.dataSource.room.entities.feeds.Feeds
+import com.example.smartpoultry.data.dataSource.local.room.entities.feeds.FeedTrack
+import com.example.smartpoultry.data.dataSource.local.room.entities.feeds.Feeds
 import com.example.smartpoultry.domain.repository.FeedsRepository
 import com.example.smartpoultry.utils.localDateToJavaDate
 import dagger.hilt.android.lifecycle.HiltViewModel

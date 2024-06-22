@@ -6,9 +6,9 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStoreFile
-import com.example.smartpoultry.data.dataSource.datastore.AppDataStore
-import com.example.smartpoultry.data.dataSource.datastore.PreferencesRepo
-import com.example.smartpoultry.data.dataSource.room.database.SmartPoultryDatabase
+import com.example.smartpoultry.data.dataSource.local.datastore.AppDataStore
+import com.example.smartpoultry.data.dataSource.local.datastore.PreferencesRepo
+import com.example.smartpoultry.data.dataSource.local.room.database.SmartPoultryDatabase
 import com.example.smartpoultry.data.repositoryImpl.AlertsRepositoryImpl
 import com.example.smartpoultry.data.repositoryImpl.BlocksRepositoryImpl
 import com.example.smartpoultry.data.repositoryImpl.CellsRepositoryImpl
@@ -36,7 +36,7 @@ import javax.inject.Singleton
 object AppModule {
     @Provides
     @Singleton
-    fun providesSmartPoultryDatabase(application : Application):SmartPoultryDatabase{
+    fun providesSmartPoultryDatabase(application : Application): SmartPoultryDatabase {
         return SmartPoultryDatabase.getInstance(application)
     }
 
@@ -97,7 +97,7 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun providesTrendAnalysis(eggCollectionRepository: EggCollectionRepository, cellsRepository: CellsRepository,dataStore: AppDataStore, preferencesRepo: PreferencesRepo) : TrendAnalysis{
+    fun providesTrendAnalysis(eggCollectionRepository: EggCollectionRepository, cellsRepository: CellsRepository, dataStore: AppDataStore, preferencesRepo: PreferencesRepo) : TrendAnalysis{
         return TrendAnalysis(eggCollectionRepository,cellsRepository, dataStore, preferencesRepo)
     }
 }

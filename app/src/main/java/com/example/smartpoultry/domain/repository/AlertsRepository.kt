@@ -1,7 +1,7 @@
 package com.example.smartpoultry.domain.repository
 
 import com.example.smartpoultry.data.dataModels.AlertFull
-import com.example.smartpoultry.data.dataSource.room.entities.alerts.Alerts
+import com.example.smartpoultry.data.dataSource.local.room.entities.alerts.Alerts
 import kotlinx.coroutines.flow.Flow
 import java.sql.Date
 

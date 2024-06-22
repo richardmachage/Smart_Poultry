@@ -1,7 +1,7 @@
 package com.example.smartpoultry.domain.repository
 
-import com.example.smartpoultry.data.dataSource.room.entities.feeds.FeedTrack
-import com.example.smartpoultry.data.dataSource.room.entities.feeds.Feeds
+import com.example.smartpoultry.data.dataSource.local.room.entities.feeds.FeedTrack
+import com.example.smartpoultry.data.dataSource.local.room.entities.feeds.Feeds
 import kotlinx.coroutines.flow.Flow
 import java.sql.Date
 

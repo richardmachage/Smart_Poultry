@@ -1,4 +1,4 @@
-package com.example.smartpoultry.data.dataSource.room.entities.alerts
+package com.example.smartpoultry.data.dataSource.local.room.entities.alerts
 
 import androidx.room.Dao
 import androidx.room.Query

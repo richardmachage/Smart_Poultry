@@ -1,7 +1,7 @@
 package com.example.smartpoultry.domain.repository
 
-import com.example.smartpoultry.data.dataSource.room.entities.blocks.Blocks
-import com.example.smartpoultry.data.dataSource.room.relations.BlocksWithCells
+import com.example.smartpoultry.data.dataSource.local.room.entities.blocks.Blocks
+import com.example.smartpoultry.data.dataSource.local.room.relations.BlocksWithCells
 import kotlinx.coroutines.flow.Flow
 
 interface BlocksRepository {

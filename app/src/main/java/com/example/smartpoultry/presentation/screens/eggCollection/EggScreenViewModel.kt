@@ -6,9 +6,9 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.smartpoultry.data.dataSource.room.entities.cells.Cells
-import com.example.smartpoultry.data.dataSource.room.entities.eggCollection.EggCollection
-import com.example.smartpoultry.data.dataSource.room.relations.BlocksWithCells
+import com.example.smartpoultry.data.dataSource.local.room.entities.cells.Cells
+import com.example.smartpoultry.data.dataSource.local.room.entities.eggCollection.EggCollection
+import com.example.smartpoultry.data.dataSource.local.room.relations.BlocksWithCells
 import com.example.smartpoultry.domain.repository.BlocksRepository
 import com.example.smartpoultry.domain.repository.CellsRepository
 import com.example.smartpoultry.domain.repository.EggCollectionRepository
@@ -117,12 +117,14 @@ class EggScreenViewModel @Inject constructor(
             run loop@{
                 cellsInput.forEachIndexed{ _,record ->
                     if(
-                        eggCollectionRepository.addNewRecord(EggCollection(
+                        eggCollectionRepository.addNewRecord(
+                            EggCollection(
                             date = chosenDateValue,  //Date.valueOf(selectedDate.value.toString()), //Date.valueOf(myDateFormatter(selectedDate.value)),
                             cellId = record.cellId,
                             eggCount = record.eggCount,
                             henCount = record.henCount
-                        ))){
+                        )
+                        )){
                         insertStatus.value = true
                         //updateEggCount(blockIndex = block, cellIndex = index, newEggCount = 0)
 

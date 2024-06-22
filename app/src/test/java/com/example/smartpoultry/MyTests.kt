@@ -1,6 +1,6 @@
 package com.example.smartpoultry
 
-import com.example.smartpoultry.data.dataSource.room.entities.eggCollection.EggCollection
+import com.example.smartpoultry.data.dataSource.local.room.entities.eggCollection.EggCollection
 import java.sql.Date
 
 class MyTests {

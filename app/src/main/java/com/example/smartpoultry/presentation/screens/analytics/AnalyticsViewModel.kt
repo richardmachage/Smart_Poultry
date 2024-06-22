@@ -11,7 +11,7 @@ import androidx.work.ExistingWorkPolicy
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import com.example.smartpoultry.data.dataModels.DailyEggCollection
-import com.example.smartpoultry.data.dataSource.room.entities.eggCollection.EggCollection
+import com.example.smartpoultry.data.dataSource.local.room.entities.eggCollection.EggCollection
 import com.example.smartpoultry.domain.repository.BlocksRepository
 import com.example.smartpoultry.domain.repository.CellsRepository
 import com.example.smartpoultry.domain.repository.EggCollectionRepository

@@ -38,7 +38,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.smartpoultry.data.dataModels.DailyEggCollection
-import com.example.smartpoultry.data.dataSource.room.entities.cells.Cells
+import com.example.smartpoultry.data.dataSource.local.room.entities.cells.Cells
 import com.example.smartpoultry.presentation.NavGraphs
 import com.example.smartpoultry.presentation.composables.MyCard
 import com.example.smartpoultry.presentation.composables.MyCardInventory

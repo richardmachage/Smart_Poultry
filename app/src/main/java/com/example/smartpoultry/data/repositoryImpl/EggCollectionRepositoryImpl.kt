@@ -3,10 +3,10 @@ package com.example.smartpoultry.data.repositoryImpl
 import android.util.Log
 import com.example.smartpoultry.data.dataModels.DailyEggCollection
 import com.example.smartpoultry.data.dataModels.EggRecordFull
-import com.example.smartpoultry.data.dataSource.datastore.PreferencesRepo
+import com.example.smartpoultry.data.dataSource.local.datastore.PreferencesRepo
 import com.example.smartpoultry.data.dataSource.remote.firebase.models.EggCollectionFb
-import com.example.smartpoultry.data.dataSource.room.entities.eggCollection.EggCollection
-import com.example.smartpoultry.data.dataSource.room.entities.eggCollection.EggCollectionDao
+import com.example.smartpoultry.data.dataSource.local.room.entities.eggCollection.EggCollection
+import com.example.smartpoultry.data.dataSource.local.room.entities.eggCollection.EggCollectionDao
 import com.example.smartpoultry.domain.repository.EggCollectionRepository
 import com.example.smartpoultry.utils.EGGS_COLLECTION
 import com.example.smartpoultry.utils.FARMS_COLLECTION

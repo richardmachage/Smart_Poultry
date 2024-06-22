@@ -7,7 +7,7 @@ import androidx.annotation.RequiresApi
 import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
-import com.example.smartpoultry.data.dataSource.room.entities.alerts.Alerts
+import com.example.smartpoultry.data.dataSource.local.room.entities.alerts.Alerts
 import com.example.smartpoultry.domain.notifications.showNotification
 import com.example.smartpoultry.domain.repository.AlertsRepository
 import com.example.smartpoultry.domain.trendAnalysis.TrendAnalysis

@@ -1,4 +1,4 @@
-package com.example.smartpoultry.data.dataSource.datastore
+package com.example.smartpoultry.data.dataSource.local.datastore
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf

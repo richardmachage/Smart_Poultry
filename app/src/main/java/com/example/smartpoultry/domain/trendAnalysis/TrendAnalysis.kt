@@ -3,9 +3,9 @@ package com.example.smartpoultry.domain.trendAnalysis
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
-import com.example.smartpoultry.data.dataSource.datastore.AppDataStore
-import com.example.smartpoultry.data.dataSource.datastore.PreferencesRepo
-import com.example.smartpoultry.data.dataSource.room.entities.cells.Cells
+import com.example.smartpoultry.data.dataSource.local.datastore.AppDataStore
+import com.example.smartpoultry.data.dataSource.local.datastore.PreferencesRepo
+import com.example.smartpoultry.data.dataSource.local.room.entities.cells.Cells
 import com.example.smartpoultry.domain.repository.CellsRepository
 import com.example.smartpoultry.domain.repository.EggCollectionRepository
 import com.example.smartpoultry.utils.CONSUCUTIVE_DAYS_KEY

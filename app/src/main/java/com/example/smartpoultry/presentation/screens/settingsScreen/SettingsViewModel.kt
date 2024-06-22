@@ -5,9 +5,9 @@ import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.smartpoultry.data.dataSource.datastore.AppDataStore
-import com.example.smartpoultry.data.dataSource.datastore.PreferencesRepo
-import com.example.smartpoultry.data.dataSource.room.database.SmartPoultryDatabase
+import com.example.smartpoultry.data.dataSource.local.datastore.AppDataStore
+import com.example.smartpoultry.data.dataSource.local.datastore.PreferencesRepo
+import com.example.smartpoultry.data.dataSource.local.room.database.SmartPoultryDatabase
 import com.example.smartpoultry.utils.CONSUCUTIVE_DAYS_KEY
 import com.example.smartpoultry.utils.FARM_ID_KEY
 import com.example.smartpoultry.utils.IS_AUTOMATED_ANALYSIS_KEY

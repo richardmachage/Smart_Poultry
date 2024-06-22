@@ -1,4 +1,4 @@
-package com.example.smartpoultry.data.dataSource.room.entities.eggCollection
+package com.example.smartpoultry.data.dataSource.local.room.entities.eggCollection
 
 import androidx.room.Entity
 import androidx.room.Index

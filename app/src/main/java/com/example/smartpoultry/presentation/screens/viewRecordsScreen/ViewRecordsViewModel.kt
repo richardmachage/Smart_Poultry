@@ -4,8 +4,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.smartpoultry.data.dataModels.EggRecordFull
-import com.example.smartpoultry.data.dataSource.room.entities.cells.Cells
-import com.example.smartpoultry.data.dataSource.room.entities.eggCollection.EggCollection
+import com.example.smartpoultry.data.dataSource.local.room.entities.cells.Cells
+import com.example.smartpoultry.data.dataSource.local.room.entities.eggCollection.EggCollection
 import com.example.smartpoultry.domain.repository.CellsRepository
 import com.example.smartpoultry.domain.repository.EggCollectionRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,7 +21,7 @@ class ViewRecordsViewModel @Inject constructor(
     private val cellsRepository: CellsRepository
 ) : ViewModel() {
 
-    lateinit var cellsMap : Map<Int,Cells>
+    lateinit var cellsMap : Map<Int, Cells>
     var searchText = mutableStateOf("")
     var listOfCollectionRecords = mutableListOf<EggRecordFull>()
 

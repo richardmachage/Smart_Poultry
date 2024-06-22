@@ -1,4 +1,4 @@
-package com.example.smartpoultry.data.dataSource.room.entities.blocks
+package com.example.smartpoultry.data.dataSource.local.room.entities.blocks
 
 import androidx.room.Dao
 import androidx.room.Delete
@@ -7,7 +7,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Upsert
-import com.example.smartpoultry.data.dataSource.room.relations.BlocksWithCells
+import com.example.smartpoultry.data.dataSource.local.room.relations.BlocksWithCells
 import kotlinx.coroutines.flow.Flow
 
 @Dao

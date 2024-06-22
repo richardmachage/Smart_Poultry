@@ -1,23 +1,23 @@
-package com.example.smartpoultry.data.dataSource.room.database
+package com.example.smartpoultry.data.dataSource.local.room.database
 
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import com.example.smartpoultry.data.dataSource.room.entities.PopulationChange.PopChange
-import com.example.smartpoultry.data.dataSource.room.entities.PopulationChange.PopChangeDao
-import com.example.smartpoultry.data.dataSource.room.entities.alerts.Alerts
-import com.example.smartpoultry.data.dataSource.room.entities.alerts.AlertsDao
-import com.example.smartpoultry.data.dataSource.room.entities.blocks.Blocks
-import com.example.smartpoultry.data.dataSource.room.entities.blocks.BlocksDao
-import com.example.smartpoultry.data.dataSource.room.entities.cells.Cells
-import com.example.smartpoultry.data.dataSource.room.entities.cells.CellsDao
-import com.example.smartpoultry.data.dataSource.room.entities.eggCollection.EggCollection
-import com.example.smartpoultry.data.dataSource.room.entities.eggCollection.EggCollectionDao
-import com.example.smartpoultry.data.dataSource.room.entities.feeds.FeedTrack
-import com.example.smartpoultry.data.dataSource.room.entities.feeds.Feeds
-import com.example.smartpoultry.data.dataSource.room.entities.feeds.FeedsDao
+import com.example.smartpoultry.data.dataSource.local.room.entities.PopulationChange.PopChange
+import com.example.smartpoultry.data.dataSource.local.room.entities.PopulationChange.PopChangeDao
+import com.example.smartpoultry.data.dataSource.local.room.entities.alerts.Alerts
+import com.example.smartpoultry.data.dataSource.local.room.entities.alerts.AlertsDao
+import com.example.smartpoultry.data.dataSource.local.room.entities.blocks.Blocks
+import com.example.smartpoultry.data.dataSource.local.room.entities.blocks.BlocksDao
+import com.example.smartpoultry.data.dataSource.local.room.entities.cells.Cells
+import com.example.smartpoultry.data.dataSource.local.room.entities.cells.CellsDao
+import com.example.smartpoultry.data.dataSource.local.room.entities.eggCollection.EggCollection
+import com.example.smartpoultry.data.dataSource.local.room.entities.eggCollection.EggCollectionDao
+import com.example.smartpoultry.data.dataSource.local.room.entities.feeds.FeedTrack
+import com.example.smartpoultry.data.dataSource.local.room.entities.feeds.Feeds
+import com.example.smartpoultry.data.dataSource.local.room.entities.feeds.FeedsDao
 import com.example.smartpoultry.utils.DbConverters
 
 @Database(
@@ -38,7 +38,7 @@ abstract class SmartPoultryDatabase : RoomDatabase() {
     companion object{
         private  var INSTANCE : SmartPoultryDatabase? = null
 
-        fun getInstance(context: Context) : SmartPoultryDatabase{
+        fun getInstance(context: Context) : SmartPoultryDatabase {
             synchronized(this){
                 var instance  = INSTANCE
                 if (instance == null){

@@ -1,7 +1,7 @@
 package com.example.smartpoultry.data.dataSource.remote.firebase
 
-import com.example.smartpoultry.data.dataSource.datastore.AppDataStore
-import com.example.smartpoultry.data.dataSource.datastore.PreferencesRepo
+import com.example.smartpoultry.data.dataSource.local.datastore.AppDataStore
+import com.example.smartpoultry.data.dataSource.local.datastore.PreferencesRepo
 import com.example.smartpoultry.data.dataSource.remote.firebase.models.User
 import com.example.smartpoultry.utils.FARM_ID_KEY
 import com.google.firebase.auth.FirebaseAuth

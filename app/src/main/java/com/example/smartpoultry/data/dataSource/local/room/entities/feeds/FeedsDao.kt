@@ -1,4 +1,4 @@
-package com.example.smartpoultry.data.dataSource.room.entities.feeds
+package com.example.smartpoultry.data.dataSource.local.room.entities.feeds
 
 import androidx.room.Dao
 import androidx.room.Delete

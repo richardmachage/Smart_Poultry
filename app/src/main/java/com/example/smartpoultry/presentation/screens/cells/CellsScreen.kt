@@ -39,7 +39,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.smartpoultry.data.dataSource.room.entities.cells.Cells
+import com.example.smartpoultry.data.dataSource.local.room.entities.cells.Cells
 import com.example.smartpoultry.presentation.composables.MyCard
 import com.example.smartpoultry.presentation.composables.MyInputDialog
 import com.example.smartpoultry.presentation.composables.MyOutlineTextFiled
@@ -136,10 +136,12 @@ fun CellsScreen(
         showDialog = showAddCellDialog,
         title = "Create New Cell",
         onConfirm = { 
-                    cellsViewModel.onAddNewCell(Cells(
+                    cellsViewModel.onAddNewCell(
+                        Cells(
                         blockId = block.blockId,
                         cellNum = if (listOfCells.isNotEmpty()) listOfCells.size + 1 else 1
-                    ))
+                    )
+                    )
             showAddCellDialog = false
         },
         onDismiss = {

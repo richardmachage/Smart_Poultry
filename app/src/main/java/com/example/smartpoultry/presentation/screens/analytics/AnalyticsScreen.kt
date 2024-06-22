@@ -34,8 +34,8 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.smartpoultry.data.dataModels.DailyEggCollection
-import com.example.smartpoultry.data.dataSource.room.entities.cells.Cells
-import com.example.smartpoultry.data.dataSource.room.entities.eggCollection.EggCollection
+import com.example.smartpoultry.data.dataSource.local.room.entities.cells.Cells
+import com.example.smartpoultry.data.dataSource.local.room.entities.eggCollection.EggCollection
 import com.example.smartpoultry.domain.permissions.POST_NOTIFICATIONS
 import com.example.smartpoultry.domain.permissions.checkIfPermissionGranted
 import com.example.smartpoultry.presentation.composables.BlocksDropDownMenu

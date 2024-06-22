@@ -2,7 +2,7 @@ package com.example.smartpoultry.domain.repository
 
 import com.example.smartpoultry.data.dataModels.DailyEggCollection
 import com.example.smartpoultry.data.dataModels.EggRecordFull
-import com.example.smartpoultry.data.dataSource.room.entities.eggCollection.EggCollection
+import com.example.smartpoultry.data.dataSource.local.room.entities.eggCollection.EggCollection
 import kotlinx.coroutines.flow.Flow
 import java.sql.Date
 
