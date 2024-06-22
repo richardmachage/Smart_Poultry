@@ -5,7 +5,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.smartpoultry.data.dataSource.local.datastore.AppDataStore
 import com.example.smartpoultry.data.dataSource.local.datastore.PreferencesRepo
-import com.example.smartpoultry.data.dataSource.remote.firebase.FirestorePathProvider
 import com.example.smartpoultry.data.dataSource.remote.firebase.models.User
 import com.example.smartpoultry.data.dataSource.local.room.entities.blocks.Blocks
 import com.example.smartpoultry.data.dataSource.local.room.entities.blocks.BlocksDao
