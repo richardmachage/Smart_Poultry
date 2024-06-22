@@ -32,8 +32,8 @@ class AnalysisWorker @AssistedInject constructor(
     @RequiresApi(Build.VERSION_CODES.O)
     override suspend fun doWork(): Result {
         Log.d("Analysis worker: ", "started")
-        Log.d("Threshold ratio: ", trendAnalysis.THRESHOLD_RATIO.toString())
-        Log.d("ConsucutiveDays: ", trendAnalysis.CONSUCUTIVE_DAYS.toString())
+        //Log.d("Threshold ratio: ", trendAnalysis.THRESHOLD_RATIO.toString())
+        //Log.d("ConsucutiveDays: ", trendAnalysis.CONSUCUTIVE_DAYS.toString())
         Log.d("Cells ", trendAnalysis.listOfAllCells.size.toString())
 
         val result = trendAnalysis.performAnalysis()

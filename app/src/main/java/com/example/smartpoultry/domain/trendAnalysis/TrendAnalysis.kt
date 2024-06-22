@@ -31,8 +31,8 @@ class TrendAnalysis @Inject constructor(
     private val preferencesRepo: PreferencesRepo
 ) {
 
-    var THRESHOLD_RATIO = preferencesRepo.loadData(THRESHOLD_RATIO_KEY)!!.toFloatOrNull() ?: 0.0f//by Delegates.notNull<Float>()
-    var CONSUCUTIVE_DAYS = preferencesRepo.loadData(CONSUCUTIVE_DAYS_KEY)!!.toIntOrNull()?: 0//by Delegates.notNull<Int>()
+    //var THRESHOLD_RATIO = preferencesRepo.loadData(THRESHOLD_RATIO_KEY)!!.toFloatOrNull() ?: 0.0f//by Delegates.notNull<Float>()
+   // var CONSUCUTIVE_DAYS = preferencesRepo.loadData(CONSUCUTIVE_DAYS_KEY)!!.toIntOrNull()?: 0//by Delegates.notNull<Int>()
 
     //first get all cells
     var listOfAllCells = mutableListOf<Cells>()
@@ -43,6 +43,8 @@ class TrendAnalysis @Inject constructor(
     }
 
 
+    private fun getThreshHoldRatio() : Float = preferencesRepo.loadData(THRESHOLD_RATIO_KEY)!!.toFloatOrNull() ?: 0.0f
+    private fun getConsucutiveDays() : Int = preferencesRepo.loadData(CONSUCUTIVE_DAYS_KEY)!!.toIntOrNull()?: 0
     private fun getAllCells() {
         CoroutineScope(Dispatchers.IO).launch {
             cellsRepository.getAllCells().collect {
@@ -79,16 +81,16 @@ class TrendAnalysis @Inject constructor(
             eggCollectionRepository.getCellEggCollectionForPastDays(
                 cellId= cellId,
                 startDate = Date(
-                    localDateToJavaDate(getDateDaysAgo(CONSUCUTIVE_DAYS))
+                    localDateToJavaDate(getDateDaysAgo(getConsucutiveDays()))
                 )
             ).collect{records->
                 var count = 0
                 for (record in records){
                     val ratio = record.eggCount.toFloat() / record.henCount.toFloat()
                    // Log.d("Compare", "is $ratio < $THRESHOLD_RATIO")
-                    if (ratio <= THRESHOLD_RATIO){
+                    if (ratio <= getThreshHoldRatio()){
                         count++
-                        if (count >= CONSUCUTIVE_DAYS) result = true
+                        if (count >= getConsucutiveDays()) result = true
                     }else{
                         count = 0
                     }
