@@ -9,6 +9,7 @@ import com.example.smartpoultry.domain.repository.FirebaseAuthRepository
 import com.example.smartpoultry.utils.FARMS_COLLECTION
 import com.example.smartpoultry.utils.FARM_ID_KEY
 import com.example.smartpoultry.utils.FARM_NAME_KEY
+import com.example.smartpoultry.utils.FARM_SUPER_USER_EMAIL
 import com.example.smartpoultry.utils.IS_PASSWORD_RESET_KEY
 import com.example.smartpoultry.utils.USERS_COLLECTION
 import com.example.smartpoultry.utils.USER_EMAIL_KEY
@@ -166,7 +167,24 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
                                 //user role
                                 preferencesRepo.saveData(USER_ROLE_KEY, it.role)
 
-                                //getThisUser(preferencesRepo)
+                                //get the farm
+                                firebaseFirestore
+                                    .collection(FARMS_COLLECTION).document(user.farmId)
+                                    .get()
+                                    .addOnSuccessListener {documentSnapshot->
+                                        //farm is retrieved
+                                        val farm = documentSnapshot.toObject(Farm::class.java)
+                                        farm?.let {
+                                            //save farm details to local
+                                            preferencesRepo.saveData(FARM_NAME_KEY, farm.name)
+                                            preferencesRepo.saveData(FARM_SUPER_USER_EMAIL, farm.name)
+
+                                        }
+
+                                    }
+                                    .addOnFailureListener{
+
+                                    }
                             }
 
                         }
