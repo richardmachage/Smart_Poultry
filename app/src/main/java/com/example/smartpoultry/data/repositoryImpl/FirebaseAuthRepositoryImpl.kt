@@ -291,40 +291,6 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
         )
     }
 
-    override suspend fun getFarm(): String {
-        //1. check if name exists locally
-        //2. if not, read from remote and store locally
-        //3. return value from local
-        try {
-            var farmName = preferencesRepo.loadData(FARM_NAME_KEY) ?: ""
-            var farmId = preferencesRepo.loadData(FARM_ID_KEY) ?: ""
-
-            if (farmName.isNotBlank()) {
-                //farm name exists locally, we return here
-                return farmName
-            } else {
-                //farm name does not exist locally so we read from remote source
-                val docsnapshot = firebaseFirestore.collection(FARMS_COLLECTION).document(farmId)
-                    .get()
-                    .addOnSuccessListener {
-                        val farm = it.toObject(Farm::class.java)
-                        farm?.let {
-                            preferencesRepo.saveData(FARM_NAME_KEY, it.name)
-                        }
-                    }
-                    .addOnFailureListener {
-                        Throwable(it)
-                    }
-                    .await()
-                return preferencesRepo.loadData(FARM_NAME_KEY) ?: ""
-            }
-        } catch (e: Exception) {
-            Log.e("getting farm name", "getFarm failed: ${e.message.toString()} ", e)
-            return ""
-        }
-
-
-    }
 
     override suspend fun getFarmEmployees(farmId: String): Result<List<User>> {
         val listOfEmployees = mutableListOf<User>()

@@ -17,6 +17,7 @@ import com.example.smartpoultry.domain.repository.BlocksRepository
 import com.example.smartpoultry.domain.repository.CellsRepository
 import com.example.smartpoultry.domain.repository.EggCollectionRepository
 import com.example.smartpoultry.domain.repository.FirebaseAuthRepository
+import com.example.smartpoultry.utils.FARM_NAME_KEY
 import com.example.smartpoultry.utils.IS_PASSWORD_RESET_KEY
 import com.example.smartpoultry.utils.USER_EMAIL_KEY
 import com.example.smartpoultry.utils.USER_NAME_KEY
@@ -44,16 +45,14 @@ class HomeViewModel @Inject constructor(
     // @ApplicationContext val context: Context
 ) : ViewModel() {
 
-    var farmName = mutableStateOf("")
+    var farmName = mutableStateOf(getFarmName())
     var passwordReset = mutableStateOf("")
     var isLoading by  mutableStateOf(false)
     var toastMessage by mutableStateOf("")
     var navigateToLogin by mutableStateOf("")
     var isLoadingText by mutableStateOf("")
     init {
-        viewModelScope.launch {
-             //   getFarmName()
-        }
+
         passwordReset.value = preferencesRepo.loadData(IS_PASSWORD_RESET_KEY)?:""
     }
 
@@ -96,11 +95,7 @@ class HomeViewModel @Inject constructor(
             }
         }
     }
-    private fun getFarmName() {
-        viewModelScope.launch {
-            farmName.value = firebaseAuthRepository.getFarm()
-        }
-    }
+    private fun getFarmName() = preferencesRepo.loadData(FARM_NAME_KEY)!!
 
     /*val userRole = dataStore.readData(USER_ROLE_KEY).stateIn(
         scope = viewModelScope,
