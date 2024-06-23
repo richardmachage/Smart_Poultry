@@ -175,15 +175,13 @@ fun HomeScreen(
 
                 ) {
                     Text(
-                        text = "Hello, $userName ",//from ${homeViewModel.farmName.value}",
+                        text = "Hello, $userName from ${homeViewModel.farmName.value}",
                         modifier = Modifier
                             .padding(6.dp)
                             .align(Alignment.Start)
                     )
                 }
             }
-
-            Text(text ="From " + homeViewModel.farmName.value)
             Column(
                 //Inventory block
                 modifier = Modifier
