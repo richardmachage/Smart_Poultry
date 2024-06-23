@@ -183,6 +183,7 @@ fun HomeScreen(
                 }
             }
 
+            Text(text ="From " + homeViewModel.farmName.value)
             Column(
                 //Inventory block
                 modifier = Modifier

@@ -169,7 +169,7 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
 
                                 //get the farm
                                 firebaseFirestore
-                                    .collection(FARMS_COLLECTION).document(user.farmId)
+                                    .collection(FARMS_COLLECTION).document(it.farmId)
                                     .get()
                                     .addOnSuccessListener {documentSnapshot->
                                         //farm is retrieved
