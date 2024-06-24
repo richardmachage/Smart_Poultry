@@ -3,9 +3,11 @@ package com.example.smartpoultry.data.repositoryImpl
 import android.util.Log
 import com.example.smartpoultry.data.dataSource.local.datastore.AppDataStore
 import com.example.smartpoultry.data.dataSource.local.datastore.PreferencesRepo
+import com.example.smartpoultry.data.dataSource.remote.firebase.models.AccessLevel
 import com.example.smartpoultry.data.dataSource.remote.firebase.models.Farm
 import com.example.smartpoultry.data.dataSource.remote.firebase.models.User
 import com.example.smartpoultry.domain.repository.FirebaseAuthRepository
+import com.example.smartpoultry.utils.ACCESS_LEVEL
 import com.example.smartpoultry.utils.FARMS_COLLECTION
 import com.example.smartpoultry.utils.FARM_ID_KEY
 import com.example.smartpoultry.utils.FARM_NAME_KEY
@@ -16,6 +18,7 @@ import com.example.smartpoultry.utils.USER_EMAIL_KEY
 import com.example.smartpoultry.utils.USER_NAME_KEY
 import com.example.smartpoultry.utils.USER_PHONE_KEY
 import com.example.smartpoultry.utils.USER_ROLE_KEY
+import com.google.android.play.integrity.internal.h
 import com.google.firebase.Firebase
 import com.google.firebase.auth.EmailAuthCredential
 import com.google.firebase.auth.EmailAuthProvider
@@ -64,7 +67,7 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
                 //step 2 create farm
                 val newFarm = firebaseFirestore.collection(FARMS_COLLECTION).document()
                 newFarm.set(Farm(name = farmName, id = newFarm.id, superUserEmail = email)).await()
-                //step 3 add created user to the Main Users Collection
+                //step 3 add created user to the Users Collection
                 firebaseUser?.let {
                     val user = User(
                         userId = firebaseUser.uid,
@@ -78,6 +81,27 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
                     firebaseFirestore.collection(USERS_COLLECTION)
                         .document(firebaseUser.uid)
                         .set(user)
+                        .addOnSuccessListener{
+                           //step 4: add the AccessLevel subcollection
+                            CoroutineScope(Dispatchers.IO).launch {
+                                firebaseFirestore.collection(USERS_COLLECTION)
+                                    .document(firebaseUser.uid).collection(ACCESS_LEVEL)
+                                    .document(firebaseUser.uid + "accessLevel")
+                                    .set(
+                                        AccessLevel(
+                                            collectEggs = true,
+                                            editHenCount = true,
+                                            editBlockName = true,
+                                            addNewCell = true,
+                                            addNewBlock = true,
+                                            manageUsers = true,
+                                            deleteCell = true,
+                                            deleteBlock = true
+                                        )
+                                    )
+                                    .await()
+                            }
+                        }
                         .await()
                     Result.success(true)
                 } ?: Result.failure(Exception("Firebase user is null"))
