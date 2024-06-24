@@ -18,7 +18,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -85,9 +84,6 @@ fun HomeScreen(
             }
         }
 
-    LaunchedEffect(key1 = "") {
-       // homeViewModel.syncWithRemote()
-    }
     LaunchedEffect(homeViewModel.toastMessage) {
         if (homeViewModel.toastMessage.isNotBlank()){
             Toast.makeText(context, homeViewModel.toastMessage,Toast.LENGTH_SHORT).show()
@@ -103,11 +99,11 @@ fun HomeScreen(
             }
         }
     }
-    Surface(
+    /*Surface(
         modifier = Modifier
             .fillMaxSize(),
         color = MaterialTheme.colorScheme.background
-    ) {
+    ) {*/
         MyCircularProgressBar(
             isLoading = homeViewModel.isLoading,
             displayText = homeViewModel.isLoadingText
@@ -265,7 +261,7 @@ fun HomeScreen(
                 if (dailyEggsForPastDays.value.isNotEmpty()) RecentEggsLineChart(dailyEggCollections = dailyEggsForPastDays.value)
             }
         }
-    }
+   // }
 }
 
 @RequiresApi(Build.VERSION_CODES.O)

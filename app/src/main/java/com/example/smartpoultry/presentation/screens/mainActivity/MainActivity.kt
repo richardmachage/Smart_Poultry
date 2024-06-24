@@ -1,7 +1,6 @@
 package com.example.smartpoultry.presentation.screens.mainActivity
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
@@ -24,7 +23,6 @@ class MainActivity() : ComponentActivity() {
             descriptionText = "Alerts for cells detected with downward trend",
             channelID = "1"
         )
-        val destination = intent.getStringExtra("destination")
         super.onCreate(savedInstanceState)
 
         installSplashScreen().apply {
@@ -34,7 +32,6 @@ class MainActivity() : ComponentActivity() {
         }
 
         setContent {
-            Log.d("Destination", destination.toString())
             SmartPoultryTheme {
                 //DestinationsNavHost(navGraph = NavGraphs.root)
                 if (mainViewModel.isFirstInstall) { // first time installed
