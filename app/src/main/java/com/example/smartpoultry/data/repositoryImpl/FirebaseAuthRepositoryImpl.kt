@@ -142,6 +142,24 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
                     firebaseFirestore.collection(USERS_COLLECTION)
                         .document(firebaseUser.uid)
                         .set(user)
+                        .addOnSuccessListener {
+                            CoroutineScope(Dispatchers.IO).launch {
+                                firebaseFirestore.collection(USERS_COLLECTION).document(firebaseUser.uid).collection(ACCESS_LEVEL)
+                                    .document(firebaseUser.uid + "accessLevel")
+                                    .set(
+                                        AccessLevel(
+                                            collectEggs = true,
+                                            editHenCount = true,
+                                            editBlockName = true,
+                                            addNewCell = false,
+                                            addNewBlock = false,
+                                            manageUsers = false,
+                                            deleteCell = false,
+                                            deleteBlock = false
+                                        )
+                                    ).await()
+                            }
+                        }
                         .await()
                     Result.success(true)
                 } ?: Result.failure(Exception("Firebase user is null"))
