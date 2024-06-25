@@ -11,5 +11,8 @@ Egg Production tracking
 #  Sample ScreenShots
 ![smart p dark](https://github.com/richardmachage/Smart_Poultry/assets/95470025/bccc8fb8-04e0-4917-9f01-e84a4d00a23e)  ![smart p light](https://github.com/richardmachage/Smart_Poultry/assets/95470025/0efad9bc-16b7-4c8f-91bc-70222c8977c5)
 
+![alerts_Screen_with_bgc](https://github.com/richardmachage/Smart_Poultry/assets/95470025/13e5e610-bef7-478f-92a5-3558e3e23fef)
+
+
 
 
