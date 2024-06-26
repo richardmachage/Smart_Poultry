@@ -15,7 +15,6 @@
         android:label="@string/app_name"
         android:roundIcon="@drawable/chicken"
         android:supportsRtl="true"
-        android:theme="@style/Theme.SmartPoultry"
         tools:targetApi="31">
         <activity
             android:name=".presentation.screens.alerts.AlertsActivity"
@@ -25,8 +24,8 @@
         <activity
             android:name=".presentation.screens.mainActivity.MainActivity"
             android:exported="true"
-            android:label="@string/app_name"
-            android:theme="@style/Theme.SmartPoultry">
+            android:theme="@style/Theme.SmartPoultry"
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
