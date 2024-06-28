@@ -72,6 +72,9 @@ fun HomeScreen(
     val userName = homeViewModel.getName()!!
     val emailAddress = homeViewModel.getEmail()!!//by homeViewModel.dataStore.readData(USER_EMAIL_KEY).collectAsState(initial = "")
 
+    val listOfAlerts by remember { homeViewModel.getFlaggedCells() }.collectAsState(initial = emptyList())
+
+
     val pastDaysState = homeViewModel.preferencesRepo.loadData(PAST_DAYS_KEY)//remember { homeViewModel.dataStore.readData(PAST_DAYS_KEY) }.collectAsState(initial = "0")
     val pastDays = pastDaysState?.toIntOrNull() ?: 0
 

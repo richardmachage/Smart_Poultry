@@ -9,10 +9,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.smartpoultry.data.dataModels.AlertFull
 import com.example.smartpoultry.data.dataModels.DailyEggCollection
 import com.example.smartpoultry.data.dataSource.local.datastore.AppDataStore
 import com.example.smartpoultry.data.dataSource.local.datastore.PreferencesRepo
 import com.example.smartpoultry.domain.reports.Report
+import com.example.smartpoultry.domain.repository.AlertsRepository
 import com.example.smartpoultry.domain.repository.BlocksRepository
 import com.example.smartpoultry.domain.repository.CellsRepository
 import com.example.smartpoultry.domain.repository.EggCollectionRepository
@@ -41,7 +43,8 @@ class HomeViewModel @Inject constructor(
     private val report: Report,
     val dataStore: AppDataStore,
     val preferencesRepo: PreferencesRepo,
-    val firebaseAuthRepository: FirebaseAuthRepository
+    val firebaseAuthRepository: FirebaseAuthRepository,
+    private val alertsRepository: AlertsRepository
     // @ApplicationContext val context: Context
 ) : ViewModel() {
 
@@ -67,6 +70,14 @@ class HomeViewModel @Inject constructor(
         isLoadingText = "Syncing Egg collection records.."
         eggCollectionRepository.fetchAndUpdateEggRecords()
         isLoading = false
+    }
+
+    fun getFlaggedCells(): Flow<List<AlertFull>>{
+        return alertsRepository.getFlaggedCells().stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(),
+            initialValue = emptyList()
+        )
     }
 
     fun onPasswordReset(email : String){
