@@ -56,9 +56,10 @@ fun BlockCellScreen(
 ) {
     val context = LocalContext.current
     val blockCellViewModel: BlockCellViewModel = hiltViewModel()
-    val userRole by remember {
+    /*val userRole by remember {
         mutableStateOf(blockCellViewModel.getUserRole())
-    }//by blockCellViewModel.userRole.collectAsState()
+    }*/
+    //by blockCellViewModel.userRole.collectAsState()
     //val listOfBlocks by blockCellViewModel.listOfBlocks.collectAsState()
     val listOfBlocksWithCells by blockCellViewModel.listOfBlocksWithCells.collectAsState()
 
@@ -133,7 +134,7 @@ fun BlockCellScreen(
     Scaffold(
         //if (userRole != "Collector")
         floatingActionButton = {
-            if(userRole != "Collector") {
+            if(blockCellViewModel.getManageBlockCellsAccess()/*userRole != "Collector"*/) {
                 IconButton(
                     onClick = {
                         //I want the dialog to show when this button is clicked
@@ -225,7 +226,7 @@ fun BlockCellScreen(
                                 Text(text = "Are you sure you want to delete?")
                             }
                         }
-                        if(userRole != "Collector") {
+                        if(blockCellViewModel.getManageBlockCellsAccess()/*userRole != "Collector"*/) {
 
                             IconButton(onClick = {
                                 //show confirm delete dialog
