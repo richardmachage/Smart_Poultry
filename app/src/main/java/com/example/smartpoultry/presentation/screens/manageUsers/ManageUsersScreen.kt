@@ -94,7 +94,7 @@ fun ManageUsersScreen(
                     onDelete = {user->
                         manageUsersViewModel.onDeleteUser(userId = user.userId)
                     },
-                   // accessLevel = manageUsersViewModel.getAccessLevel()
+                    accessLevel = manageUsersViewModel.currentAccessLevel!!
                 )
             }
 
@@ -129,6 +129,7 @@ fun UserListItem(
             .fillMaxWidth()
             // .padding(start = 6.dp, end = 6.dp)
             .clickable {
+
                 onClick(user)
             }
             .background(

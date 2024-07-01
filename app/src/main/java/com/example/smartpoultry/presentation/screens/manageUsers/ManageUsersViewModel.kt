@@ -9,12 +9,9 @@ import com.example.smartpoultry.data.dataSource.local.datastore.PreferencesRepo
 import com.example.smartpoultry.data.dataSource.remote.firebase.models.AccessLevel
 import com.example.smartpoultry.data.dataSource.remote.firebase.models.User
 import com.example.smartpoultry.domain.repository.FirebaseAuthRepository
-import com.example.smartpoultry.utils.EDIT_HEN_COUNT_ACCESS
-import com.example.smartpoultry.utils.EGG_COLLECTION_ACCESS
 import com.example.smartpoultry.utils.FARM_ID_KEY
-import com.example.smartpoultry.utils.MANAGE_BLOCKS_CELLS_ACCESS
-import com.example.smartpoultry.utils.MANAGE_USERS_ACCESS
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -23,8 +20,9 @@ import javax.inject.Inject
 class ManageUsersViewModel @Inject constructor(
     private val firebaseAuthRepository: FirebaseAuthRepository,
     private val preferencesRepo: PreferencesRepo,
-    firebaseAuth: FirebaseAuth
-): ViewModel(){
+    firebaseAuth: FirebaseAuth,
+    private val firebaseFirestore: FirebaseFirestore
+) : ViewModel() {
 
 
     /*objectives here
@@ -35,12 +33,12 @@ class ManageUsersViewModel @Inject constructor(
     val toastMessage = mutableStateOf("")
     val farmId = mutableStateOf("")
     val listOfUsers = mutableStateListOf<User>()
-    var currentUser : User? = null //user selected for editing
+    var currentUser: User? = null //user selected for editing
+    var currentAccessLevel: AccessLevel? = null
     val showBottomSheet = mutableStateOf(false)
     val updateListOfEmployees = mutableStateOf("")
     val isLoading = mutableStateOf(false)
-    val  myId = firebaseAuth.currentUser?.uid
-
+    val myId = firebaseAuth.currentUser?.uid
 
 
     init {
@@ -53,24 +51,37 @@ class ManageUsersViewModel @Inject constructor(
         }
     }
 
-    suspend fun updateListOfUsers(){
-       farmId.value = preferencesRepo.loadData(FARM_ID_KEY).toString()
+    suspend fun updateListOfUsers() {
+        farmId.value = preferencesRepo.loadData(FARM_ID_KEY).toString()
         val result = firebaseAuthRepository.getFarmEmployees(farmId.value)
         result.onSuccess {
             listOfUsers.clear()
             listOfUsers.addAll(it)
         }
     }
-    fun onListItemClicked(user : User ){
+
+    fun onListItemClicked(user: User) {
         //toastMessage.value = "email for this user is ${item.email}"
-        currentUser = user
-        showBottomSheet.value = true
+        // currentUser = user
+        viewModelScope.launch {
+            firebaseAuthRepository.getAccessLevel(user.userId)
+                .onSuccess {
+                    isLoading.value = true
+                    currentUser = user
+                    currentAccessLevel = it
+                    isLoading.value = false
+                    showBottomSheet.value = true
+                }
+                .onFailure {
+                    toastMessage.value = "Error : ${it.localizedMessage}"
+                }
+        }
     }
 
-    fun onDeleteUser(userId:String){
+    fun onDeleteUser(userId: String) {
         viewModelScope.launch {
             isLoading.value = true
-           val result = firebaseAuthRepository.deleteUser(userId = userId)
+            val result = firebaseAuthRepository.deleteUser(userId = userId)
             result.onSuccess {
                 //Todo implement on success
                 isLoading.value = false
@@ -86,15 +97,5 @@ class ManageUsersViewModel @Inject constructor(
                 Log.e("on delete user", it.stackTraceToString())
             }
         }
-    }
-
-    fun getAccessLevel(): AccessLevel {
-        return AccessLevel(
-            manageUsers = preferencesRepo.loadData(MANAGE_USERS_ACCESS).toBoolean(),
-            manageBlocksCells = preferencesRepo.loadData(MANAGE_BLOCKS_CELLS_ACCESS).toBoolean(),
-            editHenCount = preferencesRepo.loadData(EDIT_HEN_COUNT_ACCESS).toBoolean(),
-            collectEggs = preferencesRepo.loadData(EGG_COLLECTION_ACCESS).toBoolean()
-        )
-
     }
 }

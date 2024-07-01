@@ -28,6 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.example.smartpoultry.data.dataSource.remote.firebase.models.AccessLevel
 import com.example.smartpoultry.data.dataSource.remote.firebase.models.User
 import com.example.smartpoultry.presentation.composables.MyInputDialog
 import com.example.smartpoultry.presentation.composables.MyVerticalSpacer
@@ -40,7 +41,7 @@ import kotlinx.coroutines.launch
 fun ManageUsersBottomSheet(
     //showBottomSheet: Boolean,
     user: User,
-   // accessLevel: AccessLevel,
+    accessLevel: AccessLevel,
     sheetState: SheetState,
     scope: CoroutineScope,
     onDismiss: () -> Unit = {},
