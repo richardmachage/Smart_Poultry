@@ -183,7 +183,7 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
                                 async {
                                     firebaseFirestore.collection(USERS_COLLECTION)
                                         .document(user.userId).collection(ACCESS_LEVEL)
-                                        .document(firebaseUser.uid + "accessLevel")
+                                        .document(userResult.userId + "accessLevel")
                                         .get()
                                         .addOnSuccessListener {
                                             val accessLevel =
