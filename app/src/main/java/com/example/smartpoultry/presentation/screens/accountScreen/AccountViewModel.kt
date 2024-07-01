@@ -25,6 +25,10 @@ class AccountViewModel @Inject constructor(
     //val myDataStore = dataStore
     var isLoading = mutableStateOf(false)
     var toastMessage = mutableStateOf("")
+    var eggCollectionAccess = mutableStateOf(false)
+    var editHenCountAccess = mutableStateOf(false)
+    var manageUsersAccess = mutableStateOf(false)
+    var manageBlocksCellsAccess = mutableStateOf(false)
     val user = User(
         name = getUserName(),
         role = getUserRole(),

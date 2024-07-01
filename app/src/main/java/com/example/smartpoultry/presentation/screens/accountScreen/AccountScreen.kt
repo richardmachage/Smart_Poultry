@@ -297,10 +297,10 @@ fun AccountScreen(
 
                             }
                             if (expanded){
-                                AccessLevelItem(itemName = "Egg Collection", description = "Allows the user to be input to eggs collection records", isChecked = false, onChecked = {} )
-                                AccessLevelItem(itemName = "Edit Hen Count", description = "Allows the user to be edit the number of hens in a cell ", isChecked = false, onChecked = {} )
-                                AccessLevelItem(itemName = "Manage Blocks & Cells", description = "Allows the user to add, delete or rename a cell or a block.", isChecked = false, onChecked = {} )
-                                AccessLevelItem(itemName = "Manage other users", description = "This will allow the user to be able to register new users to the farm, delete other user accounts and also be able to change the access level of the other users", isChecked = false, onChecked = {} )
+                                AccessLevelItem(itemName = "Egg Collection", description = "Allows the user to be input to eggs collection records", isChecked = accountViewModel.eggCollectionAccess.value, onChecked = {accountViewModel.eggCollectionAccess.value = it } )
+                                AccessLevelItem(itemName = "Edit Hen Count", description = "Allows the user to be edit the number of hens in a cell ", isChecked = accountViewModel.editHenCountAccess.value, onChecked = { accountViewModel.editHenCountAccess.value = it} )
+                                AccessLevelItem(itemName = "Manage Blocks & Cells", description = "Allows the user to add, delete or rename a cell or a block.", isChecked =  accountViewModel.manageBlocksCellsAccess.value, onChecked = { accountViewModel.manageBlocksCellsAccess.value = it} )
+                                AccessLevelItem(itemName = "Manage other users", description = "This will allow the user to be able to register new users to the farm, delete other user accounts and also be able to change the access level of the other users", isChecked =  accountViewModel.manageUsersAccess.value, onChecked = { accountViewModel.manageUsersAccess.value = it} )
                                 }
                         }
 
