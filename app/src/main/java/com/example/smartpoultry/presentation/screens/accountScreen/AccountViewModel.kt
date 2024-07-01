@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.smartpoultry.data.dataSource.local.datastore.AppDataStore
 import com.example.smartpoultry.data.dataSource.local.datastore.PreferencesRepo
+import com.example.smartpoultry.data.dataSource.remote.firebase.models.AccessLevel
 import com.example.smartpoultry.data.dataSource.remote.firebase.models.User
 import com.example.smartpoultry.domain.repository.FirebaseAuthRepository
 import com.example.smartpoultry.utils.USER_EMAIL_KEY
@@ -54,11 +55,17 @@ class AccountViewModel @Inject constructor(
             }else{
                 val result = fireBaseAuthRepo.registerUser(
                     email = email,
-                    role = userRole,
+                    //role = userRole,
                     password = "0000000",
                     farmId = dataStore.farmID,
                     name = name,
-                    phone = phone
+                    phone = phone,
+                    accessLevel = AccessLevel(
+                        collectEggs = eggCollectionAccess.value,
+                        editHenCount = editHenCountAccess.value,
+                        manageBlocksCells  = manageBlocksCellsAccess.value,
+                        manageUsers = manageUsersAccess.value
+                    )
                 )
                 result.onSuccess {
                     isLoading.value = false

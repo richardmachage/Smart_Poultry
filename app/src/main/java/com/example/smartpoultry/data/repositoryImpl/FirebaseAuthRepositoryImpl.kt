@@ -42,7 +42,7 @@ var isPasswordReset: Boolean? = null
 class FirebaseAuthRepositoryImpl @Inject constructor(
     private val firebaseAuth: FirebaseAuth,
     private val firebaseFirestore: FirebaseFirestore,
-   // private val dataStore: AppDataStore,
+    // private val dataStore: AppDataStore,
     private val preferencesRepo: PreferencesRepo
 ) : FirebaseAuthRepository {
 
@@ -81,8 +81,8 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
                     firebaseFirestore.collection(USERS_COLLECTION)
                         .document(firebaseUser.uid)
                         .set(user)
-                        .addOnSuccessListener{
-                           //step 4: add the AccessLevel subcollection
+                        .addOnSuccessListener {
+                            //step 4: add the AccessLevel subcollection
                             CoroutineScope(Dispatchers.IO).launch {
                                 firebaseFirestore.collection(USERS_COLLECTION)
                                     .document(firebaseUser.uid).collection(ACCESS_LEVEL)
@@ -91,13 +91,10 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
                                         AccessLevel(
                                             collectEggs = true,
                                             editHenCount = true,
-                                            editBlockName = true,
-                                            addNewCell = true,
-                                            addNewBlock = true,
+                                            manageBlocksCells = true,
                                             manageUsers = true,
-                                            deleteCell = true,
-                                            deleteBlock = true
-                                        )
+
+                                            )
                                     )
                                     .await()
                             }
@@ -116,10 +113,10 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
     override suspend fun registerUser(
         email: String,
         password: String,
-        role: String,
         farmId: String,
         name: String,
-        phone: String
+        phone: String,
+        accessLevel: AccessLevel
     ): Result<Boolean> = coroutineScope {
 
         val deferred = async(Dispatchers.IO) {
@@ -133,7 +130,6 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
                         User(
                             userId = firebaseUser.uid,
                             email = email,
-                            role = role,
                             farmId = farmId,
                             phone = name,
                             name = phone,
@@ -144,20 +140,11 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
                         .set(user)
                         .addOnSuccessListener {
                             CoroutineScope(Dispatchers.IO).launch {
-                                firebaseFirestore.collection(USERS_COLLECTION).document(firebaseUser.uid).collection(ACCESS_LEVEL)
+                                firebaseFirestore.collection(USERS_COLLECTION)
+                                    .document(firebaseUser.uid).collection(ACCESS_LEVEL)
                                     .document(firebaseUser.uid + "accessLevel")
-                                    .set(
-                                        AccessLevel(
-                                            collectEggs = true,
-                                            editHenCount = true,
-                                            editBlockName = true,
-                                            addNewCell = false,
-                                            addNewBlock = false,
-                                            manageUsers = false,
-                                            deleteCell = false,
-                                            deleteBlock = false
-                                        )
-                                    ).await()
+                                    .set(accessLevel)
+                                    .await()
                             }
                         }
                         .await()
@@ -213,18 +200,21 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
                                 firebaseFirestore
                                     .collection(FARMS_COLLECTION).document(it.farmId)
                                     .get()
-                                    .addOnSuccessListener {documentSnapshot->
+                                    .addOnSuccessListener { documentSnapshot ->
                                         //farm is retrieved
                                         val farm = documentSnapshot.toObject(Farm::class.java)
                                         farm?.let {
                                             //save farm details to local
                                             preferencesRepo.saveData(FARM_NAME_KEY, farm.name)
-                                            preferencesRepo.saveData(FARM_SUPER_USER_EMAIL, farm.name)
+                                            preferencesRepo.saveData(
+                                                FARM_SUPER_USER_EMAIL,
+                                                farm.name
+                                            )
 
                                         }
 
                                     }
-                                    .addOnFailureListener{
+                                    .addOnFailureListener {
 
                                     }
                             }
