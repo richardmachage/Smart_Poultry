@@ -8,11 +8,15 @@ import com.example.smartpoultry.data.dataSource.remote.firebase.models.Farm
 import com.example.smartpoultry.data.dataSource.remote.firebase.models.User
 import com.example.smartpoultry.domain.repository.FirebaseAuthRepository
 import com.example.smartpoultry.utils.ACCESS_LEVEL
+import com.example.smartpoultry.utils.EDIT_HEN_COUNT_ACCESS
+import com.example.smartpoultry.utils.EGG_COLLECTION_ACCESS
 import com.example.smartpoultry.utils.FARMS_COLLECTION
 import com.example.smartpoultry.utils.FARM_ID_KEY
 import com.example.smartpoultry.utils.FARM_NAME_KEY
 import com.example.smartpoultry.utils.FARM_SUPER_USER_EMAIL
 import com.example.smartpoultry.utils.IS_PASSWORD_RESET_KEY
+import com.example.smartpoultry.utils.MANAGE_BLOCKS_CELLS_ACCESS
+import com.example.smartpoultry.utils.MANAGE_USERS_ACCESS
 import com.example.smartpoultry.utils.USERS_COLLECTION
 import com.example.smartpoultry.utils.USER_EMAIL_KEY
 import com.example.smartpoultry.utils.USER_NAME_KEY
@@ -175,48 +179,103 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
                         .addOnSuccessListener { documentSnapshot ->
                             val user = documentSnapshot.toObject(User::class.java)
                             //check status of password reset
-                            user?.let {
-                                //then also save to local
-                                preferencesRepo.saveData(
-                                    IS_PASSWORD_RESET_KEY,
-                                    it.passwordReset.toString()
-                                )
+                            user?.let { userResult ->
+                                async {
+                                    firebaseFirestore.collection(USERS_COLLECTION)
+                                        .document(user.userId).collection(ACCESS_LEVEL)
+                                        .document(firebaseUser.uid + "accessLevel")
+                                        .get()
+                                        .addOnSuccessListener {
+                                            val accessLevel =
+                                                documentSnapshot.toObject(AccessLevel::class.java)
+                                            accessLevel?.let { accessLevelResult ->
+                                                //Save evrything to local
+                                                preferencesRepo.saveData(
+                                                    IS_PASSWORD_RESET_KEY,
+                                                    userResult.passwordReset.toString()
+                                                )
 
-                                //Farm Id
-                                preferencesRepo.saveData(FARM_ID_KEY, it.farmId)
-                                Log.d("Farm", "saving farm to shared preferences: ${user?.farmId}")
+                                                //Farm Id
+                                                preferencesRepo.saveData(
+                                                    FARM_ID_KEY,
+                                                    userResult.farmId
+                                                )
 
-                                //user name
-                                preferencesRepo.saveData(USER_NAME_KEY, it.name)
+                                                //user name
+                                                preferencesRepo.saveData(
+                                                    USER_NAME_KEY,
+                                                    userResult.name
+                                                )
 
-                                //user email
-                                preferencesRepo.saveData(USER_EMAIL_KEY, it.email)
-                                //user phone
-                                preferencesRepo.saveData(USER_PHONE_KEY, it.phone)
-                                //user role
-                                preferencesRepo.saveData(USER_ROLE_KEY, it.role)
+                                                //user email
+                                                preferencesRepo.saveData(
+                                                    USER_EMAIL_KEY,
+                                                    userResult.email
+                                                )
+                                                //user phone
+                                                preferencesRepo.saveData(
+                                                    USER_PHONE_KEY,
+                                                    userResult.phone
+                                                )
+                                                //user AccessLevels
+                                                preferencesRepo.saveData(
+                                                    EGG_COLLECTION_ACCESS,
+                                                    accessLevelResult.collectEggs.toString()
+                                                )
+                                                preferencesRepo.saveData(
+                                                    EDIT_HEN_COUNT_ACCESS,
+                                                    accessLevelResult.editHenCount.toString()
+                                                )
+                                                preferencesRepo.saveData(
+                                                    MANAGE_USERS_ACCESS,
+                                                    accessLevelResult.manageUsers.toString()
+                                                )
+                                                preferencesRepo.saveData(
+                                                    MANAGE_BLOCKS_CELLS_ACCESS,
+                                                    accessLevelResult.manageBlocksCells.toString()
+                                                )
 
-                                //get the farm
-                                firebaseFirestore
-                                    .collection(FARMS_COLLECTION).document(it.farmId)
-                                    .get()
-                                    .addOnSuccessListener { documentSnapshot ->
-                                        //farm is retrieved
-                                        val farm = documentSnapshot.toObject(Farm::class.java)
-                                        farm?.let {
-                                            //save farm details to local
-                                            preferencesRepo.saveData(FARM_NAME_KEY, farm.name)
-                                            preferencesRepo.saveData(
-                                                FARM_SUPER_USER_EMAIL,
-                                                farm.name
-                                            )
 
+                                                //get the farm
+                                                async {
+                                                    firebaseFirestore
+                                                        .collection(FARMS_COLLECTION)
+                                                        .document(userResult.farmId)
+                                                        .get()
+                                                        .addOnSuccessListener { documentSnapshot ->
+                                                            //farm is retrieved
+                                                            val farm =
+                                                                documentSnapshot.toObject(Farm::class.java)
+                                                            farm?.let {
+                                                                //save farm details to local
+                                                                preferencesRepo.saveData(
+                                                                    FARM_NAME_KEY,
+                                                                    farm.name
+                                                                )
+                                                                preferencesRepo.saveData(
+                                                                    FARM_SUPER_USER_EMAIL,
+                                                                    farm.name
+                                                                )
+
+                                                            }
+
+                                                        }
+                                                        .addOnFailureListener {
+                                                            Throwable(it)
+                                                        }
+                                                        .await()
+
+                                                }
+
+                                            }
                                         }
+                                        .addOnFailureListener {
+                                            Throwable(it)
+                                        }
+                                        .await()
+                                }
 
-                                    }
-                                    .addOnFailureListener {
-
-                                    }
+                                //then also save to local
                             }
 
                         }
