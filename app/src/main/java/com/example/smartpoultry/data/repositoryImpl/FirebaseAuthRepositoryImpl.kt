@@ -264,7 +264,6 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
                                                             Throwable(it)
                                                         }
                                                         .await()
-
                                                 }
 
                                             }

@@ -70,9 +70,6 @@ fun AccountScreen(
 ) {
     val accountViewModel = hiltViewModel<AccountViewModel>()
     val context = LocalContext.current
-    val userRole by remember {
-        mutableStateOf(accountViewModel.user.role)
-    }//accountViewModel.userRole.collectAsState()
     val userName by remember {
         mutableStateOf(accountViewModel.user.name)
     }//accountViewModel.userName.collectAsState()
@@ -141,11 +138,11 @@ fun AccountScreen(
                             color = MaterialTheme.colorScheme.primary,
                             modifier = Modifier.padding(bottom = 8.dp)
                         )
-                        UserInfoRow(
+                        /*UserInfoRow(
                             ImageVector.vectorResource(id = R.drawable.verified_user),
                             label = "Role",
                             value = userRole
-                        )
+                        )*/
                         Spacer(modifier = Modifier.height(16.dp))
                         //Name
                         var showNameDialog by remember { mutableStateOf(false) }
@@ -333,7 +330,8 @@ fun AccountScreen(
                         }
                     }
                 }
-                if (userRole == "Director" || userRole == "Super") {
+
+                if (accountViewModel.accessLevel.value.manageUsers) {
                     Spacer(modifier = Modifier.height(24.dp))
                     ActionButton(
                         text = "Register a new user",
@@ -348,8 +346,6 @@ fun AccountScreen(
                                 ManageUsersScreenDestination
                             )
                         })
-
-
                 }
             }
 

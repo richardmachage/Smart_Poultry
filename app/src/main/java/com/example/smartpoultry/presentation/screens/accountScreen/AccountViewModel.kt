@@ -8,10 +8,14 @@ import com.example.smartpoultry.data.dataSource.local.datastore.PreferencesRepo
 import com.example.smartpoultry.data.dataSource.remote.firebase.models.AccessLevel
 import com.example.smartpoultry.data.dataSource.remote.firebase.models.User
 import com.example.smartpoultry.domain.repository.FirebaseAuthRepository
+import com.example.smartpoultry.utils.EDIT_HEN_COUNT_ACCESS
+import com.example.smartpoultry.utils.EGG_COLLECTION_ACCESS
+import com.example.smartpoultry.utils.MANAGE_BLOCKS_CELLS_ACCESS
+import com.example.smartpoultry.utils.MANAGE_USERS_ACCESS
 import com.example.smartpoultry.utils.USER_EMAIL_KEY
 import com.example.smartpoultry.utils.USER_NAME_KEY
 import com.example.smartpoultry.utils.USER_PHONE_KEY
-import com.example.smartpoultry.utils.USER_ROLE_KEY
+//import com.example.smartpoultry.utils.USER_ROLE_KEY
 import com.example.smartpoultry.utils.isValidEmail
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -30,29 +34,39 @@ class AccountViewModel @Inject constructor(
     var editHenCountAccess = mutableStateOf(false)
     var manageUsersAccess = mutableStateOf(false)
     var manageBlocksCellsAccess = mutableStateOf(false)
+    var accessLevel = mutableStateOf(getAccessLevel())
     val user = User(
         name = getUserName(),
-        role = getUserRole(),
+        // role = getUserRole(),
         email = getUserEmail(),
         phone = getUserPhone(),
     )
 
     private fun getUserName() = preferencesRepo.loadData(USER_NAME_KEY)!!
-    private fun getUserRole() = preferencesRepo.loadData(USER_ROLE_KEY)!!
+
+    // private fun getUserRole() = preferencesRepo.loadData(USER_ROLE_KEY)!!
     private fun getUserEmail() = preferencesRepo.loadData(USER_EMAIL_KEY)!!
     private fun getUserPhone() = preferencesRepo.loadData(USER_PHONE_KEY)!!
+    private fun getAccessLevel(): AccessLevel {
+        return AccessLevel(
+            manageUsers = preferencesRepo.loadData(MANAGE_USERS_ACCESS).toBoolean(),
+            manageBlocksCells = preferencesRepo.loadData(MANAGE_BLOCKS_CELLS_ACCESS).toBoolean(),
+            editHenCount = preferencesRepo.loadData(EDIT_HEN_COUNT_ACCESS).toBoolean(),
+            collectEggs = preferencesRepo.loadData(EGG_COLLECTION_ACCESS).toBoolean()
+        )
 
+    }
 
-    fun registerUser(userRole: String, email: String, name: String,phone: String) {
+    fun registerUser(userRole: String, email: String, name: String, phone: String) {
         viewModelScope.launch {
             isLoading.value = true
-            if (!isValidEmail(email)){
+            if (!isValidEmail(email)) {
                 isLoading.value = false
                 toastMessage.value = "Invalid email"
-            }else if (userRole.isBlank()){
+            } else if (userRole.isBlank()) {
                 isLoading.value = false
                 toastMessage.value = "Please select a role"
-            }else{
+            } else {
                 val result = fireBaseAuthRepo.registerUser(
                     email = email,
                     //role = userRole,
@@ -63,7 +77,7 @@ class AccountViewModel @Inject constructor(
                     accessLevel = AccessLevel(
                         collectEggs = eggCollectionAccess.value,
                         editHenCount = editHenCountAccess.value,
-                        manageBlocksCells  = manageBlocksCellsAccess.value,
+                        manageBlocksCells = manageBlocksCellsAccess.value,
                         manageUsers = manageUsersAccess.value
                     )
                 )
@@ -120,7 +134,7 @@ class AccountViewModel @Inject constructor(
     }
 
     fun resetPassword(email: String) {
-        viewModelScope.launch{
+        viewModelScope.launch {
             val result = fireBaseAuthRepo.resetPassword(email)
 
         }
