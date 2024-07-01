@@ -37,27 +37,6 @@ class AccountViewModel @Inject constructor(
     private fun getUserEmail() = preferencesRepo.loadData(USER_EMAIL_KEY)!!
     private fun getUserPhone() = preferencesRepo.loadData(USER_PHONE_KEY)!!
 
-   /* val userRole = dataStore.readData(USER_ROLE_KEY).stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.Eagerly,
-        initialValue = ""
-    )
-    val userName = dataStore.readData(USER_NAME_KEY).stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.Eagerly,
-        initialValue = ""
-    )
-
-    val userEmail = dataStore.readData(USER_EMAIL_KEY).stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.Eagerly,
-        initialValue = ""
-    )
-    val userPhone = dataStore.readData(USER_PHONE_KEY).stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.Eagerly,
-        initialValue = ""
-    )*/
 
     fun registerUser(userRole: String, email: String, name: String,phone: String) {
         viewModelScope.launch {
@@ -114,9 +93,6 @@ class AccountViewModel @Inject constructor(
         }
     }
 
-    fun changeUserRole(role: String) {
-
-    }
 
     fun changePhoneNumber(phoneNumber: String) {
         viewModelScope.launch {

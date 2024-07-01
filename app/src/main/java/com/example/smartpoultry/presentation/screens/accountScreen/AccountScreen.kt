@@ -17,6 +17,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Person
@@ -40,6 +41,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
@@ -49,6 +51,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.smartpoultry.R
+import com.example.smartpoultry.presentation.composables.MyBorderedColumn
 import com.example.smartpoultry.presentation.composables.MyCircularProgressBar
 import com.example.smartpoultry.presentation.composables.MyEditTextClear
 import com.example.smartpoultry.presentation.composables.MyInputDialog
@@ -277,6 +280,26 @@ fun AccountScreen(
                         UserTypeDropDownMenu(onItemClick = { userRole ->
                             userRoleReg = userRole
                         })
+
+                        var expanded by remember { mutableStateOf(false) }
+
+                        MyBorderedColumn {
+                            Row (modifier = Modifier.padding(8.dp), horizontalArrangement = Arrangement.SpaceBetween){
+                                Text(text = "Specify user access Level")
+                                IconButton(onClick = { expanded = !expanded}) {
+                                    Icon(
+                                        Icons.Filled.ArrowDropDown,
+                                        null,
+                                        Modifier.rotate(if (expanded) 180f else 0f)
+                                    )
+                                }
+
+                            }
+                            if (expanded){
+
+                            }
+                        }
+
                         MyEditTextClear( // email input
                             label = "Email address",
                             iconLeading = Icons.Default.Email,
