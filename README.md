@@ -1,5 +1,5 @@
 # Smart Poultry
-Smart Poultry is an innovative mobile application designed to transform the management of poultry farms that utilize a cage system.  
+Smart Poultry is an innovative mobile application designed to transform the management of poultry farms that are organized using battery a cage system.  
 By digitizing crucial farm operations, Smart Poultry enables farmers to track egg production and manage the inventory of chickens in real-time efficiently.  
 This tool aims to simplify farm management tasks, enhance productivity, and provide insights into farm operations.
 
