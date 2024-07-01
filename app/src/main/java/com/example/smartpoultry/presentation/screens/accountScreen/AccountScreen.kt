@@ -57,7 +57,7 @@ import com.example.smartpoultry.presentation.composables.MyCircularProgressBar
 import com.example.smartpoultry.presentation.composables.MyEditTextClear
 import com.example.smartpoultry.presentation.composables.MyInputDialog
 import com.example.smartpoultry.presentation.composables.MyOutlineTextFiled
-import com.example.smartpoultry.presentation.composables.UserTypeDropDownMenu
+import com.example.smartpoultry.presentation.composables.MyVerticalSpacer
 import com.example.smartpoultry.presentation.destinations.ManageUsersScreenDestination
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -278,31 +278,9 @@ fun AccountScreen(
                 ) {
                     Column {
 
-                        UserTypeDropDownMenu(onItemClick = { userRole ->
+                        /*UserTypeDropDownMenu(onItemClick = { userRole ->
                             userRoleReg = userRole
-                        })
-
-                        var expanded by remember { mutableStateOf(false) }
-
-                        MyBorderedColumn {
-                            Row (modifier = Modifier.padding(8.dp), horizontalArrangement = Arrangement.SpaceBetween){
-                                Text(text = "Specify user access Level")
-                                IconButton(onClick = { expanded = !expanded}) {
-                                    Icon(
-                                        Icons.Filled.ArrowDropDown,
-                                        null,
-                                        Modifier.rotate(if (expanded) 180f else 0f)
-                                    )
-                                }
-
-                            }
-                            if (expanded){
-                                AccessLevelItem(itemName = "Egg Collection", description = "Allows the user to be input to eggs collection records", isChecked = accountViewModel.eggCollectionAccess.value, onChecked = {accountViewModel.eggCollectionAccess.value = it } )
-                                AccessLevelItem(itemName = "Edit Hen Count", description = "Allows the user to be edit the number of hens in a cell ", isChecked = accountViewModel.editHenCountAccess.value, onChecked = { accountViewModel.editHenCountAccess.value = it} )
-                                AccessLevelItem(itemName = "Manage Blocks & Cells", description = "Allows the user to add, delete or rename a cell or a block.", isChecked =  accountViewModel.manageBlocksCellsAccess.value, onChecked = { accountViewModel.manageBlocksCellsAccess.value = it} )
-                                AccessLevelItem(itemName = "Manage other users", description = "This will allow the user to be able to register new users to the farm, delete other user accounts and also be able to change the access level of the other users", isChecked =  accountViewModel.manageUsersAccess.value, onChecked = { accountViewModel.manageUsersAccess.value = it} )
-                                }
-                        }
+                        })*/
 
                         MyEditTextClear( // email input
                             label = "Email address",
@@ -331,6 +309,28 @@ fun AccountScreen(
                                 userEmailReg = text.trim()
                             }
                         )
+
+                        MyVerticalSpacer(height = 10)
+                        var expanded by remember { mutableStateOf(false) }
+                        MyBorderedColumn {
+                            Row (modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically,horizontalArrangement = Arrangement.SpaceBetween){
+                                Text(text = "Specify access Level")
+                                IconButton(onClick = { expanded = !expanded}) {
+                                    Icon(
+                                        Icons.Filled.ArrowDropDown,
+                                        null,
+                                        Modifier.rotate(if (expanded) 180f else 0f)
+                                    )
+                                }
+
+                            }
+                            if (expanded){
+                                AccessLevelItem(itemName = "Egg Collection", description = "Allows the user to be able to input the daily eggs collection records", isChecked = accountViewModel.eggCollectionAccess.value, onChecked = {accountViewModel.eggCollectionAccess.value = it } )
+                                AccessLevelItem(itemName = "Edit Hen Count", description = "Allows the user to be edit the number of hens in a cell ", isChecked = accountViewModel.editHenCountAccess.value, onChecked = { accountViewModel.editHenCountAccess.value = it} )
+                                AccessLevelItem(itemName = "Manage Blocks & Cells", description = "Allows the user to add, delete or rename a cell or a block.", isChecked =  accountViewModel.manageBlocksCellsAccess.value, onChecked = { accountViewModel.manageBlocksCellsAccess.value = it} )
+                                AccessLevelItem(itemName = "Manage other users", description = "This will allow the user to be able to register new users to the farm, delete other user accounts and also be able to change the access level of the other users", isChecked =  accountViewModel.manageUsersAccess.value, onChecked = { accountViewModel.manageUsersAccess.value = it} )
+                            }
+                        }
                     }
                 }
                 if (userRole == "Director" || userRole == "Super") {
