@@ -17,5 +17,6 @@ interface FirebaseAuthRepository {
 //    suspend fun getFarm() : String
     suspend fun getFarmEmployees (farmId: String): Result<List<User>>
     suspend fun deleteUser(userId:String):Result<String>
+    suspend fun getAccessLevel(userId: String) : Result<AccessLevel>
     fun logOut()
 }

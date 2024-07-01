@@ -6,9 +6,15 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.smartpoultry.data.dataSource.local.datastore.PreferencesRepo
+import com.example.smartpoultry.data.dataSource.remote.firebase.models.AccessLevel
 import com.example.smartpoultry.data.dataSource.remote.firebase.models.User
 import com.example.smartpoultry.domain.repository.FirebaseAuthRepository
+import com.example.smartpoultry.utils.EDIT_HEN_COUNT_ACCESS
+import com.example.smartpoultry.utils.EGG_COLLECTION_ACCESS
 import com.example.smartpoultry.utils.FARM_ID_KEY
+import com.example.smartpoultry.utils.MANAGE_BLOCKS_CELLS_ACCESS
+import com.example.smartpoultry.utils.MANAGE_USERS_ACCESS
+import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -16,7 +22,8 @@ import javax.inject.Inject
 @HiltViewModel
 class ManageUsersViewModel @Inject constructor(
     private val firebaseAuthRepository: FirebaseAuthRepository,
-    private val preferencesRepo: PreferencesRepo
+    private val preferencesRepo: PreferencesRepo,
+    firebaseAuth: FirebaseAuth
 ): ViewModel(){
 
 
@@ -32,7 +39,7 @@ class ManageUsersViewModel @Inject constructor(
     val showBottomSheet = mutableStateOf(false)
     val updateListOfEmployees = mutableStateOf("")
     val isLoading = mutableStateOf(false)
-
+    val  myId = firebaseAuth.currentUser?.uid
 
 
 
@@ -81,4 +88,13 @@ class ManageUsersViewModel @Inject constructor(
         }
     }
 
+    fun getAccessLevel(): AccessLevel {
+        return AccessLevel(
+            manageUsers = preferencesRepo.loadData(MANAGE_USERS_ACCESS).toBoolean(),
+            manageBlocksCells = preferencesRepo.loadData(MANAGE_BLOCKS_CELLS_ACCESS).toBoolean(),
+            editHenCount = preferencesRepo.loadData(EDIT_HEN_COUNT_ACCESS).toBoolean(),
+            collectEggs = preferencesRepo.loadData(EGG_COLLECTION_ACCESS).toBoolean()
+        )
+
+    }
 }

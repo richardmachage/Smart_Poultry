@@ -26,15 +26,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.example.smartpoultry.R
 import com.example.smartpoultry.data.dataSource.remote.firebase.models.User
 import com.example.smartpoultry.presentation.composables.MyInputDialog
 import com.example.smartpoultry.presentation.composables.MyVerticalSpacer
-import com.example.smartpoultry.presentation.composables.UserTypeDropDownMenu
 import com.example.smartpoultry.presentation.screens.accountScreen.UserInfoRow
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -44,6 +40,7 @@ import kotlinx.coroutines.launch
 fun ManageUsersBottomSheet(
     //showBottomSheet: Boolean,
     user: User,
+   // accessLevel: AccessLevel,
     sheetState: SheetState,
     scope: CoroutineScope,
     onDismiss: () -> Unit = {},
@@ -86,7 +83,7 @@ fun ManageUsersBottomSheet(
             }
 
             //user role
-            var shoeEditRole by remember { mutableStateOf(false) }
+            /*var shoeEditRole by remember { mutableStateOf(false) }
             UserInfoRow(
                 icon = ImageVector.vectorResource(id = R.drawable.verified_user),
                 label = "Role",
@@ -97,7 +94,7 @@ fun ManageUsersBottomSheet(
 
             if (shoeEditRole) {
                 UserTypeDropDownMenu(onItemClick = { shoeEditRole = false })
-            }
+            }*/
 
             MyVerticalSpacer(height = 10)
 

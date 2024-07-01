@@ -93,7 +93,8 @@ fun ManageUsersScreen(
                     onDismiss = {showBottomSheet = false},
                     onDelete = {user->
                         manageUsersViewModel.onDeleteUser(userId = user.userId)
-                    }
+                    },
+                   // accessLevel = manageUsersViewModel.getAccessLevel()
                 )
             }
 
@@ -101,7 +102,7 @@ fun ManageUsersScreen(
                 modifier = Modifier.padding(it)
             ) {
 
-                items(manageUsersViewModel.listOfUsers.filter {user -> user.role.lowercase() != "super"   }){user->
+                items(manageUsersViewModel.listOfUsers.filter {user -> user.userId.lowercase() != manageUsersViewModel.myId   }){user->
                    // UserItem()
                     UserListItem(
                         user = user,
@@ -179,14 +180,14 @@ fun UserListItem(
                 style = MaterialTheme.typography.bodySmall,
                 fontSize = 14.sp
             )
-            Text(
+            /*Text(
                 text = user.role,
                 style = MaterialTheme.typography.bodySmall.copy(
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.secondary
                 ),
                 fontSize = 14.sp
-            )
+            )*/
         }
     }
     MyVerticalSpacer(height = 5)

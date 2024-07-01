@@ -21,7 +21,6 @@ import com.example.smartpoultry.utils.USERS_COLLECTION
 import com.example.smartpoultry.utils.USER_EMAIL_KEY
 import com.example.smartpoultry.utils.USER_NAME_KEY
 import com.example.smartpoultry.utils.USER_PHONE_KEY
-import com.example.smartpoultry.utils.USER_ROLE_KEY
 import com.google.android.play.integrity.internal.h
 import com.google.firebase.Firebase
 import com.google.firebase.auth.EmailAuthCredential
@@ -78,7 +77,6 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
                         name = userName,
                         phone = phone,
                         email = email,
-                        role = role,
                         farmId = newFarm.id,
                         passwordReset = true
                     )
@@ -443,6 +441,31 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
 
 
         return completableDeferred.await()
+    }
+
+    override suspend fun getAccessLevel(userId: String): Result<AccessLevel> {
+          return try {
+              //var accessLevel = AccessLevel()
+              val task  = firebaseFirestore.collection(USERS_COLLECTION).document(userId)
+                  .collection(ACCESS_LEVEL).document(userId + "accessLevel")
+                  .get()
+
+              val docSnapShot = task.await()
+
+              if (task.isSuccessful) {
+                  val accessLevel = docSnapShot.toObject(AccessLevel::class.java)
+                  if (accessLevel != null) {
+                      Result.success(accessLevel)
+                  } else {
+                      Result.failure(Exception("AccessLevel is null"))
+                  }
+              } else {
+                  Result.failure(task.exception ?: Exception("Unknown Firestore error"))
+              }
+
+        }catch (e : Exception){
+            Result.failure(e)
+        }
     }
 
     override fun logOut() {
