@@ -51,6 +51,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.smartpoultry.R
+import com.example.smartpoultry.presentation.composables.AccessLevelItem
 import com.example.smartpoultry.presentation.composables.MyBorderedColumn
 import com.example.smartpoultry.presentation.composables.MyCircularProgressBar
 import com.example.smartpoultry.presentation.composables.MyEditTextClear
@@ -296,8 +297,11 @@ fun AccountScreen(
 
                             }
                             if (expanded){
-
-                            }
+                                AccessLevelItem(itemName = "Egg Collection", description = "Allows the user to be input to eggs collection records", isChecked = false, onChecked = {} )
+                                AccessLevelItem(itemName = "Edit Hen Count", description = "Allows the user to be edit the number of hens in a cell ", isChecked = false, onChecked = {} )
+                                AccessLevelItem(itemName = "Manage Blocks & Cells", description = "Allows the user to add, delete or rename a cell or a block.", isChecked = false, onChecked = {} )
+                                AccessLevelItem(itemName = "Manage other users", description = "This will allow the user to be able to register new users to the farm, delete other user accounts and also be able to change the access level of the other users", isChecked = false, onChecked = {} )
+                                }
                         }
 
                         MyEditTextClear( // email input
