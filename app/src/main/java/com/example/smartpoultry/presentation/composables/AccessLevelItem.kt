@@ -57,8 +57,13 @@ fun AccessLevelItem(
                 MyInputDialog(
                     showDialog = showDialog,
                     title = "Description",
-                    onConfirm = { showDialog = false },
-                    onDismiss = { showDialog = false }) {
+                    onConfirm = {
+                        onChecked(true)
+                        showDialog = false
+                                },
+                    onDismiss = {
+                        onChecked(false)
+                        showDialog = false }) {
                     Text(text = description)
                 }
 
