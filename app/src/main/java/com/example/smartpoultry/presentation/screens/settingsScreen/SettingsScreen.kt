@@ -33,16 +33,20 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.smartpoultry.R
 import com.example.smartpoultry.domain.permissions.POST_NOTIFICATIONS
 import com.example.smartpoultry.domain.permissions.checkIfPermissionGranted
 import com.example.smartpoultry.presentation.NavGraphs
 import com.example.smartpoultry.presentation.composables.MyBorderedColumn
+import com.example.smartpoultry.presentation.composables.MyHorizontalSpacer
 import com.example.smartpoultry.presentation.composables.MyInputDialog
 import com.example.smartpoultry.presentation.composables.MyOutlineTextFiled
 import com.example.smartpoultry.presentation.composables.MyVerticalSpacer
@@ -393,6 +397,8 @@ fun SettingsScreen(
                     onClick = {
                         showLogOutDialog = true
                     }) {
+                    Icon(imageVector = ImageVector.vectorResource(id = R.drawable.ic_logout), contentDescription ="log out" )
+                    MyHorizontalSpacer(width = 10)
                     Text(text = "Log Out")
                 }
             }
