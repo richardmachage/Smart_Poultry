@@ -9,6 +9,7 @@ import com.example.smartpoultry.data.dataSource.local.room.entities.cells.Cells
 import com.example.smartpoultry.domain.repository.BlocksRepository
 import com.example.smartpoultry.domain.repository.CellsRepository
 import com.example.smartpoultry.presentation.uiModels.BlockItem
+import com.example.smartpoultry.utils.EDIT_HEN_COUNT_ACCESS
 import com.example.smartpoultry.utils.MANAGE_BLOCKS_CELLS_ACCESS
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
@@ -49,7 +50,6 @@ class BlockCellViewModel @Inject constructor(
 
     //fun getUserRole() = preferencesRepo.loadData(USER_ROLE_KEY)!!
     fun getManageBlockCellsAccess() = preferencesRepo.loadData(MANAGE_BLOCKS_CELLS_ACCESS).toBoolean()
-
     fun onAddNewBlock(blockItem: BlockItem) {
         viewModelScope.launch {
             //Create the new Block first

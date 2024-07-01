@@ -30,7 +30,7 @@ fun MainScreen(
 
         Scaffold (
             topBar = { MyTopAppBar(navController, navigator) },
-            bottomBar = { MyBottomNavBar(navController, mainViewModel.getUserRole()) }
+            bottomBar = { MyBottomNavBar(navController, mainViewModel.getEggCollectionAccess()) }
         ){ paddingValues ->
             BottomNavGraph(
                 modifier = Modifier

@@ -12,7 +12,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -27,10 +26,10 @@ import com.example.smartpoultry.presentation.uiModels.BottomNavigationItem
 @Composable
 fun MyBottomNavBar(
     navController: NavController,
-    userRole : String
+    eggCollectionAccess : Boolean
 ) {
 
-    val items = if (userRole == "Collector" || userRole == "Manager" || userRole == "Super")listOf<BottomNavigationItem>(
+    val items = if (eggCollectionAccess/*userRole == "Collector" || userRole == "Manager" || userRole == "Super"*/)listOf<BottomNavigationItem>(
         BottomNavigationItem(
             route = HomeScreenDestination.route,
             title = "Home",

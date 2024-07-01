@@ -57,9 +57,10 @@ fun CellsScreen(
     block : BlockParse
 ) {
     val cellsViewModel = hiltViewModel<CellsViewModel>()
-    val userRole by remember {
+    /*val userRole by remember {
         mutableStateOf(cellsViewModel.getUserRole())
-    }//by cellsViewModel.userRole.collectAsState()
+    }*/
+    //by cellsViewModel.userRole.collectAsState()
     val listOfCells by remember {
         cellsViewModel.getCellsForBLock(block.blockId)
     }.collectAsState()
@@ -164,7 +165,7 @@ fun CellsScreen(
                 }
             )},
         floatingActionButton = {
-            if(userRole != "Collector") {
+            if(cellsViewModel.getManageBlockCellsAccess()/*userRole != "Collector"*/) {
                 IconButton(
                     onClick = {
                         showAddCellDialog = true
@@ -228,8 +229,10 @@ fun CellsScreen(
                             Column(
                                 modifier = Modifier
                                     .clickable {
-                                        cellsViewModel.setTheSelectedCell(item)
-                                        cellsViewModel.showDialog.value = true
+                                        if (cellsViewModel.getEditHenCountAccess()){
+                                            cellsViewModel.setTheSelectedCell(item)
+                                            cellsViewModel.showDialog.value = true
+                                        }
                                     }
                                     .fillMaxWidth(0.9f)
 
@@ -273,7 +276,7 @@ fun CellsScreen(
                                 }
                             }
 
-                            if(userRole != "Collector") {
+                            if(cellsViewModel.getManageBlockCellsAccess()/*userRole != "Collector"*/) {
 
                                 IconButton(
                                     onClick = {
