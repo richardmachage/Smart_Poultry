@@ -38,6 +38,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.smartpoultry.data.dataSource.remote.firebase.models.User
 import com.example.smartpoultry.presentation.composables.MyCircularProgressBar
 import com.example.smartpoultry.presentation.composables.MyHorizontalSpacer
@@ -45,6 +46,7 @@ import com.example.smartpoultry.presentation.composables.MyVerticalSpacer
 import com.example.smartpoultry.presentation.theme.SmartPoultryTheme
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Destination
@@ -96,8 +98,14 @@ fun ManageUsersScreen(
                     sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
                     scope = rememberCoroutineScope(),
                     onDismiss = {user, accessLevel, doUpdate->
-                        manageUsersViewModel.editAccessLevel(user, accessLevel)
-                        showBottomSheet = false
+                        if (doUpdate){
+                            manageUsersViewModel.viewModelScope.launch{
+                                if(manageUsersViewModel.editAccessLevel(user,accessLevel)) showBottomSheet = false  else showBottomSheet = true
+                            }
+                        }
+                        else {
+                            showBottomSheet = false
+                        }
                     },
                     onDelete = { user ->
                         manageUsersViewModel.onDeleteUser(userId = user.userId)
