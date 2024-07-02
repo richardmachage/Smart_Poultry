@@ -1,14 +1,11 @@
 package com.example.smartpoultry.presentation.screens.manageUsers
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Person
@@ -17,7 +14,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SheetState
@@ -29,7 +25,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -76,7 +71,7 @@ fun ManageUsersBottomSheet(
             )
 
             //userName
-            MyVerticalSpacer(height = 20)
+            MyVerticalSpacer(height = 10)
             if (user.name.isNotBlank()) {
                 UserInfoRow(Icons.Default.Person, "name", value = user.name, false)
             }
@@ -86,43 +81,20 @@ fun ManageUsersBottomSheet(
             UserInfoRow(Icons.Default.Email, "Email", value = user.email, false)
 
             //userPhone
+            MyVerticalSpacer(height = 10)
             if (user.phone.isNotBlank()) {
                 UserInfoRow(Icons.Default.Phone, "Phone", value = user.phone, false)
             }
 
-            //user accessLevel
-            /*var shoeEditRole by remember { mutableStateOf(false) }
-            UserInfoRow(
-                icon = ImageVector.vectorResource(id = R.drawable.verified_user),
-                label = "Role",
-                value = user.role,
-                editable = true,
-                onEditClick = { shoeEditRole = !shoeEditRole }
-            )
+            MyVerticalSpacer(height = 10)
+            MyBorderedColumn(modifier = Modifier.padding(8.dp)) {
+                Text(text = "Access Level", modifier = Modifier.padding(8.dp))
 
-            if (shoeEditRole) {
-                UserTypeDropDownMenu(onItemClick = { shoeEditRole = false })
-            }*/
-
-
-            var expanded by remember { mutableStateOf(false) }
-            MyBorderedColumn {
-                Row (modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically,horizontalArrangement = Arrangement.SpaceBetween){
-                    Text(text = "Specify access Level")
-                    IconButton(onClick = { expanded = !expanded}) {
-                        Icon(
-                            Icons.Filled.ArrowDropDown,
-                            null,
-                            Modifier.rotate(if (expanded) 180f else 0f)
-                        )
-                    }
-                }
-                if (expanded){
                     AccessLevelItem(itemName = "Egg Collection", description = "Allows the user to be able to input the daily eggs collection records", isChecked = accessLevel.collectEggs, onChecked = {} )
                     AccessLevelItem(itemName = "Edit Hen Count", description = "Allows the user to be edit the number of hens in a cell ", isChecked = accessLevel.editHenCount, onChecked = { } )
                     AccessLevelItem(itemName = "Manage Blocks & Cells", description = "Allows the user to add, delete or rename a cell or a block.", isChecked =  accessLevel.manageBlocksCells, onChecked = { } )
                     AccessLevelItem(itemName = "Manage other users", description = "This will allow the user to be able to register new users to the farm, delete other user accounts and also be able to change the access level of the other users", isChecked =  accessLevel.manageUsers, onChecked = { } )
-                }
+
             }
             MyVerticalSpacer(height = 10)
 

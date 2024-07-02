@@ -50,21 +50,22 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 @Destination
 @Composable
 fun ManageUsersScreen(
-    navigator:DestinationsNavigator
-){
-    val manageUsersViewModel : ManageUsersViewModel = hiltViewModel()
+    navigator: DestinationsNavigator
+) {
+    val manageUsersViewModel: ManageUsersViewModel = hiltViewModel()
     val context = LocalContext.current
     var showBottomSheet by remember { manageUsersViewModel.showBottomSheet }
 
-    LaunchedEffect (manageUsersViewModel.toastMessage.value){
-        if (manageUsersViewModel.toastMessage.value.isNotBlank()){
-            Toast.makeText(context,manageUsersViewModel.toastMessage.value,Toast.LENGTH_SHORT).show()
+    LaunchedEffect(manageUsersViewModel.toastMessage.value) {
+        if (manageUsersViewModel.toastMessage.value.isNotBlank()) {
+            Toast.makeText(context, manageUsersViewModel.toastMessage.value, Toast.LENGTH_SHORT)
+                .show()
             manageUsersViewModel.toastMessage.value = ""
         }
     }
-    
+
     LaunchedEffect(manageUsersViewModel.updateListOfEmployees.value) {
-        if (manageUsersViewModel.updateListOfEmployees.value.isNotBlank()){
+        if (manageUsersViewModel.updateListOfEmployees.value.isNotBlank()) {
             manageUsersViewModel.updateListOfUsers()
             manageUsersViewModel.updateListOfEmployees.value = ""
         }
@@ -79,19 +80,26 @@ fun ManageUsersScreen(
                         IconButton(onClick = {
                             navigator.navigateUp()
                         }) {
-                            Icon(imageVector = Icons.AutoMirrored.Filled.ArrowBack, contentDescription ="back" )
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                                contentDescription = "back"
+                            )
                         }
                     }
-                )}
+                )
+            }
         ) {
             MyCircularProgressBar(isLoading = manageUsersViewModel.isLoading.value)
-            if (showBottomSheet){
+            if (showBottomSheet) {
                 ManageUsersBottomSheet(
                     user = manageUsersViewModel.selectedUser!!,
-                    sheetState = rememberModalBottomSheetState(),
+                    sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
                     scope = rememberCoroutineScope(),
-                    onDismiss = {showBottomSheet = false},
-                    onDelete = {user->
+                    onDismiss = {
+                        //TODO perform access level changes made
+                        showBottomSheet = false
+                    },
+                    onDelete = { user ->
                         manageUsersViewModel.onDeleteUser(userId = user.userId)
                     },
                     accessLevel = manageUsersViewModel.currentAccessLevel!!
@@ -102,13 +110,13 @@ fun ManageUsersScreen(
                 modifier = Modifier.padding(it)
             ) {
 
-                items(manageUsersViewModel.listOfUsers.filter {user -> user.email != manageUsersViewModel.getUserEmail()   })
-                {user->
-                   // UserItem()
-                    Text(text = "userId : ${user.userId} != ${manageUsersViewModel.myId}")
+                items(manageUsersViewModel.listOfUsers.filter { user -> user.email != manageUsersViewModel.getUserEmail() })
+                { user ->
+                    // UserItem()
+                    //Text(text = "userId : ${user.userId} != ${manageUsersViewModel.myId}")
                     UserListItem(
                         user = user,
-                        onClick = {userClicked->
+                        onClick = { userClicked ->
                             manageUsersViewModel.onListItemClicked(userClicked)
                         }
                     )
@@ -152,7 +160,8 @@ fun UserListItem(
                 .background(MaterialTheme.colorScheme.primary)
         ) {
             Text(
-                text = if (user.name.isNotBlank())user.name.first().uppercaseChar().toString() else user.email.first().uppercase(),
+                text = if (user.name.isNotBlank()) user.name.first().uppercaseChar()
+                    .toString() else user.email.first().uppercase(),
                 style = MaterialTheme.typography.bodyLarge.copy(
                     color = MaterialTheme.colorScheme.onPrimary,
                     fontWeight = FontWeight.Bold,
@@ -162,7 +171,7 @@ fun UserListItem(
             )
         }
         MyHorizontalSpacer(width = 16)
-       // Spacer(modifier = Modifier.width(16.dp))
+        // Spacer(modifier = Modifier.width(16.dp))
         Column(modifier = Modifier.weight(1f)) {
             if (user.name.isNotBlank()) {
                 Text(
