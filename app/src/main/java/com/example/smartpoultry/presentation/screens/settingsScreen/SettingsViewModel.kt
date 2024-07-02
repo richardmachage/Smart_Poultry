@@ -9,16 +9,19 @@ import com.example.smartpoultry.data.dataSource.local.datastore.AppDataStore
 import com.example.smartpoultry.data.dataSource.local.datastore.PreferencesRepo
 import com.example.smartpoultry.data.dataSource.local.room.database.SmartPoultryDatabase
 import com.example.smartpoultry.utils.CONSUCUTIVE_DAYS_KEY
+import com.example.smartpoultry.utils.EDIT_HEN_COUNT_ACCESS
+import com.example.smartpoultry.utils.EGG_COLLECTION_ACCESS
 import com.example.smartpoultry.utils.FARM_ID_KEY
 import com.example.smartpoultry.utils.IS_AUTOMATED_ANALYSIS_KEY
 import com.example.smartpoultry.utils.IS_PASSWORD_RESET_KEY
+import com.example.smartpoultry.utils.MANAGE_BLOCKS_CELLS_ACCESS
+import com.example.smartpoultry.utils.MANAGE_USERS_ACCESS
 import com.example.smartpoultry.utils.PAST_DAYS_KEY
 import com.example.smartpoultry.utils.REPEAT_INTERVAL_KEY
 import com.example.smartpoultry.utils.THRESHOLD_RATIO_KEY
 import com.example.smartpoultry.utils.USER_EMAIL_KEY
 import com.example.smartpoultry.utils.USER_NAME_KEY
 import com.example.smartpoultry.utils.USER_PHONE_KEY
-import com.example.smartpoultry.utils.USER_ROLE_KEY
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -100,7 +103,10 @@ class SettingsViewModel @Inject constructor (
             preferencesRepo.deleteData(USER_EMAIL_KEY)
             Log.d("Clear Preferences", "cleared email ")
 
-            preferencesRepo.deleteData(USER_ROLE_KEY)
+            preferencesRepo.deleteData(EGG_COLLECTION_ACCESS)
+            preferencesRepo.deleteData(EDIT_HEN_COUNT_ACCESS)
+            preferencesRepo.deleteData(MANAGE_USERS_ACCESS)
+            preferencesRepo.deleteData(MANAGE_BLOCKS_CELLS_ACCESS)
             Log.d("Clear Preferences", "cleared user role ")
 
             preferencesRepo.deleteData(USER_PHONE_KEY)

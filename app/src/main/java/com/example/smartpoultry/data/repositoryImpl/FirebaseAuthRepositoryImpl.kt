@@ -26,6 +26,7 @@ import com.google.firebase.Firebase
 import com.google.firebase.auth.EmailAuthCredential
 import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.toObject
 import com.google.firebase.functions.functions
@@ -36,8 +37,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.invoke
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 var isPasswordReset: Boolean? = null
@@ -160,134 +163,121 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
         deferred.await()
     }
 
+    suspend fun fetchUserDetails(firebaseUser: FirebaseUser) : User?{
+            val task = firebaseFirestore.collection(USERS_COLLECTION).document(firebaseUser.uid).get()
+            val documentSnapshot = task.await()
+
+            if (task.isSuccessful){
+                return documentSnapshot.toObject(User::class.java)
+            }else{
+                Throwable(task.exception)
+                return null
+            }
+
+    }
+
+    suspend fun fetchUserAccessLevel(userId: String):AccessLevel?{
+        val task = firebaseFirestore.collection(USERS_COLLECTION).document(userId).collection(ACCESS_LEVEL).document(userId + "accessLevel").get()
+        val documentSnapShot = task.await()
+
+        if (task.isSuccessful){
+            return  documentSnapShot.toObject(AccessLevel::class.java)
+        }else{
+            Throwable(task.exception)
+            return null
+        }
+    }
+
+    suspend fun fetchFarm(farmId: String): Farm?{
+       val task =  firebaseFirestore.collection(FARMS_COLLECTION).document(farmId).get()
+        val documentSnapShot = task.await()
+        if (task.isSuccessful) {
+            return documentSnapShot.toObject(Farm::class.java)
+        }else {
+            Throwable(task.exception)
+            return null
+        }
+    }
+
+    fun saveToPreferences(user:User,accessLevel: AccessLevel, farm : Farm){
+        preferencesRepo.saveData(
+            IS_PASSWORD_RESET_KEY,
+            user.passwordReset.toString()
+        )
+
+        //Farm Id
+        preferencesRepo.saveData(
+            FARM_ID_KEY,
+            user.farmId
+        )
+
+        //user name
+        preferencesRepo.saveData(
+            USER_NAME_KEY,
+            user.name
+        )
+
+        //user email
+        preferencesRepo.saveData(
+            USER_EMAIL_KEY,
+            user.email
+        )
+        //user phone
+        preferencesRepo.saveData(
+            USER_PHONE_KEY,
+            user.phone
+        )
+        //user AccessLevels
+        preferencesRepo.saveData(
+            EGG_COLLECTION_ACCESS,
+            accessLevel.collectEggs.toString()
+        )
+        preferencesRepo.saveData(
+            EDIT_HEN_COUNT_ACCESS,
+            accessLevel.editHenCount.toString()
+        )
+        preferencesRepo.saveData(
+            MANAGE_USERS_ACCESS,
+            accessLevel.manageUsers.toString()
+        )
+        preferencesRepo.saveData(
+            MANAGE_BLOCKS_CELLS_ACCESS,
+            accessLevel.manageBlocksCells.toString()
+        )
+        preferencesRepo.saveData(
+            FARM_NAME_KEY,
+            farm.name
+        )
+        preferencesRepo.saveData(
+            FARM_SUPER_USER_EMAIL,
+            farm.superUserEmail
+        )
+    }
 
     override suspend fun logIn(email: String, password: String): Result<Boolean> = coroutineScope {
-        val deferred = async(Dispatchers.IO) {
+        withContext(Dispatchers.IO){
             try {
-                //try logging in
-                val authResult = firebaseAuth.signInWithEmailAndPassword(email, password).await()
-                val firebaseUser = authResult.user
+                //first, sign in
+                val authResult = firebaseAuth.signInWithEmailAndPassword(email,password).await()
+                val firebaseUser = authResult.user ?: return@withContext Result.failure(Exception("Authentication failed"))
 
-                if (firebaseUser != null) {
-                    //  fetch user details from Firestore .
-                    firebaseFirestore
-                        .collection(USERS_COLLECTION)
-                        .document(firebaseUser.uid)
-                        .get()
-                        .addOnSuccessListener { documentSnapshot ->
-                            val user = documentSnapshot.toObject(User::class.java)
-                            //check status of password reset
-                            user?.let { userResult ->
-                                async {
-                                    firebaseFirestore.collection(USERS_COLLECTION)
-                                        .document(user.userId).collection(ACCESS_LEVEL)
-                                        .document(userResult.userId + "accessLevel")
-                                        .get()
-                                        .addOnSuccessListener {
-                                            val accessLevel =
-                                                documentSnapshot.toObject(AccessLevel::class.java)
-                                            accessLevel?.let { accessLevelResult ->
-                                                //Save evrything to local
-                                                preferencesRepo.saveData(
-                                                    IS_PASSWORD_RESET_KEY,
-                                                    userResult.passwordReset.toString()
-                                                )
+                //then fetch user details
+                val user = fetchUserDetails(firebaseUser)?: return@withContext Result.failure(Exception("Failed to fetch user details"))
 
-                                                //Farm Id
-                                                preferencesRepo.saveData(
-                                                    FARM_ID_KEY,
-                                                    userResult.farmId
-                                                )
+                //fetch access level
+                val  accessLevel = fetchUserAccessLevel(firebaseUser.uid)?: return@withContext Result.failure(Exception("Failed to get access level"))
 
-                                                //user name
-                                                preferencesRepo.saveData(
-                                                    USER_NAME_KEY,
-                                                    userResult.name
-                                                )
+                //fetch farm
+                val farm = fetchFarm(user.farmId)?: return@withContext Result.failure(Exception("Failed to get farm details"))
 
-                                                //user email
-                                                preferencesRepo.saveData(
-                                                    USER_EMAIL_KEY,
-                                                    userResult.email
-                                                )
-                                                //user phone
-                                                preferencesRepo.saveData(
-                                                    USER_PHONE_KEY,
-                                                    userResult.phone
-                                                )
-                                                //user AccessLevels
-                                                preferencesRepo.saveData(
-                                                    EGG_COLLECTION_ACCESS,
-                                                    accessLevelResult.collectEggs.toString()
-                                                )
-                                                preferencesRepo.saveData(
-                                                    EDIT_HEN_COUNT_ACCESS,
-                                                    accessLevelResult.editHenCount.toString()
-                                                )
-                                                preferencesRepo.saveData(
-                                                    MANAGE_USERS_ACCESS,
-                                                    accessLevelResult.manageUsers.toString()
-                                                )
-                                                preferencesRepo.saveData(
-                                                    MANAGE_BLOCKS_CELLS_ACCESS,
-                                                    accessLevelResult.manageBlocksCells.toString()
-                                                )
+                //store fecthed data to shared preferences
+                saveToPreferences( user, accessLevel, farm)
 
-
-                                                //get the farm
-                                                async {
-                                                    firebaseFirestore
-                                                        .collection(FARMS_COLLECTION)
-                                                        .document(userResult.farmId)
-                                                        .get()
-                                                        .addOnSuccessListener { documentSnapshot ->
-                                                            //farm is retrieved
-                                                            val farm =
-                                                                documentSnapshot.toObject(Farm::class.java)
-                                                            farm?.let {
-                                                                //save farm details to local
-                                                                preferencesRepo.saveData(
-                                                                    FARM_NAME_KEY,
-                                                                    farm.name
-                                                                )
-                                                                preferencesRepo.saveData(
-                                                                    FARM_SUPER_USER_EMAIL,
-                                                                    farm.name
-                                                                )
-
-                                                            }
-
-                                                        }
-                                                        .addOnFailureListener {
-                                                            Throwable(it)
-                                                        }
-                                                        .await()
-                                                }
-
-                                            }
-                                        }
-                                        .addOnFailureListener {
-                                            Throwable(it)
-                                        }
-                                        .await()
-                                }
-
-                                //then also save to local
-                            }
-
-                        }
-                        .await()
-                    //getFarm()
-                    //getThisUser(preferencesRepo)
-                    Result.success(true)
-                } else {
-                    Result.failure(Exception("Firebase user is null"))
-                }
-            } catch (e: Exception) {
+                Result.success(true)
+            }catch (e:Exception){
                 Result.failure(e)
             }
         }
-        deferred.await()
     }
 
     override suspend fun resetPassword(email: String): Result<Boolean> = coroutineScope {

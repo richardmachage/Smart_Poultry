@@ -23,7 +23,6 @@ import com.example.smartpoultry.utils.FARM_NAME_KEY
 import com.example.smartpoultry.utils.IS_PASSWORD_RESET_KEY
 import com.example.smartpoultry.utils.USER_EMAIL_KEY
 import com.example.smartpoultry.utils.USER_NAME_KEY
-import com.example.smartpoultry.utils.USER_ROLE_KEY
 import com.example.smartpoultry.utils.localDateToJavaDate
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
@@ -113,7 +112,7 @@ class HomeViewModel @Inject constructor(
         started = SharingStarted.Eagerly,
         initialValue = ""
     )*/
-    fun getUserRole() = preferencesRepo.loadData(USER_ROLE_KEY)
+    //fun getUserRole() = preferencesRepo.loadData(USER_ROLE_KEY)
 
     /*val userName = dataStore.readData(USER_NAME_KEY).stateIn(
         scope = viewModelScope,
