@@ -101,4 +101,9 @@ class ManageUsersViewModel @Inject constructor(
             }
         }
     }
+
+    fun editAccessLevel(user: User, accessLevel: AccessLevel) {
+        firebaseAuthRepository.editAccessLevel(user.userId, accessLevel)
+
+    }
 }

@@ -19,4 +19,5 @@ interface FirebaseAuthRepository {
     suspend fun deleteUser(userId:String):Result<String>
     suspend fun getAccessLevel(userId: String) : Result<AccessLevel>
     fun logOut()
+    suspend fun editAccessLevel(userId: String, accessLevel: AccessLevel):Result<Boolean>
 }

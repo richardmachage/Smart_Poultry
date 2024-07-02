@@ -369,6 +369,9 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
         )
     }
 
+    override suspend fun editAccessLevel(userId: String, accessLevel: AccessLevel): Result<Boolean> {
+        TODO("Not yet implemented")
+    }
 
     override suspend fun getFarmEmployees(farmId: String): Result<List<User>> {
         val listOfEmployees = mutableListOf<User>()
