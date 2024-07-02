@@ -46,15 +46,34 @@ fun ManageUsersBottomSheet(
     accessLevel: AccessLevel,
     sheetState: SheetState,
     scope: CoroutineScope,
-    onDismiss: (User,AccessLevel) -> Unit,
+    onDismiss: (User,AccessLevel, Boolean) -> Unit,
     onDelete: (User) -> Unit = {}
 ) {
+   // var doUpdate by remember { mutableStateOf(false) }
+    var eggCollectionAccess by remember { mutableStateOf(accessLevel.collectEggs) }
+    var editHenCountAccess by remember { mutableStateOf(accessLevel.editHenCount) }
+    var manageUsersAccess by remember { mutableStateOf(accessLevel.manageUsers) }
+    var manageBlocksAccess by remember { mutableStateOf(accessLevel.manageBlocksCells) }
+
     ModalBottomSheet(
         sheetState = sheetState,
         onDismissRequest = {
             scope.launch { sheetState.hide() }.invokeOnCompletion {
                 if (!sheetState.isVisible) {
-                    onDismiss(user,accessLevel) //set showBottomSheet = false
+                    if (
+                        accessLevel.manageUsers != manageUsersAccess ||
+                        accessLevel.editHenCount != editHenCountAccess ||
+                        accessLevel.manageBlocksCells != manageBlocksAccess ||
+                        accessLevel.collectEggs != eggCollectionAccess
+                    ){
+                        onDismiss(
+                            user,
+                            AccessLevel(collectEggs = eggCollectionAccess, editHenCount = editHenCountAccess, manageUsers = manageUsersAccess, manageBlocksCells = manageBlocksAccess),
+                            true)
+                    }else{
+                        onDismiss(user,accessLevel,false)
+                    }
+                    //onDismiss(user,accessLevel, doUpdate) //set showBottomSheet = false
                 }
             }
         }
@@ -88,10 +107,10 @@ fun ManageUsersBottomSheet(
             MyVerticalSpacer(height = 10)
             MyBorderedColumn(modifier = Modifier.padding(8.dp)) {
                 Text(text = "Access Level", modifier = Modifier.padding(8.dp))
-                    AccessLevelItem(itemName = "Egg Collection", description = "Allows the user to be able to input the daily eggs collection records", isChecked = accessLevel.collectEggs, onCheckedChanged = { accessLevel.collectEggs = it} )
-                    AccessLevelItem(itemName = "Edit Hen Count", description = "Allows the user to be edit the number of hens in a cell ", isChecked = accessLevel.editHenCount, onCheckedChanged = {accessLevel.editHenCount = it} )
-                    AccessLevelItem(itemName = "Manage Blocks & Cells", description = "Allows the user to add, delete or rename a cell or a block.", isChecked =  accessLevel.manageBlocksCells, onCheckedChanged = { accessLevel.manageBlocksCells = it } )
-                    AccessLevelItem(itemName = "Manage other users", description = "This will allow the user to be able to register new users to the farm, delete other user accounts and also be able to change the access level of the other users", isChecked =  accessLevel.manageUsers, onCheckedChanged = {accessLevel.manageUsers = it } )
+                    AccessLevelItem(itemName = "Egg Collection", description = "Allows the user to be able to input the daily eggs collection records", isChecked = eggCollectionAccess, onCheckedChanged = { eggCollectionAccess = it} )
+                    AccessLevelItem(itemName = "Edit Hen Count", description = "Allows the user to be edit the number of hens in a cell ", isChecked = editHenCountAccess, onCheckedChanged = {editHenCountAccess = it} )
+                    AccessLevelItem(itemName = "Manage Blocks & Cells", description = "Allows the user to add, delete or rename a cell or a block.", isChecked =  manageBlocksAccess, onCheckedChanged = { manageBlocksAccess= it } )
+                    AccessLevelItem(itemName = "Manage other users", description = "This will allow the user to be able to register new users to the farm, delete other user accounts and also be able to change the access level of the other users", isChecked =  manageUsersAccess, onCheckedChanged = {manageUsersAccess = it } )
             }
 
             var showDeleteDialog by remember { mutableStateOf(false) }

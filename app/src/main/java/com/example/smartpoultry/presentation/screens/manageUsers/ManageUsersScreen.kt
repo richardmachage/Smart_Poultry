@@ -95,8 +95,7 @@ fun ManageUsersScreen(
                     user = manageUsersViewModel.selectedUser!!,
                     sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
                     scope = rememberCoroutineScope(),
-                    onDismiss = {user, accessLevel->
-                        //TODO perform access level changes made
+                    onDismiss = {user, accessLevel, doUpdate->
                         manageUsersViewModel.editAccessLevel(user, accessLevel)
                         showBottomSheet = false
                     },
