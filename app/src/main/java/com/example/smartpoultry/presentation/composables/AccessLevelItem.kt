@@ -32,7 +32,7 @@ fun AccessLevelItem(
     itemName : String,
     description : String,
     isChecked : Boolean,
-    onChecked : (Boolean) -> Unit,
+    onCheckedChanged : (Boolean) -> Unit,
 ){
     var showDialog by remember{ mutableStateOf(false) }
 
@@ -58,18 +58,18 @@ fun AccessLevelItem(
                     showDialog = showDialog,
                     title = "Description",
                     onConfirm = {
-                        onChecked(true)
+                        onCheckedChanged(true)
                         showDialog = false
                                 },
                     onDismiss = {
-                        onChecked(false)
+                        onCheckedChanged(false)
                         showDialog = false }) {
                     Text(text = description)
                 }
 
                 Text(text = itemName, fontWeight = FontWeight.Bold)
                 Checkbox(checked = isChecked, onCheckedChange = {
-                    onChecked(it)
+                    onCheckedChanged(it)
                 })
             }
             IconButton(onClick = { showDialog = true }) {

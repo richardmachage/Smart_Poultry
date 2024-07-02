@@ -46,7 +46,7 @@ fun ManageUsersBottomSheet(
     accessLevel: AccessLevel,
     sheetState: SheetState,
     scope: CoroutineScope,
-    onDismiss: () -> Unit = {},
+    onDismiss: (User,AccessLevel) -> Unit,
     onDelete: (User) -> Unit = {}
 ) {
     ModalBottomSheet(
@@ -54,20 +54,19 @@ fun ManageUsersBottomSheet(
         onDismissRequest = {
             scope.launch { sheetState.hide() }.invokeOnCompletion {
                 if (!sheetState.isVisible) {
-                    onDismiss() //set showBottomSheet = false
+                    onDismiss(user,accessLevel) //set showBottomSheet = false
                 }
             }
         }
     ) {
         Column(
-            modifier = Modifier.padding(10.dp),
+            modifier = Modifier.padding(8.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text( //Tittle
-                text = "Edit Details",
+                text = "More Details",
                 style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.Bold),
                 color = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.padding(bottom = 8.dp)
             )
 
             //userName
@@ -89,14 +88,11 @@ fun ManageUsersBottomSheet(
             MyVerticalSpacer(height = 10)
             MyBorderedColumn(modifier = Modifier.padding(8.dp)) {
                 Text(text = "Access Level", modifier = Modifier.padding(8.dp))
-
-                    AccessLevelItem(itemName = "Egg Collection", description = "Allows the user to be able to input the daily eggs collection records", isChecked = accessLevel.collectEggs, onChecked = {} )
-                    AccessLevelItem(itemName = "Edit Hen Count", description = "Allows the user to be edit the number of hens in a cell ", isChecked = accessLevel.editHenCount, onChecked = { } )
-                    AccessLevelItem(itemName = "Manage Blocks & Cells", description = "Allows the user to add, delete or rename a cell or a block.", isChecked =  accessLevel.manageBlocksCells, onChecked = { } )
-                    AccessLevelItem(itemName = "Manage other users", description = "This will allow the user to be able to register new users to the farm, delete other user accounts and also be able to change the access level of the other users", isChecked =  accessLevel.manageUsers, onChecked = { } )
-
+                    AccessLevelItem(itemName = "Egg Collection", description = "Allows the user to be able to input the daily eggs collection records", isChecked = accessLevel.collectEggs, onCheckedChanged = { accessLevel.collectEggs = it} )
+                    AccessLevelItem(itemName = "Edit Hen Count", description = "Allows the user to be edit the number of hens in a cell ", isChecked = accessLevel.editHenCount, onCheckedChanged = {accessLevel.editHenCount = it} )
+                    AccessLevelItem(itemName = "Manage Blocks & Cells", description = "Allows the user to add, delete or rename a cell or a block.", isChecked =  accessLevel.manageBlocksCells, onCheckedChanged = { accessLevel.manageBlocksCells = it } )
+                    AccessLevelItem(itemName = "Manage other users", description = "This will allow the user to be able to register new users to the farm, delete other user accounts and also be able to change the access level of the other users", isChecked =  accessLevel.manageUsers, onCheckedChanged = {accessLevel.manageUsers = it } )
             }
-            MyVerticalSpacer(height = 10)
 
             var showDeleteDialog by remember { mutableStateOf(false) }
             MyInputDialog(
@@ -110,10 +106,11 @@ fun ManageUsersBottomSheet(
             ) {
                 Text(text = "Are you sure you want o delete this user? email: ${user.email}")
             }
+
             Button(//Delete user button
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(10.dp),
+                    .padding(8.dp),
                 onClick = { showDeleteDialog = true },
                 colors = ButtonDefaults.buttonColors().copy(
                     containerColor = Color.Red,
