@@ -102,7 +102,7 @@ fun ManageUsersScreen(
                 modifier = Modifier.padding(it)
             ) {
 
-                items(manageUsersViewModel.listOfUsers.filter {user -> user.userId.lowercase() != manageUsersViewModel.myId   }){user->
+                items(manageUsersViewModel.listOfUsers.filter {user -> user.userId != manageUsersViewModel.myId   }){user->
                    // UserItem()
                     UserListItem(
                         user = user,
