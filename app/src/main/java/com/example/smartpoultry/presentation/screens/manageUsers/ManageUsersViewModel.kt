@@ -103,7 +103,19 @@ class ManageUsersViewModel @Inject constructor(
     }
 
     fun editAccessLevel(user: User, accessLevel: AccessLevel) {
-        firebaseAuthRepository.editAccessLevel(user.userId, accessLevel)
+        viewModelScope.launch {
+            isLoading.value = true
+            firebaseAuthRepository.editAccessLevel(user.userId,accessLevel)
+                .onSuccess {
+                    isLoading.value = false
+                    toastMessage.value = "Access levels updated successfully"
+                }
+                .onFailure {
+                    isLoading.value = false
+                    toastMessage.value = "Failed to update access level for ${user.name}./n${it.localizedMessage}"
+                }
+        }
+       // firebaseAuthRepository.editAccessLevel(user.userId, accessLevel)
 
     }
 }

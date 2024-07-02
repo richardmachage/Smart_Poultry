@@ -1,6 +1,7 @@
 package com.example.smartpoultry.data.repositoryImpl
 
 import android.util.Log
+import androidx.compose.ui.input.key.Key.Companion.U
 import com.example.smartpoultry.data.dataSource.local.datastore.AppDataStore
 import com.example.smartpoultry.data.dataSource.local.datastore.PreferencesRepo
 import com.example.smartpoultry.data.dataSource.remote.firebase.models.AccessLevel
@@ -370,7 +371,12 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
     }
 
     override suspend fun editAccessLevel(userId: String, accessLevel: AccessLevel): Result<Boolean> {
-        TODO("Not yet implemented")
+        val task  = firebaseFirestore.collection(USERS_COLLECTION).document(userId)
+            .collection(ACCESS_LEVEL).document(userId + "accessLevel")
+            .set(accessLevel)
+         task.await()
+
+        return if (task.isSuccessful) Result.success(true) else Result.failure(task.exception?.cause!!)
     }
 
     override suspend fun getFarmEmployees(farmId: String): Result<List<User>> {
