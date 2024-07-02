@@ -260,7 +260,7 @@ fun AccountScreen(
                 //Register new user
                 var showRegDialog by remember { mutableStateOf(false) }
                 var userEmailReg by remember { mutableStateOf("") }
-                var userRoleReg by remember { mutableStateOf("") }
+                //var userRoleReg by remember { mutableStateOf("") }
                 var userNameReg by remember { mutableStateOf("") }
                 var userPhoneReg by remember { mutableStateOf("") }
                 MyInputDialog(
@@ -268,17 +268,12 @@ fun AccountScreen(
                     title = "Register New User",
                     onConfirm = {
                         //TODO -> validate Email address, and role selected.
-                        accountViewModel.registerUser(email = userEmailReg.trim(), userRole = userRoleReg, name = userNameReg.trim(), phone = userPhoneReg.trim())
-                        showRegDialog = false
+                        accountViewModel.registerUser(email = userEmailReg, name = userNameReg.trim(), phone = userPhoneReg.trim())
+                        if(accountViewModel.toastMessage.value != "Invalid email: $userEmailReg" && accountViewModel.toastMessage.value != "Please select a role") showRegDialog = false
                     },
                     onDismiss = { showRegDialog = false }
                 ) {
                     Column {
-
-                        /*UserTypeDropDownMenu(onItemClick = { userRole ->
-                            userRoleReg = userRole
-                        })*/
-
                         MyEditTextClear( // email input
                             label = "Email address",
                             iconLeading = Icons.Default.Email,
@@ -294,7 +289,7 @@ fun AccountScreen(
                             iconLeadingDescription = "person",
                             keyboardType = KeyboardType.Text,
                             onValueChange = { text ->
-                                userEmailReg = text.trim()
+                                userNameReg = text.trim()
                             }
                         )
                         MyEditTextClear( // input phone
@@ -303,7 +298,7 @@ fun AccountScreen(
                             iconLeadingDescription = "Email",
                             keyboardType = KeyboardType.Phone,
                             onValueChange = { text ->
-                                userEmailReg = text.trim()
+                                userPhoneReg = text.trim()
                             }
                         )
 

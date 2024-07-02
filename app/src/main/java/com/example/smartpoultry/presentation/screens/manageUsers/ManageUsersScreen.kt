@@ -87,7 +87,7 @@ fun ManageUsersScreen(
             MyCircularProgressBar(isLoading = manageUsersViewModel.isLoading.value)
             if (showBottomSheet){
                 ManageUsersBottomSheet(
-                    user = manageUsersViewModel.currentUser!!,
+                    user = manageUsersViewModel.selectedUser!!,
                     sheetState = rememberModalBottomSheetState(),
                     scope = rememberCoroutineScope(),
                     onDismiss = {showBottomSheet = false},
@@ -102,8 +102,10 @@ fun ManageUsersScreen(
                 modifier = Modifier.padding(it)
             ) {
 
-                items(manageUsersViewModel.listOfUsers.filter {user -> user.userId != manageUsersViewModel.myId   }){user->
+                items(manageUsersViewModel.listOfUsers.filter {user -> user.email != manageUsersViewModel.getUserEmail()   })
+                {user->
                    // UserItem()
+                    Text(text = "userId : ${user.userId} != ${manageUsersViewModel.myId}")
                     UserListItem(
                         user = user,
                         onClick = {userClicked->

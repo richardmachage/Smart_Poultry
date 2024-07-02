@@ -136,8 +136,8 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
                             userId = firebaseUser.uid,
                             email = email,
                             farmId = farmId,
-                            phone = name,
-                            name = phone,
+                            phone = phone,
+                            name = name,
                             passwordReset = false
                         )
                     firebaseFirestore.collection(USERS_COLLECTION)

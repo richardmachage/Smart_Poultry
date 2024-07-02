@@ -1,21 +1,21 @@
 package com.example.smartpoultry.presentation.screens.accountScreen
 
+//import com.example.smartpoultry.utils.USER_ROLE_KEY
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.smartpoultry.data.dataSource.local.datastore.AppDataStore
 import com.example.smartpoultry.data.dataSource.local.datastore.PreferencesRepo
 import com.example.smartpoultry.data.dataSource.remote.firebase.models.AccessLevel
 import com.example.smartpoultry.data.dataSource.remote.firebase.models.User
 import com.example.smartpoultry.domain.repository.FirebaseAuthRepository
 import com.example.smartpoultry.utils.EDIT_HEN_COUNT_ACCESS
 import com.example.smartpoultry.utils.EGG_COLLECTION_ACCESS
+import com.example.smartpoultry.utils.FARM_ID_KEY
 import com.example.smartpoultry.utils.MANAGE_BLOCKS_CELLS_ACCESS
 import com.example.smartpoultry.utils.MANAGE_USERS_ACCESS
 import com.example.smartpoultry.utils.USER_EMAIL_KEY
 import com.example.smartpoultry.utils.USER_NAME_KEY
 import com.example.smartpoultry.utils.USER_PHONE_KEY
-//import com.example.smartpoultry.utils.USER_ROLE_KEY
 import com.example.smartpoultry.utils.isValidEmail
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -24,7 +24,6 @@ import javax.inject.Inject
 @HiltViewModel
 class AccountViewModel @Inject constructor(
     private val fireBaseAuthRepo: FirebaseAuthRepository,
-    private val dataStore: AppDataStore,
     private val preferencesRepo: PreferencesRepo
 ) : ViewModel() {
     //val myDataStore = dataStore
@@ -56,22 +55,22 @@ class AccountViewModel @Inject constructor(
         )
 
     }
+    private fun getFarmId() = preferencesRepo.loadData(FARM_ID_KEY)!!
 
-    fun registerUser(userRole: String, email: String, name: String, phone: String) {
+    fun registerUser( email: String, name: String, phone: String) {
         viewModelScope.launch {
             isLoading.value = true
             if (!isValidEmail(email)) {
                 isLoading.value = false
-                toastMessage.value = "Invalid email"
-            } else if (userRole.isBlank()) {
+                toastMessage.value = "Invalid email: $email"
+            /*} else if (userRole.isBlank()) {
                 isLoading.value = false
-                toastMessage.value = "Please select a role"
+                toastMessage.value = "Please select a role"*/
             } else {
                 val result = fireBaseAuthRepo.registerUser(
                     email = email,
-                    //role = userRole,
                     password = "0000000",
-                    farmId = dataStore.farmID,
+                    farmId = getFarmId(),
                     name = name,
                     phone = phone,
                     accessLevel = AccessLevel(

@@ -10,6 +10,7 @@ import com.example.smartpoultry.data.dataSource.remote.firebase.models.AccessLev
 import com.example.smartpoultry.data.dataSource.remote.firebase.models.User
 import com.example.smartpoultry.domain.repository.FirebaseAuthRepository
 import com.example.smartpoultry.utils.FARM_ID_KEY
+import com.example.smartpoultry.utils.USER_EMAIL_KEY
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -20,7 +21,7 @@ import javax.inject.Inject
 class ManageUsersViewModel @Inject constructor(
     private val firebaseAuthRepository: FirebaseAuthRepository,
     private val preferencesRepo: PreferencesRepo,
-    firebaseAuth: FirebaseAuth,
+    private val firebaseAuth: FirebaseAuth,
     private val firebaseFirestore: FirebaseFirestore
 ) : ViewModel() {
 
@@ -33,7 +34,7 @@ class ManageUsersViewModel @Inject constructor(
     val toastMessage = mutableStateOf("")
     val farmId = mutableStateOf("")
     val listOfUsers = mutableStateListOf<User>()
-    var currentUser: User? = null //user selected for editing
+    var selectedUser: User? = null //user selected for editing
     var currentAccessLevel: AccessLevel? = null
     val showBottomSheet = mutableStateOf(false)
     val updateListOfEmployees = mutableStateOf("")
@@ -50,6 +51,8 @@ class ManageUsersViewModel @Inject constructor(
             }
         }
     }
+     fun getUserEmail() = preferencesRepo.loadData(USER_EMAIL_KEY)!!
+
 
     suspend fun updateListOfUsers() {
         farmId.value = preferencesRepo.loadData(FARM_ID_KEY).toString()
@@ -67,7 +70,7 @@ class ManageUsersViewModel @Inject constructor(
             firebaseAuthRepository.getAccessLevel(user.userId)
                 .onSuccess {
                     isLoading.value = true
-                    currentUser = user
+                    selectedUser = user
                     currentAccessLevel = it
                     isLoading.value = false
                     showBottomSheet.value = true
