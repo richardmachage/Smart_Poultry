@@ -4,7 +4,8 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
-import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.EaseIn
+import androidx.compose.animation.core.EaseOut
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
@@ -85,7 +86,7 @@ fun enterAnime():EnterTransition{
         initialOffsetX = {-it},
         animationSpec = tween(
             300,
-            easing = LinearEasing
+            easing = EaseIn
         )
     )
 }
@@ -95,7 +96,7 @@ fun exitAnime():ExitTransition{
         targetOffsetX = {-it},
         animationSpec = tween(
             300,
-            easing = LinearEasing
+            easing = EaseOut
         )
     )
 }

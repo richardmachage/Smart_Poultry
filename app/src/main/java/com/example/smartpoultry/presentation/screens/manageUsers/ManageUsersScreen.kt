@@ -1,6 +1,7 @@
 package com.example.smartpoultry.presentation.screens.manageUsers
 
 import android.widget.Toast
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -115,7 +116,7 @@ fun ManageUsersScreen(
             }
 
             LazyColumn(
-                modifier = Modifier.padding(it)
+                modifier = Modifier.padding(it).animateContentSize()
             ) {
 
                 items(manageUsersViewModel.listOfUsers.filter { user -> user.email != manageUsersViewModel.getUserEmail() })

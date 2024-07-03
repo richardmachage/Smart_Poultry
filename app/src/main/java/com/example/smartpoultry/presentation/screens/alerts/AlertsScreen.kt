@@ -5,6 +5,7 @@ import android.app.Activity
 import android.content.Intent
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -50,7 +51,7 @@ import com.ramcosta.composedestinations.annotation.Destination
 import java.text.SimpleDateFormat
 
 @SuppressLint("SimpleDateFormat")
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Destination
 @Composable
 fun AlertScreen(
@@ -132,7 +133,8 @@ fun AlertScreen(
                             MyBorderedRow(
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .padding(6.dp),
+                                    .padding(6.dp)
+                                    .animateItemPlacement(),
                             ) {
                                 Text(text = (index + 1).toString())
                                 Column {

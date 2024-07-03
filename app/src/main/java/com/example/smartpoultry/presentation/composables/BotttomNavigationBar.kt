@@ -26,88 +26,92 @@ import com.example.smartpoultry.presentation.uiModels.BottomNavigationItem
 @Composable
 fun MyBottomNavBar(
     navController: NavController,
-    eggCollectionAccess : Boolean
+    eggCollectionAccess: Boolean
 ) {
 
-    val items = if (eggCollectionAccess/*userRole == "Collector" || userRole == "Manager" || userRole == "Super"*/)listOf<BottomNavigationItem>(
-        BottomNavigationItem(
-            route = HomeScreenDestination.route,
-            title = "Home",
-            selectedIcon = Icons.Filled.Home,
-            unselectedIcon = Icons.Outlined.Home
-        ),
-        BottomNavigationItem(
-            route = AnalyticsScreenDestination.route,
-            title = "Analytics",
-            selectedIcon = ImageVector.vectorResource(R.drawable.analytics_filled),
-            unselectedIcon = ImageVector.vectorResource(R.drawable.analytics_outlined)
-        ),
-        BottomNavigationItem(
-            route = BlockCellScreenDestination.route,
-            title = "Blocks",//"Alerts",
-            selectedIcon = Icons.Filled.Edit,//ImageVector.vectorResource(R.drawable.notification_filled),
-            unselectedIcon = Icons.Outlined.Edit,//.vectorResource(R.drawable.notification_outline)
-        ),
+    val items =
+        if (eggCollectionAccess) listOf<BottomNavigationItem>(
+            BottomNavigationItem(
+                route = HomeScreenDestination.route,
+                title = "Home",
+                selectedIcon = Icons.Filled.Home,
+                unselectedIcon = Icons.Outlined.Home
+            ),
+            BottomNavigationItem(
+                route = AnalyticsScreenDestination.route,
+                title = "Analytics",
+                selectedIcon = ImageVector.vectorResource(R.drawable.analytics_filled),
+                unselectedIcon = ImageVector.vectorResource(R.drawable.analytics_outlined)
+            ),
+            BottomNavigationItem(
+                route = BlockCellScreenDestination.route,
+                title = "Blocks",//"Alerts",
+                selectedIcon = Icons.Filled.Edit,//ImageVector.vectorResource(R.drawable.notification_filled),
+                unselectedIcon = Icons.Outlined.Edit,//.vectorResource(R.drawable.notification_outline)
+            ),
 
-        BottomNavigationItem(
-            route = EggScreenDestination.route,
-            title = "Eggs",
-            selectedIcon = ImageVector.vectorResource(R.drawable.egg_filled),
-            unselectedIcon = ImageVector.vectorResource(R.drawable.egg_outline),
+            BottomNavigationItem(
+                route = EggScreenDestination.route,
+                title = "Eggs",
+                selectedIcon = ImageVector.vectorResource(R.drawable.egg_filled),
+                unselectedIcon = ImageVector.vectorResource(R.drawable.egg_outline),
+            )
         )
-    ) else listOf<BottomNavigationItem>(
-        BottomNavigationItem(
-            route = HomeScreenDestination.route,
-            title = "Home",
-            selectedIcon = Icons.Filled.Home,
-            unselectedIcon = Icons.Outlined.Home
-        ),
-        BottomNavigationItem(
-            route = AnalyticsScreenDestination.route,
-            title = "Analytics",
-            selectedIcon = ImageVector.vectorResource(R.drawable.analytics_filled),
-            unselectedIcon = ImageVector.vectorResource(R.drawable.analytics_outlined)
-        ),
-        BottomNavigationItem(
-            route = BlockCellScreenDestination.route,
-            title = "Blocks & Cells ",//"Alerts",
-            selectedIcon = Icons.Filled.Edit,//ImageVector.vectorResource(R.drawable.notification_filled),
-            unselectedIcon = Icons.Outlined.Edit,//.vectorResource(R.drawable.notification_outline)
-        ),
+        else listOf<BottomNavigationItem>(
+            BottomNavigationItem(
+                route = HomeScreenDestination.route,
+                title = "Home",
+                selectedIcon = Icons.Filled.Home,
+                unselectedIcon = Icons.Outlined.Home
+            ),
+            BottomNavigationItem(
+                route = AnalyticsScreenDestination.route,
+                title = "Analytics",
+                selectedIcon = ImageVector.vectorResource(R.drawable.analytics_filled),
+                unselectedIcon = ImageVector.vectorResource(R.drawable.analytics_outlined)
+            ),
+            BottomNavigationItem(
+                route = BlockCellScreenDestination.route,
+                title = "Blocks & Cells ",//"Alerts",
+                selectedIcon = Icons.Filled.Edit,//ImageVector.vectorResource(R.drawable.notification_filled),
+                unselectedIcon = Icons.Outlined.Edit,//.vectorResource(R.drawable.notification_outline)
+            ),
 
-        )
+            )
 
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
 
-    NavigationBar {
-        items.forEachIndexed { _, item ->
-            var selected = currentRoute == item.route
-            NavigationBarItem(
-                selected = selected,  //navController.currentDestination?.route == item.route,//
-                onClick = {
-                    navController.navigate(item.route) {
-                        popUpTo(navController.graph.findStartDestination().id)
-                        launchSingleTop =true
 
+        NavigationBar {
+            items.forEachIndexed { _, item ->
+                var selected = currentRoute == item.route
+                NavigationBarItem(
+                    selected = selected,  //navController.currentDestination?.route == item.route,//
+                    onClick = {
+                        navController.navigate(item.route) {
+                            popUpTo(navController.graph.findStartDestination().id)
+                            launchSingleTop = true
+
+                        }
+                    },
+                    icon = {
+                        Icon(
+                            imageVector = if (selected) {
+                                item.selectedIcon
+                            } else {
+                                item.unselectedIcon
+                            },
+                            contentDescription = item.title
+                        )
+                    },
+                    label = {
+                        Text(text = item.title)
                     }
-                },
-                icon = {
-                    Icon(
-                        imageVector = if (selected) {
-                            item.selectedIcon
-                        } else {
-                            item.unselectedIcon
-                        },
-                        contentDescription = item.title
-                    )
-                },
-                label = {
-                    Text(text = item.title)
-                }
-            )
+                )
 
+            }
         }
+
     }
 
-}

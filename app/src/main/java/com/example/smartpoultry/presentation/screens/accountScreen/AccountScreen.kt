@@ -304,7 +304,7 @@ fun AccountScreen(
 
                         MyVerticalSpacer(height = 10)
                         var expanded by remember { mutableStateOf(false) }
-                        MyBorderedColumn {
+                        MyBorderedColumn{
                             Row (modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically,horizontalArrangement = Arrangement.SpaceBetween){
                                 Text(text = "Specify access Level")
                                 IconButton(onClick = { expanded = !expanded}) {
