@@ -113,7 +113,8 @@ fun ViewRecordsScreen(
                                 recordsViewModel.searchRecord(
                                     queryValue,
                                     listOfRecordsFull.value
-                                )
+                                ),
+                                key = {_, item -> item.productionId }
                             ) { _, item ->
                                 var showDeleteDialog by remember{ mutableStateOf(false)}
                                 MyInputDialog(
@@ -154,7 +155,7 @@ fun ViewRecordsScreen(
                 }
                 //General List
                 LazyColumn(modifier = Modifier.padding(6.dp)) {
-                    itemsIndexed(listOfRecordsFull.value) { _, item ->
+                    itemsIndexed(listOfRecordsFull.value, key = {_, item ->  item.productionId}) { _, item ->
                         var showDeleteDialog by remember{ mutableStateOf(false)}
                         MyInputDialog(
                             showDialog= showDeleteDialog,
