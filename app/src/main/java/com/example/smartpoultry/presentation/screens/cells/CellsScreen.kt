@@ -1,6 +1,7 @@
 package com.example.smartpoultry.presentation.screens.cells
 
 import android.widget.Toast
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -48,7 +49,7 @@ import com.example.smartpoultry.presentation.uiModels.BlockParse
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Destination
 @Composable
 fun CellsScreen(
@@ -208,10 +209,11 @@ fun CellsScreen(
 //                MyVerticalSpacer(height = 3)
 
                 LazyColumn(
-                    modifier = Modifier.padding(3.dp)
+                    modifier = Modifier.padding(5.dp),
+                    verticalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
-                    itemsIndexed(listOfCells) { _, item ->
-                        MyVerticalSpacer(height = 6)
+                    itemsIndexed(listOfCells, key = {_, item ->  item.cellId}) { _, item ->
+                        //MyVerticalSpacer(height = 6)
 
                         Row(
                             Modifier
@@ -222,7 +224,8 @@ fun CellsScreen(
                                     shape = RoundedCornerShape(
                                         (0.03 * LocalConfiguration.current.screenWidthDp).dp
                                     )
-                                ),
+                                )
+                                .animateItemPlacement(),
                             horizontalArrangement = Arrangement.SpaceBetween,
                             verticalAlignment = Alignment.CenterVertically
                         ) {
