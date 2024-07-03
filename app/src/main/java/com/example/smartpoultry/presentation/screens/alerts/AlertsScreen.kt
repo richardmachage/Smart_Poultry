@@ -45,7 +45,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.smartpoultry.presentation.composables.MyBorderedRow
 import com.example.smartpoultry.presentation.composables.MyCard
 import com.example.smartpoultry.presentation.composables.MyInputDialog
-import com.example.smartpoultry.presentation.composables.MyVerticalSpacer
 import com.example.smartpoultry.presentation.screens.mainActivity.MainActivity
 import com.ramcosta.composedestinations.annotation.Destination
 import java.text.SimpleDateFormat
@@ -128,8 +127,8 @@ fun AlertScreen(
                     }
 
                     LazyColumn() {
-                        itemsIndexed(listOfAlerts) { index, alert ->
-                            MyVerticalSpacer(height = 5)
+                        itemsIndexed(listOfAlerts, key = {_, alert ->  alert.alertId} ) { index, alert ->
+                           // MyVerticalSpacer(height = 5)
                             MyBorderedRow(
                                 modifier = Modifier
                                     .fillMaxWidth()

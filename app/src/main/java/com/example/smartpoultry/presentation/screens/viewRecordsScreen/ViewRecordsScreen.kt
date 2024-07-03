@@ -1,5 +1,7 @@
 package com.example.smartpoultry.presentation.screens.viewRecordsScreen
 
+import androidx.compose.animation.animateContentSize
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -28,7 +30,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.smartpoultry.presentation.composables.MyBorderedRow
@@ -37,17 +38,15 @@ import com.example.smartpoultry.presentation.composables.MyVerticalSpacer
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Destination
 @Composable
 fun ViewRecordsScreen(
     navigator: DestinationsNavigator
 ) {
     val recordsViewModel = hiltViewModel<ViewRecordsViewModel>()
-    val listOfRecords = recordsViewModel.getAllRecords().collectAsState(initial = emptyList())
     val listOfRecordsFull =
         recordsViewModel.getAllFullRecords().collectAsState(initial = emptyList())
-    val context = LocalContext.current
     Scaffold(
         topBar = {
             TopAppBar(
@@ -109,7 +108,7 @@ fun ViewRecordsScreen(
                         color = MaterialTheme.colorScheme.background,
                     ) {
                         
-                        LazyColumn(modifier = Modifier.padding(6.dp)) {
+                        LazyColumn(modifier = Modifier.padding(6.dp).animateContentSize()) {
                             itemsIndexed(
                                 recordsViewModel.searchRecord(
                                     queryValue,
@@ -131,7 +130,7 @@ fun ViewRecordsScreen(
                                 MyVerticalSpacer(height = 5)
                                 //val cell = recordsViewModel.getCell(item.cellId)
                                 MyBorderedRow(
-                                    modifier = Modifier.fillMaxWidth(),
+                                    modifier = Modifier.fillMaxWidth().animateItemPlacement(),
                                     horizontalArrangement = Arrangement.SpaceBetween
                                 ) {
                                     Column (
@@ -170,7 +169,7 @@ fun ViewRecordsScreen(
                         }
                         MyVerticalSpacer(height = 10)
                         MyBorderedRow(
-                            modifier = Modifier.fillMaxWidth(),
+                            modifier = Modifier.fillMaxWidth().animateItemPlacement(),
                             horizontalArrangement = Arrangement.SpaceBetween
                         ) {
                             Column (
