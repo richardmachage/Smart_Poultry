@@ -1,6 +1,7 @@
 package com.example.smartpoultry.presentation.screens.blockCellScreen
 
 import android.widget.Toast
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -48,7 +49,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @com.ramcosta.composedestinations.annotation.Destination
 @Composable
 fun BlockCellScreen(
@@ -159,8 +160,8 @@ fun BlockCellScreen(
                     .padding(6.dp),
                 contentPadding = paddingValues
             ) {
-                itemsIndexed( listOfBlocksWithCells//listOfBlocks
-                ) { blockIndex, blockWithCells ->
+                itemsIndexed( listOfBlocksWithCells, key = {_, item -> item.block.blockId }
+                ) { _, blockWithCells ->
                     MyVerticalSpacer(height = 10)
                     Row(
                         Modifier
@@ -171,7 +172,9 @@ fun BlockCellScreen(
                                 shape = RoundedCornerShape(
                                     (0.03 * LocalConfiguration.current.screenWidthDp).dp
                                 )
-                            ),
+                            )
+                            .animateItemPlacement()
+                        ,
                         horizontalArrangement = Arrangement.Absolute.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
