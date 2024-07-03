@@ -85,7 +85,7 @@ fun enterAnime():EnterTransition{
     return slideInHorizontally (
         initialOffsetX = {-it},
         animationSpec = tween(
-            300,
+            200,
             easing = EaseIn
         )
     )
@@ -95,7 +95,7 @@ fun exitAnime():ExitTransition{
     return slideOutHorizontally (
         targetOffsetX = {-it},
         animationSpec = tween(
-            300,
+            200,
             easing = EaseOut
         )
     )

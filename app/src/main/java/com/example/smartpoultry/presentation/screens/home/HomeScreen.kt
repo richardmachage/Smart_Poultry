@@ -4,6 +4,9 @@ import android.annotation.SuppressLint
 import android.os.Build
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.EaseIn
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -256,8 +259,17 @@ fun HomeScreen(
                         )
                     )
                     .fillMaxWidth()
-                    .padding(6.dp),
+                    .padding(6.dp)
+                    .animateContentSize(
+                        tween(
+                            500,
+                            easing = EaseIn
+
+                        )
+                    )
+                ,
             ) {
+
                 Text(text = "Recent Production Trends:")
                 MyVerticalSpacer(height = 10)
                 //Create graph
