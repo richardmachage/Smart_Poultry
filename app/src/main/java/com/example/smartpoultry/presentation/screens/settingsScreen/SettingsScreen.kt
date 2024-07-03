@@ -3,6 +3,7 @@ package com.example.smartpoultry.presentation.screens.settingsScreen
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -74,8 +75,8 @@ fun SettingsScreen(
 
     LaunchedEffect(settingsViewModel.toastMessage.value) {
         val toastMessage = settingsViewModel.toastMessage.value
-        if (toastMessage.isNotBlank()){
-            Toast.makeText(context,toastMessage,Toast.LENGTH_SHORT).show()
+        if (toastMessage.isNotBlank()) {
+            Toast.makeText(context, toastMessage, Toast.LENGTH_SHORT).show()
         }
         settingsViewModel.toastMessage.value = ""
     }
@@ -227,7 +228,10 @@ fun SettingsScreen(
                             onConfirm = {
                                 if (validateThresholdInput(newThreshold)) {
                                     showDialog = false
-                                    settingsViewModel.saveToDataStore(THRESHOLD_RATIO_KEY, newThreshold)
+                                    settingsViewModel.saveToDataStore(
+                                        THRESHOLD_RATIO_KEY,
+                                        newThreshold
+                                    )
 
                                 } else {
                                     Toast.makeText(
@@ -281,7 +285,10 @@ fun SettingsScreen(
                                 if (isGranted) {
                                     isNotificationPermissionGranted = true
                                     showDialog = false
-                                    settingsViewModel.saveToDataStore(IS_AUTOMATED_ANALYSIS_KEY, "1")
+                                    settingsViewModel.saveToDataStore(
+                                        IS_AUTOMATED_ANALYSIS_KEY,
+                                        "1"
+                                    )
                                 } else {
                                     isNotificationPermissionGranted = false
                                     settingsViewModel.toastMessage.value = "Permission denied..."
@@ -312,8 +319,11 @@ fun SettingsScreen(
                                 if (it) {
                                     if (!isNotificationPermissionGranted) {
                                         showDialog = true
-                                    }else{
-                                        settingsViewModel.saveToDataStore(IS_AUTOMATED_ANALYSIS_KEY, "1")
+                                    } else {
+                                        settingsViewModel.saveToDataStore(
+                                            IS_AUTOMATED_ANALYSIS_KEY,
+                                            "1"
+                                        )
                                     }
                                 } else settingsViewModel.saveToDataStore(
                                     IS_AUTOMATED_ANALYSIS_KEY,
@@ -323,7 +333,7 @@ fun SettingsScreen(
 
                     }
                     //edit part
-                    if (settingsViewModel.isAutomatedAnalysis.collectAsState().value == "1") {
+                    AnimatedVisibility(visible = settingsViewModel.isAutomatedAnalysis.collectAsState().value == "1") {
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -341,7 +351,10 @@ fun SettingsScreen(
                                 showDialog = showDialog,
                                 title = "Repeat Interval",
                                 onConfirm = {
-                                    settingsViewModel.saveToDataStore(REPEAT_INTERVAL_KEY, newRepeatInterval)
+                                    settingsViewModel.saveToDataStore(
+                                        REPEAT_INTERVAL_KEY,
+                                        newRepeatInterval
+                                    )
                                     showDialog = false
                                     //Log.i(PAST_DAYS_KEY + "on dialog click",newPastDays)
                                 },
@@ -373,7 +386,7 @@ fun SettingsScreen(
                     showDialog = showLogOutDialog,
                     title = "Log Out",
                     onConfirm = {
-                        settingsViewModel.viewModelScope.launch{
+                        settingsViewModel.viewModelScope.launch {
                             settingsViewModel.onLogOut()
                             showLogOutDialog = false
                             navigator.navigate(LogInScreenDestination) {
@@ -397,7 +410,10 @@ fun SettingsScreen(
                     onClick = {
                         showLogOutDialog = true
                     }) {
-                    Icon(imageVector = ImageVector.vectorResource(id = R.drawable.ic_logout), contentDescription ="log out" )
+                    Icon(
+                        imageVector = ImageVector.vectorResource(id = R.drawable.ic_logout),
+                        contentDescription = "log out"
+                    )
                     MyHorizontalSpacer(width = 10)
                     Text(text = "Log Out")
                 }
