@@ -27,7 +27,6 @@ fun MainScreen(
         initial = ""
     )*/
     SmartPoultryTheme {
-
         Scaffold (
             topBar = { MyTopAppBar(navController, navigator) },
             bottomBar = { MyBottomNavBar(navController, mainViewModel.getEggCollectionAccess()) }

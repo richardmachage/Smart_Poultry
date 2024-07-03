@@ -69,6 +69,7 @@ fun AlertScreen(
         }
 
     })
+
     var showDeleteDialog by remember { mutableStateOf(false) }
     MyInputDialog(
         showDialog = showDeleteDialog,

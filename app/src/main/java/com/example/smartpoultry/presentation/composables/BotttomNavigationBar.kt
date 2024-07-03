@@ -6,6 +6,7 @@ import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
@@ -83,35 +84,37 @@ fun MyBottomNavBar(
     val currentRoute = navBackStackEntry?.destination?.route
 
 
-        NavigationBar {
-            items.forEachIndexed { _, item ->
-                var selected = currentRoute == item.route
-                NavigationBarItem(
-                    selected = selected,  //navController.currentDestination?.route == item.route,//
-                    onClick = {
-                        navController.navigate(item.route) {
-                            popUpTo(navController.graph.findStartDestination().id)
-                            launchSingleTop = true
+    NavigationBar(
+        containerColor = MaterialTheme.colorScheme.surfaceContainer
+    ) {
+        items.forEachIndexed { _, item ->
+            var selected = currentRoute == item.route
+            NavigationBarItem(
+                selected = selected,  //navController.currentDestination?.route == item.route,//
+                onClick = {
+                    navController.navigate(item.route) {
+                        popUpTo(navController.graph.findStartDestination().id)
+                        launchSingleTop = true
 
-                        }
-                    },
-                    icon = {
-                        Icon(
-                            imageVector = if (selected) {
-                                item.selectedIcon
-                            } else {
-                                item.unselectedIcon
-                            },
-                            contentDescription = item.title
-                        )
-                    },
-                    label = {
-                        Text(text = item.title)
                     }
-                )
+                },
+                icon = {
+                    Icon(
+                        imageVector = if (selected) {
+                            item.selectedIcon
+                        } else {
+                            item.unselectedIcon
+                        },
+                        contentDescription = item.title
+                    )
+                },
+                label = {
+                    Text(text = item.title)
+                }
+            )
 
-            }
         }
-
     }
+
+}
 

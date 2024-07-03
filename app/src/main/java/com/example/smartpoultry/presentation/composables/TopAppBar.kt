@@ -25,6 +25,7 @@ import com.example.smartpoultry.presentation.destinations.EggScreenDestination
 import com.example.smartpoultry.presentation.destinations.HomeScreenDestination
 import com.example.smartpoultry.presentation.destinations.SettingsScreenDestination
 import com.example.smartpoultry.presentation.screens.alerts.AlertsActivity
+import com.example.smartpoultry.presentation.ui.theme.SmartPoultryTheme
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
@@ -35,48 +36,51 @@ fun MyTopAppBar(
     navController: NavController,
     navigator: DestinationsNavigator
 ) {
+
     val context = LocalContext.current
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
-    TopAppBar(
-        title = {
-            when (currentRoute) {
-                HomeScreenDestination.route -> {
-                    Text(text = "Home")
+
+    SmartPoultryTheme {
+        TopAppBar(
+            title = {
+                when (currentRoute) {
+                    HomeScreenDestination.route -> {
+                        Text(text = "Home")
+                    }
+
+                    AnalyticsScreenDestination.route -> {
+                        Text(text = "Analytics")
+                    }
+
+                    AlertScreenDestination.route -> {
+                        Text(text = "Alerts")
+                    }
+
+                    EggScreenDestination.route -> {
+                        Text(text = "Egg collection")
+                    }
+
+                    BlockCellScreenDestination.route -> {
+                        Text(text = "Blocks & Cells")
+                    }
+                }
+            },
+            actions = {
+                IconButton(onClick = {
+                    // navigator.navigate(AlertScreenDestination)
+                    context.startActivity(Intent(context, AlertsActivity::class.java))
+                    (context as Activity).finish()
+
+                }) {
+                    Icon(
+                        imageVector = Icons.Default.Notifications,//ImageVector.vectorResource(R.drawable.notification_filled),
+                        contentDescription = "Notifications"
+                    )
                 }
 
-                AnalyticsScreenDestination.route -> {
-                    Text(text = "Analytics")
-                }
-
-                AlertScreenDestination.route -> {
-                    Text(text = "Alerts")
-                }
-
-                EggScreenDestination.route -> {
-                    Text(text = "Egg collection")
-                }
-
-                BlockCellScreenDestination.route -> {
-                    Text(text = "Blocks & Cells")
-                }
-            }
-        },
-        actions = {
-            IconButton(onClick = {
-               // navigator.navigate(AlertScreenDestination)
-                context.startActivity(Intent(context,AlertsActivity::class.java))
-                (context as Activity).finish()
-
-            }) {
-                Icon(
-                    imageVector =Icons.Default.Notifications ,//ImageVector.vectorResource(R.drawable.notification_filled),
-                    contentDescription = "Notifications"
-                )
-            }
-
-            /*IconButton(onClick = { navigator.navigate(FeedsScreenDestination) })
+                /*IconButton(onClick = { navigator.navigate(FeedsScreenDestination) })
             {
                 Icon(
                     imageVector = ImageVector.vectorResource(R.drawable.feeds_filled),
@@ -84,25 +88,29 @@ fun MyTopAppBar(
                 )
             }*/
 
-            IconButton(onClick = { navigator.navigate(AccountScreenDestination) })
-            {
-                Icon(imageVector = Icons.Default.AccountCircle, contentDescription = "Account Icon")
-            }
-
-            IconButton(onClick = {
-                navigator.navigate(SettingsScreenDestination) {
-                    launchSingleTop = true
-
+                IconButton(onClick = { navigator.navigate(AccountScreenDestination) })
+                {
+                    Icon(
+                        imageVector = Icons.Default.AccountCircle,
+                        contentDescription = "Account Icon"
+                    )
                 }
-            })
 
-            {
-                Icon(imageVector = Icons.Default.Settings, contentDescription = "Settings Icon")
-            }
+                IconButton(onClick = {
+                    navigator.navigate(SettingsScreenDestination) {
+                        launchSingleTop = true
+
+                    }
+                })
+
+                {
+                    Icon(imageVector = Icons.Default.Settings, contentDescription = "Settings Icon")
+                }
 
 
-        },
-        scrollBehavior = scrollBehavior,
-    )
+            },
+            scrollBehavior = scrollBehavior,
+        )
+    }
 
 }

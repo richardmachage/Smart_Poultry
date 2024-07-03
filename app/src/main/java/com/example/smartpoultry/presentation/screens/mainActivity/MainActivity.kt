@@ -3,6 +3,7 @@ package com.example.smartpoultry.presentation.screens.mainActivity
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.example.smartpoultry.domain.notifications.createNotificationChannel
@@ -24,7 +25,7 @@ class MainActivity() : ComponentActivity() {
             channelID = "1"
         )
         super.onCreate(savedInstanceState)
-
+        enableEdgeToEdge()
         installSplashScreen().apply {
             setVisible(
                 !mainViewModel.isLoggedIn
