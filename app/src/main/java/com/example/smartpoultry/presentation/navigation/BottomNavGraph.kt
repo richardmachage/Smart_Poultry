@@ -2,6 +2,12 @@ package com.example.smartpoultry.presentation.navigation
 
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
@@ -27,10 +33,69 @@ fun BottomNavGraph(
     navigator : DestinationsNavigator
 ){
     NavHost(navController = navController, startDestination = HomeScreenDestination.route , modifier = modifier){
-        composable(route = HomeScreenDestination.route){ HomeScreen(navigator) }
-        composable(route = AnalyticsScreenDestination.route){ AnalyticsScreen(navigator) }
-        composable(route = AlertScreenDestination.route){ AlertScreen() }
-        composable(route = EggScreenDestination.route){ EggScreen(navigator) }
-        composable(route = BlockCellScreenDestination.route){ BlockCellScreen(navigator)}
+        composable(
+            route = HomeScreenDestination.route,
+            enterTransition = {
+                enterAnime()
+            },
+            exitTransition = {
+               exitAnime()
+            }
+        )
+        { HomeScreen(navigator) }
+        composable(
+            route = AnalyticsScreenDestination.route,
+            enterTransition = {
+                enterAnime()
+            },
+            exitTransition = {
+                exitAnime()
+            }
+        ){ AnalyticsScreen(navigator) }
+        composable(
+            route = AlertScreenDestination.route,
+            enterTransition = {
+                enterAnime()
+            },
+            exitTransition = {
+                exitAnime()
+            }){ AlertScreen() }
+        composable(
+            route = EggScreenDestination.route,
+            enterTransition = {
+                enterAnime()
+            },
+            exitTransition = {
+                exitAnime()
+            }){ EggScreen(navigator) }
+        composable(
+            route = BlockCellScreenDestination.route,
+            enterTransition = {
+                enterAnime()
+            },
+            exitTransition = {
+                exitAnime()
+            }){ BlockCellScreen(navigator)}
     }
+}
+
+
+fun enterAnime():EnterTransition{
+    return slideInHorizontally (
+        initialOffsetX = {-it},
+        animationSpec = tween(
+            300,
+            easing = LinearEasing
+        )
+    )
+}
+
+fun exitAnime():ExitTransition{
+    return slideOutHorizontally (
+        targetOffsetX = {-it},
+        animationSpec = tween(
+            300,
+            easing = LinearEasing
+        )
+    )
 }
