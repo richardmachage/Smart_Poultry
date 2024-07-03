@@ -11,7 +11,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.smartpoultry.presentation.composables.MyBottomNavBar
 import com.example.smartpoultry.presentation.composables.MyTopAppBar
 import com.example.smartpoultry.presentation.navigation.BottomNavGraph
-import com.example.smartpoultry.presentation.theme.SmartPoultryTheme
+import com.example.smartpoultry.presentation.ui.theme.SmartPoultryTheme
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 

@@ -1,7 +1,6 @@
 package com.example.smartpoultry.presentation.composables
 
 import androidx.compose.foundation.border
-import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -33,7 +32,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.smartpoultry.R
-import com.example.smartpoultry.presentation.theme.SmartPoultryTheme
+import com.example.smartpoultry.presentation.ui.theme.SmartPoultryTheme
 
 
 @Composable

@@ -44,7 +44,7 @@ import com.example.smartpoultry.data.dataSource.remote.firebase.models.User
 import com.example.smartpoultry.presentation.composables.MyCircularProgressBar
 import com.example.smartpoultry.presentation.composables.MyHorizontalSpacer
 import com.example.smartpoultry.presentation.composables.MyVerticalSpacer
-import com.example.smartpoultry.presentation.theme.SmartPoultryTheme
+import com.example.smartpoultry.presentation.ui.theme.SmartPoultryTheme
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlinx.coroutines.launch

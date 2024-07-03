@@ -30,7 +30,7 @@ import com.example.smartpoultry.presentation.composables.MyInputDialog
 import com.example.smartpoultry.presentation.composables.MyOutlineTextFiled
 import com.example.smartpoultry.presentation.composables.MyVerticalSpacer
 import com.example.smartpoultry.presentation.composables.NormButton
-import com.example.smartpoultry.presentation.theme.SmartPoultryTheme
+import com.example.smartpoultry.presentation.ui.theme.SmartPoultryTheme
 import com.ramcosta.composedestinations.annotation.Destination
 import com.vanpra.composematerialdialogs.rememberMaterialDialogState
 import kotlinx.coroutines.Dispatchers

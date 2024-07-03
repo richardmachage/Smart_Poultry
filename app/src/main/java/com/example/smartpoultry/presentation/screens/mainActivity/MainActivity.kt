@@ -9,7 +9,7 @@ import com.example.smartpoultry.domain.notifications.createNotificationChannel
 import com.example.smartpoultry.presentation.NavGraphs
 import com.example.smartpoultry.presentation.destinations.MainScreenDestination
 import com.example.smartpoultry.presentation.destinations.OnBoardingScreenDestination
-import com.example.smartpoultry.presentation.theme.SmartPoultryTheme
+import com.example.smartpoultry.presentation.ui.theme.SmartPoultryTheme
 import com.ramcosta.composedestinations.DestinationsNavHost
 import dagger.hilt.android.AndroidEntryPoint
 
