@@ -21,11 +21,10 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 fun MainScreen(
     navigator: DestinationsNavigator
 ){
+
     val mainViewModel = hiltViewModel<MainScreenViewModel>()
     val navController = rememberNavController()
-    /*val userRole by remember{ mainViewModel.myDataStore.readData(USER_ROLE_KEY)}.collectAsState(
-        initial = ""
-    )*/
+
     SmartPoultryTheme {
         Scaffold (
             topBar = { MyTopAppBar(navController, navigator) },

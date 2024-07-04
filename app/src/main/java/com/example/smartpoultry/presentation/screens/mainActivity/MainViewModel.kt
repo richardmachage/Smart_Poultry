@@ -42,6 +42,7 @@ class MainViewModel @Inject constructor(
             blocksRepository.listenForFireStoreChanges()
             cellsRepository.listenForFireStoreChanges()
             eggCollectionRepository.listenForFireStoreChanges()
+            //preferencesRepo.listenForFirestoreChanges(firebaseAuth.currentUser?.uid.toString())
         }
     }
 

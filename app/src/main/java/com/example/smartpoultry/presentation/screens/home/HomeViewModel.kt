@@ -24,6 +24,7 @@ import com.example.smartpoultry.utils.IS_PASSWORD_RESET_KEY
 import com.example.smartpoultry.utils.USER_EMAIL_KEY
 import com.example.smartpoultry.utils.USER_NAME_KEY
 import com.example.smartpoultry.utils.localDateToJavaDate
+import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
@@ -43,7 +44,8 @@ class HomeViewModel @Inject constructor(
     val dataStore: AppDataStore,
     val preferencesRepo: PreferencesRepo,
     val firebaseAuthRepository: FirebaseAuthRepository,
-    private val alertsRepository: AlertsRepository
+    private val alertsRepository: AlertsRepository,
+    private val firebaseAuth: FirebaseAuth
     // @ApplicationContext val context: Context
 ) : ViewModel() {
 
@@ -54,7 +56,7 @@ class HomeViewModel @Inject constructor(
     var navigateToLogin by mutableStateOf("")
     var isLoadingText by mutableStateOf("")
     init {
-
+        preferencesRepo.listenForFirestoreChanges(firebaseAuth.currentUser?.uid.toString())
         passwordReset.value = preferencesRepo.loadData(IS_PASSWORD_RESET_KEY)?:""
     }
 

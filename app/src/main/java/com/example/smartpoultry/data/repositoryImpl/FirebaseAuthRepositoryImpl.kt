@@ -53,6 +53,7 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
     private val preferencesRepo: PreferencesRepo
 ) : FirebaseAuthRepository {
 
+
     val functions = Firebase.functions
     override suspend fun signUp(
         email: String,

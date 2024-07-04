@@ -15,5 +15,5 @@ class MainScreenViewModel @Inject constructor(
    // val user = getThisUser(preferencesRepo)
     //val myDataStore = dataStore
     //fun getUserRole() = preferencesRepo.loadData(USER_ROLE_KEY)!!
-    fun getEggCollectionAccess() = preferencesRepo.loadData(EGG_COLLECTION_ACCESS).toBoolean()
+    fun getEggCollectionAccess() = preferencesRepo.loadData(EGG_COLLECTION_ACCESS).toBoolean() // Make this a state Flow to update automatically
 }
