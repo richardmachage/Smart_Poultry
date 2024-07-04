@@ -58,10 +58,7 @@ fun CellsScreen(
     block : BlockParse
 ) {
     val cellsViewModel = hiltViewModel<CellsViewModel>()
-    /*val userRole by remember {
-        mutableStateOf(cellsViewModel.getUserRole())
-    }*/
-    //by cellsViewModel.userRole.collectAsState()
+
     val listOfCells by remember {
         cellsViewModel.getCellsForBLock(block.blockId)
     }.collectAsState()

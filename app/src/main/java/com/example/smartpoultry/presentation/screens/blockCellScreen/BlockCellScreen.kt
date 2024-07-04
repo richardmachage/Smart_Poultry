@@ -1,5 +1,6 @@
 package com.example.smartpoultry.presentation.screens.blockCellScreen
 
+import android.annotation.SuppressLint
 import android.widget.Toast
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.border
@@ -7,6 +8,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -48,7 +50,7 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @com.ramcosta.composedestinations.annotation.Destination
 @Composable
@@ -57,11 +59,7 @@ fun BlockCellScreen(
 ) {
     val context = LocalContext.current
     val blockCellViewModel: BlockCellViewModel = hiltViewModel()
-    /*val userRole by remember {
-        mutableStateOf(blockCellViewModel.getUserRole())
-    }*/
-    //by blockCellViewModel.userRole.collectAsState()
-    //val listOfBlocks by blockCellViewModel.listOfBlocks.collectAsState()
+
     val listOfBlocksWithCells by blockCellViewModel.listOfBlocksWithCells.collectAsState()
 
     val showDialog = blockCellViewModel.showDialog.value
@@ -132,6 +130,7 @@ fun BlockCellScreen(
         )
     }
 
+
     Scaffold(
         //if (userRole != "Collector")
         floatingActionButton = {
@@ -150,19 +149,21 @@ fun BlockCellScreen(
                 }
             }
         }
-    ) { paddingValues ->
+    ) {  paddingValues->
         Surface(
-            modifier = Modifier.padding(paddingValues),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(),
             color = MaterialTheme.colorScheme.background
         ) {
             LazyColumn(
                 modifier = Modifier
-                    .padding(6.dp),
-                contentPadding = paddingValues
+                   //.padding(6.dp)
+                ,
+                verticalArrangement = Arrangement.spacedBy(10.dp)
             ) {
                 itemsIndexed( listOfBlocksWithCells, key = {_, item -> item.block.blockId }
                 ) { _, blockWithCells ->
-                    MyVerticalSpacer(height = 10)
                     Row(
                         Modifier
                             .fillMaxWidth()

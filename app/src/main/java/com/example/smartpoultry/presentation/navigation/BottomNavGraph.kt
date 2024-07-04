@@ -36,9 +36,6 @@ fun BottomNavGraph(
     NavHost(navController = navController, startDestination = HomeScreenDestination.route , modifier = modifier){
         composable(
             route = HomeScreenDestination.route,
-            enterTransition = {
-                enterAnime()
-            },
             exitTransition = {
                exitAnime()
             }
