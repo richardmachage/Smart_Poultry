@@ -30,6 +30,11 @@ fun toGraphDate(date: java.sql.Date): String {
     return SimpleDateFormat("dd-MMM").format(date)
 }
 
+@SuppressLint("SimpleDateFormat")
+fun toGraphDate(date: java.util.Date): String {
+    return SimpleDateFormat("dd-MMM").format(date)
+}
+
 fun toYearMonth(year: String, month: String): String {
     return when (month) {
         "January" -> "$year-01"
