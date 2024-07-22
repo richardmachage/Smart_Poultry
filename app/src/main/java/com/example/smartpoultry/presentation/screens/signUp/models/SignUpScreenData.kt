@@ -5,5 +5,8 @@ data class SignUpScreenData(
     var lastName : String = "",
     var gender : String = Genders.NONE.type,
     var phone : String = "",
-    var email: String = ""
+    var email: String = "",
+    var farmName : String = "",
+    var country : String = "",
+    var password : String = ""
 )

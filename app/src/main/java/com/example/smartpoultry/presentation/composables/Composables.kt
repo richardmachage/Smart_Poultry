@@ -250,7 +250,9 @@ fun MyPasswordEditText(
     iconLeading: ImageVector,
     iconLeadingDescription: String,
     keyboardType: KeyboardType,
-    onValueChange: (String) -> Unit = {}
+    onValueChange: (String) -> Unit = {},
+    hasError: Boolean = false,
+    supportingText :  @Composable (() -> Unit)? = null
 ) {
     var text by remember { mutableStateOf(TextFieldValue("")) }
     var showPassword by remember { mutableStateOf(value = false) }
@@ -294,7 +296,9 @@ fun MyPasswordEditText(
         } else {
             PasswordVisualTransformation()
         },
-        singleLine = true
+        singleLine = true,
+        isError = hasError,
+        supportingText = supportingText
     )
 }
 
