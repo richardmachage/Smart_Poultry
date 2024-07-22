@@ -275,7 +275,7 @@ fun SignUpScreen(
 
 @Composable
 fun SignUpContent(){
-    val state by remember{ mutableStateOf(SignUpParts.PERSONAL_DETAILS.name) }
+    val state by remember{ mutableStateOf(SignUpParts.CONTACT_DETAILS.name) }
 
     //Header
     //Part

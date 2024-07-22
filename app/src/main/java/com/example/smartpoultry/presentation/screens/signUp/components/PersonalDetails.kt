@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
@@ -23,7 +24,7 @@ import com.ramcosta.composedestinations.annotation.Destination
 fun PersonalDetails(
     onResponse : (PersonalDetailsResponse) -> Unit = {}
 ) {
-    val personalDetails by remember {
+    var personalDetails by remember {
         mutableStateOf(PersonalDetailsResponse("",""))
     }
     Column(
@@ -37,7 +38,7 @@ fun PersonalDetails(
             iconLeadingDescription = "account",
             keyboardType = KeyboardType.Text,
             onValueChange = { text ->
-                personalDetails.firstName = text.trim()
+                personalDetails = personalDetails.copy(firstName = text.trim())
                 onResponse(personalDetails)
             }
         )
@@ -50,7 +51,7 @@ fun PersonalDetails(
             iconLeadingDescription = "account",
             keyboardType = KeyboardType.Text,
             onValueChange = { text ->
-                personalDetails.lastName = text.trim()
+                personalDetails = personalDetails.copy(lastName = text.trim())
                 onResponse(personalDetails)
             }
         )
