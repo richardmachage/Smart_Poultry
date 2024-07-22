@@ -2,26 +2,13 @@ package com.example.smartpoultry.presentation.screens.signUp
 
 import android.widget.Toast
 import androidx.compose.animation.AnimatedContent
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.AccountCircle
-import androidx.compose.material.icons.filled.Email
-import androidx.compose.material.icons.filled.Lock
-import androidx.compose.material.icons.filled.Phone
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -36,22 +23,15 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.smartpoultry.R
 import com.example.smartpoultry.presentation.composables.MyCircularProgressBar
-import com.example.smartpoultry.presentation.composables.MyEditTextClear
 import com.example.smartpoultry.presentation.composables.MyOutlineButton
-import com.example.smartpoultry.presentation.composables.MyPasswordEditText
 import com.example.smartpoultry.presentation.composables.MyVerticalSpacer
 import com.example.smartpoultry.presentation.composables.NormButton
 import com.example.smartpoultry.presentation.screens.signUp.components.ContactDetails
@@ -59,6 +39,8 @@ import com.example.smartpoultry.presentation.screens.signUp.components.FarmDetai
 import com.example.smartpoultry.presentation.screens.signUp.components.PersonalDetails
 import com.example.smartpoultry.presentation.screens.signUp.components.SetPassword
 import com.example.smartpoultry.presentation.screens.signUp.models.SignUpParts
+import com.example.smartpoultry.presentation.screens.signUp.models.SignUpScreenData
+import com.example.smartpoultry.presentation.screens.signUp.models.SignUpScreenState
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
@@ -130,7 +112,7 @@ fun SignUpScreen(
                 displayText = "Signing In..."
             )
 
-           Column(
+           /*Column(
                modifier = Modifier.fillMaxSize(),
                verticalArrangement = Arrangement.SpaceBetween
 
@@ -268,13 +250,91 @@ fun SignUpScreen(
                 )
                MyVerticalSpacer(height = 10)
 
+            }*/
+
+            Column(
+                modifier =  Modifier.padding(6.dp)
+            ) {
+                //Header
+                Text(
+                    text = singUpViewModel.signUpScreenState.currentPart.title,//"Hello, lets start with your name",
+                    style = MaterialTheme.typography.headlineLarge,
+                    fontStyle = FontStyle.Italic
+                )
+
+                //Part
+                AnimatedContent(targetState = singUpViewModel.signUpScreenState.currentPart , label = "signUpContentAnime") {currentPart->
+                    when(currentPart){
+                        SignUpParts.PERSONAL_DETAILS -> {
+                            PersonalDetails(
+                                onResponse = {
+                                    //update state
+                                }
+                            )
+                        }
+                        SignUpParts.CONTACT_DETAILS -> {
+                            ContactDetails(
+                                onResponse = {
+
+                                }
+                            )
+                        }
+                        SignUpParts.FARM_DETAILS -> {
+                            FarmDetails(
+                                onResponse = {
+
+                            })
+                        }
+                        SignUpParts.SET_PASSWORD -> {
+                            SetPassword(
+                                onResponse = {
+
+                                }
+                            )
+                        }
+                    }
+                }
+
+                MyVerticalSpacer(height = 30)
+                Row(
+                    Modifier.fillMaxWidth().padding(6.dp)
+                ) {
+
+                    if (singUpViewModel.signUpScreenState.showPrevious){
+                        MyOutlineButton(//Previous button
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .weight(1f),
+                            onButtonClick = { singUpViewModel.onPrevious() },
+                            btnName = "Previous"
+                        )
+                    }
+
+                    NormButton(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f),
+                        onButtonClick = {
+                        if (singUpViewModel.signUpScreenState.showContinue){
+                            singUpViewModel.onContinue()
+                        }else{
+                            singUpViewModel.onDone()
+                        }
+                        },
+                        btnName = if (singUpViewModel.signUpScreenState.showContinue) "Continue" else "Done")
+                }
             }
         }
+
+
     }
 }
 
 @Composable
-fun SignUpContent(){
+fun SignUpContent(
+    signUpScreenData: SignUpScreenData ,
+    signUpScreenState: SignUpScreenState
+){
     val state by remember{ mutableStateOf(SignUpParts.SET_PASSWORD.name) }
 
     //Header
@@ -354,5 +414,5 @@ fun MyText(
 fun SignUpPreview(
 ) {
     //SignUpScreen()
-    SignUpContent()
+   // SignUpContent()
 }

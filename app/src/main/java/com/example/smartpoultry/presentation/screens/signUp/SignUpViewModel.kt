@@ -9,11 +9,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.smartpoultry.domain.repository.FirebaseAuthRepository
+import com.example.smartpoultry.presentation.screens.signUp.models.SignUpParts
+import com.example.smartpoultry.presentation.screens.signUp.models.SignUpScreenData
+import com.example.smartpoultry.presentation.screens.signUp.models.SignUpScreenState
 import com.example.smartpoultry.utils.checkPasswordLength
 import com.example.smartpoultry.utils.isPasswordSame
 import com.example.smartpoultry.utils.isValidEmail
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -22,6 +26,22 @@ import javax.inject.Inject
 class SignUpViewModel @Inject constructor(
     private  val firebaseAuthRepository: FirebaseAuthRepository
 ) : ViewModel() {
+    private var listOfParts = SignUpParts.values().asList()
+    private var currentPartIndex = 0
+
+    private var _signUpScreenState by mutableStateOf(SignUpScreenState(
+        currentPart = listOfParts[currentPartIndex],//SignUpParts.PERSONAL_DETAILS,
+        showPrevious = false,
+        showContinue = true
+    ))
+    val signUpScreenState : SignUpScreenState
+            get() = _signUpScreenState
+
+   private var _signUpScreenData by mutableStateOf(SignUpScreenData())
+    val signUpScreenData:SignUpScreenData
+        get() = _signUpScreenData
+
+
 
     var farmName = mutableStateOf("")
     var email = mutableStateOf("")
@@ -37,6 +57,24 @@ class SignUpViewModel @Inject constructor(
     var isLoading = mutableStateOf(false)
         private set
 
+
+    fun onPrevious(){
+        if (currentPartIndex > 0){
+            currentPartIndex= currentPartIndex - 1
+            _signUpScreenState = _signUpScreenState.copy(currentPart = listOfParts[currentPartIndex], showPrevious = if (currentPartIndex == 0)false else true, showContinue = true)
+        }
+    }
+    fun onContinue(){
+        if (currentPartIndex < (listOfParts.size - 1 )){
+            currentPartIndex++
+            _signUpScreenState = _signUpScreenState.copy(currentPart = listOfParts[currentPartIndex], showPrevious = true, showContinue = if (currentPartIndex == listOfParts.size - 1) false else true)
+        }
+    }
+
+    fun onDone(){
+        toastMessage.value = "Signing up..."
+        //TODO implement sign up here
+    }
 
     fun onSignUp() {
         viewModelScope.launch {
