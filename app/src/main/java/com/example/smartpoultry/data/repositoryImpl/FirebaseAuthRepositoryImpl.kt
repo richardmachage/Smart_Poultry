@@ -1,8 +1,6 @@
 package com.example.smartpoultry.data.repositoryImpl
 
 import android.util.Log
-import androidx.compose.ui.input.key.Key.Companion.U
-import com.example.smartpoultry.data.dataSource.local.datastore.AppDataStore
 import com.example.smartpoultry.data.dataSource.local.datastore.PreferencesRepo
 import com.example.smartpoultry.data.dataSource.remote.firebase.models.AccessLevel
 import com.example.smartpoultry.data.dataSource.remote.firebase.models.Farm
@@ -25,23 +23,18 @@ import com.example.smartpoultry.utils.USERS_COLLECTION
 import com.example.smartpoultry.utils.USER_EMAIL_KEY
 import com.example.smartpoultry.utils.USER_NAME_KEY
 import com.example.smartpoultry.utils.USER_PHONE_KEY
-import com.google.android.play.integrity.internal.h
 import com.google.firebase.Firebase
-import com.google.firebase.auth.EmailAuthCredential
-import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.toObject
 import com.google.firebase.functions.functions
-import com.google.protobuf.Internal.BooleanList
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.invoke
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
@@ -63,8 +56,11 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
         password: String,
         role: String,
         farmName: String,
-        userName: String,
-        phone: String
+        firstName: String,
+        lastName : String,
+        phone: String,
+        country : String,
+        gender : String
     ): Result<Boolean> = coroutineScope {
         //step 1. Create user -> using email and password
         //step 2. create farm and retrieve farm ID
@@ -77,16 +73,18 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
                 val firebaseUser = authResult.user
                 //step 2 create farm
                 val newFarm = firebaseFirestore.collection(FARMS_COLLECTION).document()
-                newFarm.set(Farm(name = farmName, id = newFarm.id, superUserEmail = email)).await()
+                newFarm.set(Farm(name = farmName, id = newFarm.id, superUserEmail = email, country = country)).await()
                 //step 3 add created user to the Users Collection
                 firebaseUser?.let {
                     val user = User(
                         userId = firebaseUser.uid,
-                        name = userName,
+                        firstName = firstName,
+                        lastName = lastName,
                         phone = phone,
                         email = email,
                         farmId = newFarm.id,
-                        passwordReset = true
+                        passwordReset = true,
+                        gender = gender
                     )
                     firebaseFirestore.collection(USERS_COLLECTION)
                         .document(firebaseUser.uid)
@@ -142,7 +140,7 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
                             email = email,
                             farmId = farmId,
                             phone = phone,
-                            name = name,
+                            firstName = name,
                             passwordReset = false
                         )
                     firebaseFirestore.collection(USERS_COLLECTION)
@@ -219,7 +217,7 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
         //user name
         preferencesRepo.saveData(
             USER_NAME_KEY,
-            user.name
+            user.firstName
         )
 
         //user email

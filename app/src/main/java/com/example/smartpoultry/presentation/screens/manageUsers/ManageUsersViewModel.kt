@@ -123,7 +123,7 @@ class ManageUsersViewModel @Inject constructor(
             result.getOrNull()?: false
         } catch (e: Exception) {
             isLoading.value = false
-            toastMessage.value = "Failed to update access level for ${user.name}.\n${e.localizedMessage}"
+            toastMessage.value = "Failed to update access level for ${user.firstName}.\n${e.localizedMessage}"
             false
         }
     }

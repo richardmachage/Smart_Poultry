@@ -18,9 +18,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -44,8 +41,6 @@ import com.example.smartpoultry.presentation.screens.signUp.components.PersonalD
 import com.example.smartpoultry.presentation.screens.signUp.components.SetPassword
 import com.example.smartpoultry.presentation.screens.signUp.models.ContactDetailsResponse
 import com.example.smartpoultry.presentation.screens.signUp.models.SignUpParts
-import com.example.smartpoultry.presentation.screens.signUp.models.SignUpScreenData
-import com.example.smartpoultry.presentation.screens.signUp.models.SignUpScreenState
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
@@ -380,75 +375,6 @@ fun SignUpScreen(
     }
 }
 
-@Composable
-fun SignUpContent(
-    signUpScreenData: SignUpScreenData,
-    signUpScreenState: SignUpScreenState
-) {
-    val state by remember { mutableStateOf(SignUpParts.SET_PASSWORD.name) }
-
-    //Header
-    //Part
-    //continue previous button
-    Column(
-        modifier = Modifier.padding(6.dp)
-    ) {
-        //Header
-        Text(
-            text = "Hello, lets start with your name",
-            style = MaterialTheme.typography.headlineLarge,
-            fontStyle = FontStyle.Italic
-        )
-
-        //Part
-        AnimatedContent(targetState = state, label = "signUpContentAnime") { currentPart ->
-            when (currentPart) {
-                SignUpParts.PERSONAL_DETAILS.name -> {
-                    PersonalDetails(
-                        onResponse = {
-                            //update state
-                        }
-                    )
-                }
-
-                SignUpParts.CONTACT_DETAILS.name -> {
-                    ContactDetails()
-                }
-
-                SignUpParts.FARM_DETAILS.name -> {
-                    FarmDetails()
-                }
-
-                SignUpParts.SET_PASSWORD.name -> {
-                    SetPassword()
-                }
-            }
-        }
-
-        MyVerticalSpacer(height = 30)
-        Row(
-            Modifier
-                .fillMaxWidth()
-                .padding(6.dp)
-        ) {
-
-            MyOutlineButton(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f),
-                onButtonClick = { /*TODO*/ },
-                btnName = "Previous"
-            )
-            NormButton(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f),
-                onButtonClick = { /*TODO*/ },
-                btnName = "Continue"
-            )
-        }
-    }
-}
 
 @Composable
 fun MyText(

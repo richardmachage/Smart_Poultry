@@ -32,7 +32,7 @@ fun SetPassword(
             keyboardType = KeyboardType.Password,
             onValueChange = { text ->
                 password = text
-            }
+            },
         )
 
         MyPasswordEditText( // Confirm Password

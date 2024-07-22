@@ -71,7 +71,7 @@ fun AccountScreen(
     val accountViewModel = hiltViewModel<AccountViewModel>()
     val context = LocalContext.current
     val userName by remember {
-        mutableStateOf(accountViewModel.user.name)
+        mutableStateOf(accountViewModel.user.firstName)
     }//accountViewModel.userName.collectAsState()
     val userEmail by remember {
         mutableStateOf(accountViewModel.user.email)

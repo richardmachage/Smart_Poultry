@@ -90,8 +90,8 @@ fun ManageUsersBottomSheet(
 
             //userName
             MyVerticalSpacer(height = 10)
-            if (user.name.isNotBlank()) {
-                UserInfoRow(Icons.Default.Person, "name", value = user.name, false)
+            if (user.firstName.isNotBlank()) {
+                UserInfoRow(Icons.Default.Person, "name", value = user.firstName, false)
             }
 
             //user email

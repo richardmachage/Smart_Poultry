@@ -4,7 +4,7 @@ import com.example.smartpoultry.data.dataSource.remote.firebase.models.AccessLev
 import com.example.smartpoultry.data.dataSource.remote.firebase.models.User
 
 interface FirebaseAuthRepository {
-    suspend fun signUp(email: String, password: String, role: String, farmName:String, userName:String, phone:String): Result<Boolean>
+    suspend fun signUp(email: String, password: String, role: String, farmName:String, firstName:String,lastName:String, phone:String, country:String,gender : String): Result<Boolean>
     //suspend fun registerUser(email : String, password:String, role:String): Result<Boolean>
     suspend fun registerUser(email : String, password:String, farmId:String, name: String, phone: String, accessLevel: AccessLevel): Result<Boolean>
     suspend fun logIn(email: String, password: String) : Result<Boolean>

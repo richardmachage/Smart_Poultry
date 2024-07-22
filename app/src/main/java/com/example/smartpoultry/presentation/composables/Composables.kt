@@ -193,7 +193,8 @@ fun MyEditTextClear(
     keyboardType: KeyboardType,
     onValueChange: (String) -> Unit = {},
     hasError : Boolean = false,
-    singleLine: Boolean = true
+    singleLine: Boolean = true,
+    onClear : () ->Unit = {}
 ) {
     var text by remember { mutableStateOf(TextFieldValue(value)) }
     val color by animateColorAsState(
@@ -228,7 +229,10 @@ fun MyEditTextClear(
                 enter = scaleIn(),
                 exit = scaleOut(),
             ) {
-                IconButton(onClick = { text = TextFieldValue("") }) {
+                IconButton(onClick = {
+                    onClear()
+                    text = TextFieldValue("")
+                }) {
                     Icon(
                         imageVector = Icons.Filled.Clear,
                         contentDescription = "clear text",
@@ -255,7 +259,7 @@ fun MyPasswordEditText(
     keyboardType: KeyboardType,
     onValueChange: (String) -> Unit = {},
     hasError: Boolean = false,
-    supportingText :  @Composable (() -> Unit)? = null
+    supportingText :  @Composable (() -> Unit)? = null,
 ) {
     var text by remember { mutableStateOf(TextFieldValue("")) }
     var showPassword by remember { mutableStateOf(value = false) }

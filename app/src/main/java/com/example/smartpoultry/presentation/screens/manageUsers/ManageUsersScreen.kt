@@ -169,7 +169,7 @@ fun UserListItem(
                 .background(MaterialTheme.colorScheme.primary)
         ) {
             Text(
-                text = if (user.name.isNotBlank()) user.name.first().uppercaseChar()
+                text = if (user.firstName.isNotBlank()) user.firstName.first().uppercaseChar()
                     .toString() else user.email.first().uppercase(),
                 style = MaterialTheme.typography.bodyLarge.copy(
                     color = MaterialTheme.colorScheme.onPrimary,
@@ -182,9 +182,9 @@ fun UserListItem(
         MyHorizontalSpacer(width = 16)
         // Spacer(modifier = Modifier.width(16.dp))
         Column(modifier = Modifier.weight(1f)) {
-            if (user.name.isNotBlank()) {
+            if (user.firstName.isNotBlank()) {
                 Text(
-                    text = user.name,
+                    text = user.firstName,
                     style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold),
                     fontSize = 20.sp
                 )

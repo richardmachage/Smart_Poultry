@@ -1,12 +1,9 @@
 package com.example.smartpoultry.presentation.screens.signUp
 
 import android.util.Log
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.credentials.CreatePasswordResponse
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.smartpoultry.domain.repository.FirebaseAuthRepository
@@ -20,10 +17,7 @@ import com.example.smartpoultry.utils.checkPasswordLength
 import com.example.smartpoultry.utils.isPasswordSame
 import com.example.smartpoultry.utils.isValidEmail
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 @HiltViewModel
@@ -76,8 +70,8 @@ class SignUpViewModel @Inject constructor(
     }
 
     fun onDone(){
-        toastMessage.value = "name : ${_signUpScreenData.firstName} registered pass: ${_signUpScreenData.password}"
         //TODO implement sign up here
+        onSignUp()
     }
 
     fun onPersonalDetailsResponse(personalDetailsResponse: PersonalDetailsResponse){
@@ -92,18 +86,33 @@ class SignUpViewModel @Inject constructor(
     fun onSetPasswordResponse(password : String){
         _signUpScreenData = _signUpScreenData.copy(password = password)
     }
+
+
     fun onSignUp() {
         viewModelScope.launch {
-            if (validateSignUp()) {
+            if (
+                //validateSignUp()
+                _signUpScreenData.checkBlanks()
+                ) {
                 isLoading.value = true
                 val result =
                     firebaseAuthRepository.signUp(
-                        email = email.value.trim(),
+                        /*email = email.value.trim(),
                         password = password.value,
                         role = "Super",
                         farmName = farmName.value.trim(),
-                        userName = name.value,
-                        phone = phone.value
+                        firstName = name.value,
+                        phone = phone.value*/
+
+                        email = _signUpScreenData.email,//email.value.trim(),
+                        password = _signUpScreenData.password,//password.value,
+                        role = "Super",
+                        farmName = _signUpScreenData.farmName,//farmName.value.trim(),
+                        firstName = _signUpScreenData.firstName,//name.value,
+                        phone = _signUpScreenData.phone,//phone.value,
+                        country = _signUpScreenData.country,
+                        gender = _signUpScreenData.gender,
+                        lastName = _signUpScreenData.lastName,
                     )
                    // firebaseAuthRepository.registerUser(email.value, password.value, userType.value)
                 result.onSuccess {
@@ -116,6 +125,9 @@ class SignUpViewModel @Inject constructor(
                         Log.d("error:","Failed to sign up : ${it.message.toString()}" )
                         isLoading.value = false
                     }
+            }
+            else{
+                toastMessage.value = "Please fill in all required fields to sign up"
             }
         }
     }

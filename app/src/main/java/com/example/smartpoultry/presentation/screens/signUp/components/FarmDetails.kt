@@ -36,6 +36,10 @@ fun FarmDetails(
             onValueChange = {text->
                 farmDetails = farmDetails.copy(farmName = text)
                 onResponse(farmDetails)
+            },
+            onClear = {
+                farmDetails = farmDetails.copy(farmName = "")
+                onResponse(farmDetails)
             }
         )
         MyVerticalSpacer(height = 5)

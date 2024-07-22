@@ -40,7 +40,12 @@ fun PersonalDetails(
             onValueChange = { text ->
                 personalDetails = personalDetails.copy(firstName = text.trim())
                 onResponse(personalDetails)
+            },
+            onClear = {
+                personalDetails = personalDetails.copy(firstName = "")
+                onResponse(personalDetails)
             }
+
         )
 
         MyVerticalSpacer(height = 5)
@@ -53,6 +58,10 @@ fun PersonalDetails(
             onValueChange = { text ->
                 personalDetails = personalDetails.copy(lastName = text.trim())
                 onResponse(personalDetails)
+            },
+            onClear = {
+                personalDetails = personalDetails.copy(lastName = "")
+                onResponse(personalDetails)
             }
         )
         MyVerticalSpacer(height = 5)
@@ -60,7 +69,7 @@ fun PersonalDetails(
         DropDownMenu(
             items = listOf(Genders.MALE.type, Genders.FEMALE.type, Genders.NONE.type),
             onItemClick = {
-                //Todo
+                personalDetails = personalDetails.copy(gender = it)
             } ,
             defaultValue = "Select gender"
         )

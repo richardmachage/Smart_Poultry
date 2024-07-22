@@ -36,7 +36,13 @@ fun ContactDetails(
             onValueChange = { text ->
                 contactResponse = contactResponse.copy(email = text)
                 onResponse(contactResponse)
+            },
+            onClear = {
+                contactResponse = contactResponse.copy(email = "")
+                onResponse(contactResponse)
+
             }
+
         )
 
         MyVerticalSpacer(height = 5)
@@ -50,6 +56,9 @@ fun ContactDetails(
             keyboardType = KeyboardType.Phone,
             onValueChange = { text ->
                 contactResponse = contactResponse.copy(phone = text)
+                onResponse(contactResponse)
+            },
+            onClear = { contactResponse = contactResponse.copy(phone = "")
                 onResponse(contactResponse)
             }
         )

@@ -35,7 +35,7 @@ class AccountViewModel @Inject constructor(
     var manageBlocksCellsAccess = mutableStateOf(false)
     var accessLevel = mutableStateOf(getAccessLevel())
     val user = User(
-        name = getUserName(),
+        firstName = getUserName(),
         // role = getUserRole(),
         email = getUserEmail(),
         phone = getUserPhone(),
