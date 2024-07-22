@@ -185,6 +185,7 @@ fun MySimpleEditText(
 
 @Composable
 fun MyEditTextClear(
+    value: String = "",
     label: String = "",
     hint: String = "",
     iconLeading: ImageVector,
@@ -194,7 +195,7 @@ fun MyEditTextClear(
     hasError : Boolean = false,
     singleLine: Boolean = true
 ) {
-    var text by remember { mutableStateOf(TextFieldValue("")) }
+    var text by remember { mutableStateOf(TextFieldValue(value)) }
     val color by animateColorAsState(
         targetValue = if (hasError) {
             MaterialTheme.colorScheme.error

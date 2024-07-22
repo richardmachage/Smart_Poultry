@@ -12,22 +12,22 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.tooling.preview.Preview
 import com.example.smartpoultry.presentation.composables.MyEditTextClear
 import com.example.smartpoultry.presentation.composables.MyVerticalSpacer
 import com.example.smartpoultry.presentation.screens.signUp.models.ContactDetailsResponse
 
-@Preview
 @Composable
 fun ContactDetails(
-    onResponse: (ContactDetailsResponse) -> Unit = {}
+    onResponse: (ContactDetailsResponse) -> Unit = {},
+    contactResponse : ContactDetailsResponse = ContactDetailsResponse("","")
 ){
 
-    var contactResponse by remember{ mutableStateOf(ContactDetailsResponse("",""))}
+    var contactResponse by remember{ mutableStateOf(contactResponse)}
     Column(
         modifier = Modifier.fillMaxWidth()
     ) {
-        MyEditTextClear( // Input Email address
+        MyEditTextClear(
+            value = contactResponse.email,// Input Email address
             label = "Email",
             hint = "eg. smartpoultry@gmail.com",
             iconLeading = Icons.Default.Email,
@@ -42,6 +42,7 @@ fun ContactDetails(
         MyVerticalSpacer(height = 5)
 
         MyEditTextClear( // Input Phone number
+            value = contactResponse.phone,
             label = "Phone",
             hint = "eg. 0718672654",
             iconLeading = Icons.Default.Phone,

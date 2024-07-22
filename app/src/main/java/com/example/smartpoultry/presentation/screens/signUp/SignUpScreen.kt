@@ -42,6 +42,7 @@ import com.example.smartpoultry.presentation.screens.signUp.components.ContactDe
 import com.example.smartpoultry.presentation.screens.signUp.components.FarmDetails
 import com.example.smartpoultry.presentation.screens.signUp.components.PersonalDetails
 import com.example.smartpoultry.presentation.screens.signUp.components.SetPassword
+import com.example.smartpoultry.presentation.screens.signUp.models.ContactDetailsResponse
 import com.example.smartpoultry.presentation.screens.signUp.models.SignUpParts
 import com.example.smartpoultry.presentation.screens.signUp.models.SignUpScreenData
 import com.example.smartpoultry.presentation.screens.signUp.models.SignUpScreenState
@@ -301,6 +302,7 @@ fun SignUpScreen(
 
                             SignUpParts.CONTACT_DETAILS -> {
                                 ContactDetails(
+                                    contactResponse = ContactDetailsResponse(phone = singUpViewModel.signUpScreenData.phone, email = singUpViewModel.signUpScreenData.email),
                                     onResponse = {
                                         singUpViewModel.onContactDetailsResponse(contactDetailsResponse = it)
                                     }

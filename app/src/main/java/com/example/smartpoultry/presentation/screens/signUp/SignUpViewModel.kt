@@ -76,7 +76,7 @@ class SignUpViewModel @Inject constructor(
     }
 
     fun onDone(){
-        toastMessage.value = "Signing up..."
+        toastMessage.value = "name : ${_signUpScreenData.firstName} registered pass: ${_signUpScreenData.password}"
         //TODO implement sign up here
     }
 
