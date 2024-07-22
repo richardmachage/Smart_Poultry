@@ -29,7 +29,7 @@ fun ContactDetails(
     ) {
         MyEditTextClear( // Input Email address
             label = "Email",
-            hint = "eg. john",
+            hint = "eg. smartpoultry@gmail.com",
             iconLeading = Icons.Default.Email,
             iconLeadingDescription = "Email",
             keyboardType = KeyboardType.Email,

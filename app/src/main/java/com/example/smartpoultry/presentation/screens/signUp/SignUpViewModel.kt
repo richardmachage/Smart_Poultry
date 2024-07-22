@@ -6,9 +6,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.credentials.CreatePasswordResponse
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.smartpoultry.domain.repository.FirebaseAuthRepository
+import com.example.smartpoultry.presentation.screens.signUp.models.ContactDetailsResponse
+import com.example.smartpoultry.presentation.screens.signUp.models.FarmDetailsResponse
+import com.example.smartpoultry.presentation.screens.signUp.models.PersonalDetailsResponse
 import com.example.smartpoultry.presentation.screens.signUp.models.SignUpParts
 import com.example.smartpoultry.presentation.screens.signUp.models.SignUpScreenData
 import com.example.smartpoultry.presentation.screens.signUp.models.SignUpScreenState
@@ -76,6 +80,18 @@ class SignUpViewModel @Inject constructor(
         //TODO implement sign up here
     }
 
+    fun onPersonalDetailsResponse(personalDetailsResponse: PersonalDetailsResponse){
+        _signUpScreenData = _signUpScreenData.copy(firstName = personalDetailsResponse.firstName, lastName = personalDetailsResponse.lastName)
+    }
+    fun onContactDetailsResponse(contactDetailsResponse: ContactDetailsResponse){
+        _signUpScreenData = _signUpScreenData.copy(phone = contactDetailsResponse.phone, email = contactDetailsResponse.email)
+    }
+    fun onFarmDetailsResponse(farmDetailsResponse: FarmDetailsResponse){
+        _signUpScreenData = signUpScreenData.copy(farmName = farmDetailsResponse.farmName, country = farmDetailsResponse.country)
+    }
+    fun onSetPasswordResponse(password : String){
+        _signUpScreenData = _signUpScreenData.copy(password = password)
+    }
     fun onSignUp() {
         viewModelScope.launch {
             if (validateSignUp()) {

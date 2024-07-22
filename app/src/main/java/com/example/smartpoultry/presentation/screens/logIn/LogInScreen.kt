@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
@@ -26,7 +27,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -34,6 +37,7 @@ import com.example.smartpoultry.R
 import com.example.smartpoultry.presentation.composables.MyCircularProgressBar
 import com.example.smartpoultry.presentation.composables.MyEditTextClear
 import com.example.smartpoultry.presentation.composables.MyInputDialog
+import com.example.smartpoultry.presentation.composables.MyOutlineButton
 import com.example.smartpoultry.presentation.composables.MyPasswordEditText
 import com.example.smartpoultry.presentation.composables.MyTextButton
 import com.example.smartpoultry.presentation.composables.MyVerticalSpacer
@@ -199,10 +203,22 @@ fun LogInScreen(
 
                 MyVerticalSpacer(height = 20)
 
-                MyTextButton( //Not registered button
+                /*MyTextButton( //Not registered button
                     onButtonClick = { navigator.navigate(SignUpScreenDestination) },
                     btnText = "You don't have an account?\nClick to sign up",
                     modifier = Modifier.fillMaxWidth()
+                )*/
+                Text(
+                    text = "You don't have an account?",
+                    textAlign = TextAlign.Left,
+                    modifier = Modifier.fillMaxWidth().padding(start = 10.dp),
+                    fontStyle = FontStyle.Italic
+
+                )
+                MyOutlineButton(
+                    modifier = Modifier.fillMaxWidth(),
+                    onButtonClick = {navigator.navigate(SignUpScreenDestination)},
+                    btnName = "Sign Up"
                 )
 
             }

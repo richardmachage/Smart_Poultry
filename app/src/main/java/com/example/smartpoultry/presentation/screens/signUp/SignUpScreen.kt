@@ -2,38 +2,42 @@ package com.example.smartpoultry.presentation.screens.signUp
 
 import android.widget.Toast
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.smartpoultry.R
 import com.example.smartpoultry.presentation.composables.MyCircularProgressBar
 import com.example.smartpoultry.presentation.composables.MyOutlineButton
 import com.example.smartpoultry.presentation.composables.MyVerticalSpacer
 import com.example.smartpoultry.presentation.composables.NormButton
+import com.example.smartpoultry.presentation.composables.NormText
 import com.example.smartpoultry.presentation.screens.signUp.components.ContactDetails
 import com.example.smartpoultry.presentation.screens.signUp.components.FarmDetails
 import com.example.smartpoultry.presentation.screens.signUp.components.PersonalDetails
@@ -58,8 +62,8 @@ fun SignUpScreen(
 
     //For All Toasts in this screen
     LaunchedEffect(singUpViewModel.toastMessage.value) {
-        if (singUpViewModel.toastMessage.value.isNotBlank()){
-            Toast.makeText(context,singUpViewModel.toastMessage.value, Toast.LENGTH_SHORT).show()
+        if (singUpViewModel.toastMessage.value.isNotBlank()) {
+            Toast.makeText(context, singUpViewModel.toastMessage.value, Toast.LENGTH_SHORT).show()
             singUpViewModel.toastMessage.value = ""
         }
     }
@@ -84,7 +88,7 @@ fun SignUpScreen(
 
     Scaffold(
         topBar = {
-            TopAppBar(
+            /*TopAppBar(
                 title = { Text(text = "Sign Up") },
                 scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(),
                 navigationIcon = {
@@ -97,7 +101,7 @@ fun SignUpScreen(
                         )
                     }
                 }
-            )
+            )*/
         }
     ) { paddingValues ->
 
@@ -112,7 +116,7 @@ fun SignUpScreen(
                 displayText = "Signing In..."
             )
 
-           /*Column(
+            /*Column(
                modifier = Modifier.fillMaxSize(),
                verticalArrangement = Arrangement.SpaceBetween
 
@@ -253,95 +257,139 @@ fun SignUpScreen(
             }*/
 
             Column(
-                modifier =  Modifier.padding(6.dp)
-            ) {
-                //Header
-                Text(
-                    text = singUpViewModel.signUpScreenState.currentPart.title,//"Hello, lets start with your name",
-                    style = MaterialTheme.typography.headlineLarge,
-                    fontStyle = FontStyle.Italic
+                modifier = Modifier.padding(top = 5.dp),
+                horizontalAlignment = Alignment.CenterHorizontally) {
+                Image(
+                    modifier = Modifier
+                        .width(100.dp)
+                        .height(100.dp),
+                    //.padding(8.dp),
+                    painter = painterResource(id = (if (isSystemInDarkTheme()) R.drawable.chicken_white else R.drawable.chicken)),
+                    contentDescription = "chicken",
+                    contentScale = ContentScale.Fit
                 )
+                NormText(text = "SMART POULTRY")
 
-                //Part
-                AnimatedContent(targetState = singUpViewModel.signUpScreenState.currentPart , label = "signUpContentAnime") {currentPart->
-                    when(currentPart){
-                        SignUpParts.PERSONAL_DETAILS -> {
-                            PersonalDetails(
-                                onResponse = {
-                                    //update state
-                                }
-                            )
-                        }
-                        SignUpParts.CONTACT_DETAILS -> {
-                            ContactDetails(
-                                onResponse = {
+                Column(
+                    modifier = Modifier.padding(6.dp),
+                ) {
+                    MyVerticalSpacer(height = 20)
+                    //Header
+                    Text(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(10.dp),
+                        text = singUpViewModel.signUpScreenState.currentPart.title,//"Hello, lets start with your name",
+                        style = MaterialTheme.typography.headlineMedium,
+                        fontStyle = FontStyle.Italic
+                    )
 
-                                }
-                            )
-                        }
-                        SignUpParts.FARM_DETAILS -> {
-                            FarmDetails(
-                                onResponse = {
+                    //Part
+                    AnimatedContent(
+                        targetState = singUpViewModel.signUpScreenState.currentPart,
+                        label = "signUpContentAnime"
+                    ) { currentPart ->
+                        when (currentPart) {
+                            SignUpParts.PERSONAL_DETAILS -> {
+                                PersonalDetails(
+                                    onResponse = {
+                                        //update data
+                                            singUpViewModel.onPersonalDetailsResponse(it)
+                                    }
+                                )
+                            }
 
-                            })
-                        }
-                        SignUpParts.SET_PASSWORD -> {
-                            SetPassword(
-                                onResponse = {
+                            SignUpParts.CONTACT_DETAILS -> {
+                                ContactDetails(
+                                    onResponse = {
+                                        singUpViewModel.onContactDetailsResponse(contactDetailsResponse = it)
+                                    }
+                                )
+                            }
 
-                                }
-                            )
+                            SignUpParts.FARM_DETAILS -> {
+                                FarmDetails(
+                                    onResponse = {
+                                        singUpViewModel.onFarmDetailsResponse(farmDetailsResponse = it)
+                                    })
+                            }
+
+                            SignUpParts.SET_PASSWORD -> {
+                                SetPassword(
+                                    onResponse = {
+                                        singUpViewModel.onSetPasswordResponse(it)
+                                    }
+                                )
+                            }
                         }
                     }
-                }
 
-                MyVerticalSpacer(height = 30)
-                Row(
-                    Modifier.fillMaxWidth().padding(6.dp)
-                ) {
+                    MyVerticalSpacer(height = 30)
+                    Row(
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(6.dp)
+                    ) {
 
-                    if (singUpViewModel.signUpScreenState.showPrevious){
-                        MyOutlineButton(//Previous button
+                        if (singUpViewModel.signUpScreenState.showPrevious) {
+                            MyOutlineButton(//Previous button
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .weight(1f),
+                                onButtonClick = { singUpViewModel.onPrevious() },
+                                btnName = "Previous"
+                            )
+                        }
+
+                        NormButton(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .weight(1f),
-                            onButtonClick = { singUpViewModel.onPrevious() },
-                            btnName = "Previous"
+                            onButtonClick = {
+                                if (singUpViewModel.signUpScreenState.showContinue) {
+                                    singUpViewModel.onContinue()
+                                } else {
+                                    singUpViewModel.onDone()
+                                }
+                            },
+                            btnName = if (singUpViewModel.signUpScreenState.showContinue) "Continue" else "Done"
                         )
                     }
 
-                    NormButton(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .weight(1f),
-                        onButtonClick = {
-                        if (singUpViewModel.signUpScreenState.showContinue){
-                            singUpViewModel.onContinue()
-                        }else{
-                            singUpViewModel.onDone()
-                        }
-                        },
-                        btnName = if (singUpViewModel.signUpScreenState.showContinue) "Continue" else "Done")
+                    if (!singUpViewModel.signUpScreenState.showPrevious) {
+                        Text(
+                            text = "Already registered? Go to log in",
+                            textAlign = TextAlign.Left,
+                            modifier = Modifier.fillMaxWidth().padding(start = 10.dp),
+                            fontStyle = FontStyle.Italic
+
+                        )
+                        MyOutlineButton(
+                            modifier = Modifier.fillMaxWidth(),
+                            onButtonClick = { navigator.navigateUp()},
+                            btnName = "Go to Log In",
+                        )
+                    }
                 }
             }
+
+
         }
-
-
     }
 }
 
 @Composable
 fun SignUpContent(
-    signUpScreenData: SignUpScreenData ,
+    signUpScreenData: SignUpScreenData,
     signUpScreenState: SignUpScreenState
-){
-    val state by remember{ mutableStateOf(SignUpParts.SET_PASSWORD.name) }
+) {
+    val state by remember { mutableStateOf(SignUpParts.SET_PASSWORD.name) }
 
     //Header
     //Part
     //continue previous button
     Column(
-        modifier =  Modifier.padding(6.dp)
+        modifier = Modifier.padding(6.dp)
     ) {
         //Header
         Text(
@@ -351,8 +399,8 @@ fun SignUpContent(
         )
 
         //Part
-        AnimatedContent(targetState = state , label = "signUpContentAnime") {currentPart->
-            when(currentPart){
+        AnimatedContent(targetState = state, label = "signUpContentAnime") { currentPart ->
+            when (currentPart) {
                 SignUpParts.PERSONAL_DETAILS.name -> {
                     PersonalDetails(
                         onResponse = {
@@ -360,12 +408,15 @@ fun SignUpContent(
                         }
                     )
                 }
+
                 SignUpParts.CONTACT_DETAILS.name -> {
                     ContactDetails()
                 }
+
                 SignUpParts.FARM_DETAILS.name -> {
                     FarmDetails()
                 }
+
                 SignUpParts.SET_PASSWORD.name -> {
                     SetPassword()
                 }
@@ -374,7 +425,9 @@ fun SignUpContent(
 
         MyVerticalSpacer(height = 30)
         Row(
-            Modifier.fillMaxWidth().padding(6.dp)
+            Modifier
+                .fillMaxWidth()
+                .padding(6.dp)
         ) {
 
             MyOutlineButton(
@@ -389,16 +442,17 @@ fun SignUpContent(
                     .fillMaxWidth()
                     .weight(1f),
                 onButtonClick = { /*TODO*/ },
-                btnName = "Continue")
+                btnName = "Continue"
+            )
         }
     }
 }
 
 @Composable
 fun MyText(
-    text:String,
+    text: String,
     modifier: Modifier = Modifier
-){
+) {
     Text(
         modifier = modifier,
         text = text,
@@ -414,5 +468,5 @@ fun MyText(
 fun SignUpPreview(
 ) {
     //SignUpScreen()
-   // SignUpContent()
+    // SignUpContent()
 }

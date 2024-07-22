@@ -46,6 +46,7 @@ fun SetPassword(
                 if (confirmPassword != password){
                     error = true
                 }else{
+                    error = false
                     onResponse(confirmPassword)
                 }
             },

@@ -46,9 +46,11 @@ import com.example.smartpoultry.R
 
 
 @Composable
-fun NormText(text: String) {
+fun NormText(
+    modifier: Modifier = Modifier,
+    text: String) {
     Text(
-        modifier = Modifier.padding(4.dp),
+        modifier = modifier.padding(4.dp),
         text = text,
         maxLines = 1,
     )
@@ -207,7 +209,7 @@ fun MyEditTextClear(
             .padding(start = (8.dp), end = (8.dp)),
         value = text,
         label = { Text(text = label) },
-        placeholder = { Text(text = hint) },
+       // placeholder = { Text(text = hint) },
         onValueChange = { newText ->
             text = newText
             onValueChange(newText.text)
