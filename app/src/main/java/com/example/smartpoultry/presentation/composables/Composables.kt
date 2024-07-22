@@ -1,10 +1,15 @@
 package com.example.smartpoultry.presentation.composables
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
@@ -16,6 +21,7 @@ import androidx.compose.material3.CardColors
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -66,6 +72,22 @@ fun NormButton(
     }
 }
 
+@Composable
+fun MyOutlineButton(
+    onButtonClick: () -> Unit,
+    btnName: String,
+    modifier: Modifier = Modifier,
+    enabled : Boolean = true
+){
+    OutlinedButton(
+        onClick = onButtonClick,
+        modifier = modifier
+            .padding(8.dp),
+        enabled = enabled
+    ) {
+        NormText(text = btnName)
+    }
+}
 @Composable
 fun MyOutlineTextFiled(
     modifier: Modifier = Modifier,
@@ -166,9 +188,19 @@ fun MyEditTextClear(
     iconLeading: ImageVector,
     iconLeadingDescription: String,
     keyboardType: KeyboardType,
-    onValueChange: (String) -> Unit = {}
+    onValueChange: (String) -> Unit = {},
+    hasError : Boolean = false,
+    singleLine: Boolean = true
 ) {
     var text by remember { mutableStateOf(TextFieldValue("")) }
+    val color by animateColorAsState(
+        targetValue = if (hasError) {
+            MaterialTheme.colorScheme.error
+        } else {
+            MaterialTheme.colorScheme.onSurface
+        },
+        label = "color",
+    )
     OutlinedTextField(
         modifier = Modifier
             .fillMaxWidth()
@@ -188,11 +220,26 @@ fun MyEditTextClear(
             )
         },
         trailingIcon = {
-            IconButton(onClick = { text = TextFieldValue("") }) {
-                Icon(imageVector = Icons.Filled.Clear, contentDescription = "Clear_input")
+            AnimatedVisibility(
+                visible = text.toString().isNotEmpty(),
+                enter = scaleIn(),
+                exit = scaleOut(),
+            ) {
+                IconButton(onClick = { text = TextFieldValue("") }) {
+                    Icon(
+                        imageVector = Icons.Filled.Clear,
+                        contentDescription = "clear text",
+                        modifier = Modifier.size(24.dp),
+                        tint = color
+                    )
+                }
             }
+
+           /* IconButton(onClick = { text = TextFieldValue("") }) {
+                Icon(imageVector = Icons.Default.Clear, contentDescription = "Clear_input")
+            }*/
         },
-        singleLine = true
+        singleLine = singleLine
     )
 }
 

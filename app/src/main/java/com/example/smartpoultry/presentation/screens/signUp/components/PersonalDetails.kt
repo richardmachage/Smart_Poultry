@@ -1,0 +1,61 @@
+package com.example.smartpoultry.presentation.screens.signUp.components
+
+import androidx.compose.foundation.layout.Column
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.tooling.preview.Preview
+import com.example.smartpoultry.presentation.composables.MyEditTextClear
+import com.example.smartpoultry.presentation.screens.signUp.models.PersonalDetailsResponse
+import com.example.smartpoultry.presentation.ui.theme.SmartPoultryTheme
+import com.ramcosta.composedestinations.annotation.Destination
+
+@Composable
+fun PersonalDetails(
+    onResponse : (PersonalDetailsResponse) -> Unit = {}
+) {
+    val personalDetails by remember {
+        mutableStateOf(PersonalDetailsResponse("",""))
+    }
+    Column {
+        //name, gender
+        MyEditTextClear( // Input first name
+            label = "First name",
+            hint = "John",
+            iconLeading = Icons.Default.AccountCircle,
+            iconLeadingDescription = "account",
+            keyboardType = KeyboardType.Text,
+            onValueChange = { text ->
+                personalDetails.firstName = text.trim()
+                onResponse(personalDetails)
+            }
+        )
+
+        MyEditTextClear( // Input last name
+            label = "Last name",
+            hint = "doe",
+            iconLeading = Icons.Default.AccountCircle,
+            iconLeadingDescription = "account",
+            keyboardType = KeyboardType.Text,
+            onValueChange = { text ->
+                personalDetails.lastName = text.trim()
+                onResponse(personalDetails)
+            }
+        )
+    }
+}
+
+@Preview//(showBackground = true, showSystemUi = true)
+@Composable
+@Destination
+fun PersonalPreview(
+) {
+    //SignUpScreen()
+    SmartPoultryTheme {
+        PersonalDetails()
+    }
+}

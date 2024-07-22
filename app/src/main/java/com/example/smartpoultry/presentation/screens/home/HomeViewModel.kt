@@ -55,6 +55,7 @@ class HomeViewModel @Inject constructor(
     var toastMessage by mutableStateOf("")
     var navigateToLogin by mutableStateOf("")
     var isLoadingText by mutableStateOf("")
+
     init {
         preferencesRepo.listenForFirestoreChanges(firebaseAuth.currentUser?.uid.toString())
         passwordReset.value = preferencesRepo.loadData(IS_PASSWORD_RESET_KEY)?:""

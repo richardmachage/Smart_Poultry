@@ -9,6 +9,7 @@ import com.example.smartpoultry.data.dataSource.remote.firebase.models.Farm
 import com.example.smartpoultry.data.dataSource.remote.firebase.models.User
 import com.example.smartpoultry.domain.repository.FirebaseAuthRepository
 import com.example.smartpoultry.utils.ACCESS_LEVEL
+import com.example.smartpoultry.utils.CONSUCUTIVE_DAYS_KEY
 import com.example.smartpoultry.utils.EDIT_HEN_COUNT_ACCESS
 import com.example.smartpoultry.utils.EGG_COLLECTION_ACCESS
 import com.example.smartpoultry.utils.FARMS_COLLECTION
@@ -18,6 +19,8 @@ import com.example.smartpoultry.utils.FARM_SUPER_USER_EMAIL
 import com.example.smartpoultry.utils.IS_PASSWORD_RESET_KEY
 import com.example.smartpoultry.utils.MANAGE_BLOCKS_CELLS_ACCESS
 import com.example.smartpoultry.utils.MANAGE_USERS_ACCESS
+import com.example.smartpoultry.utils.PAST_DAYS_KEY
+import com.example.smartpoultry.utils.THRESHOLD_RATIO_KEY
 import com.example.smartpoultry.utils.USERS_COLLECTION
 import com.example.smartpoultry.utils.USER_EMAIL_KEY
 import com.example.smartpoultry.utils.USER_NAME_KEY
@@ -253,6 +256,20 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
         preferencesRepo.saveData(
             FARM_SUPER_USER_EMAIL,
             farm.superUserEmail
+        )
+
+        preferencesRepo.saveData(
+            PAST_DAYS_KEY,
+            "5"
+        )
+        preferencesRepo.saveData(
+            CONSUCUTIVE_DAYS_KEY,
+            "2"
+        )
+
+        preferencesRepo.saveData(
+            THRESHOLD_RATIO_KEY,
+            "0.5"
         )
     }
 

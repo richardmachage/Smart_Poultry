@@ -1,13 +1,13 @@
 package com.example.smartpoultry.data.dataSource.local.datastore
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.stringPreferencesKey
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 
@@ -18,7 +18,6 @@ class AppDataStore @Inject constructor(
     private val fireBaseAuth: FirebaseAuth,
 ) {
 
-    var farmID by mutableStateOf("")
 
     init {
         //listenForFireStoreChanges()
@@ -80,7 +79,7 @@ class AppDataStore @Inject constructor(
             }
     }
 */
-   /* suspend fun saveData(key: String, value: String) {
+    suspend fun saveData(key: String, value: String) {
         val dataStoreKey = stringPreferencesKey(key)
         dataStore.edit { myPreferences ->
             myPreferences[dataStoreKey] = value
@@ -101,7 +100,7 @@ class AppDataStore @Inject constructor(
             it.remove(dataStoreKey)
         }
     }
-*/
+
     suspend fun clearDataStore() {
         dataStore.edit { myPreferences ->
             myPreferences.clear()

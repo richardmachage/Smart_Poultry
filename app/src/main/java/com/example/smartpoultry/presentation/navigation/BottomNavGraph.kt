@@ -37,40 +37,30 @@ fun BottomNavGraph(
         composable(
             route = HomeScreenDestination.route,
             exitTransition = {
-               exitAnime()
+                exitAnime()
             }
+
         )
         { HomeScreen(navigator) }
         composable(
             route = AnalyticsScreenDestination.route,
-            enterTransition = {
-                enterAnime()
-            },
             exitTransition = {
                 exitAnime()
             }
         ){ AnalyticsScreen(navigator) }
         composable(
             route = AlertScreenDestination.route,
-            enterTransition = {
-                enterAnime()
-            },
+
             exitTransition = {
                 exitAnime()
             }){ AlertScreen() }
         composable(
             route = EggScreenDestination.route,
-            enterTransition = {
-                enterAnime()
-            },
             exitTransition = {
                 exitAnime()
             }){ EggScreen(navigator) }
         composable(
             route = BlockCellScreenDestination.route,
-            enterTransition = {
-                enterAnime()
-            },
             exitTransition = {
                 exitAnime()
             }){ BlockCellScreen(navigator)}
