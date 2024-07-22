@@ -10,6 +10,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.smartpoultry.presentation.composables.MyEditTextClear
+import com.example.smartpoultry.presentation.composables.MyVerticalSpacer
 import com.example.smartpoultry.presentation.screens.signUp.models.PersonalDetailsResponse
 import com.example.smartpoultry.presentation.ui.theme.SmartPoultryTheme
 import com.ramcosta.composedestinations.annotation.Destination
@@ -35,6 +36,7 @@ fun PersonalDetails(
             }
         )
 
+        MyVerticalSpacer(height = 5)
         MyEditTextClear( // Input last name
             label = "Last name",
             hint = "doe",
@@ -46,6 +48,9 @@ fun PersonalDetails(
                 onResponse(personalDetails)
             }
         )
+        MyVerticalSpacer(height = 5)
+
+
     }
 }
 

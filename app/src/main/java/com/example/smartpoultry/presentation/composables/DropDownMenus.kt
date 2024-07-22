@@ -122,6 +122,49 @@ fun CellsDropDownMenu( // for cells
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
+fun DropDownMenu(
+    items : List<String> = emptyList(),
+    defaultSelectedIndex : Int = 0,
+    onItemClick: (String) -> Unit,
+    modifier: Modifier,
+    menuLabel : String = "",
+){
+    var selectedItem by remember { mutableStateOf(items[defaultSelectedIndex]) }
+    var expanded by  remember { mutableStateOf(false) }
+
+    ExposedDropdownMenuBox(expanded = expanded, onExpandedChange = {expanded = !expanded}) {
+        OutlinedTextField(
+            modifier = modifier
+                .menuAnchor()
+                .fillMaxWidth()
+                .padding(start = (6.dp), end = (6.dp)),
+            value = selectedItem,
+            onValueChange = {},
+            readOnly = true,
+            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
+            label = { Text(text = menuLabel)},
+        )
+
+        ExposedDropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false }
+        ) {
+            items.forEach { item ->
+                DropdownMenuItem(
+                    text = { Text(text = item) },
+                    onClick = {
+                        selectedItem = item
+                        onItemClick(item)
+                        expanded = false
+                    }
+                )
+            }
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
 fun UserTypeDropDownMenu(
     listOfItems: List<String> = listOf("Collector","Manager", "Director"),
     onItemClick: (String) -> Unit,
