@@ -1,16 +1,20 @@
 package com.example.smartpoultry.presentation.screens.signUp.components
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.smartpoultry.presentation.composables.DropDownMenu
 import com.example.smartpoultry.presentation.composables.MyEditTextClear
 import com.example.smartpoultry.presentation.composables.MyVerticalSpacer
+import com.example.smartpoultry.presentation.screens.signUp.models.Genders
 import com.example.smartpoultry.presentation.screens.signUp.models.PersonalDetailsResponse
 import com.example.smartpoultry.presentation.ui.theme.SmartPoultryTheme
 import com.ramcosta.composedestinations.annotation.Destination
@@ -22,7 +26,9 @@ fun PersonalDetails(
     val personalDetails by remember {
         mutableStateOf(PersonalDetailsResponse("",""))
     }
-    Column {
+    Column(
+        modifier = Modifier.fillMaxWidth()
+    ) {
         //name, gender
         MyEditTextClear( // Input first name
             label = "First name",
@@ -50,7 +56,13 @@ fun PersonalDetails(
         )
         MyVerticalSpacer(height = 5)
 
-
+        DropDownMenu(
+            items = listOf(Genders.MALE.type, Genders.FEMALE.type, Genders.NONE.type),
+            onItemClick = {
+                //Todo
+            } ,
+            defaultValue = "Select gender"
+        )
     }
 }
 

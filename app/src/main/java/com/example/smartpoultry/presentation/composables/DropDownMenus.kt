@@ -124,12 +124,12 @@ fun CellsDropDownMenu( // for cells
 @Composable
 fun DropDownMenu(
     items : List<String> = emptyList(),
-    defaultSelectedIndex : Int = 0,
+    defaultValue : String ,
     onItemClick: (String) -> Unit,
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
     menuLabel : String = "",
 ){
-    var selectedItem by remember { mutableStateOf(items[defaultSelectedIndex]) }
+    var selectedItem by remember { mutableStateOf(defaultValue) }
     var expanded by  remember { mutableStateOf(false) }
 
     ExposedDropdownMenuBox(expanded = expanded, onExpandedChange = {expanded = !expanded}) {

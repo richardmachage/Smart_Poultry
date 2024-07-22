@@ -276,6 +276,7 @@ fun SignUpScreen(
 @Composable
 fun SignUpContent(){
     val state by remember{ mutableStateOf(SignUpParts.PERSONAL_DETAILS.name) }
+
     //Header
     //Part
     //continue previous button
@@ -293,7 +294,11 @@ fun SignUpContent(){
         AnimatedContent(targetState = state , label = "signUpContentAnime") {currentPart->
             when(currentPart){
                 SignUpParts.PERSONAL_DETAILS.name -> {
-                    PersonalDetails()
+                    PersonalDetails(
+                        onResponse = {
+                            //update state
+                        }
+                    )
                 }
                 SignUpParts.CONTACT_DETAILS.name -> {
                     ContactDetails()
@@ -309,8 +314,9 @@ fun SignUpContent(){
 
         MyVerticalSpacer(height = 30)
         Row(
-            Modifier.fillMaxWidth()
+            Modifier.fillMaxWidth().padding(6.dp)
         ) {
+
             MyOutlineButton(
                 modifier = Modifier
                     .fillMaxWidth()
