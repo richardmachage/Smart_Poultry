@@ -18,20 +18,20 @@ import javax.inject.Inject
 class Report @Inject constructor(
     @ApplicationContext private val context: Context
 ) {
-    // private fun addTextToPage(document: PdfDocument, pageInfo: PdfDocument.PageInfo, listOfRecords : List<ChartClass>, startX: Float, startY: Float, titlePaint: Paint, reportTypePaint: Paint, datePaint: Paint, reportType: String){
     private fun addTextToPage(
         pdfDocument: PdfDocument,
         listOfRecords: List<ChartClass>,
         startX: Float,
         startY: Float,
         paint: Paint,
-        reportType: String
+        reportType: String,
+        farmName: String
     ) {
         var y = startY
         var page = pdfDocument.startPage(PdfDocument.PageInfo.Builder(595, 842, 1).create())
 
         //default title settings
-        val title = "ABUYA POULTRY FARM"
+        val title = farmName.uppercase()
         val titlePaint = Paint(paint)
         titlePaint.textAlign = Paint.Align.CENTER
         titlePaint.typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
@@ -96,11 +96,13 @@ class Report @Inject constructor(
         startX: Float,
         startY: Float,
         paint: Paint,
-        reportType: String
+        reportType: String,
+        farmName: String
+
     ) {
 
         //default title settings
-        val title = "ABUYA POULTRY FARM"
+        val title = farmName.uppercase()
         val titlePaint = Paint(paint)
         titlePaint.textAlign = Paint.Align.CENTER
         titlePaint.typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
@@ -151,7 +153,7 @@ class Report @Inject constructor(
 
     }
 
-    fun createAndSavePDF(name: String, content: List<ChartClass>, reportType: String) {
+    fun createAndSavePDF(name: String, content: List<ChartClass>, reportType: String, farmName:String) {
         val pdfDocument = PdfDocument()
         // val pageInfo = PdfDocument.PageInfo.Builder(595, 842, 1).create() //A4 size
         //  val page = pdfDocument.startPage(pageInfo)
@@ -171,7 +173,8 @@ class Report @Inject constructor(
             startX = 50f,
             startY = 50f,
             paint,
-            reportType
+            reportType,
+            farmName = farmName
         )
 
         // pdfDocument.finishPage(page)
@@ -182,7 +185,7 @@ class Report @Inject constructor(
 
     }
 
-    fun createAndSavePDF(name: String, content: String, reportType: String) {
+    fun createAndSavePDF(name: String, content: String, reportType: String, farmName: String) {
         val pdfDocument = PdfDocument()
         val pageInfo = PdfDocument.PageInfo.Builder(595, 842, 1).create() //A4 size
         val page = pdfDocument.startPage(pageInfo)
@@ -196,7 +199,7 @@ class Report @Inject constructor(
         }
         //canvas.drawText("Hello, PDF World!", 50f, 50f, paint)
 
-        addTextToPage(page = page, text = content, startX = 50f, startY = 50f, paint, reportType)
+        addTextToPage(page = page, text = content, startX = 50f, startY = 50f, paint, reportType, farmName)
 
         pdfDocument.finishPage(page)
 

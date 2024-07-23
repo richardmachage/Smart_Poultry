@@ -110,18 +110,6 @@ class HomeViewModel @Inject constructor(
     }
     private fun getFarmName() = preferencesRepo.loadData(FARM_NAME_KEY)!!
 
-    /*val userRole = dataStore.readData(USER_ROLE_KEY).stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.Eagerly,
-        initialValue = ""
-    )*/
-    //fun getUserRole() = preferencesRepo.loadData(USER_ROLE_KEY)
-
-    /*val userName = dataStore.readData(USER_NAME_KEY).stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.Eagerly,
-        initialValue = ""
-    )*/
     fun getName() = preferencesRepo.loadData(USER_NAME_KEY)
     fun getEmail() = preferencesRepo.loadData(USER_EMAIL_KEY)
 
@@ -155,7 +143,7 @@ class HomeViewModel @Inject constructor(
 
     @SuppressLint("SimpleDateFormat")
     fun onCreateReport(name: String, content: String, reportType: String) {
-        report.createAndSavePDF(name, content, reportType)
+        report.createAndSavePDF(name, content, reportType, getFarmName())
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
