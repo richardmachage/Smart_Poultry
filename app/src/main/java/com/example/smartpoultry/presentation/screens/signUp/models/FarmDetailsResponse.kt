@@ -5,6 +5,6 @@ data class FarmDetailsResponse(
     var country : String,
 )
 
-fun FarmDetailsResponse.isValid() : Boolean {
+fun FarmDetailsResponse.isNoEmptyField() : Boolean {
     return farmName.isNotBlank() || country.isNotBlank()
 }

@@ -21,13 +21,15 @@ import com.example.smartpoultry.presentation.screens.signUp.models.FarmDetailsRe
 @Preview
 @Composable
 fun FarmDetails(
+    farmDetailsResponse: FarmDetailsResponse = FarmDetailsResponse("",""),
     onResponse : (FarmDetailsResponse) ->Unit = {}
 ){
-    var farmDetails by remember { mutableStateOf(FarmDetailsResponse("","")) }
+    var farmDetails by remember { mutableStateOf(farmDetailsResponse) }
     Column(
         modifier = Modifier.fillMaxWidth()
     ) {
         MyEditTextClear( // Farm Name
+            value = farmDetails.farmName ,
             label = "Farm Name",
             hint = "eg. Abuya Poultry Farm",
             iconLeading = ImageVector.vectorResource(id = R.drawable.egg_outline),// painterResource(id = R.drawable.egg_outline),//Image(imageVector =, contentDescription = ),
@@ -42,11 +44,12 @@ fun FarmDetails(
                 onResponse(farmDetails)
             }
         )
+
         MyVerticalSpacer(height = 5)
 
         DropDownMenu(
             items = listOf("Kenya","Tanzania", "Uganda"),
-            defaultValue = "Select your Country",
+            defaultValue = farmDetails.country.ifBlank {  "Select your Country"},
             onItemClick = {
                 farmDetails = farmDetails.copy(country = it)
                 onResponse(farmDetails)

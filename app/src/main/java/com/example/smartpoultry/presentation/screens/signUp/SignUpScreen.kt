@@ -40,6 +40,7 @@ import com.example.smartpoultry.presentation.screens.signUp.components.FarmDetai
 import com.example.smartpoultry.presentation.screens.signUp.components.PersonalDetails
 import com.example.smartpoultry.presentation.screens.signUp.components.SetPassword
 import com.example.smartpoultry.presentation.screens.signUp.models.ContactDetailsResponse
+import com.example.smartpoultry.presentation.screens.signUp.models.FarmDetailsResponse
 import com.example.smartpoultry.presentation.screens.signUp.models.PersonalDetailsResponse
 import com.example.smartpoultry.presentation.screens.signUp.models.SignUpParts
 import com.ramcosta.composedestinations.annotation.Destination
@@ -315,6 +316,10 @@ fun SignUpScreen(
 
                             SignUpParts.FARM_DETAILS -> {
                                 FarmDetails(
+                                    farmDetailsResponse = FarmDetailsResponse(
+                                        farmName = singUpViewModel.signUpScreenData.farmName,
+                                        country = singUpViewModel.signUpScreenData.country
+                                    ),
                                     onResponse = {
                                         singUpViewModel.onFarmDetailsResponse(farmDetailsResponse = it)
                                     })
@@ -322,8 +327,8 @@ fun SignUpScreen(
 
                             SignUpParts.SET_PASSWORD -> {
                                 SetPassword(
-                                    onResponse = {
-                                        singUpViewModel.onSetPasswordResponse(it)
+                                    onResponse = {password, hasError->
+                                        singUpViewModel.onSetPasswordResponse(password, hasError)
                                     }
                                 )
                             }
@@ -365,7 +370,7 @@ fun SignUpScreen(
 
                     if (!singUpViewModel.signUpScreenState.showPrevious) {
                         Text(
-                            text = "Already registered? Go to log in",
+                            text = "Already registered?",
                             textAlign = TextAlign.Left,
                             modifier = Modifier.fillMaxWidth().padding(start = 10.dp),
                             fontStyle = FontStyle.Italic

@@ -16,7 +16,7 @@ import com.example.smartpoultry.presentation.composables.MyPasswordEditText
 
 @Composable
 fun SetPassword(
-    onResponse: (String) -> Unit = {}
+    onResponse: (String, Boolean) -> Unit = {_,_ ->}
 ){
     var password by remember{ mutableStateOf("") }
     var confirmPassword by remember{ mutableStateOf("") }
@@ -45,9 +45,10 @@ fun SetPassword(
                 confirmPassword = text
                 if (confirmPassword != password){
                     error = true
+                    onResponse(confirmPassword,true)
                 }else{
                     error = false
-                    onResponse(confirmPassword)
+                    onResponse(confirmPassword, false)
                 }
             },
             hasError = error,

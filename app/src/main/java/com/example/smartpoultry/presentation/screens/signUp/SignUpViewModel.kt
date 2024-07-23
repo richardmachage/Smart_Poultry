@@ -19,7 +19,6 @@ import com.example.smartpoultry.utils.isPasswordSame
 import com.example.smartpoultry.utils.isValidEmail
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import javax.annotation.meta.When
 import javax.inject.Inject
 
 @HiltViewModel
@@ -121,10 +120,22 @@ class SignUpViewModel @Inject constructor(
     }
 
     fun onFarmDetailsResponse(farmDetailsResponse: FarmDetailsResponse){
-        _signUpScreenData = signUpScreenData.copy(farmName = farmDetailsResponse.farmName, country = farmDetailsResponse.country)
+        if (farmDetailsResponse.isNoEmptyField()){
+            _signUpScreenData = signUpScreenData.copy(farmName = farmDetailsResponse.farmName, country = farmDetailsResponse.country)
+            _signUpScreenState = _signUpScreenState.copy(continueEnabled = true)
+        }else{
+            _signUpScreenState = _signUpScreenState.copy(continueEnabled = false)
+        }
     }
-    fun onSetPasswordResponse(password : String){
-        _signUpScreenData = _signUpScreenData.copy(password = password)
+
+    fun onSetPasswordResponse(password : String, hasError :Boolean){
+        if (hasError){
+            _signUpScreenState = _signUpScreenState.copy(continueEnabled = false)
+        }else {
+            _signUpScreenData = _signUpScreenData.copy(password = password)
+            _signUpScreenState = _signUpScreenState.copy(continueEnabled = true)
+
+        }
     }
 
 

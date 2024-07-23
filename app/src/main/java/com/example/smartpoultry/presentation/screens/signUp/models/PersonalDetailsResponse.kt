@@ -6,6 +6,6 @@ data class PersonalDetailsResponse (
     var gender : String ,//= Genders.NONE.type
 )
 
-fun PersonalDetailsResponse.isValid() : Boolean{
+fun PersonalDetailsResponse.isNoEmptyField() : Boolean{
     return firstName.isNotBlank() || lastName.isNotBlank()
 }
