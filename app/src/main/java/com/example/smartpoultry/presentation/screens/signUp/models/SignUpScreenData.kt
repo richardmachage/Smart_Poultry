@@ -3,7 +3,7 @@ package com.example.smartpoultry.presentation.screens.signUp.models
 data class SignUpScreenData(
     var firstName: String = "",
     var lastName: String = "",
-    var gender: String = Genders.NONE.type,
+    var gender: String = "Select Gender",//Genders.NONE.type,
     var phone: String = "",
     var email: String = "",
     var farmName: String = "",
@@ -14,7 +14,7 @@ data class SignUpScreenData(
         return (
                 firstName.isNotBlank() ||
                 lastName.isNotBlank() ||
-                gender.isNotBlank() ||
+                gender != "Select Gender"||
                 phone.isNotBlank() ||
                 email.isNotBlank() ||
                 farmName.isNotBlank() ||

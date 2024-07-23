@@ -19,10 +19,10 @@ import com.example.smartpoultry.presentation.screens.signUp.models.ContactDetail
 @Composable
 fun ContactDetails(
     onResponse: (ContactDetailsResponse) -> Unit = {},
-    contactResponse : ContactDetailsResponse = ContactDetailsResponse("","")
+    contactDetailResponse : ContactDetailsResponse = ContactDetailsResponse("","")
 ){
 
-    var contactResponse by remember{ mutableStateOf(contactResponse)}
+    var contactResponse by remember{ mutableStateOf(contactDetailResponse)}
     Column(
         modifier = Modifier.fillMaxWidth()
     ) {

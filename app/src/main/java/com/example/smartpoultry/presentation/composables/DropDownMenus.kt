@@ -123,10 +123,10 @@ fun CellsDropDownMenu( // for cells
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DropDownMenu(
+    modifier: Modifier = Modifier,
     items : List<String> = emptyList(),
     defaultValue : String ,
     onItemClick: (String) -> Unit,
-    modifier: Modifier = Modifier,
     menuLabel : String = "",
 ){
     var selectedItem by remember { mutableStateOf(defaultValue) }

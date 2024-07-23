@@ -84,7 +84,7 @@ class SignUpViewModel @Inject constructor(
     fun isContinueEnabled(currentPart : SignUpParts): Boolean {
          when (currentPart){
              SignUpParts.PERSONAL_DETAILS -> {
-                 return  _signUpScreenData.firstName.isNotBlank() && _signUpScreenData.lastName.isNotBlank() && _signUpScreenData.gender.isNotBlank()
+                 return  _signUpScreenData.firstName.isNotBlank() && _signUpScreenData.lastName.isNotBlank() && _signUpScreenData.gender != "Select Gender"
              }
 
              SignUpParts.CONTACT_DETAILS -> {
@@ -103,9 +103,10 @@ class SignUpViewModel @Inject constructor(
     }
 
     fun onPersonalDetailsResponse(personalDetailsResponse: PersonalDetailsResponse){
-        if (personalDetailsResponse.lastName.isNotBlank() && personalDetailsResponse.firstName.isNotBlank() && personalDetailsResponse.gender.isNotBlank()){
+        if (personalDetailsResponse.lastName.isNotBlank() && personalDetailsResponse.firstName.isNotBlank() && personalDetailsResponse.gender != "Select Gender"){
+            _signUpScreenData = _signUpScreenData.copy(firstName = personalDetailsResponse.firstName, lastName = personalDetailsResponse.lastName, gender = personalDetailsResponse.gender)
             _signUpScreenState = _signUpScreenState.copy(continueEnabled = true)
-            _signUpScreenData = _signUpScreenData.copy(firstName = personalDetailsResponse.firstName, lastName = personalDetailsResponse.lastName)
+
         }else{
             _signUpScreenState = _signUpScreenState.copy(continueEnabled = false)
         }

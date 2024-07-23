@@ -40,6 +40,7 @@ import com.example.smartpoultry.presentation.screens.signUp.components.FarmDetai
 import com.example.smartpoultry.presentation.screens.signUp.components.PersonalDetails
 import com.example.smartpoultry.presentation.screens.signUp.components.SetPassword
 import com.example.smartpoultry.presentation.screens.signUp.models.ContactDetailsResponse
+import com.example.smartpoultry.presentation.screens.signUp.models.PersonalDetailsResponse
 import com.example.smartpoultry.presentation.screens.signUp.models.SignUpParts
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -288,16 +289,24 @@ fun SignUpScreen(
                         when (currentPart) {
                             SignUpParts.PERSONAL_DETAILS -> {
                                 PersonalDetails(
+                                    personalDetailsResponse = PersonalDetailsResponse(
+                                        firstName = singUpViewModel.signUpScreenData.firstName,
+                                        lastName = singUpViewModel.signUpScreenData.lastName,
+                                        gender = singUpViewModel.signUpScreenData.gender
+                                    ),
                                     onResponse = {
                                         //update data
-                                            singUpViewModel.onPersonalDetailsResponse(it)
+                                            singUpViewModel.onPersonalDetailsResponse(personalDetailsResponse = it)
                                     }
                                 )
                             }
 
                             SignUpParts.CONTACT_DETAILS -> {
                                 ContactDetails(
-                                    contactResponse = ContactDetailsResponse(phone = singUpViewModel.signUpScreenData.phone, email = singUpViewModel.signUpScreenData.email),
+                                    contactDetailResponse = ContactDetailsResponse(
+                                        phone = singUpViewModel.signUpScreenData.phone,
+                                        email = singUpViewModel.signUpScreenData.email
+                                    ),
                                     onResponse = {
                                         singUpViewModel.onContactDetailsResponse(contactDetailsResponse = it)
                                     }

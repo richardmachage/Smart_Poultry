@@ -22,16 +22,18 @@ import com.ramcosta.composedestinations.annotation.Destination
 
 @Composable
 fun PersonalDetails(
+    personalDetailsResponse: PersonalDetailsResponse ,//= PersonalDetailsResponse("","","Select Gender"),
     onResponse : (PersonalDetailsResponse) -> Unit = {}
 ) {
     var personalDetails by remember {
-        mutableStateOf(PersonalDetailsResponse("","", ""))
+        mutableStateOf(personalDetailsResponse)
     }
     Column(
         modifier = Modifier.fillMaxWidth()
     ) {
         //name, gender
         MyEditTextClear( // Input first name
+            value = personalDetails.firstName,
             label = "First name",
             hint = "John",
             iconLeading = Icons.Default.AccountCircle,
@@ -50,6 +52,7 @@ fun PersonalDetails(
 
         MyVerticalSpacer(height = 5)
         MyEditTextClear( // Input last name
+            value = personalDetails.lastName,
             label = "Last name",
             hint = "doe",
             iconLeading = Icons.Default.AccountCircle,
@@ -71,8 +74,8 @@ fun PersonalDetails(
             onItemClick = {
                 personalDetails = personalDetails.copy(gender = it)
                 onResponse(personalDetails)
-            } ,
-            defaultValue = "Select gender"
+            },
+            defaultValue = personalDetails.gender
         )
     }
 }
@@ -84,6 +87,6 @@ fun PersonalPreview(
 ) {
     //SignUpScreen()
     SmartPoultryTheme {
-        PersonalDetails()
+        //PersonalDetails()
     }
 }
