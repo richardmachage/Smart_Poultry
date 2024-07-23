@@ -5,6 +5,6 @@ data class ContactDetailsResponse(
     var email : String
 )
 
-fun ContactDetailsResponse.isValidContactDetails() : Boolean{
+fun ContactDetailsResponse.isNoEmptyField() : Boolean{
     return email.isNotBlank() || phone.isNotBlank()
 }

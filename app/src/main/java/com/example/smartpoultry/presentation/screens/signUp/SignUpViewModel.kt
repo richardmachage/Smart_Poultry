@@ -13,11 +13,13 @@ import com.example.smartpoultry.presentation.screens.signUp.models.PersonalDetai
 import com.example.smartpoultry.presentation.screens.signUp.models.SignUpParts
 import com.example.smartpoultry.presentation.screens.signUp.models.SignUpScreenData
 import com.example.smartpoultry.presentation.screens.signUp.models.SignUpScreenState
+import com.example.smartpoultry.presentation.screens.signUp.models.isNoEmptyField
 import com.example.smartpoultry.utils.checkPasswordLength
 import com.example.smartpoultry.utils.isPasswordSame
 import com.example.smartpoultry.utils.isValidEmail
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.annotation.meta.When
 import javax.inject.Inject
 
 @HiltViewModel
@@ -59,27 +61,64 @@ class SignUpViewModel @Inject constructor(
     fun onPrevious(){
         if (currentPartIndex > 0){
             currentPartIndex= currentPartIndex - 1
-            _signUpScreenState = _signUpScreenState.copy(currentPart = listOfParts[currentPartIndex], showPrevious = if (currentPartIndex == 0)false else true, showContinue = true)
+            _signUpScreenState = _signUpScreenState.copy(
+                currentPart = listOfParts[currentPartIndex],
+                showPrevious = if (currentPartIndex == 0) false else true,
+                showContinue = true,
+                continueEnabled = isContinueEnabled(listOfParts[currentPartIndex])
+            )
         }
     }
     fun onContinue(){
         if (currentPartIndex < (listOfParts.size - 1 )){
             currentPartIndex++
-            _signUpScreenState = _signUpScreenState.copy(currentPart = listOfParts[currentPartIndex], showPrevious = true, showContinue = if (currentPartIndex == listOfParts.size - 1) false else true)
+            _signUpScreenState = _signUpScreenState.copy(
+                currentPart = listOfParts[currentPartIndex],
+                showPrevious = true,
+                showContinue = if (currentPartIndex == listOfParts.size - 1) false else true,
+                continueEnabled = isContinueEnabled(listOfParts[currentPartIndex])
+            )
         }
     }
 
+    fun isContinueEnabled(currentPart : SignUpParts): Boolean {
+         when (currentPart){
+             SignUpParts.PERSONAL_DETAILS -> {
+                 return  _signUpScreenData.firstName.isNotBlank() && _signUpScreenData.lastName.isNotBlank() && _signUpScreenData.gender.isNotBlank()
+             }
+
+             SignUpParts.CONTACT_DETAILS -> {
+                 return _signUpScreenData.email.isNotBlank() && _signUpScreenData.phone.isNotBlank()
+             }
+             SignUpParts.FARM_DETAILS -> {
+                 return _signUpScreenData.farmName.isNotBlank() && _signUpScreenData.country.isNotBlank()
+             }
+             SignUpParts.SET_PASSWORD -> {
+                 return _signUpScreenData.password.isNotBlank()
+             }
+         }
+    }
     fun onDone(){
-        //TODO implement sign up here
         onSignUp()
     }
 
     fun onPersonalDetailsResponse(personalDetailsResponse: PersonalDetailsResponse){
-        _signUpScreenData = _signUpScreenData.copy(firstName = personalDetailsResponse.firstName, lastName = personalDetailsResponse.lastName)
+        if (personalDetailsResponse.lastName.isNotBlank() && personalDetailsResponse.firstName.isNotBlank() && personalDetailsResponse.gender.isNotBlank()){
+            _signUpScreenState = _signUpScreenState.copy(continueEnabled = true)
+            _signUpScreenData = _signUpScreenData.copy(firstName = personalDetailsResponse.firstName, lastName = personalDetailsResponse.lastName)
+        }else{
+            _signUpScreenState = _signUpScreenState.copy(continueEnabled = false)
+        }
     }
     fun onContactDetailsResponse(contactDetailsResponse: ContactDetailsResponse){
-        _signUpScreenData = _signUpScreenData.copy(phone = contactDetailsResponse.phone, email = contactDetailsResponse.email)
+        if (contactDetailsResponse.isNoEmptyField()){
+            _signUpScreenData = _signUpScreenData.copy(phone = contactDetailsResponse.phone, email = contactDetailsResponse.email)
+            _signUpScreenState = _signUpScreenState.copy(continueEnabled = true)
+        }else{
+            _signUpScreenState = _signUpScreenState.copy(continueEnabled = false)
+        }
     }
+
     fun onFarmDetailsResponse(farmDetailsResponse: FarmDetailsResponse){
         _signUpScreenData = signUpScreenData.copy(farmName = farmDetailsResponse.farmName, country = farmDetailsResponse.country)
     }

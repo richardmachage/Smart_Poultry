@@ -349,7 +349,8 @@ fun SignUpScreen(
                                     singUpViewModel.onDone()
                                 }
                             },
-                            btnName = if (singUpViewModel.signUpScreenState.showContinue) "Continue" else "Done"
+                            btnName = if (singUpViewModel.signUpScreenState.showContinue) "Continue" else "Done",
+                            enabled = singUpViewModel.signUpScreenState.continueEnabled
                         )
                     }
 

@@ -25,7 +25,7 @@ fun PersonalDetails(
     onResponse : (PersonalDetailsResponse) -> Unit = {}
 ) {
     var personalDetails by remember {
-        mutableStateOf(PersonalDetailsResponse("",""))
+        mutableStateOf(PersonalDetailsResponse("","", ""))
     }
     Column(
         modifier = Modifier.fillMaxWidth()
@@ -70,6 +70,7 @@ fun PersonalDetails(
             items = listOf(Genders.MALE.type, Genders.FEMALE.type, Genders.NONE.type),
             onItemClick = {
                 personalDetails = personalDetails.copy(gender = it)
+                onResponse(personalDetails)
             } ,
             defaultValue = "Select gender"
         )
