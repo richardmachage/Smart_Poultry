@@ -198,7 +198,8 @@ fun LogInScreen(
                         logInViewModel.onLogIn()
                     },
                     btnName = "Log In",
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
+                    enabled = logInViewModel.email.value.isNotBlank() && logInViewModel.password.value.isNotBlank()
                 )
 
                 MyVerticalSpacer(height = 20)
