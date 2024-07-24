@@ -434,7 +434,7 @@ fun AnalyticsScreen(
                     }else{
                         isNotificationPermissionGranted = false
                         showDialog = false
-                        analyticsViewModel.toastMessage.value = "Permission denied...Go to settings and enable notifications persmision"
+                        analyticsViewModel.toastMessage.value = "Permission denied...Go to settings and enable notifications permission"
                     }
                 }
 

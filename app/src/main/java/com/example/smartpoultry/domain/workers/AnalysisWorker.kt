@@ -26,9 +26,7 @@ class AnalysisWorker @AssistedInject constructor(
     private val alertsRepository: AlertsRepository
 ) : CoroutineWorker(context, workerParameters) {
 
-   /* private val notificationManager =
-        context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager?
-*/
+
     @RequiresApi(Build.VERSION_CODES.O)
     override suspend fun doWork(): Result {
         Log.d("Analysis worker: ", "started")

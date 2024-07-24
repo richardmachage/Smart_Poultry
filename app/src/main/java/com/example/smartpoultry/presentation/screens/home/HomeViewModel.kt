@@ -151,5 +151,4 @@ class HomeViewModel @Inject constructor(
         return LocalDate.now().minusDays(numberOfDays.toLong())
     }
 
-
 }
