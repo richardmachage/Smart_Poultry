@@ -456,12 +456,11 @@ fun AnalyticsScreen(
             NormButton(
                 modifier = Modifier.fillMaxWidth(),
                 onButtonClick = {
-                    //TODO check is notification  permission is allowed or not
+                    // check is notification  permission is allowed or not
                     if (isNotificationPermissionGranted){
                         analyticsViewModel.fireWorker(context)
                     }else{
                         showDialog = true
-                        //launcher.launch(POST_NOTIFICATIONS)
                     }
                 },
                 btnName = "Perform Automated Analysis >>>"
