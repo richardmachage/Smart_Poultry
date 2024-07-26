@@ -73,7 +73,8 @@ fun ViewRecordsScreen(
                 var active by remember { mutableStateOf(false) }
                 //var items = remember { mutableStateListOf(listOfRecords) }
                 SearchBar(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth(),
                     query = queryValue,
                     onQueryChange = { newQuery ->
                         queryValue = newQuery
