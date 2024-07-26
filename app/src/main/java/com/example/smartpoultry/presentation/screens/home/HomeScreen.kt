@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.os.Build
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.EaseIn
 import androidx.compose.animation.core.tween
@@ -36,9 +37,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.smartpoultry.R
 import com.example.smartpoultry.data.dataModels.DailyEggCollection
 import com.example.smartpoultry.data.dataSource.local.room.entities.cells.Cells
 import com.example.smartpoultry.presentation.NavGraphs
@@ -46,8 +49,8 @@ import com.example.smartpoultry.presentation.composables.MyCard
 import com.example.smartpoultry.presentation.composables.MyCardInventory
 import com.example.smartpoultry.presentation.composables.MyCircularProgressBar
 import com.example.smartpoultry.presentation.composables.MyInputDialog
+import com.example.smartpoultry.presentation.composables.MyOutlineButton
 import com.example.smartpoultry.presentation.composables.MyVerticalSpacer
-import com.example.smartpoultry.presentation.composables.NormButton
 import com.example.smartpoultry.presentation.composables.NormText
 import com.example.smartpoultry.presentation.composables.RecentEggsLineChart
 import com.example.smartpoultry.presentation.destinations.LogInScreenDestination
@@ -71,14 +74,17 @@ fun HomeScreen(
     //viewmodel initialization
     val homeViewModel: HomeViewModel = hiltViewModel()
     val totalBlocks = homeViewModel.totalBlocks.collectAsState()
-    val totalCells = homeViewModel.totalCells.collectAsState() // val userRole by homeViewModel.userRole.collectAsState()
+    val totalCells =
+        homeViewModel.totalCells.collectAsState() // val userRole by homeViewModel.userRole.collectAsState()
     val userName = homeViewModel.getName()!!
-    val emailAddress = homeViewModel.getEmail()!!//by homeViewModel.dataStore.readData(USER_EMAIL_KEY).collectAsState(initial = "")
+    val emailAddress =
+        homeViewModel.getEmail()!!//by homeViewModel.dataStore.readData(USER_EMAIL_KEY).collectAsState(initial = "")
 
     val listOfAlerts by remember { homeViewModel.getFlaggedCells() }.collectAsState(initial = emptyList())
 
 
-    val pastDaysState = homeViewModel.preferencesRepo.loadData(PAST_DAYS_KEY)//remember { homeViewModel.dataStore.readData(PAST_DAYS_KEY) }.collectAsState(initial = "0")
+    val pastDaysState =
+        homeViewModel.preferencesRepo.loadData(PAST_DAYS_KEY)//remember { homeViewModel.dataStore.readData(PAST_DAYS_KEY) }.collectAsState(initial = "0")
     val pastDays = pastDaysState?.toIntOrNull() ?: 0
 
     val dailyEggsForPastDays: State<List<DailyEggCollection>> =
@@ -91,16 +97,16 @@ fun HomeScreen(
         }
 
     LaunchedEffect(homeViewModel.toastMessage) {
-        if (homeViewModel.toastMessage.isNotBlank()){
-            Toast.makeText(context, homeViewModel.toastMessage,Toast.LENGTH_SHORT).show()
+        if (homeViewModel.toastMessage.isNotBlank()) {
+            Toast.makeText(context, homeViewModel.toastMessage, Toast.LENGTH_SHORT).show()
             homeViewModel.toastMessage = ""
         }
     }
 
-    LaunchedEffect (homeViewModel.navigateToLogin){
-        if (homeViewModel.navigateToLogin.isNotBlank()){
+    LaunchedEffect(homeViewModel.navigateToLogin) {
+        if (homeViewModel.navigateToLogin.isNotBlank()) {
             homeViewModel.navigateToLogin = ""
-            navigator.navigate(LogInScreenDestination){
+            navigator.navigate(LogInScreenDestination) {
                 popUpTo(NavGraphs.root) { inclusive = true }
             }
         }
@@ -110,144 +116,149 @@ fun HomeScreen(
             .fillMaxSize(),
         color = MaterialTheme.colorScheme.background
     ) {*/
-        MyCircularProgressBar(
-            isLoading = homeViewModel.isLoading,
-            displayText = homeViewModel.isLoadingText
-        )
+    MyCircularProgressBar(
+        isLoading = homeViewModel.isLoading,
+        displayText = homeViewModel.isLoadingText
+    )
 
-        Column( //Full Screen column
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(8.dp)
-                .verticalScroll(rememberScrollState())
-        ) {
-            var showPasswordResetDialog by remember {
-                mutableStateOf(false)
-            }
+    Column( //Full Screen column
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(8.dp)
+            .verticalScroll(rememberScrollState())
+    ) {
+        var showPasswordResetDialog by remember {
+            mutableStateOf(false)
+        }
 
-            //change password dialog here
-            MyInputDialog(
-                showDialog = showPasswordResetDialog,
-                title = "Reset Password" ,
-                onConfirm = { /*TODO*/
-                    homeViewModel.onPasswordReset(emailAddress)
+        //change password dialog here
+        MyInputDialog(
+            showDialog = showPasswordResetDialog,
+            title = "Reset Password",
+            onConfirm = { /*TODO*/
+                homeViewModel.onPasswordReset(emailAddress)
                 showPasswordResetDialog = false
-                },
-                onDismiss = {
-                    /*TODO*/
-                    showPasswordResetDialog = false
-                }
-            ) {
-                //Dialog body content
-                Column {
-                    Text(text = "A password reset link will be sent to your email address: $emailAddress")
-                    MyVerticalSpacer(height = 10)
-                    Text(text = "After clicking okay, follow these steps \n" +
+            },
+            onDismiss = {
+                /*TODO*/
+                showPasswordResetDialog = false
+            }
+        ) {
+            //Dialog body content
+            Column {
+                Text(text = "A password reset link will be sent to your email address: $emailAddress")
+                MyVerticalSpacer(height = 10)
+                Text(
+                    text = "After clicking okay, follow these steps \n" +
                             "1.You will be logged out automatically \n" +
                             "2.Go to your email inbox \n" +
                             "3.Click on link sent to reset your password \n" +
-                            "4.Now open Smart Poultry and log in using your new password")
-                }
+                            "4.Now open Smart Poultry and log in using your new password"
+                )
             }
-            if ( homeViewModel.passwordReset.value == "false") {
-                MyCard(
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    TextButton(onClick = {
-                        //show password reset dialog
-                        showPasswordResetDialog = true
-                    }) {
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceEvenly
-                        ) {
-                            Icon(imageVector = Icons.Default.Warning, contentDescription = "info")
-                            NormText(text = "To reset your password, click here")
-                        }
+        }
+        if (homeViewModel.passwordReset.value == "false") {
+            MyCard(
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                TextButton(onClick = {
+                    //show password reset dialog
+                    showPasswordResetDialog = true
+                }) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceEvenly
+                    ) {
+                        Icon(imageVector = Icons.Default.Warning, contentDescription = "info")
+                        NormText(text = "To reset your password, click here")
                     }
                 }
             }
+        }
 
-            //Greeting card
-            if (userName.isNotBlank()) {
-                MyCard(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 10.dp)
-
-                ) {
-                    Text(
-                        text = "Hello, $userName from ${homeViewModel.farmName.value}",
-                        modifier = Modifier
-                            .padding(6.dp)
-                            .align(Alignment.Start)
-                    )
-                }
-            }
-            Column(
-                //Inventory block
+        //Greeting card
+        if (userName.isNotBlank()) {
+            MyCard(
                 modifier = Modifier
-                    .border(
-                        width = 1.dp,
-                        color = MaterialTheme.colorScheme.primary,
-                        shape = RoundedCornerShape(
-                            (0.03 * LocalConfiguration.current.screenWidthDp).dp
-                        )
-                    )
                     .fillMaxWidth()
-                    .padding(6.dp),
+                    .padding(bottom = 10.dp)
 
-                ) {
-                Text(text = "Inventory Status :")
-                MyVerticalSpacer(height = 10)
-
-                Row( //inventory cards
+            ) {
+                Text(
+                    text = "Hello, $userName from ${homeViewModel.farmName.value}",
                     modifier = Modifier
-                        .fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceEvenly
-                ) {
-
-                    MyCardInventory(
-                        item = "Chicken",
-                        number = totalCells.value.sumOf { cell: Cells -> cell.henCount }
-                    )
-
-                    MyCardInventory(
-                        item = "Blocks",
-                        number = totalBlocks.value.size
-                    )
-
-                    MyCardInventory(
-                        item = "Cells",
-                        number = totalCells.value.size
-                    )
-
-                }
-
-                NormButton(
-                    modifier = Modifier.fillMaxWidth(),
-                    onButtonClick = {
-                        val reportType = "Farm Inventory Status"
-                        homeViewModel.onCreateReport(
-                            name = "$reportType ${SimpleDateFormat("dd/MMM/yyyy").format(System.currentTimeMillis())}",
-                            content =
-                            "\nTotal Blocks : ${totalBlocks.value.size}" +
-                                    "\nTotal Cells: ${totalCells.value.size}" +
-                                    "\nTotal Chicken: ${totalCells.value.sumOf { cell: Cells -> cell.henCount }}",
-                            reportType = reportType
-                        )
-                        Toast.makeText(
-                            context,
-                            "File exported successfully, view in downloads",
-                            Toast.LENGTH_LONG
-                        ).show()
-                    },
-                    btnName = "Export inventory summary as PDF>"
+                        .padding(6.dp)
+                        .align(Alignment.Start)
                 )
             }
+        }
+        Column(
+            //Inventory block
+            modifier = Modifier
+                .border(
+                    width = 1.dp,
+                    color = MaterialTheme.colorScheme.primary,
+                    shape = RoundedCornerShape(
+                        (0.03 * LocalConfiguration.current.screenWidthDp).dp
+                    )
+                )
+                .fillMaxWidth()
+                .padding(6.dp),
 
-            MyVerticalSpacer(height = 20)
+            ) {
+            Text(text = "Inventory Status :")
+            MyVerticalSpacer(height = 10)
 
+            Row( //inventory cards
+                modifier = Modifier
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceEvenly
+            ) {
+
+                MyCardInventory(
+                    item = "Chicken",
+                    number = totalCells.value.sumOf { cell: Cells -> cell.henCount }
+                )
+
+                MyCardInventory(
+                    item = "Blocks",
+                    number = totalBlocks.value.size
+                )
+
+                MyCardInventory(
+                    item = "Cells",
+                    number = totalCells.value.size
+                )
+
+            }
+
+            //MyOutlineButton(onButtonClick = { /*TODO*/ }, btnName = )
+            MyOutlineButton(
+                modifier = Modifier.fillMaxWidth(),
+                onButtonClick = {
+                    val reportType = "Farm Inventory Status"
+                    homeViewModel.onCreateReport(
+                        name = "$reportType ${SimpleDateFormat("dd/MMM/yyyy").format(System.currentTimeMillis())}",
+                        content =
+                        "\nTotal Blocks : ${totalBlocks.value.size}" +
+                                "\nTotal Cells: ${totalCells.value.size}" +
+                                "\nTotal Chicken: ${totalCells.value.sumOf { cell: Cells -> cell.henCount }}",
+                        reportType = reportType
+                    )
+                    Toast.makeText(
+                        context,
+                        R.string.export_inventory_success,// "File exported successfully, view in downloads",
+                        Toast.LENGTH_LONG
+                    ).show()
+                },
+                btnName = stringResource(id = R.string.export_inventory_summary_as_pdf)//"Export inventory summary as PDF>"
+            )
+        }
+
+        MyVerticalSpacer(height = 20)
+
+
+        AnimatedVisibility(visible = dailyEggsForPastDays.value.isNotEmpty()) {
             Column(
                 //Recent production trends block
                 modifier = Modifier
@@ -266,22 +277,23 @@ fun HomeScreen(
                             easing = EaseIn
 
                         )
-                    )
-                ,
+                    ),
             ) {
-
                 Text(text = "Recent Production Trends:")
                 MyVerticalSpacer(height = 10)
                 //Create graph
-                if (dailyEggsForPastDays.value.isNotEmpty()) RecentEggsLineChart(dailyEggCollections = dailyEggsForPastDays.value)
+                if (dailyEggsForPastDays.value.isNotEmpty()) RecentEggsLineChart(
+                    dailyEggCollections = dailyEggsForPastDays.value
+                )
             }
         }
-   // }
+    }
+    // }
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Preview(showSystemUi = true, showBackground = true)
 @Composable
 fun HomeScreenPrev() {
-   // HomeScreen(rememberNavController())
+    // HomeScreen(rememberNavController())
 }
