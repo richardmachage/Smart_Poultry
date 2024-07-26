@@ -87,7 +87,11 @@ class SettingsViewModel @Inject constructor (
                     workRequest
                 )
 
+         if (repeatInterval.value.toInt() > 1){
             toastMessage.value = "Automatic analysis set to repeat after ${repeatInterval.value} hours"
+         }else{
+             toastMessage.value = "Automatic analysis set to repeat after ${repeatInterval.value} hour"
+         }
     }
 
      fun cancelWorker(){
