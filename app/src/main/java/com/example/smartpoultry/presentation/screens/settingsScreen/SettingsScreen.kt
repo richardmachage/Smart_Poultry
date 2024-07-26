@@ -317,18 +317,22 @@ fun SettingsScreen(
                             isChecked = settingsViewModel.isAutomatedAnalysis.collectAsState().value == "1",
                             onCheckedChange = {
                                 if (it) {
-                                    if (!isNotificationPermissionGranted) {
-                                        showDialog = true
-                                    } else {
+                                    if (isNotificationPermissionGranted) {
                                         settingsViewModel.saveToDataStore(
                                             IS_AUTOMATED_ANALYSIS_KEY,
                                             "1"
                                         )
+                                        settingsViewModel.setWorker()
+                                    } else {
+                                        showDialog = true
                                     }
-                                } else settingsViewModel.saveToDataStore(
-                                    IS_AUTOMATED_ANALYSIS_KEY,
-                                    "0"
-                                )
+                                } else {
+                                    settingsViewModel.saveToDataStore(
+                                        IS_AUTOMATED_ANALYSIS_KEY,
+                                        "0"
+                                    )
+                                    settingsViewModel.cancelWorker()
+                                }
                             })
 
                     }
@@ -355,6 +359,7 @@ fun SettingsScreen(
                                         REPEAT_INTERVAL_KEY,
                                         newRepeatInterval
                                     )
+                                    settingsViewModel.setWorker()
                                     showDialog = false
                                     //Log.i(PAST_DAYS_KEY + "on dialog click",newPastDays)
                                 },

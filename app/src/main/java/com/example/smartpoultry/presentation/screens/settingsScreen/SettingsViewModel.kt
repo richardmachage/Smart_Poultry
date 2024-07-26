@@ -4,7 +4,6 @@ import android.content.Context
 import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
@@ -33,7 +32,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -73,20 +71,14 @@ class SettingsViewModel @Inject constructor (
 
     }
 
-    fun toggleWorker(isAutomatedAnalysis:Boolean){
-        if (isAutomatedAnalysis){
-            setWorker(timeInterval = repeatInterval.value.toIntOrNull()?: 0 )
-        }else{
-            cancelWorker()
-        }
-    }
 
-    private fun setWorker(timeInterval:Int) {
-        if (timeInterval > 0) {
+
+     fun setWorker() {
             val workRequest = PeriodicWorkRequestBuilder<AnalysisWorker>(
-                timeInterval.toLong(),
+                repeatInterval.value.toLong(),
                 TimeUnit.HOURS
-            ).build()
+            ).setInitialDelay(repeatInterval.value.toLong(), TimeUnit.HOURS)
+                .build()
 
             WorkManager.getInstance(context)
                 .enqueueUniquePeriodicWork(
@@ -95,24 +87,21 @@ class SettingsViewModel @Inject constructor (
                     workRequest
                 )
 
-            toastMessage.value = "Automatic analysis set to repeat after $timeInterval hours"
-        }
+            toastMessage.value = "Automatic analysis set to repeat after ${repeatInterval.value} hours"
     }
 
-    private fun cancelWorker(){
+     fun cancelWorker(){
         WorkManager.getInstance(context).cancelUniqueWork("periodic_analysis")
         toastMessage.value = "Automated analysis turned off"
 
     }
 
     private fun loadInitialValues() {
-        viewModelScope.launch {
             _pastDays.value = preferencesRepo.loadData(PAST_DAYS_KEY)!!//getFromDataStore(PAST_DAYS_KEY).ifBlank { "0" }
             _thresholdRatio.value = preferencesRepo.loadData(THRESHOLD_RATIO_KEY)!!//getFromDataStore(THRESHOLD_RATIO_KEY).ifBlank { "0" }
             _consucutiveNumberOfDays.value = preferencesRepo.loadData(CONSUCUTIVE_DAYS_KEY)!!//getFromDataStore(CONSUCUTIVE_DAYS_KEY).ifBlank { "0" }
             _repeatInterval.value = preferencesRepo.loadData(REPEAT_INTERVAL_KEY)!!//getFromDataStore(REPEAT_INTERVAL_KEY).ifBlank { "0" }
             _isAutomatedAnalysis.value = preferencesRepo.loadData(IS_AUTOMATED_ANALYSIS_KEY)!!//getFromDataStore(IS_AUTOMATED_ANALYSIS_KEY).ifBlank { "0" }
-        }
     }
 
     fun saveToDataStore(key: String, value : String){
