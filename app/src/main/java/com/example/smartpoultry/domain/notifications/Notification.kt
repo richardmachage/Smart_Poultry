@@ -41,8 +41,10 @@ contentText : String
         )
         .setContentTitle(title)
         .setContentText(contentText)
+        .setAutoCancel(true)
         .setPriority(NotificationCompat.PRIORITY_HIGH)
         .setContentIntent(onNotificationTap(context))
+
 
 
     return builder.build()
