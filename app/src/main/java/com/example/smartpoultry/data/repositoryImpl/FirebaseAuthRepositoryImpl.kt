@@ -18,6 +18,7 @@ import com.example.smartpoultry.utils.IS_PASSWORD_RESET_KEY
 import com.example.smartpoultry.utils.MANAGE_BLOCKS_CELLS_ACCESS
 import com.example.smartpoultry.utils.MANAGE_USERS_ACCESS
 import com.example.smartpoultry.utils.PAST_DAYS_KEY
+import com.example.smartpoultry.utils.REPEAT_INTERVAL_KEY
 import com.example.smartpoultry.utils.THRESHOLD_RATIO_KEY
 import com.example.smartpoultry.utils.USERS_COLLECTION
 import com.example.smartpoultry.utils.USER_EMAIL_KEY
@@ -268,6 +269,11 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
         preferencesRepo.saveData(
             THRESHOLD_RATIO_KEY,
             "0.5"
+        )
+
+        preferencesRepo.saveData(
+            REPEAT_INTERVAL_KEY,
+            "24"
         )
     }
 
