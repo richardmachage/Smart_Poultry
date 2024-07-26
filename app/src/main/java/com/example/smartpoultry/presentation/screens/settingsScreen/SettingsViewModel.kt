@@ -5,9 +5,13 @@ import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkManager
 import com.example.smartpoultry.data.dataSource.local.datastore.AppDataStore
 import com.example.smartpoultry.data.dataSource.local.datastore.PreferencesRepo
 import com.example.smartpoultry.data.dataSource.local.room.database.SmartPoultryDatabase
+import com.example.smartpoultry.domain.workers.AnalysisWorker
 import com.example.smartpoultry.utils.CONSUCUTIVE_DAYS_KEY
 import com.example.smartpoultry.utils.EDIT_HEN_COUNT_ACCESS
 import com.example.smartpoultry.utils.EGG_COLLECTION_ACCESS
@@ -31,6 +35,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 
@@ -65,6 +70,38 @@ class SettingsViewModel @Inject constructor (
     init {
         //getPastDays()
         loadInitialValues()
+
+    }
+
+    fun toggleWorker(isAutomatedAnalysis:Boolean){
+        if (isAutomatedAnalysis){
+            setWorker(timeInterval = repeatInterval.value.toIntOrNull()?: 0 )
+        }else{
+            cancelWorker()
+        }
+    }
+
+    private fun setWorker(timeInterval:Int) {
+        if (timeInterval > 0) {
+            val workRequest = PeriodicWorkRequestBuilder<AnalysisWorker>(
+                timeInterval.toLong(),
+                TimeUnit.HOURS
+            ).build()
+
+            WorkManager.getInstance(context)
+                .enqueueUniquePeriodicWork(
+                    "periodic_analysis",
+                    ExistingPeriodicWorkPolicy.UPDATE,
+                    workRequest
+                )
+
+            toastMessage.value = "Automatic analysis set to repeat after $timeInterval hours"
+        }
+    }
+
+    private fun cancelWorker(){
+        WorkManager.getInstance(context).cancelUniqueWork("periodic_analysis")
+        toastMessage.value = "Automated analysis turned off"
 
     }
 
