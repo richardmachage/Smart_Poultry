@@ -23,6 +23,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -44,7 +45,6 @@ import com.example.smartpoultry.presentation.composables.MyCard
 import com.example.smartpoultry.presentation.composables.MyCircularProgressBar
 import com.example.smartpoultry.presentation.composables.MyDatePicker
 import com.example.smartpoultry.presentation.composables.MyOutlineButton
-import com.example.smartpoultry.presentation.composables.NormButton
 import com.example.smartpoultry.presentation.uiModels.CellEggCollection
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -81,12 +81,12 @@ fun EggScreen(
         color = MaterialTheme.colorScheme.background
     ) {
 
-
         var switchModes by remember { mutableStateOf(false) }
         Column {
             MyOutlineButton(
+                modifier = Modifier.fillMaxWidth(),
                 onButtonClick = { switchModes = !switchModes },
-                btnName = if (switchModes) "Input Per Cell" else "Input Per Block"
+                btnName = if (!switchModes) "Switch to input Per Cell" else "Switch to input Per Block"
             )
             AnimatedContent(targetState = switchModes, label = "eggCollectionMode") {
                 if (it) {
@@ -107,7 +107,9 @@ fun EggScreen(
                                 it < LocalDate.now() || it == LocalDate.now()
                             }
                         )
-                        EggCollectionScreen()
+                        EggCollectionScreen(
+                            eggViewModel.getAllBlocks.collectAsState().value
+                        )
                     }
                 } else {
 
@@ -238,7 +240,7 @@ fun EggScreen(
                                             }
                                         }
 
-                                        NormButton(
+                                        MyOutlineButton(
                                             onButtonClick = {
                                                 eggViewModel.onSaveRecord(
                                                     block = blockIndex,

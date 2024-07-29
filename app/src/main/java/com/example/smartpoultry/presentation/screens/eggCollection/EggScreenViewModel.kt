@@ -2,8 +2,10 @@ package com.example.smartpoultry.presentation.screens.eggCollection
 
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.smartpoultry.data.dataSource.local.room.entities.cells.Cells
@@ -42,6 +44,10 @@ class EggScreenViewModel @Inject constructor(
     var toastMessage = mutableStateOf("")
     var myInputBlocks = mutableStateListOf<BlockEggCollection>()
         private set
+
+    private var _eggCollectionScreenState by mutableStateOf( EggCollectionScreenState())
+    val eggCollectionScreenState : EggCollectionScreenState
+        get() = _eggCollectionScreenState
 
 
     init {

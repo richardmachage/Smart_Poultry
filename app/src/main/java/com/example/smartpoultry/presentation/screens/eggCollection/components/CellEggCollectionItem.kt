@@ -34,6 +34,7 @@ import com.example.smartpoultry.presentation.composables.MyVerticalSpacer
 @Preview
 @Composable
 fun CellEggCollectionItem(
+    modifier: Modifier = Modifier,
     cellNum: Int = 0,
     henCount: Int = 0,
     onSave: (Int) -> Unit = {}
@@ -61,8 +62,8 @@ fun CellEggCollectionItem(
                 horizontalAlignment = Alignment.CenterHorizontally
 
             ) {
-                Text(text = "Cell $cellNum", style = MaterialTheme.typography.bodyLarge)
-                Text(text = "Chicken $henCount", style = MaterialTheme.typography.bodyLarge)
+                Text(text = "Cell : $cellNum", style = MaterialTheme.typography.bodyLarge)
+                Text(text = "Chicken : $henCount", style = MaterialTheme.typography.bodyLarge)
             }
 
                 MyVerticalSpacer(height = 5)
