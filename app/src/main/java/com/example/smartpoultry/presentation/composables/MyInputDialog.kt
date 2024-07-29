@@ -26,7 +26,7 @@ fun MyInputDialog(
                 )
             },
             dismissButton = {
-                NormButton(
+                MyOutlineButton(
                     onButtonClick = onDismiss,
                     btnName = "Cancel",
                     modifier = Modifier

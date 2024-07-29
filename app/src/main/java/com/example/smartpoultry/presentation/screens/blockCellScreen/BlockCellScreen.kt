@@ -3,9 +3,10 @@ package com.example.smartpoultry.presentation.screens.blockCellScreen
 import android.annotation.SuppressLint
 import android.widget.Toast
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.border
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -13,7 +14,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.Delete
@@ -34,12 +35,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.smartpoultry.presentation.composables.MyCard
 import com.example.smartpoultry.presentation.composables.MyInputDialog
 import com.example.smartpoultry.presentation.composables.MyOutlineTextFiled
 import com.example.smartpoultry.presentation.composables.MyVerticalSpacer
@@ -50,6 +52,7 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @com.ramcosta.composedestinations.annotation.Destination
@@ -160,87 +163,101 @@ fun BlockCellScreen(
                 modifier = Modifier
                    //.padding(6.dp)
                 ,
-                verticalArrangement = Arrangement.spacedBy(10.dp)
+                //verticalArrangement = Arrangement.spacedBy(1.dp)
             ) {
                 itemsIndexed( listOfBlocksWithCells, key = {_, item -> item.block.blockId }
                 ) { _, blockWithCells ->
-                    Row(
-                        Modifier
+
+                    MyCard (
+                        modifier = Modifier
                             .fillMaxWidth()
-                            .border(
-                                width = 1.dp,
-                                color = MaterialTheme.colorScheme.primary,
-                                shape = RoundedCornerShape(
-                                    (0.03 * LocalConfiguration.current.screenWidthDp).dp
-                                )
-                            )
-                            .animateItemPlacement()
-                        ,
-                        horizontalArrangement = Arrangement.Absolute.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Column(
+                            .padding(3.dp)
+                    ){
+                        Row(
                             Modifier
-                                .clickable {
-                                    navigator.navigate(
-                                        CellsScreenDestination(
-                                            BlockParse(
-                                                blockId = blockWithCells.block.blockId,
-                                                blockNum = blockWithCells.block.blockNum,
-                                                totalCells = blockWithCells.cell.size
+                                .fillMaxWidth()
+                                .padding(3.dp)
+                                .animateItemPlacement(),
+                            horizontalArrangement = Arrangement.Absolute.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+
+                            Box(
+                                modifier = Modifier
+                                    .padding(6.dp)
+                                    .clip(CircleShape)
+                                    .background(MaterialTheme.colorScheme.surfaceContainerHighest)
+                                   // .weight(1f),
+                            ) {
+                                Text(
+                                    modifier = Modifier.padding(6.dp),
+                                    text =" "+ blockWithCells.block.blockNum.toString() + " ", style = MaterialTheme.typography.headlineMedium )
+                            }
+
+                            Column(
+                                Modifier
+                                    .clickable {
+                                        navigator.navigate(
+                                            CellsScreenDestination(
+                                                BlockParse(
+                                                    blockId = blockWithCells.block.blockId,
+                                                    blockNum = blockWithCells.block.blockNum,
+                                                    totalCells = blockWithCells.cell.size
+                                                )
                                             )
                                         )
+                                    }
+                                    //.fillMaxWidth(0.9f)
+                                    .padding(4.dp)
+                                    .weight(1f)
+                            ) {
+                                //  Text(text = "BlockId : ${blockWithCells.block.blockId}")
+                                Text(text = "Block Number : ${blockWithCells.block.blockNum}")
+                                Text(text = "Number of cells: ${blockWithCells.cell.size}")
+                            }
+
+                            // MyHorizontalSpacer(width = 5)
+
+
+                            var showDeleteDialog by remember { mutableStateOf(false) }
+                            MyInputDialog(
+                                showDialog = showDeleteDialog,
+                                title = "Delete Block",
+                                onConfirm = {
+                                    // on delete block
+                                    val blockId = blockWithCells.block.blockId
+                                    val blockNum = blockWithCells.block.blockNum
+
+                                    CoroutineScope(Dispatchers.IO).launch {
+                                        blockCellViewModel.onDeleteBlock(block = blockWithCells.block)
+                                    }
+
+                                    showDeleteDialog = false
+
+                                },
+                                onDismiss = {
+                                    showDeleteDialog = false
+                                }
+                            )
+                            {
+                                Column {
+                                    Text(text = "Warning! \nDeleting this block will also delete all the cells within the block ")
+                                    MyVerticalSpacer(height = 10)
+                                    Text(text = "Are you sure you want to delete?")
+                                }
+                            }
+                            if (blockCellViewModel.getManageBlockCellsAccess()/*userRole != "Collector"*/) {
+
+                                IconButton(onClick = {
+                                    //show confirm delete dialog
+                                    showDeleteDialog = true
+
+                                }) {
+                                    Icon(
+                                        imageVector = Icons.Default.Delete,
+                                        contentDescription = "delete"
                                     )
                                 }
-                                .fillMaxWidth(0.9f)
-                                .padding(6.dp)
-                        ) {
-                          //  Text(text = "BlockId : ${blockWithCells.block.blockId}")
-                            Text(text = "Block Number : ${blockWithCells.block.blockNum}")
-                            Text(text = "Number of cells: ${blockWithCells.cell.size}")
-                        }
-
-                        // MyHorizontalSpacer(width = 5)
-
-
-                        var showDeleteDialog by remember { mutableStateOf(false) }
-                        MyInputDialog(
-                            showDialog = showDeleteDialog,
-                            title = "Delete Block",
-                            onConfirm = {
-                                // on delete block
-                                val blockId = blockWithCells.block.blockId
-                                val blockNum = blockWithCells.block.blockNum
-
-                                CoroutineScope(Dispatchers.IO).launch {
-                                    blockCellViewModel.onDeleteBlock(block = blockWithCells.block)
-                                }
-
-                                showDeleteDialog = false
-
-                            },
-                            onDismiss = {
-                                showDeleteDialog = false
-                            }
-                        )
-                        {
-                            Column {
-                                Text(text = "Warning! \nDeleting this block will also delete all the cells within the block ")
-                                MyVerticalSpacer(height = 10)
-                                Text(text = "Are you sure you want to delete?")
-                            }
-                        }
-                        if(blockCellViewModel.getManageBlockCellsAccess()/*userRole != "Collector"*/) {
-
-                            IconButton(onClick = {
-                                //show confirm delete dialog
-                                showDeleteDialog = true
-
-                            }) {
-                                Icon(
-                                    imageVector = Icons.Default.Delete,
-                                    contentDescription = "delete"
-                                )
                             }
                         }
                     }
