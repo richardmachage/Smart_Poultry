@@ -82,15 +82,15 @@ fun EggScreen(
         color = MaterialTheme.colorScheme.background
     ) {
 
-        var switchModes by remember { mutableStateOf(false) }
+        var switchModes by remember { mutableStateOf(true) }
         Column {
             MyOutlineButton(
                 modifier = Modifier.fillMaxWidth(),
                 onButtonClick = { switchModes = !switchModes },
                 btnName = if (!switchModes) "Switch to input Per Cell" else "Switch to input Per Block"
             )
-            AnimatedContent(targetState = switchModes, label = "eggCollectionMode") {
-                if (it) {
+            AnimatedContent(targetState = switchModes, label = "eggCollectionMode") {state->
+                if (state) {
                     Column(
                         modifier = Modifier
                     ) {
@@ -104,8 +104,8 @@ fun EggScreen(
                                 eggViewModel.setSelectedDate(chosenDate)
                             },
                             negativeButton = {},
-                            allowedDateValidate = {
-                                it < LocalDate.now() || it == LocalDate.now()
+                            allowedDateValidate = { date->
+                                date < LocalDate.now() || date == LocalDate.now()
                             }
                         )
                         var showZeroEggsDialog by remember { mutableStateOf(false) }
@@ -125,8 +125,10 @@ fun EggScreen(
                                 showZeroEggsDialog = false
                             }
                         ) {
-                            Text(text = "There is no eggs collected from this cell?")
-                            Text(text = "This will record 0 egg count.")
+                            Column {
+                                Text(text = "There is no eggs collected from this cell?")
+                                Text(text = "This will record 0 egg count.")
+                            }
                         }
                         EggCollectionScreen(
                             listOfBlocks = eggViewModel.getAllBlocks.collectAsState().value,
@@ -140,8 +142,8 @@ fun EggScreen(
                             }
                         )
                     }
-                } else {
-
+                }
+                else {
                     Column(
                         modifier = Modifier
                         // .fillMaxSize()
