@@ -200,8 +200,9 @@ fun CellsScreen(
                             .padding(6.dp),
                         horizontalArrangement = Arrangement.SpaceEvenly
                     ) {
-                        Text(text = "Block Number : ${block.blockNum}")
-                        Text(text = "Number of cells : ${listOfCells.size}")
+                        Text(text = "Block  : ${block.blockNum}")
+                        Text(text = "Cells : ${listOfCells.size}")
+                        Text(text = "Chicken : ${listOfCells.sumOf { it.henCount }}")
                     }
                 }
 
