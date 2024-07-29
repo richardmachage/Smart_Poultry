@@ -15,6 +15,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -47,6 +48,7 @@ import com.example.smartpoultry.domain.permissions.POST_NOTIFICATIONS
 import com.example.smartpoultry.domain.permissions.checkIfPermissionGranted
 import com.example.smartpoultry.presentation.NavGraphs
 import com.example.smartpoultry.presentation.composables.MyBorderedColumn
+import com.example.smartpoultry.presentation.composables.MyCard
 import com.example.smartpoultry.presentation.composables.MyHorizontalSpacer
 import com.example.smartpoultry.presentation.composables.MyInputDialog
 import com.example.smartpoultry.presentation.composables.MyOutlineTextFiled
@@ -72,6 +74,10 @@ fun SettingsScreen(
     //val navController = rememberNavController()
     val context = LocalContext.current
     val settingsViewModel = hiltViewModel<SettingsViewModel>()
+
+    var showPastDayInfoDialog by remember {
+        mutableStateOf(false)
+    }
 
     LaunchedEffect(settingsViewModel.toastMessage.value) {
         val toastMessage = settingsViewModel.toastMessage.value
@@ -114,12 +120,24 @@ fun SettingsScreen(
                 MyVerticalSpacer(height = 10)
 
                 //past days
-                MyBorderedColumn {
-                    Text(text = "Past Days Summary in Home Screen: ")
+                MyCard(modifier = Modifier.fillMaxWidth()) {
+                Column(
+                    modifier = Modifier.padding(6.dp)
+                ) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween
+
+                    ) {
+                        Text(modifier = Modifier.padding(5.dp), text = "Past Days Summary in Home Screen: ")
+                        IconButton(onClick = { showPastDayInfoDialog = true }) {
+                            Icon(imageVector = Icons.Default.Info, contentDescription = null)
+                        }
+                    }
                     Row(
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(6.dp),
+                            .fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
@@ -152,12 +170,13 @@ fun SettingsScreen(
                                 }
                             )
                         }
-                        Text(text = settingsViewModel.pastDays.collectAsState().value)
+                        Text(modifier = Modifier.padding(5.dp),text = settingsViewModel.pastDays.collectAsState().value)
                         IconButton(onClick = { showDialog = true }) {
                             Icon(imageVector = Icons.Default.Edit, contentDescription = "edit")
                         }
                     }
                 }
+            }
                 MyVerticalSpacer(height = 10)
 
                 //consucutive days

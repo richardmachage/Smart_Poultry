@@ -363,7 +363,7 @@ fun MyCard(
     Card(
         modifier = modifier
             .animateContentSize()
-            .padding(8.dp)
+            //.padding(8.dp)
             .shadow(
                 elevation = 20.dp,
                 shape = RoundedCornerShape(10.dp),
