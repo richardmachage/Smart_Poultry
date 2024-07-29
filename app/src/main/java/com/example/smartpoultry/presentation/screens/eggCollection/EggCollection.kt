@@ -55,7 +55,7 @@ fun EggCollectionScreen(
 
         AnimatedVisibility(visible = showCellsAnime) {
                 LazyColumn() {
-                    items(listOfCells.toList(), key = { it.cellId }) {cell->
+                    items(listOfCells.toList().sortedBy { it.cellNum }, key = { it.cellId }) {cell->
                         CellEggCollectionItem(
                             modifier = Modifier.animateItemPlacement(),
                             cellNum = cell.cellNum,

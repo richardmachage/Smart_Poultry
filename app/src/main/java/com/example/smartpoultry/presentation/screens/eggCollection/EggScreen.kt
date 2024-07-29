@@ -44,6 +44,7 @@ import com.example.smartpoultry.presentation.composables.MyBorderedColumn
 import com.example.smartpoultry.presentation.composables.MyCard
 import com.example.smartpoultry.presentation.composables.MyCircularProgressBar
 import com.example.smartpoultry.presentation.composables.MyDatePicker
+import com.example.smartpoultry.presentation.composables.MyInputDialog
 import com.example.smartpoultry.presentation.composables.MyOutlineButton
 import com.example.smartpoultry.presentation.uiModels.CellEggCollection
 import com.ramcosta.composedestinations.annotation.Destination
@@ -107,8 +108,36 @@ fun EggScreen(
                                 it < LocalDate.now() || it == LocalDate.now()
                             }
                         )
+                        var showZeroEggsDialog by remember { mutableStateOf(false) }
+                        MyInputDialog(
+                            showDialog = showZeroEggsDialog,
+                            title = "No eggs Collected",
+                            onConfirm = {
+                                eggViewModel.zeroCellEggs?.let {thisCell->
+                                    eggViewModel.onSaveSingleCellRecord(
+                                        cell = thisCell,
+                                        eggCount = 0
+                                    )
+                                    showZeroEggsDialog = false
+                                }
+                            },
+                            onDismiss = {
+                                showZeroEggsDialog = false
+                            }
+                        ) {
+                            Text(text = "There is no eggs collected from this cell?")
+                            Text(text = "This will record 0 egg count.")
+                        }
                         EggCollectionScreen(
-                            eggViewModel.getAllBlocks.collectAsState().value
+                            listOfBlocks = eggViewModel.getAllBlocks.collectAsState().value,
+                            onSave = { cell, eggCount ->
+                                if (eggCount == 0) {
+                                    eggViewModel.zeroCellEggs = cell
+                                    showZeroEggsDialog = true
+                                } else{
+                                    eggViewModel.onSaveSingleCellRecord(cell,eggCount)
+                                }
+                            }
                         )
                     }
                 } else {
