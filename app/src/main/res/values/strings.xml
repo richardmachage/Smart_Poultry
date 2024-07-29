@@ -3,4 +3,7 @@
     <string name="title_activity_alerts">AlertsActivity</string>
     <string name="export_inventory_summary_as_pdf">Export Inventory Summary as PDF</string>
     <string name="export_inventory_success">Export Inventory Summary as PDF</string>
+    <string name="eggs">"Eggs "</string>
+    <string name="save_btn">Save</string>
+    <string name="input_egg_count">Eggs collected</string>
 </resources>

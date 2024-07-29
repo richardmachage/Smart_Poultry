@@ -3,6 +3,7 @@ package com.example.smartpoultry.presentation.screens.eggCollection
 import android.os.Build
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -42,6 +43,7 @@ import com.example.smartpoultry.presentation.composables.MyBorderedColumn
 import com.example.smartpoultry.presentation.composables.MyCard
 import com.example.smartpoultry.presentation.composables.MyCircularProgressBar
 import com.example.smartpoultry.presentation.composables.MyDatePicker
+import com.example.smartpoultry.presentation.composables.MyOutlineButton
 import com.example.smartpoultry.presentation.composables.NormButton
 import com.example.smartpoultry.presentation.uiModels.CellEggCollection
 import com.ramcosta.composedestinations.annotation.Destination
@@ -78,143 +80,186 @@ fun EggScreen(
             .fillMaxSize(),
         color = MaterialTheme.colorScheme.background
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-        ) {
-            //Defining the datePicker
-            MyDatePicker(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                dateDialogState = rememberMaterialDialogState(),
-                label = "Date",
-                positiveButtonOnClick = { chosenDate ->
-                    eggViewModel.setChosenDateValue(chosenDate)
-                    eggViewModel.setSelectedDate(chosenDate)
-                },
-                negativeButton = {},
-                allowedDateValidate = {
-                    it < LocalDate.now() || it == LocalDate.now()
-                }
+
+
+        var switchModes by remember { mutableStateOf(false) }
+        Column {
+            MyOutlineButton(
+                onButtonClick = { switchModes = !switchModes },
+                btnName = if (switchModes) "Input Per Cell" else "Input Per Block"
             )
-
-            //Blocks and cells UI begins here
-            LazyColumn { //Column of Blocks
-                itemsIndexed(listOfBlocks) { blockIndex, block ->
-                    MyBorderedColumn(
+            AnimatedContent(targetState = switchModes, label = "eggCollectionMode") {
+                if (it) {
+                    Column(
                         modifier = Modifier
-                            .padding(4.dp)
-
                     ) {
-                        Column {
-                            Row(
-                                modifier = Modifier
-                                    .fillMaxWidth(),
-                                horizontalArrangement = Arrangement.SpaceBetween
-                            ) {
-
-                                Text(
-                                    modifier = Modifier
-                                        .padding(6.dp),
-                                    text = "Block : ${listOfBlocks[blockIndex].blockNum}"
-                                )
-
-                                Text(
-                                    modifier = Modifier
-                                        .padding(6.dp),
-                                    text = "Total Eggs: ${listOfBlocks[blockIndex].cells.sumOf { cellEggCollection: CellEggCollection -> cellEggCollection.eggCount }}"
-                                )
+                        MyDatePicker(
+                            modifier = Modifier
+                                .fillMaxWidth(),
+                            dateDialogState = rememberMaterialDialogState(),
+                            label = "Date",
+                            positiveButtonOnClick = { chosenDate ->
+                                eggViewModel.setChosenDateValue(chosenDate)
+                                eggViewModel.setSelectedDate(chosenDate)
+                            },
+                            negativeButton = {},
+                            allowedDateValidate = {
+                                it < LocalDate.now() || it == LocalDate.now()
                             }
+                        )
+                        EggCollectionScreen()
+                    }
+                } else {
 
-                            //These are the cell cards
-                            var saveButtonState by remember { mutableStateOf(true) }
-                            LazyRow {
-                                itemsIndexed(listOfBlocks[blockIndex].cells) { cellIndex, cell ->
+                    Column(
+                        modifier = Modifier
+                        // .fillMaxSize()
+                    ) {
+                        //Defining the datePicker
+                        MyDatePicker(
+                            modifier = Modifier
+                                .fillMaxWidth(),
+                            dateDialogState = rememberMaterialDialogState(),
+                            label = "Date",
+                            positiveButtonOnClick = { chosenDate ->
+                                eggViewModel.setChosenDateValue(chosenDate)
+                                eggViewModel.setSelectedDate(chosenDate)
+                            },
+                            negativeButton = {},
+                            allowedDateValidate = {
+                                it < LocalDate.now() || it == LocalDate.now()
+                            }
+                        )
 
-                                    MyCard(
-                                        modifier = Modifier.width(
-                                            (LocalConfiguration.current.screenWidthDp / 3).dp
-                                        )
-                                    ) {
-                                        Text(
-                                            text = "Cell :${cell.cellNum}",
+                        //Blocks and cells UI begins here
+                        LazyColumn { //Column of Blocks
+                            itemsIndexed(listOfBlocks) { blockIndex, block ->
+                                MyBorderedColumn(
+                                    modifier = Modifier
+                                        .padding(4.dp)
+
+                                ) {
+                                    Column {
+                                        Row(
                                             modifier = Modifier
-                                                //.padding(6.dp)
-                                                .align(Alignment.CenterHorizontally)
-                                        )
-                                        Text(
-                                            text = "Chicken: ${cell.henCount}",//${listOfBlocks[blockIndex].cells[cellIndex].cellNum}",
-                                            modifier = Modifier
-                                                .padding(3.dp)
-                                                .align(Alignment.CenterHorizontally)
-                                        )
+                                                .fillMaxWidth(),
+                                            horizontalArrangement = Arrangement.SpaceBetween
+                                        ) {
 
-                                        var textFieldValueState by remember {
-                                            mutableStateOf(
-                                                TextFieldValue(text = listOfBlocks[blockIndex].cells[cellIndex].eggCount.toString())
+                                            Text(
+                                                modifier = Modifier
+                                                    .padding(6.dp),
+                                                text = "Block : ${listOfBlocks[blockIndex].blockNum}"
+                                            )
+
+                                            Text(
+                                                modifier = Modifier
+                                                    .padding(6.dp),
+                                                text = "Total Eggs: ${listOfBlocks[blockIndex].cells.sumOf { cellEggCollection: CellEggCollection -> cellEggCollection.eggCount }}"
                                             )
                                         }
-                                        var isErrorState by remember { mutableStateOf(false) }
-                                        OutlinedTextField(
-                                            modifier = Modifier
-                                                .fillMaxSize()
-                                                .padding(5.dp),
-                                            value = textFieldValueState,//TextFieldValue(listOfBlocks[blockIndex].cells[cellIndex].eggCount.toString()),//)cell.eggCount.toString()),
-                                            onValueChange = { newText ->
-                                                textFieldValueState = newText.copy(
-                                                    text = newText.text,
-                                                    selection = TextRange(newText.text.length)
-                                                )
 
-                                                val newEggCount = newText.text.toIntOrNull() ?: 0
+                                        //These are the cell cards
+                                        var saveButtonState by remember { mutableStateOf(true) }
+                                        LazyRow {
+                                            itemsIndexed(listOfBlocks[blockIndex].cells) { cellIndex, cell ->
 
-                                                if (newEggCount > cell.henCount) {
-                                                    isErrorState = true
-                                                    saveButtonState = false
-                                                } else {
-                                                    isErrorState = false
-                                                    saveButtonState = true
-                                                    eggViewModel.updateEggCount(
-                                                        blockIndex,
-                                                        cellIndex,
-                                                        newEggCount
+                                                MyCard(
+                                                    modifier = Modifier.width(
+                                                        (LocalConfiguration.current.screenWidthDp / 3).dp
+                                                    )
+                                                ) {
+                                                    Text(
+                                                        text = "Cell :${cell.cellNum}",
+                                                        modifier = Modifier
+                                                            //.padding(6.dp)
+                                                            .align(Alignment.CenterHorizontally)
+                                                    )
+                                                    Text(
+                                                        text = "Chicken: ${cell.henCount}",//${listOfBlocks[blockIndex].cells[cellIndex].cellNum}",
+                                                        modifier = Modifier
+                                                            .padding(3.dp)
+                                                            .align(Alignment.CenterHorizontally)
+                                                    )
+
+                                                    var textFieldValueState by remember {
+                                                        mutableStateOf(
+                                                            TextFieldValue(text = listOfBlocks[blockIndex].cells[cellIndex].eggCount.toString())
+                                                        )
+                                                    }
+                                                    var isErrorState by remember {
+                                                        mutableStateOf(
+                                                            false
+                                                        )
+                                                    }
+                                                    OutlinedTextField(
+                                                        modifier = Modifier
+                                                            .fillMaxSize()
+                                                            .padding(5.dp),
+                                                        value = textFieldValueState,//TextFieldValue(listOfBlocks[blockIndex].cells[cellIndex].eggCount.toString()),//)cell.eggCount.toString()),
+                                                        onValueChange = { newText ->
+                                                            textFieldValueState = newText.copy(
+                                                                text = newText.text,
+                                                                selection = TextRange(newText.text.length)
+                                                            )
+
+                                                            val newEggCount =
+                                                                newText.text.toIntOrNull() ?: 0
+
+                                                            if (newEggCount > cell.henCount) {
+                                                                isErrorState = true
+                                                                saveButtonState = false
+                                                            } else {
+                                                                isErrorState = false
+                                                                saveButtonState = true
+                                                                eggViewModel.updateEggCount(
+                                                                    blockIndex,
+                                                                    cellIndex,
+                                                                    newEggCount
+                                                                )
+                                                            }
+                                                        },
+                                                        keyboardOptions = KeyboardOptions(
+                                                            keyboardType = KeyboardType.Number
+                                                        ),
+                                                        leadingIcon = {
+                                                            Icon(
+                                                                imageVector = ImageVector.vectorResource(
+                                                                    R.drawable.egg_outline
+                                                                ),
+                                                                contentDescription = "egg"
+                                                            )
+                                                        },
+                                                        singleLine = true,
+                                                        isError = isErrorState
                                                     )
                                                 }
-                                            },
-                                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                                            leadingIcon = {
-                                                Icon(
-                                                    imageVector = ImageVector.vectorResource(R.drawable.egg_outline),
-                                                    contentDescription = "egg"
+
+                                            }
+                                        }
+
+                                        NormButton(
+                                            onButtonClick = {
+                                                eggViewModel.onSaveRecord(
+                                                    block = blockIndex,
+                                                    cellsInput = listOfBlocks[blockIndex].cells
                                                 )
+
                                             },
-                                            singleLine = true,
-                                            isError = isErrorState
+                                            btnName = "Save",
+                                            modifier = Modifier.fillMaxWidth(),
+                                            enabled = saveButtonState
                                         )
                                     }
-
                                 }
+
                             }
 
-                            NormButton(
-                                onButtonClick = {
-                                    eggViewModel.onSaveRecord(
-                                        block = blockIndex,
-                                        cellsInput = listOfBlocks[blockIndex].cells
-                                    )
-
-                                },
-                                btnName = "Save",
-                                modifier = Modifier.fillMaxWidth(),
-                                enabled = saveButtonState
-                            )
                         }
+
                     }
-
                 }
-
             }
-
         }
     }
 }
