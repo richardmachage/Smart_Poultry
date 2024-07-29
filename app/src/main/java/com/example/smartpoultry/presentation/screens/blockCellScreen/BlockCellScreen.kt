@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
@@ -146,6 +147,7 @@ fun BlockCellScreen(
                     }
                 ) {
                     Icon(
+                        modifier = Modifier.size(100.dp),
                         imageVector = Icons.Default.AddCircle,
                         contentDescription = "Add"
                     )
@@ -165,7 +167,7 @@ fun BlockCellScreen(
                 ,
                 //verticalArrangement = Arrangement.spacedBy(1.dp)
             ) {
-                itemsIndexed( listOfBlocksWithCells, key = {_, item -> item.block.blockId }
+                itemsIndexed( listOfBlocksWithCells.sortedBy { it.block.blockNum }, key = {_, item -> item.block.blockId }
                 ) { _, blockWithCells ->
 
                     MyCard (
