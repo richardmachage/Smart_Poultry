@@ -211,12 +211,14 @@ fun CellsScreen(
 
                 LazyColumn(
                     modifier = Modifier.padding(4.dp),
+                    //verticalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
                     itemsIndexed(listOfCells.sortedBy { it.cellNum }, key = {_, item ->  item.cellId}) { _, item ->
                         //MyVerticalSpacer(height = 6)
 
                         MyCard(
                             modifier = Modifier.fillMaxWidth()
+                                .padding(6.dp)
                         ) {
                             Row(
                                 Modifier

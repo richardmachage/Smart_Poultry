@@ -44,8 +44,9 @@ fun CellEggCollectionItem(
 
 
     MyCard(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
+
     ) {
         Column(
             modifier = Modifier
