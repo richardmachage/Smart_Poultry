@@ -47,7 +47,6 @@ import com.example.smartpoultry.R
 import com.example.smartpoultry.domain.permissions.POST_NOTIFICATIONS
 import com.example.smartpoultry.domain.permissions.checkIfPermissionGranted
 import com.example.smartpoultry.presentation.NavGraphs
-import com.example.smartpoultry.presentation.composables.MyBorderedColumn
 import com.example.smartpoultry.presentation.composables.MyCard
 import com.example.smartpoultry.presentation.composables.MyHorizontalSpacer
 import com.example.smartpoultry.presentation.composables.MyInputDialog
@@ -121,167 +120,216 @@ fun SettingsScreen(
 
                 //past days
                 MyCard(modifier = Modifier.fillMaxWidth()) {
-                Column(
-                    modifier = Modifier.padding(6.dp)
-                ) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.SpaceBetween
+                    Column(
+                        modifier = Modifier.padding(6.dp)
+                    ) {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.SpaceBetween
 
-                    ) {
-                        Text(modifier = Modifier.padding(5.dp), text = "Past Days Summary in Home Screen: ")
-                        IconButton(onClick = { showPastDayInfoDialog = true }) {
-                            Icon(imageVector = Icons.Default.Info, contentDescription = null)
-                        }
-                    }
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        var showDialog by remember {
-                            mutableStateOf(false)
-                        }
-                        var newPastDays by remember {
-                            mutableStateOf(settingsViewModel.pastDays.value)
-                        }
-                        MyInputDialog(
-                            showDialog = showDialog,
-                            title = "Consecutive Days to Consider",
-                            onConfirm = {
-                                settingsViewModel.saveToDataStore(
-                                    PAST_DAYS_KEY,
-                                    newPastDays
-                                )
-                                showDialog = false
-                                //Log.i(PAST_DAYS_KEY + "on dialog click",newPastDays)
-                            },
-                            onDismiss = { showDialog = false }
                         ) {
-                            MyOutlineTextFiled(
-                                modifier = Modifier.fillMaxWidth(),
-                                label = "Default Past Days",
-                                keyboardType = KeyboardType.Number,
-                                initialText = settingsViewModel.pastDays.collectAsState().value,
-                                onValueChange = {
-                                    newPastDays = it
-                                }
+                            Text(
+                                modifier = Modifier.padding(5.dp),
+                                text = "Past Days Summary in Home Screen: "
                             )
+                            IconButton(onClick = { showPastDayInfoDialog = true }) {
+                                Icon(imageVector = Icons.Default.Info, contentDescription = null)
+                            }
                         }
-                        Text(modifier = Modifier.padding(5.dp),text = settingsViewModel.pastDays.collectAsState().value)
-                        IconButton(onClick = { showDialog = true }) {
-                            Icon(imageVector = Icons.Default.Edit, contentDescription = "edit")
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            var showDialog by remember {
+                                mutableStateOf(false)
+                            }
+                            var newPastDays by remember {
+                                mutableStateOf(settingsViewModel.pastDays.value)
+                            }
+                            MyInputDialog(
+                                showDialog = showDialog,
+                                title = "Consecutive Days to Consider",
+                                onConfirm = {
+                                    settingsViewModel.saveToDataStore(
+                                        PAST_DAYS_KEY,
+                                        newPastDays
+                                    )
+                                    showDialog = false
+                                    //Log.i(PAST_DAYS_KEY + "on dialog click",newPastDays)
+                                },
+                                onDismiss = { showDialog = false }
+                            ) {
+                                MyOutlineTextFiled(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    label = "Default Past Days",
+                                    keyboardType = KeyboardType.Number,
+                                    initialText = settingsViewModel.pastDays.collectAsState().value,
+                                    onValueChange = {
+                                        newPastDays = it
+                                    }
+                                )
+                            }
+                            Text(
+                                modifier = Modifier.padding(5.dp),
+                                text = settingsViewModel.pastDays.collectAsState().value
+                            )
+                            IconButton(onClick = { showDialog = true }) {
+                                Icon(imageVector = Icons.Default.Edit, contentDescription = "edit")
+                            }
                         }
                     }
                 }
-            }
                 MyVerticalSpacer(height = 10)
 
                 //consucutive days
-                MyBorderedColumn {
-                    Text(text = "Number of Day for trend analysis (Consecutive days of low production to be considered before flagging a cell?)")
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(6.dp),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
+                MyCard(modifier = Modifier.fillMaxWidth()) {
+                    Column(
+                        modifier = Modifier.padding(6.dp)
                     ) {
-                        var showDialog by remember {
-                            mutableStateOf(false)
-                        }
-                        var newConsucutiveDays by remember {
-                            mutableStateOf(settingsViewModel.consucutiveNumberOfDays.value)
-                        }
-                        MyInputDialog(
-                            showDialog = showDialog,
-                            title = "Consecutive Days to Consider",
-                            onConfirm = {
-                                showDialog = false
-                                settingsViewModel.saveToDataStore(
-                                    CONSUCUTIVE_DAYS_KEY,
-                                    newConsucutiveDays
-                                )
-                            },
-                            onDismiss = { showDialog = false }
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.SpaceBetween
                         ) {
-                            MyOutlineTextFiled(
-                                modifier = Modifier.fillMaxWidth(),
-                                label = "Consecutive Days",
-                                keyboardType = KeyboardType.Number,
-                                initialText = settingsViewModel.consucutiveNumberOfDays.collectAsState().value,
-                                onValueChange = {
-                                    newConsucutiveDays = it
-                                }
-                            )
+                            Text(
+                                modifier = Modifier.padding(5.dp),
+                                text = "Number of Day for trend analysis "
+                            ) //(Consecutive days of low production to be considered before flagging a cell?)")
+                            var showNumberOfDaysAnalysisInfo by remember { mutableStateOf(false) }
+                            IconButton(onClick = { showNumberOfDaysAnalysisInfo = true }) {
+                                Icon(imageVector = Icons.Default.Info, contentDescription = null)
+                            }
                         }
-                        Text(text = settingsViewModel.consucutiveNumberOfDays.collectAsState().value)
-                        IconButton(onClick = { showDialog = true }) {
-                            Icon(imageVector = Icons.Default.Edit, contentDescription = "edit")
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth(),
+                            //.padding(6.dp),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            var showDialog by remember {
+                                mutableStateOf(false)
+                            }
+                            var newConsucutiveDays by remember {
+                                mutableStateOf(settingsViewModel.consucutiveNumberOfDays.value)
+                            }
+                            MyInputDialog(
+                                showDialog = showDialog,
+                                title = "Consecutive Days to Consider",
+                                onConfirm = {
+                                    showDialog = false
+                                    settingsViewModel.saveToDataStore(
+                                        CONSUCUTIVE_DAYS_KEY,
+                                        newConsucutiveDays
+                                    )
+                                },
+                                onDismiss = { showDialog = false }
+                            ) {
+                                MyOutlineTextFiled(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    label = "Consecutive Days",
+                                    keyboardType = KeyboardType.Number,
+                                    initialText = settingsViewModel.consucutiveNumberOfDays.collectAsState().value,
+                                    onValueChange = {
+                                        newConsucutiveDays = it
+                                    }
+                                )
+                            }
+                            Text(
+                                modifier = Modifier.padding(5.dp),
+                                text = settingsViewModel.consucutiveNumberOfDays.collectAsState().value
+                            )
+                            IconButton(onClick = { showDialog = true }) {
+                                Icon(imageVector = Icons.Default.Edit, contentDescription = "edit")
+                            }
                         }
                     }
                 }
                 MyVerticalSpacer(height = 10)
 
                 //threshold ratio
-                MyBorderedColumn {
-                    Text(text = "Threshold Ratio for trend analysis (What should be the minimum henCount to EggCount ration in determining poor egg production?)")
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(6.dp),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
+                MyCard(modifier = Modifier.fillMaxWidth()) {
+                    Column(
+                        modifier = Modifier.padding(6.dp)
                     ) {
-                        var showDialog by remember {
-                            mutableStateOf(false)
-                        }
-                        var newThreshold by remember {
-                            mutableStateOf(settingsViewModel.thresholdRatio.value)
-                        }
-                        MyInputDialog(
-                            showDialog = showDialog,
-                            title = "Threshold Ratio",
-                            onConfirm = {
-                                if (validateThresholdInput(newThreshold)) {
-                                    showDialog = false
-                                    settingsViewModel.saveToDataStore(
-                                        THRESHOLD_RATIO_KEY,
-                                        newThreshold
-                                    )
-
-                                } else {
-                                    Toast.makeText(
-                                        context,
-                                        "Threshold Ratio can only be decimal between 0 and 1",
-                                        Toast.LENGTH_LONG
-                                    ).show()
-                                }
-                            },
-                            onDismiss = { showDialog = false }
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.SpaceBetween
                         ) {
-                            MyOutlineTextFiled(
-                                modifier = Modifier.fillMaxWidth(),
-                                label = "Threshold Ratio",
-                                keyboardType = KeyboardType.Decimal,
-                                initialText = settingsViewModel.thresholdRatio.collectAsState().value,
-                                onValueChange = {
-                                    newThreshold = it
-                                }
-                            )
+                            Text(
+                                modifier = Modifier.padding(5.dp),
+                                text = "Threshold Ratio for trend analysis "
+                            )//(What should be the minimum henCount to EggCount ration in determining poor egg production?)")
+                            var thresholdRatioInfo by remember { mutableStateOf(false) }
+                            IconButton(onClick = { thresholdRatioInfo = true }) {
+                                Icon(imageVector = Icons.Default.Info, contentDescription = null)
+                            }
                         }
-                        Text(text = settingsViewModel.thresholdRatio.collectAsState().value)
-                        IconButton(onClick = { showDialog = true }) {
-                            Icon(imageVector = Icons.Default.Edit, contentDescription = "edit")
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth(),
+                            //.padding(6.dp),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            var showDialog by remember {
+                                mutableStateOf(false)
+                            }
+                            var newThreshold by remember {
+                                mutableStateOf(settingsViewModel.thresholdRatio.value)
+                            }
+                            MyInputDialog(
+                                showDialog = showDialog,
+                                title = "Threshold Ratio",
+                                onConfirm = {
+                                    if (validateThresholdInput(newThreshold)) {
+                                        showDialog = false
+                                        settingsViewModel.saveToDataStore(
+                                            THRESHOLD_RATIO_KEY,
+                                            newThreshold
+                                        )
+
+                                    } else {
+                                        Toast.makeText(
+                                            context,
+                                            "Threshold Ratio can only be decimal between 0 and 1",
+                                            Toast.LENGTH_LONG
+                                        ).show()
+                                    }
+                                },
+                                onDismiss = { showDialog = false }
+                            ) {
+                                MyOutlineTextFiled(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    label = "Threshold Ratio",
+                                    keyboardType = KeyboardType.Decimal,
+                                    initialText = settingsViewModel.thresholdRatio.collectAsState().value,
+                                    onValueChange = {
+                                        newThreshold = it
+                                    }
+                                )
+                            }
+                            Text(
+                                modifier = Modifier.padding(5.dp),
+                                text = settingsViewModel.thresholdRatio.collectAsState().value
+                            )
+                            IconButton(onClick = { showDialog = true }) {
+                                Icon(imageVector = Icons.Default.Edit, contentDescription = "edit")
+                            }
                         }
                     }
                 }
                 MyVerticalSpacer(height = 10)
 
                 //repeat analysis period
-                MyBorderedColumn {
+                MyCard (
+                    modifier = Modifier.fillMaxWidth()
+                ){
+                Column {
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -290,7 +338,7 @@ fun SettingsScreen(
                         verticalAlignment = Alignment.CenterVertically
 
                     ) {
-                        Text(text = "Repeat interval for automated analysis")
+                        Text(text = "Repeat interval")// for automated analysis")
 
                         var showDialog by remember { mutableStateOf(false) }
                         var isNotificationPermissionGranted by remember {
@@ -331,28 +379,39 @@ fun SettingsScreen(
                         }
 
 
-                        ToggleButton(
-                            modifier = Modifier.align(Alignment.CenterVertically),
-                            isChecked = settingsViewModel.isAutomatedAnalysis.collectAsState().value == "1",
-                            onCheckedChange = {
-                                if (it) {
-                                    if (isNotificationPermissionGranted) {
+                        Row {
+                            ToggleButton(
+                                modifier = Modifier.align(Alignment.CenterVertically),
+                                isChecked = settingsViewModel.isAutomatedAnalysis.collectAsState().value == "1",
+                                onCheckedChange = {
+                                    if (it) {
+                                        if (isNotificationPermissionGranted) {
+                                            settingsViewModel.saveToDataStore(
+                                                IS_AUTOMATED_ANALYSIS_KEY,
+                                                "1"
+                                            )
+                                            settingsViewModel.setWorker()
+                                        } else {
+                                            showDialog = true
+                                        }
+                                    } else {
                                         settingsViewModel.saveToDataStore(
                                             IS_AUTOMATED_ANALYSIS_KEY,
-                                            "1"
+                                            "0"
                                         )
-                                        settingsViewModel.setWorker()
-                                    } else {
-                                        showDialog = true
+                                        settingsViewModel.cancelWorker()
                                     }
-                                } else {
-                                    settingsViewModel.saveToDataStore(
-                                        IS_AUTOMATED_ANALYSIS_KEY,
-                                        "0"
-                                    )
-                                    settingsViewModel.cancelWorker()
                                 }
-                            })
+                            )
+
+                            MyHorizontalSpacer(width = 5)
+                            
+                            var thresholdRatioInfo by remember { mutableStateOf(false) }
+                            IconButton(onClick = { thresholdRatioInfo = true }) {
+                                Icon(imageVector = Icons.Default.Info, contentDescription = null)
+                            }
+                        }
+                        
 
                     }
                     //edit part
@@ -402,6 +461,8 @@ fun SettingsScreen(
                     }
 
                 }
+            }
+                
                 MyVerticalSpacer(height = 10)
 
                 //confirm log out dialog
