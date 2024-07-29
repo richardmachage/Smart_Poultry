@@ -39,6 +39,7 @@ class EggScreenViewModel @Inject constructor(
         initialValue = emptyList(),
     )
 
+    var zeroCellEggs : Cells? = null
     var isLoading = mutableStateOf(false)
     var insertStatus = mutableStateOf(true)
     var toastMessage = mutableStateOf("")
@@ -53,12 +54,7 @@ class EggScreenViewModel @Inject constructor(
     init {
         setChosenDateValue(LocalDate.now())
         setMyInputBlocks()
-        /*viewModelScope.launch {
-            getAllBlocks.collect {
-                myInputBlocks.clear()
-                myInputBlocks.addAll(transformBlocksIntoBlocksForInput(it))
-            }
-        }*/
+
     }
 
     private fun setMyInputBlocks() {
@@ -80,6 +76,7 @@ class EggScreenViewModel @Inject constructor(
     fun setChosenDateValue(localDate: LocalDate) {
         chosenDateValue = Date(localDateToJavaDate(localDate))
     }
+
 
 
     @RequiresApi(Build.VERSION_CODES.O)
