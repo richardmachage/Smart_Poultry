@@ -282,6 +282,7 @@ fun HomeScreen(
                 Text(text = "Recent Production Trends:")
                 MyVerticalSpacer(height = 10)
                 //Create graph
+
                 if (dailyEggsForPastDays.value.isNotEmpty()) RecentEggsLineChart(
                     dailyEggCollections = dailyEggsForPastDays.value
                 )
