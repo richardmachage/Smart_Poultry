@@ -1,11 +1,9 @@
 package com.example.smartpoultry.presentation.screens.eggCollection.components
 
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -28,6 +26,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.smartpoultry.R
+import com.example.smartpoultry.presentation.composables.MyCard
 import com.example.smartpoultry.presentation.composables.MyOutlineButton
 import com.example.smartpoultry.presentation.composables.MyVerticalSpacer
 
@@ -42,29 +41,28 @@ fun CellEggCollectionItem(
     var eggCount by remember { mutableStateOf(TextFieldValue("0")) }
     var hasError by remember { mutableStateOf(false) }
 
-    Column(
+    MyCard(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(3.dp)
-            .border(
-                color = MaterialTheme.colorScheme.primary,
-                width = 1.dp,
-                shape = RoundedCornerShape(6.dp)
-            )
     ) {
-        Row (
-            verticalAlignment = Alignment.CenterVertically
-        ){
-            Column(
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(3.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
 
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(text = "Cell : $cellNum", style = MaterialTheme.typography.bodyLarge)
-                Text(text = "Chicken : $henCount", style = MaterialTheme.typography.bodyLarge)
-            }
+                Column(
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(3.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+
+                ) {
+                    Text(text = "Cell : $cellNum", style = MaterialTheme.typography.bodyLarge)
+                    Text(text = "Chicken : $henCount", style = MaterialTheme.typography.bodyLarge)
+                }
 
                 MyVerticalSpacer(height = 5)
 
@@ -75,14 +73,17 @@ fun CellEggCollectionItem(
                         .onFocusChanged { focusState ->
                             if (focusState.hasFocus && eggCount.text == "0") {
                                 eggCount = TextFieldValue("", TextRange(0))
-                            }else if( !focusState.hasFocus && eggCount.text == ""){
+                            } else if (!focusState.hasFocus && eggCount.text == "") {
                                 eggCount = TextFieldValue("0")
                             }
                         },
                     value = eggCount,
-                    onValueChange = {newText->
+                    onValueChange = { newText ->
                         // val text = it.toIntOrNull()?:0
-                        eggCount = newText.copy(text = newText.text, selection = TextRange(newText.text.length))
+                        eggCount = newText.copy(
+                            text = newText.text,
+                            selection = TextRange(newText.text.length)
+                        )
                         hasError = (eggCount.text.toIntOrNull() ?: 0) > henCount
                     },
                     label = { Text(text = stringResource(id = R.string.input_egg_count)) },
@@ -95,16 +96,17 @@ fun CellEggCollectionItem(
                         )
                     },
                     singleLine = true,
-                    placeholder = { Text(text = "0")}
+                    placeholder = { Text(text = "0") }
                 )
 
 
-            MyOutlineButton(
-                modifier = Modifier.weight(1f),
-                onButtonClick = { onSave(eggCount.text.toIntOrNull()?:0) },
-                btnName = stringResource(id = R.string.save_btn),
-                enabled = !hasError
-            )
+                MyOutlineButton(
+                    modifier = Modifier.weight(1f),
+                    onButtonClick = { onSave(eggCount.text.toIntOrNull() ?: 0) },
+                    btnName = stringResource(id = R.string.save_btn),
+                    enabled = !hasError
+                )
+            }
         }
     }
 }

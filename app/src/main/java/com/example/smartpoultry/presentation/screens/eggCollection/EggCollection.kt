@@ -23,7 +23,7 @@ import com.example.smartpoultry.presentation.screens.eggCollection.components.Ce
 @Composable
 fun EggCollectionScreen(
     listOfBlocks: List<BlocksWithCells>,
-    onBlockSelected: (BlocksWithCells) -> Unit = {}
+    onSave : (cell : Cells, eggCount : Int) -> Unit  = {_,_ ->}
 ) {
     val listOfCells = remember { mutableStateListOf<Cells>() }
     var showCellsAnime by remember{ mutableStateOf(false) }
@@ -53,14 +53,15 @@ fun EggCollectionScreen(
 
         MyVerticalSpacer(height = 5)
 
-
         AnimatedVisibility(visible = showCellsAnime) {
                 LazyColumn() {
-                    items(listOfCells.toList(), key = { it.cellId }) {
+                    items(listOfCells.toList(), key = { it.cellId }) {cell->
                         CellEggCollectionItem(
                             modifier = Modifier.animateItemPlacement(),
-                            cellNum = it.cellNum,
-                            henCount = it.henCount
+                            cellNum = cell.cellNum,
+                            henCount = cell.henCount,
+                            onSave = {eggCount->
+                                onSave(cell, eggCount)}
                         )
 
                 }
