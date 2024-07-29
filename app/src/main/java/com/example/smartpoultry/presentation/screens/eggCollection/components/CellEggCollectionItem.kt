@@ -1,7 +1,6 @@
 package com.example.smartpoultry.presentation.screens.eggCollection.components
 
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -14,16 +13,18 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.smartpoultry.R
@@ -37,7 +38,7 @@ fun CellEggCollectionItem(
     henCount: Int = 0,
     onSave: (Int) -> Unit = {}
 ) {
-    var eggCount by remember { mutableIntStateOf(0) }
+    var eggCount by remember { mutableStateOf(TextFieldValue("0")) }
     var hasError by remember { mutableStateOf(false) }
 
     Column(
@@ -65,20 +66,23 @@ fun CellEggCollectionItem(
             }
 
                 MyVerticalSpacer(height = 5)
-            Box(
-                modifier = Modifier.weight(1f)
-            ) {
+
                 OutlinedTextField(
-                    modifier = Modifier.padding(6.dp),
-                    value = eggCount.toString(),
-                    onValueChange = {
+                    modifier = Modifier
+                        .padding(6.dp)
+                        .weight(1f)
+                        .onFocusChanged { focusState ->
+                            if (focusState.hasFocus && eggCount.text == "0") {
+                                eggCount = TextFieldValue("", TextRange(0))
+                            }else if( !focusState.hasFocus && eggCount.text == ""){
+                                eggCount = TextFieldValue("0")
+                            }
+                        },
+                    value = eggCount,
+                    onValueChange = {newText->
                         // val text = it.toIntOrNull()?:0
-                        eggCount = it.toIntOrNull() ?: 0
-                        if (eggCount > henCount) {
-                            hasError = true
-                        } else {
-                            hasError = false
-                        }
+                        eggCount = newText.copy(text = newText.text, selection = TextRange(newText.text.length))
+                        hasError = (eggCount.text.toIntOrNull() ?: 0) > henCount
                     },
                     label = { Text(text = stringResource(id = R.string.input_egg_count)) },
                     isError = hasError,
@@ -89,13 +93,14 @@ fun CellEggCollectionItem(
                             contentDescription = "egg"
                         )
                     },
-                    singleLine = true
+                    singleLine = true,
+                    placeholder = { Text(text = "0")}
                 )
 
-            }
+
             MyOutlineButton(
                 modifier = Modifier.weight(1f),
-                onButtonClick = { onSave(eggCount) },
+                onButtonClick = { onSave(eggCount.text.toIntOrNull()?:0) },
                 btnName = stringResource(id = R.string.save_btn),
                 enabled = !hasError
             )
