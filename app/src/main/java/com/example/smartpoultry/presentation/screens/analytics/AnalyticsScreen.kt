@@ -43,6 +43,7 @@ import com.example.smartpoultry.presentation.composables.CellsDropDownMenu
 import com.example.smartpoultry.presentation.composables.MonthsDropDownMenu
 import com.example.smartpoultry.presentation.composables.MyDatePicker
 import com.example.smartpoultry.presentation.composables.MyInputDialog
+import com.example.smartpoultry.presentation.composables.MyOutlineButton
 import com.example.smartpoultry.presentation.composables.MyVerticalSpacer
 import com.example.smartpoultry.presentation.composables.NormButton
 import com.example.smartpoultry.presentation.composables.RadioButtonGroup
@@ -93,13 +94,6 @@ fun AnalyticsScreen(
                 .padding(8.dp)
                 .verticalScroll(rememberScrollState())
         ) {
-            NormButton(
-                modifier = Modifier.fillMaxWidth(),
-                onButtonClick = {
-                    navigator.navigate(ViewRecordsScreenDestination)
-                }, btnName = "View All records >>>"
-            )
-
             Column(
                 // level of Analysis by cell
                 modifier = Modifier
@@ -383,6 +377,7 @@ fun AnalyticsScreen(
                             }
                         } as List<ChartClass>
 
+
                         if (analyticsViewModel.levelOfAnalysis.value == "Cell") {
                             CellAnalysisGraph(
                                 isGraphPlotted = analyticsViewModel.plotChart.value,
@@ -405,7 +400,8 @@ fun AnalyticsScreen(
                         }
 
 
-                    } else {
+                    }
+                    else {
                         // analyticsViewModel.plotChart.value = false
                         Text(text = "Not data retrieved for that period")
                         MyVerticalSpacer(height = 10)
@@ -453,7 +449,8 @@ fun AnalyticsScreen(
                 }) {
                 Text(text = "This feature requires use of Notifications.\nAllow notifications Permission to proceed.")
             }
-            NormButton(
+
+            MyOutlineButton(
                 modifier = Modifier.fillMaxWidth(),
                 onButtonClick = {
                     // check is notification  permission is allowed or not
@@ -466,9 +463,12 @@ fun AnalyticsScreen(
                 btnName = "Perform Automated Analysis >>>"
             )
 
-            MyVerticalSpacer(height = 5)
-            //view all records button
-
+            MyOutlineButton(
+                modifier = Modifier.fillMaxWidth(),
+                onButtonClick = {
+                    navigator.navigate(ViewRecordsScreenDestination)
+                }, btnName = "View All records >>>"
+            )
         }
     }
 }
