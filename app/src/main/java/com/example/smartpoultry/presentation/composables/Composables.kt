@@ -2,6 +2,7 @@ package com.example.smartpoultry.presentation.composables
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.layout.Spacer
@@ -361,6 +362,7 @@ fun MyCard(
 ){
     Card(
         modifier = modifier
+            .animateContentSize()
             .padding(8.dp)
             .shadow(
                 elevation = 20.dp,

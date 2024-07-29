@@ -4,9 +4,9 @@ import android.util.Log
 import com.example.smartpoultry.data.dataModels.DailyEggCollection
 import com.example.smartpoultry.data.dataModels.EggRecordFull
 import com.example.smartpoultry.data.dataSource.local.datastore.PreferencesRepo
-import com.example.smartpoultry.data.dataSource.remote.firebase.models.EggCollectionFb
 import com.example.smartpoultry.data.dataSource.local.room.entities.eggCollection.EggCollection
 import com.example.smartpoultry.data.dataSource.local.room.entities.eggCollection.EggCollectionDao
+import com.example.smartpoultry.data.dataSource.remote.firebase.models.EggCollectionFb
 import com.example.smartpoultry.domain.repository.EggCollectionRepository
 import com.example.smartpoultry.utils.EGGS_COLLECTION
 import com.example.smartpoultry.utils.FARMS_COLLECTION
@@ -127,10 +127,11 @@ class EggCollectionRepositoryImpl @Inject constructor(
     override suspend fun addNewRecord(eggCollection: EggCollection): Boolean {
         try {
             var insertStatus:Boolean = false
-            val recordId = eggCollectionDao.insertCollectionRecord(eggCollection)
-            //fireStoreDb.collection(eggsCollectionPath.path)
 
-            //now update remote
+            //first insert to Local DB
+            val recordId = eggCollectionDao.insertCollectionRecord(eggCollection)
+
+            //then now update remote DB
             val farmsCollection = fireStoreDb.collection(FARMS_COLLECTION)
             val farmDocument = farmsCollection.document(getFarmId())
             val eggsCollectionRef : CollectionReference = farmDocument.collection(EGGS_COLLECTION)
@@ -152,7 +153,7 @@ class EggCollectionRepositoryImpl @Inject constructor(
                     insertStatus = true
                 }
                 .addOnFailureListener{
-                    Log.d("add new record", "Failed: added record $recordId for cellId ${eggCollection.cellId} to firebase ")
+                    Log.d("add new record", "Failed to add record $recordId for cellId ${eggCollection.cellId} to firebase ")
 
                     CoroutineScope(Dispatchers.IO).launch{
                         eggCollectionDao.deleteCollectionRecord(recordId.toInt())
@@ -163,7 +164,6 @@ class EggCollectionRepositoryImpl @Inject constructor(
             return insertStatus
         } catch (e: Exception) {
             Log.d("add new record", "Failed: ${e.message.toString()} ")
-
             return false
         }
     }

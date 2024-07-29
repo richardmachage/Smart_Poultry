@@ -1,5 +1,6 @@
 package com.example.smartpoultry.presentation.screens.eggCollection.components
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -40,6 +41,7 @@ fun CellEggCollectionItem(
 ) {
     var eggCount by remember { mutableStateOf(TextFieldValue("0")) }
     var hasError by remember { mutableStateOf(false) }
+
 
     MyCard(
         modifier = Modifier
@@ -96,7 +98,12 @@ fun CellEggCollectionItem(
                         )
                     },
                     singleLine = true,
-                    placeholder = { Text(text = "0") }
+                    placeholder = { Text(text = "0") },
+                    supportingText = {
+                        AnimatedVisibility(visible = hasError) {
+                            Text(text = "Number of eggs can't exceed chicken")
+                        }
+                    }
                 )
 
 
