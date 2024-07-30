@@ -16,11 +16,11 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Info
-import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -39,7 +39,6 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewModelScope
@@ -490,7 +489,7 @@ fun SettingsScreen(
                     Text(text = "Are you sure you want to log out?")
 
                 }
-                Button(
+                OutlinedButton(
                     modifier = Modifier.fillMaxWidth(),
                     onClick = {
                         showLogOutDialog = true
@@ -515,10 +514,4 @@ fun validateThresholdInput(str: String): Boolean {
     } catch (e: NumberFormatException) {
         false // Parsing failed or number is out of range
     }
-}
-
-@Preview(showSystemUi = true, showBackground = true)
-@Composable
-fun PrevSettings() {
-    //SettingsScreen()
 }
