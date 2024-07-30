@@ -37,7 +37,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -52,6 +54,7 @@ import com.example.smartpoultry.presentation.composables.MyInputDialog
 import com.example.smartpoultry.presentation.composables.MyOutlineTextFiled
 import com.example.smartpoultry.presentation.composables.MyVerticalSpacer
 import com.example.smartpoultry.presentation.composables.ToggleButton
+import com.example.smartpoultry.presentation.composables.text.TitleText
 import com.example.smartpoultry.presentation.destinations.LogInScreenDestination
 import com.example.smartpoultry.utils.CONSUCUTIVE_DAYS_KEY
 import com.example.smartpoultry.utils.IS_AUTOMATED_ANALYSIS_KEY
@@ -130,7 +133,8 @@ fun SettingsScreen(
                         ) {
                             Text(
                                 modifier = Modifier.padding(5.dp),
-                                text = "Past Days Summary in Home Screen: "
+                                text = "Past Days Summary in Home Screen",
+                                fontWeight = FontWeight.Bold
                             )
                             IconButton(onClick = { showPastDayInfoDialog = true }) {
                                 Icon(imageVector = Icons.Default.Info, contentDescription = null)
@@ -171,10 +175,11 @@ fun SettingsScreen(
                                     }
                                 )
                             }
-                            Text(
-                                modifier = Modifier.padding(5.dp),
-                                text = settingsViewModel.pastDays.collectAsState().value
-                            )
+
+                            TitleText(
+                                modifier = Modifier.padding(start = 10.dp),
+                                text = settingsViewModel.pastDays.collectAsState().value)
+
                             IconButton(onClick = { showDialog = true }) {
                                 Icon(imageVector = Icons.Default.Edit, contentDescription = "edit")
                             }
@@ -195,7 +200,9 @@ fun SettingsScreen(
                         ) {
                             Text(
                                 modifier = Modifier.padding(5.dp),
-                                text = "Number of Day for trend analysis "
+                                text = stringResource(id = R.string.number_of_days_for_trend_analysis),//"Number of Days for trend analysis ",
+                                        fontWeight = FontWeight.Bold
+
                             ) //(Consecutive days of low production to be considered before flagging a cell?)")
                             var showNumberOfDaysAnalysisInfo by remember { mutableStateOf(false) }
                             IconButton(onClick = { showNumberOfDaysAnalysisInfo = true }) {
@@ -237,10 +244,9 @@ fun SettingsScreen(
                                     }
                                 )
                             }
-                            Text(
-                                modifier = Modifier.padding(5.dp),
-                                text = settingsViewModel.consucutiveNumberOfDays.collectAsState().value
-                            )
+                            TitleText(
+                                modifier = Modifier.padding(start = 10.dp),
+                                text = settingsViewModel.consucutiveNumberOfDays.collectAsState().value)
                             IconButton(onClick = { showDialog = true }) {
                                 Icon(imageVector = Icons.Default.Edit, contentDescription = "edit")
                             }
@@ -261,7 +267,9 @@ fun SettingsScreen(
                         ) {
                             Text(
                                 modifier = Modifier.padding(5.dp),
-                                text = "Threshold Ratio for trend analysis "
+                                text = "Threshold Ratio for trend analysis ",
+                                fontWeight = FontWeight.Bold
+
                             )//(What should be the minimum henCount to EggCount ration in determining poor egg production?)")
                             var thresholdRatioInfo by remember { mutableStateOf(false) }
                             IconButton(onClick = { thresholdRatioInfo = true }) {
@@ -312,10 +320,10 @@ fun SettingsScreen(
                                     }
                                 )
                             }
-                            Text(
-                                modifier = Modifier.padding(5.dp),
-                                text = settingsViewModel.thresholdRatio.collectAsState().value
-                            )
+                            TitleText(
+                                modifier = Modifier.padding(start = 10.dp),
+                                text = settingsViewModel.thresholdRatio.collectAsState().value)
+
                             IconButton(onClick = { showDialog = true }) {
                                 Icon(imageVector = Icons.Default.Edit, contentDescription = "edit")
                             }
@@ -337,7 +345,11 @@ fun SettingsScreen(
                         verticalAlignment = Alignment.CenterVertically
 
                     ) {
-                        Text(text = "Repeat interval")// for automated analysis")
+                        Text(
+                            text = "Repeat interval",
+                            fontWeight = FontWeight.Bold
+
+                        )// for automated analysis")
 
                         var showDialog by remember { mutableStateOf(false) }
                         var isNotificationPermissionGranted by remember {
@@ -452,7 +464,11 @@ fun SettingsScreen(
                                     }
                                 )
                             }
-                            Text(text = "Time in hours: ${settingsViewModel.repeatInterval.collectAsState().value}")
+                            TitleText(
+                                modifier = Modifier.padding(start = 10.dp),
+                                text = settingsViewModel.repeatInterval.collectAsState().value)
+                            Text(text = stringResource(id = R.string.time_in_hours))//"Time in hours")
+
                             IconButton(onClick = { showDialog = true }) {
                                 Icon(imageVector = Icons.Default.Edit, contentDescription = "edit")
                             }

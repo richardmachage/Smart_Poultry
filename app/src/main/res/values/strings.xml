@@ -40,4 +40,6 @@
     <string name="recent_production_trends_home">Recent Production Trends</string>
     <string name="show_bar_chart">Show Bar Chart</string>
     <string name="show_line_chart">Show Line Chart</string>
+    <string name="time_in_hours">Time in Hours</string>
+    <string name="number_of_days_for_trend_analysis">Number of Days for trend analysis</string>
 </resources>
