@@ -53,6 +53,7 @@ import com.example.smartpoultry.presentation.composables.MyOutlineButton
 import com.example.smartpoultry.presentation.composables.MyVerticalSpacer
 import com.example.smartpoultry.presentation.composables.NormText
 import com.example.smartpoultry.presentation.composables.RecentEggsLineChart
+import com.example.smartpoultry.presentation.composables.text.TitleText
 import com.example.smartpoultry.presentation.destinations.LogInScreenDestination
 import com.example.smartpoultry.utils.PAST_DAYS_KEY
 import com.ramcosta.composedestinations.annotation.Destination
@@ -298,12 +299,12 @@ fun HomeScreen(
                             )
                         )*/,
                 ) {
-                    Text(text = "Recent Production Trends:")
+                    TitleText(text = stringResource(id = R.string.recent_production_trends_home))
+                    //Text(text = "Recent Production Trends:")
                     MyVerticalSpacer(height = 10)
-                    //Create graph
 
                     if (dailyEggsForPastDays.value.isNotEmpty()) RecentEggsLineChart(
-                        dailyEggCollections = dailyEggsForPastDays.value
+                        dailyEggCollections = dailyEggsForPastDays.value.reversed()
                     )
                 }
             }

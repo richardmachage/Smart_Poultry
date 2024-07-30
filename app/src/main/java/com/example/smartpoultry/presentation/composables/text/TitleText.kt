@@ -1,4 +1,4 @@
-package com.example.smartpoultry.presentation.composables.Text
+package com.example.smartpoultry.presentation.composables.text
 
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text

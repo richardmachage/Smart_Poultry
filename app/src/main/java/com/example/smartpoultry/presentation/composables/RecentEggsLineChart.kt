@@ -3,10 +3,19 @@ package com.example.smartpoultry.presentation.composables
 import android.annotation.SuppressLint
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.res.stringResource
+import com.example.smartpoultry.R
 import com.example.smartpoultry.data.dataModels.DailyEggCollection
 import com.example.smartpoultry.presentation.uiModels.ChartClass
 import com.example.smartpoultry.utils.toGraphDate
@@ -51,50 +60,69 @@ fun RecentEggsLineChart(dailyEggCollections: List<DailyEggCollection>) {
         AxisValueFormatter<AxisPosition.Vertical.Start> { value, chartValues ->
             value.roundToInt().toString()
         }
-        Text(text = "Column Chart")
 
-        Chart(
-            chart = columnChart(),
-            model = chartEntryModel,
-            startAxis = rememberStartAxis(
-                valueFormatter = verticalAxisValueFormatter,
-                titleComponent = textComponent().apply { color = MaterialTheme.colorScheme.primary.toArgb() },
-                title = "Number of Eggs",
-                itemPlacer = AxisItemPlacer.Vertical.default(maxItemCount = 6)
-            ),
-            bottomAxis = rememberBottomAxis(
-                valueFormatter = horizontalAxisValueFormatter,
-                titleComponent = textComponent().apply { color = MaterialTheme.colorScheme.primary.toArgb() },
-                title = "Date",
-                //guideline = null
-            ),
-            isZoomEnabled = true
-            
+       // Text(text = "Column Chart")
+
+    Column {
+        var showLineChart by remember{ mutableStateOf(true) }
+
+        AnimatedVisibility(visible = !showLineChart) {
+            Chart(
+                chart = columnChart(),
+                model = chartEntryModel,
+                startAxis = rememberStartAxis(
+                    valueFormatter = verticalAxisValueFormatter,
+                    titleComponent = textComponent().apply {
+                        color = MaterialTheme.colorScheme.primary.toArgb()
+                    },
+                    title = "Number of Eggs",
+                    itemPlacer = AxisItemPlacer.Vertical.default(maxItemCount = 6)
+                ),
+                bottomAxis = rememberBottomAxis(
+                    valueFormatter = horizontalAxisValueFormatter,
+                    titleComponent = textComponent().apply {
+                        color = MaterialTheme.colorScheme.primary.toArgb()
+                    },
+                    title = "Date",
+                    //guideline = null
+                ),
+                isZoomEnabled = true
+
+            )
+        }
+
+        AnimatedVisibility(visible = showLineChart) {
+            Chart(
+                chart = lineChart(),
+                model = chartEntryModel,
+                startAxis = rememberStartAxis(
+                    valueFormatter = verticalAxisValueFormatter,
+                    titleComponent = textComponent().apply {
+                        color = MaterialTheme.colorScheme.primary.toArgb()
+                    },
+                    title = "Number of Eggs",
+                    itemPlacer = AxisItemPlacer.Vertical.default(maxItemCount = 6)
+                ),
+                bottomAxis = rememberBottomAxis(
+                    valueFormatter = horizontalAxisValueFormatter,
+                    titleComponent = textComponent().apply {
+                        color = MaterialTheme.colorScheme.primary.toArgb()
+                    },
+                    title = "Date",
+                    //guideline = null
+                ),
+                isZoomEnabled = true
+
+            )
+
+        }
+        MyOutlineButton(
+            modifier = Modifier.fillMaxWidth(),
+            onButtonClick = { showLineChart = !showLineChart },
+            btnName = stringResource(id = if (showLineChart)  R.string.show_bar_chart else R.string.show_line_chart)
         )
-        
-        MyVerticalSpacer(height = 5)
-        Text(text = "LineChart")
 
-        Chart(
-            chart = lineChart(),
-            model = chartEntryModel,
-            startAxis = rememberStartAxis(
-                valueFormatter = verticalAxisValueFormatter,
-                titleComponent = textComponent().apply { color = MaterialTheme.colorScheme.primary.toArgb() },
-                title = "Number of Eggs",
-                itemPlacer = AxisItemPlacer.Vertical.default(maxItemCount = 6)
-            ),
-            bottomAxis = rememberBottomAxis(
-                valueFormatter = horizontalAxisValueFormatter,
-                titleComponent = textComponent().apply { color = MaterialTheme.colorScheme.primary.toArgb() },
-                title = "Date",
-                //guideline = null
-            ),
-            isZoomEnabled = true
-
-        )
-
-
+    }
 
 
 }
