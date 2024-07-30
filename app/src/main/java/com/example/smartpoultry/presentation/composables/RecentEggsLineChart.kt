@@ -14,7 +14,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import com.example.smartpoultry.R
 import com.example.smartpoultry.data.dataModels.DailyEggCollection
 import com.example.smartpoultry.presentation.uiModels.ChartClass
@@ -119,7 +121,8 @@ fun RecentEggsLineChart(dailyEggCollections: List<DailyEggCollection>) {
         MyOutlineButton(
             modifier = Modifier.fillMaxWidth(),
             onButtonClick = { showLineChart = !showLineChart },
-            btnName = stringResource(id = if (showLineChart)  R.string.show_bar_chart else R.string.show_line_chart)
+            btnName = stringResource(id = if (showLineChart)  R.string.show_bar_chart else R.string.show_line_chart),
+            trailingIcon = ImageVector.vectorResource(id = if (!showLineChart) R.drawable.ic_line_chart else R.drawable.ic_bar_chart)
         )
 
     }
