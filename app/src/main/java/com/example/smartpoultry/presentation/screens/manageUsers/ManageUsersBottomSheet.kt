@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.Face
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material3.Button
@@ -91,8 +92,12 @@ fun ManageUsersBottomSheet(
             //userName
             MyVerticalSpacer(height = 10)
             if (user.firstName.isNotBlank()) {
-                UserInfoRow(Icons.Default.Person, "name", value = user.firstName, false)
+                UserInfoRow(Icons.Default.Person, "name", value = user.firstName + " "+ user.lastName, false)
             }
+
+            //user Gender
+            MyVerticalSpacer(height = 10)
+            UserInfoRow(icon = Icons.Default.Face, label = "gender", value =user.gender, false )
 
             //user email
             MyVerticalSpacer(height = 10)

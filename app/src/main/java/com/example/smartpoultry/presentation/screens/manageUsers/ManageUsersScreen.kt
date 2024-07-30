@@ -116,7 +116,9 @@ fun ManageUsersScreen(
             }
 
             LazyColumn(
-                modifier = Modifier.padding(it).animateContentSize()
+                modifier = Modifier
+                    .padding(it)
+                    .animateContentSize()
             ) {
 
                 items(manageUsersViewModel.listOfUsers.filter { user -> user.email != manageUsersViewModel.getUserEmail() })
@@ -148,7 +150,6 @@ fun UserListItem(
             .fillMaxWidth()
             // .padding(start = 6.dp, end = 6.dp)
             .clickable {
-
                 onClick(user)
             }
             .background(
@@ -179,16 +180,29 @@ fun UserListItem(
                 modifier = Modifier.align(Alignment.Center)
             )
         }
+
         MyHorizontalSpacer(width = 16)
         // Spacer(modifier = Modifier.width(16.dp))
         Column(modifier = Modifier.weight(1f)) {
-            if (user.firstName.isNotBlank()) {
-                Text(
-                    text = user.firstName,
-                    style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold),
-                    fontSize = 20.sp
-                )
+            Row {
+                if (user.firstName.isNotBlank()) {
+                    Text(
+                        text = user.firstName,
+                        style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold),
+                        fontSize = 20.sp
+                    )
+                }
+                MyHorizontalSpacer(width = 5)
+                if (user.lastName.isNotBlank()) {
+                    Text(
+                        text = user.lastName,
+                        style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold),
+                        fontSize = 20.sp
+                    )
+                }
             }
+
+            MyVerticalSpacer(height = 5)
             if (user.phone.isNotBlank()) {
                 Text(
                     text = user.phone,
@@ -196,28 +210,13 @@ fun UserListItem(
                     fontSize = 16.sp
                 )
             }
+            MyVerticalSpacer(height = 2)
             Text(
                 text = user.email,
                 style = MaterialTheme.typography.bodySmall,
                 fontSize = 14.sp
             )
-            /*Text(
-                text = user.role,
-                style = MaterialTheme.typography.bodySmall.copy(
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.secondary
-                ),
-                fontSize = 14.sp
-            )*/
         }
     }
-    MyVerticalSpacer(height = 5)
 }
 
-/*fun sampleUserList(): List<User> {
-    return listOf(
-        User(name = "John Doe", phone = "+1234567890", email = "johndoe@example.com", role = "Admin"),
-        User(name = "Jane Smith", phone = "+0987654321", email = "janesmith@example.com", role = "User"),
-        User(name = "Alice Johnson", phone = "+1122334455", email = "alicejohnson@example.com", role = "Moderator")
-    )
-}*/
