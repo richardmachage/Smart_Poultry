@@ -9,6 +9,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.smartpoultry.R
 import com.example.smartpoultry.data.dataModels.AlertFull
 import com.example.smartpoultry.data.dataModels.DailyEggCollection
 import com.example.smartpoultry.data.dataSource.local.datastore.AppDataStore
@@ -32,6 +33,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import java.sql.Date
 import java.time.LocalDate
+import java.time.LocalTime
 import javax.inject.Inject
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -140,6 +142,17 @@ class HomeViewModel @Inject constructor(
         )
     }
 
+
+    fun getGreetingBasedOnTime(): Int {
+        val currentHour = LocalTime.now().hour
+
+        return when (currentHour) {
+            in 5..11 -> R.string.morning_greeting //"Good Morning"
+            in 12..16 -> R.string.afternoon_greeting//"Good Afternoon"
+            in 17..20 -> R.string.evening_greeting //"Good Evening"
+            else -> R.string.night_greeting// "Good Night"
+        }
+    }
 
     @SuppressLint("SimpleDateFormat")
     fun onCreateReport(name: String, content: String, reportType: String) {

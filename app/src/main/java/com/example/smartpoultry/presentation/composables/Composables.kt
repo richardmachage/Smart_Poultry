@@ -5,6 +5,7 @@ import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -19,6 +20,7 @@ import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardColors
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -36,6 +38,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.TextFieldValue
@@ -329,11 +332,12 @@ fun MyHorizontalSpacer(width: Int) {
 
 @Composable
 fun MyCardInventory(
+    modifier : Modifier = Modifier,
     item: String,
     number: Int,
     //modifier: Modifier
 ) {
-    MyCard{
+    /*MyCard{
         Text(
             text = item,
             modifier = Modifier
@@ -352,6 +356,39 @@ fun MyCardInventory(
             textAlign = TextAlign.Center
 
         )
+    }*/
+
+    Card(
+        shape = RoundedCornerShape(16.dp),
+        elevation = CardDefaults.cardElevation(8.dp),
+        modifier = modifier,
+            //.width((LocalConfiguration.current.screenWidthDp / 4).dp),
+        colors = CardDefaults.cardColors().copy(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh)/*CardColors(
+                            containerColor = MaterialTheme.colorScheme.surfaceContainer,
+                            contentColor = MaterialTheme.colorScheme.onSurface,
+                            disabledContainerColor = MaterialTheme.colorScheme.surfaceContainerLow,
+                            disabledContentColor = MaterialTheme.colorScheme.primaryContainer
+                        )*/
+    ) {
+        Column(
+            modifier = Modifier.padding(5.dp)
+        ) {
+            Text(
+                modifier = Modifier.fillMaxWidth(),
+                text = item,
+                fontWeight = FontWeight.Bold,
+                textAlign = TextAlign.Center,
+                color = MaterialTheme.colorScheme.primary
+            )
+
+            MyVerticalSpacer(height = 5)
+            Text(
+                modifier = Modifier.fillMaxWidth(),
+                text = number.toString(),
+            textAlign = TextAlign.Center,
+                )
+
+        }
     }
 }
 

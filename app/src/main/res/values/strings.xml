@@ -30,4 +30,11 @@
     <string name="level_egg_collection">Egg Collection</string>
     <string name="egg_collection_description">Allows the user to be able to input the daily eggs collection records</string>
     <string name="specify_access_level">Specify access Level</string>
+    <string name="inventory_home_screen">Farm Inventory</string>
+    <string name="chicken">Chicken</string>
+    <string name="greeting_home">Hello</string>
+    <string name="morning_greeting">Good Morning ✨</string>
+    <string name="afternoon_greeting">Good Afternoon 🌞</string>
+    <string name="evening_greeting">Good Evening</string>
+    <string name="night_greeting">Good nightGood night😴</string>
 </resources>

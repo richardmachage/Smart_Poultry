@@ -5,10 +5,7 @@ import android.os.Build
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.animateContentSize
-import androidx.compose.animation.core.EaseIn
-import androidx.compose.animation.core.tween
-import androidx.compose.foundation.border
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -20,6 +17,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Warning
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -33,11 +32,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -48,6 +47,7 @@ import com.example.smartpoultry.presentation.NavGraphs
 import com.example.smartpoultry.presentation.composables.MyCard
 import com.example.smartpoultry.presentation.composables.MyCardInventory
 import com.example.smartpoultry.presentation.composables.MyCircularProgressBar
+import com.example.smartpoultry.presentation.composables.MyHorizontalSpacer
 import com.example.smartpoultry.presentation.composables.MyInputDialog
 import com.example.smartpoultry.presentation.composables.MyOutlineButton
 import com.example.smartpoultry.presentation.composables.MyVerticalSpacer
@@ -176,116 +176,136 @@ fun HomeScreen(
             }
         }
 
-        //Greeting card
-        if (userName.isNotBlank()) {
-            MyCard(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 10.dp)
 
-            ) {
-                Text(
-                    text = "Hello, $userName from ${homeViewModel.farmName.value}",
-                    modifier = Modifier
-                        .padding(6.dp)
-                        .align(Alignment.Start)
-                )
-            }
-        }
-        Column(
-            //Inventory block
-            modifier = Modifier
-                .border(
-                    width = 1.dp,
-                    color = MaterialTheme.colorScheme.primary,
-                    shape = RoundedCornerShape(
-                        (0.03 * LocalConfiguration.current.screenWidthDp).dp
-                    )
-                )
-                .fillMaxWidth()
-                .padding(6.dp),
-
-            ) {
-            Text(text = "Inventory Status :")
-            MyVerticalSpacer(height = 10)
-
-            Row( //inventory cards
-                modifier = Modifier
-                    .fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceEvenly
-            ) {
-
-                MyCardInventory(
-                    item = "Chicken",
-                    number = totalCells.value.sumOf { cell: Cells -> cell.henCount }
-                )
-
-                MyCardInventory(
-                    item = "Blocks",
-                    number = totalBlocks.value.size
-                )
-
-                MyCardInventory(
-                    item = "Cells",
-                    number = totalCells.value.size
-                )
-
-            }
-
-            //MyOutlineButton(onButtonClick = { /*TODO*/ }, btnName = )
-            MyOutlineButton(
-                modifier = Modifier.fillMaxWidth(),
-                onButtonClick = {
-                    val reportType = "Farm Inventory Status"
-                    homeViewModel.onCreateReport(
-                        name = "$reportType ${SimpleDateFormat("dd/MMM/yyyy").format(System.currentTimeMillis())}",
-                        content =
-                        "\nTotal Blocks : ${totalBlocks.value.size}" +
-                                "\nTotal Cells: ${totalCells.value.size}" +
-                                "\nTotal Chicken: ${totalCells.value.sumOf { cell: Cells -> cell.henCount }}",
-                        reportType = reportType
-                    )
-                    Toast.makeText(
-                        context,
-                        R.string.export_inventory_success,// "File exported successfully, view in downloads",
-                        Toast.LENGTH_LONG
-                    ).show()
-                },
-                btnName = stringResource(id = R.string.export_inventory_summary_as_pdf)//"Export inventory summary as PDF>"
-            )
-        }
-
-        MyVerticalSpacer(height = 20)
-
-
-        AnimatedVisibility(visible = dailyEggsForPastDays.value.isNotEmpty()) {
+        Card(
+            shape = RoundedCornerShape(16.dp),
+            elevation = CardDefaults.cardElevation(8.dp),
+            modifier = Modifier.fillMaxWidth()
+        ) {
             Column(
-                //Recent production trends block
+                //Inventory block
                 modifier = Modifier
-                    .border(
+                    /*.border(
                         width = 1.dp,
                         color = MaterialTheme.colorScheme.primary,
                         shape = RoundedCornerShape(
                             (0.03 * LocalConfiguration.current.screenWidthDp).dp
                         )
+                    )*/
+                    .fillMaxWidth()
+                    .background(MaterialTheme.colorScheme.surface)
+                    .padding(8.dp),
+
+                ) {
+                Text(
+                    text = stringResource(id = R.string.inventory_home_screen),//"Inventory Status",
+                    style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.Bold),
+                    color = MaterialTheme.colorScheme.primary,)
+                MyVerticalSpacer(height = 10)
+
+                Row( //inventory cards
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+
+                    MyCardInventory(
+                        modifier = Modifier.weight(1f),
+                        item = "Chicken",
+                        number = totalCells.value.sumOf { cell: Cells -> cell.henCount }
                     )
+                    MyHorizontalSpacer(width = 5)
+                    MyCardInventory(
+                        modifier = Modifier.weight(1f),
+                        item = "Blocks",
+                        number = totalBlocks.value.size
+                    )
+                    MyHorizontalSpacer(width = 5)
+
+                    MyCardInventory(
+                        modifier = Modifier.weight(1f),
+                        item = "Cells",
+                        number = totalCells.value.size
+                    )
+
+                }
+
+                //MyOutlineButton(onButtonClick = { /*TODO*/ }, btnName = )
+                MyOutlineButton(
+                    modifier = Modifier.fillMaxWidth(),
+                    onButtonClick = {
+                        val reportType = "Farm Inventory Status"
+                        homeViewModel.onCreateReport(
+                            name = "$reportType ${SimpleDateFormat("dd/MMM/yyyy").format(System.currentTimeMillis())}",
+                            content =
+                            "\nTotal Blocks : ${totalBlocks.value.size}" +
+                                    "\nTotal Cells: ${totalCells.value.size}" +
+                                    "\nTotal Chicken: ${totalCells.value.sumOf { cell: Cells -> cell.henCount }}",
+                            reportType = reportType
+                        )
+                        Toast.makeText(
+                            context,
+                            R.string.export_inventory_success,// "File exported successfully, view in downloads",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    },
+                    btnName = stringResource(id = R.string.export_inventory_summary_as_pdf)//"Export inventory summary as PDF>"
+                )
+            }
+        }
+
+        MyVerticalSpacer(height = 5)
+        //Greeting card
+        if (userName.isNotBlank()) {
+            Text(
+                modifier = Modifier
                     .fillMaxWidth()
                     .padding(6.dp)
-                    .animateContentSize(
-                        tween(
-                            500,
-                            easing = EaseIn
-
-                        )
-                    ),
-            ) {
-                Text(text = "Recent Production Trends:")
-                MyVerticalSpacer(height = 10)
-                //Create graph
-
-                if (dailyEggsForPastDays.value.isNotEmpty()) RecentEggsLineChart(
-                    dailyEggCollections = dailyEggsForPastDays.value
+                ,
+                text = "👋🏼 " + stringResource(id = R.string.greeting_home)+ ", $userName  . "+ stringResource(
+                id = homeViewModel.getGreetingBasedOnTime()),
+                textAlign = TextAlign.Center
                 )
+
+        }
+        MyVerticalSpacer(height = 5)
+
+        AnimatedVisibility(visible = dailyEggsForPastDays.value.isNotEmpty()) {
+
+            Card(
+                shape = RoundedCornerShape(16.dp),
+                elevation = CardDefaults.cardElevation(8.dp),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Column(
+                    //Recent production trends block
+                    modifier = Modifier
+                        /*.border(
+                            width = 1.dp,
+                            color = MaterialTheme.colorScheme.primary,
+                            shape = RoundedCornerShape(
+                                (0.03 * LocalConfiguration.current.screenWidthDp).dp
+                            )
+                        )*/
+                        .fillMaxWidth()
+                        .background(MaterialTheme.colorScheme.surface)
+                        .padding(6.dp)
+                        /*.animateContentSize(
+                            tween(
+                                500,
+                                easing = EaseIn
+
+                            )
+                        )*/,
+                ) {
+                    Text(text = "Recent Production Trends:")
+                    MyVerticalSpacer(height = 10)
+                    //Create graph
+
+                    if (dailyEggsForPastDays.value.isNotEmpty()) RecentEggsLineChart(
+                        dailyEggCollections = dailyEggsForPastDays.value
+                    )
+                }
             }
         }
     }
