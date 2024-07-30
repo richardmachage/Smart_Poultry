@@ -135,7 +135,7 @@ fun AccountScreen(
                             .padding(16.dp)
                     ) {
                         Text(
-                            text = "My Account",
+                            text = stringResource(id = R.string.my_Profile_title),
                             style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.Bold),
                             color = MaterialTheme.colorScheme.primary,
                             modifier = Modifier.padding(bottom = 8.dp)
@@ -147,7 +147,7 @@ fun AccountScreen(
                         var newUserName by remember { mutableStateOf(userName) }
                         MyInputDialog(
                             showDialog = showNameDialog,
-                            title = "User Name",
+                            title = stringResource(id = R.string.user_name_title),//"User Name",
                             onConfirm = {
                                 if (newUserName.isBlank())
                                     accountViewModel.toastMessage.value = "Empty field"
@@ -175,27 +175,26 @@ fun AccountScreen(
                         //Name
                         UserInfoRow(
                             Icons.Default.Person,
-                            "name",
-                            value = accountViewModel.user.firstName + " " + accountViewModel.user.lastName,//userName.ifBlank { "No name set" },
+                            label = stringResource(id = R.string.name_label),
+                            value = accountViewModel.user.firstName + " " + accountViewModel.user.lastName,
                             true,
                             onEditClick = {
                                 showNameDialog = true
                             })
-
                         Spacer(modifier = Modifier.height(16.dp))
-
 
                         //Email address
                         var showEmailDialog by remember { mutableStateOf(false) }
                         var newEmail by remember { mutableStateOf(userEmail) }
                         MyInputDialog(
                             showDialog = showEmailDialog,
-                            title = "Email",
+                            title = stringResource(id = R.string.email_address_title),//"Email",
                             onConfirm = {
                                 if (newEmail.isBlank())
-                                    accountViewModel.toastMessage.value = "empty field"
-                                else if (newEmail == userEmail) accountViewModel.toastMessage.value =
-                                    "similar email, no change"
+                                    accountViewModel.toastMessage.value =
+                                        R.string.empty_field.toString() //"empty field"
+                                else if (newEmail == userEmail) accountViewModel.toastMessage.value = R.string.similar_email_no_change.toString()
+                                   // "similar email, no change"
                                 else {
                                     accountViewModel.changeEmail(email = newEmail)
                                     showEmailDialog = false
@@ -205,7 +204,7 @@ fun AccountScreen(
                         ) {
                             MyOutlineTextFiled(
                                 modifier = Modifier.fillMaxWidth(),
-                                label = "Email",
+                                label = stringResource(id = R.string.email_label),
                                 keyboardType = KeyboardType.Email,
                                 initialText = newEmail,
                                 onValueChange = {
@@ -215,7 +214,7 @@ fun AccountScreen(
                         }
                         UserInfoRow(
                             Icons.Default.Email,
-                            "Email address",
+                            label = stringResource(id = R.string.email_address_title),//"Email address",
                             userEmail,
                             true,
                             onEditClick = { showEmailDialog = true })
@@ -226,12 +225,10 @@ fun AccountScreen(
                         var newPhone by remember { mutableStateOf(userPhone) }
                         MyInputDialog(
                             showDialog = showPhoneDialog,
-                            title = "Phone Number",
+                            title = stringResource(id = R.string.phone_number_title),//"Phone Number",
                             onConfirm = {
-                                if (newPhone.isBlank()) accountViewModel.toastMessage.value =
-                                    "empty field"
-                                else if (newPhone == userPhone) accountViewModel.toastMessage.value =
-                                    "same phone number, no change made"
+                                if (newPhone.isBlank()) accountViewModel.toastMessage.value = R.string.empty_field.toString()
+                                else if (newPhone == userPhone) accountViewModel.toastMessage.value = R.string.similar_phone_no_change.toString()
                                 else {
                                     accountViewModel.changePhoneNumber(phoneNumber = newPhone)
                                     showPhoneDialog = false
@@ -241,8 +238,8 @@ fun AccountScreen(
                         ) {
                             MyOutlineTextFiled(
                                 modifier = Modifier.fillMaxWidth(),
-                                label = "Phone Number",
-                                keyboardType = KeyboardType.Email,
+                                label = stringResource(id = R.string.phone_number_title),//"Phone Number",
+                                keyboardType = KeyboardType.Phone,
                                 initialText = newPhone,
                                 onValueChange = {
                                     newPhone = it
@@ -251,9 +248,9 @@ fun AccountScreen(
                         }
                         UserInfoRow(
                             Icons.Default.Phone,
-                            "Phone Number",
-                            userPhone.ifBlank { "No number set" },
-                            true,
+                            label = stringResource(id = R.string.phone_number_title),//"Phone Number",
+                            userPhone.ifBlank { stringResource(id = R.string.no_number_set)},
+                            editable = true,
                             onEditClick = { showPhoneDialog = true })
                     }
                 }
@@ -272,7 +269,7 @@ fun AccountScreen(
                             .padding(16.dp)
                     ) {
                         Text(
-                            text = "My Poultry Farm",
+                            text = stringResource(id = R.string.my_poultry_farm_title),
                             style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.Bold),
                             color = MaterialTheme.colorScheme.primary,
                             modifier = Modifier
@@ -287,7 +284,7 @@ fun AccountScreen(
                             icon = ImageVector.vectorResource(id = R.drawable.egg_outline),
 
                             label = stringResource(id = R.string.farm_name),
-                            value = "Abuya Poultry Farm",
+                            value = accountViewModel.getFarmName(),
                             true
                         )
                         MyVerticalSpacer(height = 10)
@@ -296,7 +293,7 @@ fun AccountScreen(
                         UserInfoRow(
                             icon = Icons.Default.LocationOn,
                             label = stringResource(id = R.string.country),
-                            value = "Tanzania"
+                            value = accountViewModel.getFarmCountry()
                         )
                     }
                 }

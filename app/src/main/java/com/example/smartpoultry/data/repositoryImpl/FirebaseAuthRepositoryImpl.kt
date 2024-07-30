@@ -11,6 +11,7 @@ import com.example.smartpoultry.utils.CONSUCUTIVE_DAYS_KEY
 import com.example.smartpoultry.utils.EDIT_HEN_COUNT_ACCESS
 import com.example.smartpoultry.utils.EGG_COLLECTION_ACCESS
 import com.example.smartpoultry.utils.FARMS_COLLECTION
+import com.example.smartpoultry.utils.FARM_COUNTRY_KEY
 import com.example.smartpoultry.utils.FARM_ID_KEY
 import com.example.smartpoultry.utils.FARM_NAME_KEY
 import com.example.smartpoultry.utils.FARM_SUPER_USER_EMAIL
@@ -22,7 +23,7 @@ import com.example.smartpoultry.utils.REPEAT_INTERVAL_KEY
 import com.example.smartpoultry.utils.THRESHOLD_RATIO_KEY
 import com.example.smartpoultry.utils.USERS_COLLECTION
 import com.example.smartpoultry.utils.USER_EMAIL_KEY
-import com.example.smartpoultry.utils.USER_NAME_KEY
+import com.example.smartpoultry.utils.USER_FIRST_NAME_KEY
 import com.example.smartpoultry.utils.USER_PHONE_KEY
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
@@ -204,6 +205,7 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
     }
 
     fun saveToPreferences(user:User,accessLevel: AccessLevel, farm : Farm){
+        //is password reset
         preferencesRepo.saveData(
             IS_PASSWORD_RESET_KEY,
             user.passwordReset.toString()
@@ -217,7 +219,7 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
 
         //user name
         preferencesRepo.saveData(
-            USER_NAME_KEY,
+            USER_FIRST_NAME_KEY,
             user.firstName
         )
 
@@ -248,6 +250,8 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
             MANAGE_BLOCKS_CELLS_ACCESS,
             accessLevel.manageBlocksCells.toString()
         )
+
+        //Farm Details
         preferencesRepo.saveData(
             FARM_NAME_KEY,
             farm.name
@@ -255,6 +259,10 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
         preferencesRepo.saveData(
             FARM_SUPER_USER_EMAIL,
             farm.superUserEmail
+        )
+        preferencesRepo.saveData(
+            FARM_COUNTRY_KEY,
+            farm.country
         )
 
         preferencesRepo.saveData(

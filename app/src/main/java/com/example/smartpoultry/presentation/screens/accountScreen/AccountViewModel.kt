@@ -10,11 +10,15 @@ import com.example.smartpoultry.data.dataSource.remote.firebase.models.User
 import com.example.smartpoultry.domain.repository.FirebaseAuthRepository
 import com.example.smartpoultry.utils.EDIT_HEN_COUNT_ACCESS
 import com.example.smartpoultry.utils.EGG_COLLECTION_ACCESS
+import com.example.smartpoultry.utils.FARM_COUNTRY_KEY
 import com.example.smartpoultry.utils.FARM_ID_KEY
+import com.example.smartpoultry.utils.FARM_NAME_KEY
 import com.example.smartpoultry.utils.MANAGE_BLOCKS_CELLS_ACCESS
 import com.example.smartpoultry.utils.MANAGE_USERS_ACCESS
 import com.example.smartpoultry.utils.USER_EMAIL_KEY
-import com.example.smartpoultry.utils.USER_NAME_KEY
+import com.example.smartpoultry.utils.USER_FIRST_NAME_KEY
+import com.example.smartpoultry.utils.USER_GENDER_KEY
+import com.example.smartpoultry.utils.USER_LAST_NAME_KEY
 import com.example.smartpoultry.utils.USER_PHONE_KEY
 import com.example.smartpoultry.utils.isValidEmail
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -35,17 +39,18 @@ class AccountViewModel @Inject constructor(
     var manageBlocksCellsAccess = mutableStateOf(false)
     var accessLevel = mutableStateOf(getAccessLevel())
     val user = User(
-        firstName = getUserName(),
-        // role = getUserRole(),
+        firstName = getUserFirstName(),
+        lastName = getUserLastName(),
+        gender =  getUserGender(),
         email = getUserEmail(),
         phone = getUserPhone(),
     )
 
-    private fun getUserName() = preferencesRepo.loadData(USER_NAME_KEY)!!
-
-    // private fun getUserRole() = preferencesRepo.loadData(USER_ROLE_KEY)!!
+    private fun getUserFirstName() = preferencesRepo.loadData(USER_FIRST_NAME_KEY)!!
+    private fun getUserLastName() = preferencesRepo.loadData(USER_LAST_NAME_KEY)!!
     private fun getUserEmail() = preferencesRepo.loadData(USER_EMAIL_KEY)!!
     private fun getUserPhone() = preferencesRepo.loadData(USER_PHONE_KEY)!!
+    private fun getUserGender() = preferencesRepo.loadData(USER_GENDER_KEY)!!
     private fun getAccessLevel(): AccessLevel {
         return AccessLevel(
             manageUsers = preferencesRepo.loadData(MANAGE_USERS_ACCESS).toBoolean(),
@@ -55,7 +60,11 @@ class AccountViewModel @Inject constructor(
         )
 
     }
+
     private fun getFarmId() = preferencesRepo.loadData(FARM_ID_KEY)!!
+    fun getFarmName() = preferencesRepo.loadData(FARM_NAME_KEY)!!
+    fun getFarmCountry() = preferencesRepo.loadData(FARM_COUNTRY_KEY)!!
+
 
     fun registerUser( email: String, name: String, phone: String) {
         viewModelScope.launch {

@@ -23,7 +23,7 @@ import com.example.smartpoultry.utils.PAST_DAYS_KEY
 import com.example.smartpoultry.utils.REPEAT_INTERVAL_KEY
 import com.example.smartpoultry.utils.THRESHOLD_RATIO_KEY
 import com.example.smartpoultry.utils.USER_EMAIL_KEY
-import com.example.smartpoultry.utils.USER_NAME_KEY
+import com.example.smartpoultry.utils.USER_FIRST_NAME_KEY
 import com.example.smartpoultry.utils.USER_PHONE_KEY
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -127,7 +127,7 @@ class SettingsViewModel @Inject constructor (
             preferencesRepo.deleteData(FARM_ID_KEY)
             Log.d("Clear Preferences", "cleared farm id ")
 
-            preferencesRepo.deleteData(USER_NAME_KEY)
+            preferencesRepo.deleteData(USER_FIRST_NAME_KEY)
             Log.d("Clear Preferences", "cleared user name")
 
             preferencesRepo.deleteData(USER_EMAIL_KEY)

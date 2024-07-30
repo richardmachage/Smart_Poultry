@@ -22,7 +22,7 @@ import com.example.smartpoultry.domain.repository.FirebaseAuthRepository
 import com.example.smartpoultry.utils.FARM_NAME_KEY
 import com.example.smartpoultry.utils.IS_PASSWORD_RESET_KEY
 import com.example.smartpoultry.utils.USER_EMAIL_KEY
-import com.example.smartpoultry.utils.USER_NAME_KEY
+import com.example.smartpoultry.utils.USER_FIRST_NAME_KEY
 import com.example.smartpoultry.utils.localDateToJavaDate
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -110,7 +110,7 @@ class HomeViewModel @Inject constructor(
     }
     private fun getFarmName() = preferencesRepo.loadData(FARM_NAME_KEY)!!
 
-    fun getName() = preferencesRepo.loadData(USER_NAME_KEY)
+    fun getName() = preferencesRepo.loadData(USER_FIRST_NAME_KEY)
     fun getEmail() = preferencesRepo.loadData(USER_EMAIL_KEY)
 
     val totalBlocks = blocksRepository.getAllBlocks().stateIn(

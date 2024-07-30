@@ -3,7 +3,9 @@ package com.example.smartpoultry.utils
 
 
 //const val USER_ROLE_KEY = "user_role"
-const val USER_NAME_KEY = "user_name"
+const val USER_FIRST_NAME_KEY = "user_first_name"
+const val USER_LAST_NAME_KEY = "user_last_name"
+const val USER_GENDER_KEY = "user_gender"
 const val USER_PHONE_KEY = "user_phone"
 const val USER_EMAIL_KEY = "user_email"
 const val FIRST_INSTALL = "first_install"
@@ -11,6 +13,7 @@ const val FIRST_INSTALL = "first_install"
 const val FARM_ID_KEY = "farm_id"
 const val FARM_NAME_KEY = "farm_name"
 const val FARM_SUPER_USER_EMAIL = "farm_super_user_email"
+const val FARM_COUNTRY_KEY = "farm_country"
 
 const val IS_PASSWORD_RESET_KEY = "is_password_reset"
 

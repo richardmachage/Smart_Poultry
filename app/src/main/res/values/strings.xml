@@ -8,4 +8,15 @@
     <string name="input_egg_count">Eggs collected</string>
     <string name="farm_name">Farm Name</string>
     <string name="country">Country</string>
+    <string name="my_poultry_farm_title">My Poultry Farm</string>
+    <string name="my_Profile_title">My Profile</string>
+    <string name="user_name_title">User Name</string>
+    <string name="name_label">Name</string>
+    <string name="email_address_title">Email Address</string>
+    <string name="empty_field">empty field</string>
+    <string name="similar_email_no_change">similar email, no change</string>
+    <string name="email_label">Email</string>
+    <string name="phone_number_title">Phone Number</string>
+    <string name="similar_phone_no_change">same phone number, no change made</string>
+    <string name="no_number_set">no number set</string>
 </resources>
