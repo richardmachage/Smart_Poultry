@@ -35,6 +35,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -198,11 +199,11 @@ fun HomeScreen(
                     .padding(8.dp),
 
                 ) {
-                Text(
-                    text = stringResource(id = R.string.inventory_home_screen),//"Inventory Status",
-                    style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.Bold),
-                    color = MaterialTheme.colorScheme.primary,)
-                MyVerticalSpacer(height = 10)
+                TitleText(
+                    modifier = Modifier.padding(5.dp),
+                    text = stringResource(id = R.string.inventory_home_screen)
+                )
+
 
                 Row( //inventory cards
                     modifier = Modifier
@@ -231,7 +232,6 @@ fun HomeScreen(
 
                 }
 
-                //MyOutlineButton(onButtonClick = { /*TODO*/ }, btnName = )
                 MyOutlineButton(
                     modifier = Modifier.fillMaxWidth(),
                     onButtonClick = {
@@ -246,7 +246,7 @@ fun HomeScreen(
                         )
                         Toast.makeText(
                             context,
-                            R.string.export_inventory_success,// "File exported successfully, view in downloads",
+                            R.string.export_inventory_success,
                             Toast.LENGTH_LONG
                         ).show()
                     },
@@ -261,12 +261,15 @@ fun HomeScreen(
             Text(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(6.dp)
+                // .padding(6.dp)
                 ,
-                text = "👋🏼 " + stringResource(id = R.string.greeting_home)+ ", $userName  . "+ stringResource(
-                id = homeViewModel.getGreetingBasedOnTime()),
-                textAlign = TextAlign.Center
-                )
+                text = "👋🏼 " + stringResource(id = R.string.greeting_home) + ", $userName. " + stringResource(
+                    id = homeViewModel.getGreetingBasedOnTime()
+                ),
+                textAlign = TextAlign.Center,
+                fontStyle = FontStyle.Italic,
+                fontWeight = FontWeight.W300
+            )
 
         }
         MyVerticalSpacer(height = 5)
@@ -290,16 +293,19 @@ fun HomeScreen(
                         )*/
                         .fillMaxWidth()
                         .background(MaterialTheme.colorScheme.surface)
-                        .padding(6.dp)
-                        /*.animateContentSize(
-                            tween(
-                                500,
-                                easing = EaseIn
+                        .padding(6.dp),
+                    /*.animateContentSize(
+                        tween(
+                            500,
+                            easing = EaseIn
 
-                            )
-                        )*/,
+                        )
+                    )*/
                 ) {
-                    TitleText(text = stringResource(id = R.string.recent_production_trends_home))
+                    TitleText(
+                        modifier = Modifier.padding(start = 5.dp),
+                        text = stringResource(id = R.string.recent_production_trends_home)
+                    )
                     //Text(text = "Recent Production Trends:")
                     MyVerticalSpacer(height = 10)
 
@@ -309,6 +315,26 @@ fun HomeScreen(
                 }
             }
         }
+
+        MyVerticalSpacer(height = 5)
+        Card(
+            shape = RoundedCornerShape(16.dp),
+            elevation = CardDefaults.cardElevation(8.dp),
+            modifier = Modifier.fillMaxWidth()//.padding(6.dp)
+
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(MaterialTheme.colorScheme.surfaceContainer)
+            ) {
+                Text(
+                    color = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.fillMaxWidth().padding(6.dp),
+                    text = "Egg Laying Percentage  -> 80%")
+            }
+        }
+
     }
     // }
 }
