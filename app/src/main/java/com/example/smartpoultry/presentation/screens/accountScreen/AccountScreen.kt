@@ -23,13 +23,13 @@ import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Phone
-import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -297,11 +297,9 @@ fun AccountScreen(
                         )
                     }
                 }
-                //}
                 //Register new user
                 var showRegDialog by remember { mutableStateOf(false) }
                 var userEmailReg by remember { mutableStateOf("") }
-                //var userRoleReg by remember { mutableStateOf("") }
                 var userNameReg by remember { mutableStateOf("") }
                 var userPhoneReg by remember { mutableStateOf("") }
                 MyInputDialog(
@@ -321,7 +319,7 @@ fun AccountScreen(
                 ) {
                     Column {
                         MyEditTextClear( // email input
-                            label = "Email address",
+                            label = stringResource(id = R.string.email_address_title),//"Email address",
                             iconLeading = Icons.Default.Email,
                             iconLeadingDescription = "Email",
                             keyboardType = KeyboardType.Email,
@@ -330,7 +328,7 @@ fun AccountScreen(
                             }
                         )
                         MyEditTextClear(// input name
-                            label = "User Name",
+                            label = stringResource(id = R.string.user_name_title),//"User Name",
                             iconLeading = Icons.Default.Person,
                             iconLeadingDescription = "person",
                             keyboardType = KeyboardType.Text,
@@ -339,7 +337,7 @@ fun AccountScreen(
                             }
                         )
                         MyEditTextClear( // input phone
-                            label = "Phone number",
+                            label = stringResource(id = R.string.phone_number_title),//"Phone number",
                             iconLeading = Icons.Default.Phone,
                             iconLeadingDescription = "Email",
                             keyboardType = KeyboardType.Phone,
@@ -356,7 +354,7 @@ fun AccountScreen(
                                 verticalAlignment = Alignment.CenterVertically,
                                 horizontalArrangement = Arrangement.SpaceBetween
                             ) {
-                                Text(text = "Specify access Level")
+                                Text(text = stringResource(id = R.string.specify_access_level))//"Specify access Level")
                                 IconButton(onClick = { expanded = !expanded }) {
                                     Icon(
                                         Icons.Filled.ArrowDropDown,
@@ -368,29 +366,32 @@ fun AccountScreen(
                             }
                             if (expanded) {
                                 AccessLevelItem(
-                                    itemName = "Egg Collection",
-                                    description = "Allows the user to be able to input the daily eggs collection records",
+                                    itemName = stringResource(id = R.string.level_egg_collection),//"Egg Collection",
+                                    description = stringResource(id = R.string.egg_collection_description),
                                     isChecked = accountViewModel.eggCollectionAccess.value,
                                     onCheckedChanged = {
                                         accountViewModel.eggCollectionAccess.value = it
                                     })
+
                                 AccessLevelItem(
-                                    itemName = "Edit Hen Count",
-                                    description = "Allows the user to be edit the number of hens in a cell ",
+                                    itemName = stringResource(id = R.string.level_edit_hen_count),//"Edit Hen Count",
+                                    description = stringResource(id = R.string.edit_hen_count_description),
                                     isChecked = accountViewModel.editHenCountAccess.value,
                                     onCheckedChanged = {
                                         accountViewModel.editHenCountAccess.value = it
                                     })
+
                                 AccessLevelItem(
-                                    itemName = "Manage Blocks & Cells",
-                                    description = "Allows the user to add, delete or rename a cell or a block.",
+                                    itemName = stringResource(id = R.string.level_manage_blocks_cells),//"Manage Blocks & Cells",
+                                    description = stringResource(id = R.string.manage_blocks_cells_description),//"Allows the user to add, delete or rename a cell or a block.",
                                     isChecked = accountViewModel.manageBlocksCellsAccess.value,
                                     onCheckedChanged = {
                                         accountViewModel.manageBlocksCellsAccess.value = it
                                     })
+
                                 AccessLevelItem(
-                                    itemName = "Manage other users",
-                                    description = "This will allow the user to be able to register new users to the farm, delete other user accounts and also be able to change the access level of the other users",
+                                    itemName = stringResource(id = R.string.level_manage_users),//"Manage other users",
+                                    description = stringResource(id = R.string.manage_users_description),//"This will allow the user to be able to register new users to the farm, delete other user accounts and also be able to change the access level of the other users",
                                     isChecked = accountViewModel.manageUsersAccess.value,
                                     onCheckedChanged = {
                                         accountViewModel.manageUsersAccess.value = it
@@ -404,12 +405,12 @@ fun AccountScreen(
                 if (accountViewModel.accessLevel.value.manageUsers) {
                     Spacer(modifier = Modifier.height(24.dp))
                     ActionButton(
-                        text = "Register a new user",
+                        text = stringResource(id = R.string.register_new_user),//"Register a new user",
                         icon = ImageVector.vectorResource(id = R.drawable.person_add),
                         onClick = { showRegDialog = true })
                     Spacer(modifier = Modifier.height(16.dp))
                     ActionButton(
-                        "Manage existing users",
+                        text = stringResource(id = R.string.manage_users),//"Manage existing users",
                         ImageVector.vectorResource(id = R.drawable.supervisor_account),
                         onClick = {
                             navigator.navigate(
@@ -465,7 +466,7 @@ fun UserInfoRow(
 
 @Composable
 fun ActionButton(text: String, icon: ImageVector, onClick: () -> Unit = {}) {
-    Button(
+    OutlinedButton(
         onClick = { onClick() },
         modifier = Modifier
             .fillMaxWidth()

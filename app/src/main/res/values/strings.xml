@@ -19,4 +19,15 @@
     <string name="phone_number_title">Phone Number</string>
     <string name="similar_phone_no_change">same phone number, no change made</string>
     <string name="no_number_set">no number set</string>
+    <string name="register_new_user">Register a new user</string>
+    <string name="manage_users">Manage existing users</string>
+    <string name="manage_users_description">This will allow the user to be able to register new users to the farm, delete other user accounts and also be able to change the access level of the other users</string>
+    <string name="level_manage_users">Manage other users</string>
+    <string name="level_manage_blocks_cells"><![CDATA[Manage Blocks & Cells]]></string>
+    <string name="manage_blocks_cells_description">Allows the user to add, delete or rename a cell or a block.</string>
+    <string name="level_edit_hen_count">Edit hen count</string>
+    <string name="edit_hen_count_description">Allows the user to be edit the number of hens in a cell</string>
+    <string name="level_egg_collection">Egg Collection</string>
+    <string name="egg_collection_description">Allows the user to be able to input the daily eggs collection records</string>
+    <string name="specify_access_level">Specify access Level</string>
 </resources>
