@@ -288,7 +288,7 @@ fun AccountScreen(
 
                             label = stringResource(id = R.string.farm_name),
                             value = "Abuya Poultry Farm",
-                            false
+                            true
                         )
                         MyVerticalSpacer(height = 10)
 
