@@ -20,6 +20,7 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material3.Button
@@ -44,6 +45,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -138,11 +140,7 @@ fun AccountScreen(
                             color = MaterialTheme.colorScheme.primary,
                             modifier = Modifier.padding(bottom = 8.dp)
                         )
-                        /*UserInfoRow(
-                            ImageVector.vectorResource(id = R.drawable.verified_user),
-                            label = "Role",
-                            value = userRole
-                        )*/
+
                         Spacer(modifier = Modifier.height(16.dp))
                         //Name
                         var showNameDialog by remember { mutableStateOf(false) }
@@ -173,16 +171,19 @@ fun AccountScreen(
                                 }
                             )
                         }
+
+                        //Name
                         UserInfoRow(
                             Icons.Default.Person,
                             "name",
-                            value = userName.ifBlank { "No name set" },
+                            value = accountViewModel.user.firstName + " " + accountViewModel.user.lastName,//userName.ifBlank { "No name set" },
                             true,
                             onEditClick = {
                                 showNameDialog = true
                             })
 
                         Spacer(modifier = Modifier.height(16.dp))
+
 
                         //Email address
                         var showEmailDialog by remember { mutableStateOf(false) }
@@ -256,6 +257,49 @@ fun AccountScreen(
                             onEditClick = { showPhoneDialog = true })
                     }
                 }
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                //Farm Card
+                Card(
+                    shape = RoundedCornerShape(16.dp),
+                    elevation = CardDefaults.cardElevation(8.dp),
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Column(
+                        modifier = Modifier
+                            .background(MaterialTheme.colorScheme.surface)
+                            .padding(16.dp)
+                    ) {
+                        Text(
+                            text = "My Poultry Farm",
+                            style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.Bold),
+                            color = MaterialTheme.colorScheme.primary,
+                            modifier = Modifier
+                                .padding(bottom = 8.dp)
+                                .fillMaxWidth()
+                        )
+
+                        MyVerticalSpacer(height = 10)
+
+                        //FarmName
+                        UserInfoRow(
+                            icon = ImageVector.vectorResource(id = R.drawable.egg_outline),
+
+                            label = stringResource(id = R.string.farm_name),
+                            value = "Abuya Poultry Farm",
+                            false
+                        )
+                        MyVerticalSpacer(height = 10)
+
+                        //Country
+                        UserInfoRow(
+                            icon = Icons.Default.LocationOn,
+                            label = stringResource(id = R.string.country),
+                            value = "Tanzania"
+                        )
+                    }
+                }
                 //}
                 //Register new user
                 var showRegDialog by remember { mutableStateOf(false) }
@@ -268,8 +312,13 @@ fun AccountScreen(
                     title = "Register New User",
                     onConfirm = {
                         //TODO -> validate Email address, and role selected.
-                        accountViewModel.registerUser(email = userEmailReg, name = userNameReg.trim(), phone = userPhoneReg.trim())
-                        if(accountViewModel.toastMessage.value != "Invalid email: $userEmailReg" && accountViewModel.toastMessage.value != "Please select a role") showRegDialog = false
+                        accountViewModel.registerUser(
+                            email = userEmailReg,
+                            name = userNameReg.trim(),
+                            phone = userPhoneReg.trim()
+                        )
+                        if (accountViewModel.toastMessage.value != "Invalid email: $userEmailReg" && accountViewModel.toastMessage.value != "Please select a role") showRegDialog =
+                            false
                     },
                     onDismiss = { showRegDialog = false }
                 ) {
@@ -304,10 +353,14 @@ fun AccountScreen(
 
                         MyVerticalSpacer(height = 10)
                         var expanded by remember { mutableStateOf(false) }
-                        MyBorderedColumn{
-                            Row (modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically,horizontalArrangement = Arrangement.SpaceBetween){
+                        MyBorderedColumn {
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.SpaceBetween
+                            ) {
                                 Text(text = "Specify access Level")
-                                IconButton(onClick = { expanded = !expanded}) {
+                                IconButton(onClick = { expanded = !expanded }) {
                                     Icon(
                                         Icons.Filled.ArrowDropDown,
                                         null,
@@ -316,15 +369,40 @@ fun AccountScreen(
                                 }
 
                             }
-                            if (expanded){
-                                AccessLevelItem(itemName = "Egg Collection", description = "Allows the user to be able to input the daily eggs collection records", isChecked = accountViewModel.eggCollectionAccess.value, onCheckedChanged = {accountViewModel.eggCollectionAccess.value = it } )
-                                AccessLevelItem(itemName = "Edit Hen Count", description = "Allows the user to be edit the number of hens in a cell ", isChecked = accountViewModel.editHenCountAccess.value, onCheckedChanged = { accountViewModel.editHenCountAccess.value = it} )
-                                AccessLevelItem(itemName = "Manage Blocks & Cells", description = "Allows the user to add, delete or rename a cell or a block.", isChecked =  accountViewModel.manageBlocksCellsAccess.value, onCheckedChanged = { accountViewModel.manageBlocksCellsAccess.value = it} )
-                                AccessLevelItem(itemName = "Manage other users", description = "This will allow the user to be able to register new users to the farm, delete other user accounts and also be able to change the access level of the other users", isChecked =  accountViewModel.manageUsersAccess.value, onCheckedChanged = { accountViewModel.manageUsersAccess.value = it} )
+                            if (expanded) {
+                                AccessLevelItem(
+                                    itemName = "Egg Collection",
+                                    description = "Allows the user to be able to input the daily eggs collection records",
+                                    isChecked = accountViewModel.eggCollectionAccess.value,
+                                    onCheckedChanged = {
+                                        accountViewModel.eggCollectionAccess.value = it
+                                    })
+                                AccessLevelItem(
+                                    itemName = "Edit Hen Count",
+                                    description = "Allows the user to be edit the number of hens in a cell ",
+                                    isChecked = accountViewModel.editHenCountAccess.value,
+                                    onCheckedChanged = {
+                                        accountViewModel.editHenCountAccess.value = it
+                                    })
+                                AccessLevelItem(
+                                    itemName = "Manage Blocks & Cells",
+                                    description = "Allows the user to add, delete or rename a cell or a block.",
+                                    isChecked = accountViewModel.manageBlocksCellsAccess.value,
+                                    onCheckedChanged = {
+                                        accountViewModel.manageBlocksCellsAccess.value = it
+                                    })
+                                AccessLevelItem(
+                                    itemName = "Manage other users",
+                                    description = "This will allow the user to be able to register new users to the farm, delete other user accounts and also be able to change the access level of the other users",
+                                    isChecked = accountViewModel.manageUsersAccess.value,
+                                    onCheckedChanged = {
+                                        accountViewModel.manageUsersAccess.value = it
+                                    })
                             }
                         }
                     }
                 }
+
 
                 if (accountViewModel.accessLevel.value.manageUsers) {
                     Spacer(modifier = Modifier.height(24.dp))
@@ -342,6 +420,8 @@ fun AccountScreen(
                             )
                         })
                 }
+
+
             }
 
         }

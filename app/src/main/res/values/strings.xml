@@ -6,4 +6,6 @@
     <string name="eggs">"Eggs "</string>
     <string name="save_btn">Save</string>
     <string name="input_egg_count">Eggs collected</string>
+    <string name="farm_name">Farm Name</string>
+    <string name="country">Country</string>
 </resources>
