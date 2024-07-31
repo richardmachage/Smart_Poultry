@@ -53,7 +53,7 @@ private val preferencesRepo: PreferencesRepo
             _registerUserScreenState = _registerUserScreenState.copy(
                 currentPart = listOfParts[currentPartIndex],
                 showPrevious = true,
-                showContinue = if (currentPartIndex == listOfParts.size - 1) false else true,
+                showContinue = currentPartIndex != listOfParts.size - 1,
                 isContinueEnabled = isContinueEnabled(currentPart = listOfParts[currentPartIndex])
             )
         }
@@ -66,14 +66,16 @@ private val preferencesRepo: PreferencesRepo
     private fun isContinueEnabled(currentPart: RegisterUserParts):Boolean{
         return when(currentPart){
             RegisterUserParts.PERSONAL_DETAILS -> {
-                false
+                //false
+                _registerUserScreenData.personalDetailsNotBlank()
             }
             RegisterUserParts.CONTACT_DETAILS -> {
-                false
+                _registerUserScreenData.contactDetailsNotBlank()
+
             }
 
             RegisterUserParts.ACCESS_LEVEL_DETAILS -> {
-                false
+                true
             }
         }
     }

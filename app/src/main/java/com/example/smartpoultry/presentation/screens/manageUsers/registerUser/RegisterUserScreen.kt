@@ -2,6 +2,7 @@ package com.example.smartpoultry.presentation.screens.manageUsers.registerUser
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -133,7 +134,8 @@ fun RegisterUserScreen(
                     Box(
                         modifier = Modifier
                             .fillMaxSize()
-                            .padding(6.dp),
+                            .padding(6.dp)
+                            .animateContentSize(),
                         contentAlignment = Alignment.BottomCenter
                     ) {
                         Row(
