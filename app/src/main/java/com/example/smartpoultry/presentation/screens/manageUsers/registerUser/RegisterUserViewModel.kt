@@ -68,6 +68,11 @@ class RegisterUserViewModel @Inject constructor(
     }
 
     fun onDone() {
+
+    }
+
+    private fun registerUser(){
+
     }
 
     fun onPersonalDetailsResponse(personalDetailsResponse: PersonalDetailsResponse) {
