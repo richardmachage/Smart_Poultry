@@ -55,7 +55,7 @@ fun AccessLevelItem(
                 // var isChecked by remember{ mutableStateOf(false) }
                 MyInputDialog(
                     showDialog = showDialog,
-                    title = "Description",
+                    title = itemName,
                     onConfirm = {
                         onCheckedChanged(true)
                         showDialog = false

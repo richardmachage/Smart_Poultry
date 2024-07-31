@@ -22,7 +22,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.smartpoultry.R
@@ -31,6 +30,7 @@ import com.example.smartpoultry.presentation.composables.MyVerticalSpacer
 import com.example.smartpoultry.presentation.composables.NormButton
 import com.example.smartpoultry.presentation.composables.text.TitleText
 import com.example.smartpoultry.presentation.screens.manageUsers.registerUser.components.AccessLevelDetails
+import com.example.smartpoultry.presentation.screens.manageUsers.registerUser.components.AccessLevelDetailsResponse
 import com.example.smartpoultry.presentation.screens.manageUsers.registerUser.components.RegisterUserParts
 import com.example.smartpoultry.presentation.screens.signUp.components.ContactDetails
 import com.example.smartpoultry.presentation.screens.signUp.components.PersonalDetails
@@ -38,12 +38,15 @@ import com.example.smartpoultry.presentation.screens.signUp.models.ContactDetail
 import com.example.smartpoultry.presentation.screens.signUp.models.PersonalDetailsResponse
 import com.example.smartpoultry.presentation.ui.theme.SmartPoultryTheme
 import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Destination
-@Preview(showSystemUi = true)
+//@Preview(showSystemUi = true)
 @Composable
 fun RegisterUserScreen(
+    navigator: DestinationsNavigator
+
 ) {
     val registerUserViewModel = hiltViewModel<RegisterUserViewModel>()
     SmartPoultryTheme {
@@ -54,7 +57,7 @@ fun RegisterUserScreen(
                     navigationIcon = {
                         IconButton(onClick = {
                             /*TODO*/
-                            // navigator.navigateUp()
+                             navigator.navigateUp()
                         }) {
                             Icon(
                                 imageVector = Icons.AutoMirrored.Filled.ArrowBack,
@@ -112,7 +115,15 @@ fun RegisterUserScreen(
 
                             RegisterUserParts.ACCESS_LEVEL_DETAILS -> {
                                 AccessLevelDetails(
-                                    
+                                    accessLevelDetailsResponse = AccessLevelDetailsResponse(
+                                        manageUsers = registerUserViewModel.registerUserScreenData.manageUsers,
+                                        editHenCount = registerUserViewModel.registerUserScreenData.editHenCountAccess,
+                                        eggCollection = registerUserViewModel.registerUserScreenData.eggCollectionAccess,
+                                        manageBlocksCells = registerUserViewModel.registerUserScreenData.manageBlockCells,
+                                    ),
+                                    onResponse = {
+
+                                    }
                                 )
                             }
                         }
@@ -131,9 +142,10 @@ fun RegisterUserScreen(
                                 .padding(6.dp),
                             horizontalArrangement = Arrangement.SpaceBetween
                         ) {
-                            AnimatedVisibility(visible = registerUserViewModel.registerUserScreenState.showPrevious) {
+                            AnimatedVisibility(
+                                modifier = Modifier.weight(1f),
+                                visible = registerUserViewModel.registerUserScreenState.showPrevious) {
                                 MyOutlineButton(
-                                    modifier = Modifier.weight(1f),
                                     onButtonClick = { registerUserViewModel.onPrevious() },
                                     btnName = stringResource(id = R.string.previous_btn),
                                     leadingIcon = Icons.AutoMirrored.Default.ArrowBack
