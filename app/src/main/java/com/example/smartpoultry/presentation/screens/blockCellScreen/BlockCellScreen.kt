@@ -138,7 +138,9 @@ fun BlockCellScreen(
     Scaffold(
         //if (userRole != "Collector")
         floatingActionButton = {
+
             if (blockCellViewModel.getManageBlockCellsAccess()) {
+
                 MyFloatingActionButton(
                     onClick = {
                         blockCellViewModel.showDialog.value = true
@@ -151,12 +153,11 @@ fun BlockCellScreen(
                         )
                     },
                     text = {
-                        Text(text = "Add Cell")
+                        Text(text = "Add Block")
                     }
                 )
             }
-        }
-        ,
+        },
 
     ) { paddingValues ->
         Surface(
