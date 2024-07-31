@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
@@ -47,6 +46,7 @@ import com.example.smartpoultry.presentation.composables.MyCard
 import com.example.smartpoultry.presentation.composables.MyInputDialog
 import com.example.smartpoultry.presentation.composables.MyOutlineTextFiled
 import com.example.smartpoultry.presentation.composables.MyVerticalSpacer
+import com.example.smartpoultry.presentation.composables.buttons.MyFloatingActionButton
 import com.example.smartpoultry.presentation.uiModels.BlockParse
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -166,17 +166,23 @@ fun CellsScreen(
             )},
         floatingActionButton = {
             if(cellsViewModel.getManageBlockCellsAccess()/*userRole != "Collector"*/) {
-                IconButton(
+                MyFloatingActionButton(
+                    modifier = Modifier.padding(bottom = 50.dp),
                     onClick = {
                         showAddCellDialog = true
+                    },
+                    icon = {
+                        Icon(
+                            //modifier = Modifier.size(40.dp),
+                            imageVector = Icons.Default.AddCircle,
+                            contentDescription = "Add"
+                        )
+                    },
+                    text = {
+                        Text(text = "Add Cell")
                     }
-                ) {
-                    Icon(
-                        modifier = Modifier.size(100.dp),
-                        imageVector = Icons.Default.AddCircle,
-                        contentDescription = "Add"
-                    )
-                }
+                )
+
             }
         }
     ){ paddingValues->
