@@ -17,7 +17,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.LocationOn
@@ -42,7 +41,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -53,15 +51,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.smartpoultry.R
-import com.example.smartpoultry.presentation.composables.AccessLevelItem
-import com.example.smartpoultry.presentation.composables.MyBorderedColumn
 import com.example.smartpoultry.presentation.composables.MyCircularProgressBar
-import com.example.smartpoultry.presentation.composables.MyEditTextClear
 import com.example.smartpoultry.presentation.composables.MyInputDialog
 import com.example.smartpoultry.presentation.composables.MyOutlineTextFiled
 import com.example.smartpoultry.presentation.composables.MyVerticalSpacer
 import com.example.smartpoultry.presentation.destinations.ManageUsersScreenDestination
-import com.example.smartpoultry.presentation.destinations.RegisterUserScreenDestination
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
@@ -299,6 +293,8 @@ fun AccountScreen(
                     }
                 }
                 //Register new user
+                /*
+
                 var showRegDialog by remember { mutableStateOf(false) }
                 var userEmailReg by remember { mutableStateOf("") }
                 var userNameReg by remember { mutableStateOf("") }
@@ -402,9 +398,10 @@ fun AccountScreen(
                     }
                 }
 
+*/
 
                 if (accountViewModel.accessLevel.value.manageUsers) {
-                    Spacer(modifier = Modifier.height(24.dp))
+                   /* Spacer(modifier = Modifier.height(24.dp))
                     ActionButton(
                         text = stringResource(id = R.string.register_new_user),//"Register a new user",
                         icon = ImageVector.vectorResource(id = R.drawable.person_add),
@@ -413,7 +410,7 @@ fun AccountScreen(
                             navigator.navigate( RegisterUserScreenDestination)
 
                         })
-                    Spacer(modifier = Modifier.height(16.dp))
+                    Spacer(modifier = Modifier.height(16.dp))*/
                     ActionButton(
                         text = stringResource(id = R.string.manage_users),//"Manage existing users",
                         ImageVector.vectorResource(id = R.drawable.supervisor_account),

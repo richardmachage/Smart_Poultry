@@ -20,7 +20,6 @@ import com.example.smartpoultry.utils.USER_FIRST_NAME_KEY
 import com.example.smartpoultry.utils.USER_GENDER_KEY
 import com.example.smartpoultry.utils.USER_LAST_NAME_KEY
 import com.example.smartpoultry.utils.USER_PHONE_KEY
-import com.example.smartpoultry.utils.isValidEmail
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -65,6 +64,7 @@ class AccountViewModel @Inject constructor(
     fun getFarmName() = preferencesRepo.loadData(FARM_NAME_KEY)!!
     fun getFarmCountry() = preferencesRepo.loadData(FARM_COUNTRY_KEY)!!
 
+/*
 
     fun registerUser( email: String, name: String, phone: String) {
         viewModelScope.launch {
@@ -98,6 +98,7 @@ class AccountViewModel @Inject constructor(
             }
         }
     }
+*/
 
     fun changeEmail(email: String) {
         viewModelScope.launch {

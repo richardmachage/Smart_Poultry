@@ -24,8 +24,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.smartpoultry.R
@@ -34,6 +36,7 @@ import com.example.smartpoultry.presentation.composables.MyOutlineButton
 import com.example.smartpoultry.presentation.composables.MyVerticalSpacer
 import com.example.smartpoultry.presentation.composables.NormButton
 import com.example.smartpoultry.presentation.composables.text.TitleText
+import com.example.smartpoultry.presentation.destinations.RegisterUserScreenDestination
 import com.example.smartpoultry.presentation.screens.manageUsers.registerUser.components.AccessLevelDetails
 import com.example.smartpoultry.presentation.screens.manageUsers.registerUser.components.AccessLevelDetailsResponse
 import com.example.smartpoultry.presentation.screens.manageUsers.registerUser.components.RegisterUserParts
@@ -81,7 +84,8 @@ fun RegisterUserScreen(
                         }
                     }
                 )
-            }
+            },
+
         ) { paddingValues ->
 
             MyCircularProgressBar(
