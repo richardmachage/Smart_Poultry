@@ -71,6 +71,10 @@ private val preferencesRepo: PreferencesRepo
             RegisterUserParts.CONTACT_DETAILS -> {
                 false
             }
+
+            RegisterUserParts.ACCESS_LEVEL_DETAILS -> {
+                false
+            }
         }
     }
 

@@ -30,6 +30,7 @@ import com.example.smartpoultry.presentation.composables.MyOutlineButton
 import com.example.smartpoultry.presentation.composables.MyVerticalSpacer
 import com.example.smartpoultry.presentation.composables.NormButton
 import com.example.smartpoultry.presentation.composables.text.TitleText
+import com.example.smartpoultry.presentation.screens.manageUsers.registerUser.components.AccessLevelDetails
 import com.example.smartpoultry.presentation.screens.manageUsers.registerUser.components.RegisterUserParts
 import com.example.smartpoultry.presentation.screens.signUp.components.ContactDetails
 import com.example.smartpoultry.presentation.screens.signUp.components.PersonalDetails
@@ -106,6 +107,12 @@ fun RegisterUserScreen(
                                     onResponse = {
 
                                     }
+                                )
+                            }
+
+                            RegisterUserParts.ACCESS_LEVEL_DETAILS -> {
+                                AccessLevelDetails(
+                                    
                                 )
                             }
                         }
