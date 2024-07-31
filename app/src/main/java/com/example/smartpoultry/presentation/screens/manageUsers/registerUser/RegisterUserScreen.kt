@@ -2,7 +2,6 @@ package com.example.smartpoultry.presentation.screens.manageUsers.registerUser
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -97,8 +96,8 @@ fun RegisterUserScreen(
                                         lastName = registerUserViewModel.registerUserScreenData.lastName,
                                         gender = registerUserViewModel.registerUserScreenData.gender
                                     ),
-                                    onResponse = {
-
+                                    onResponse = {personalDetails->
+                                        registerUserViewModel.onPersonalDetailsResponse(personalDetails)
                                     })
                             }
 
@@ -108,8 +107,8 @@ fun RegisterUserScreen(
                                         email = registerUserViewModel.registerUserScreenData.email,
                                         phone = registerUserViewModel.registerUserScreenData.phone
                                     ),
-                                    onResponse = {
-
+                                    onResponse = {contactDetails->
+                                        registerUserViewModel.onContactDetailsResponse(contactDetails)
                                     }
                                 )
                             }
@@ -122,8 +121,8 @@ fun RegisterUserScreen(
                                         eggCollection = registerUserViewModel.registerUserScreenData.eggCollectionAccess,
                                         manageBlocksCells = registerUserViewModel.registerUserScreenData.manageBlockCells,
                                     ),
-                                    onResponse = {
-
+                                    onResponse = {accessLevelDetails->
+                                        registerUserViewModel.onAccessLevelResponse(accessLevelDetails)
                                     }
                                 )
                             }
@@ -134,20 +133,19 @@ fun RegisterUserScreen(
                     Box(
                         modifier = Modifier
                             .fillMaxSize()
-                            .padding(6.dp)
-                            .animateContentSize(),
+                            .padding(6.dp),
                         contentAlignment = Alignment.BottomCenter
                     ) {
                         Row(
                             modifier = Modifier
-                                .fillMaxWidth()
                                 .padding(6.dp),
                             horizontalArrangement = Arrangement.SpaceBetween
                         ) {
                             AnimatedVisibility(
-                                modifier = Modifier.weight(1f),
-                                visible = registerUserViewModel.registerUserScreenState.showPrevious) {
+                                visible = registerUserViewModel.registerUserScreenState.showPrevious,
+                            ) {
                                 MyOutlineButton(
+
                                     onButtonClick = { registerUserViewModel.onPrevious() },
                                     btnName = stringResource(id = R.string.previous_btn),
                                     leadingIcon = Icons.AutoMirrored.Default.ArrowBack
@@ -165,7 +163,7 @@ fun RegisterUserScreen(
                                 },
                                 btnName = stringResource(
                                     id =
-                                    if (registerUserViewModel.registerUserScreenState.showContinue) R.string.continue_btn else R.string.done_btn
+                                    if (registerUserViewModel.registerUserScreenState.showContinue) R.string.continue_btn else R.string.done_btn,
                                 ),
                                 trailingIcon = if (registerUserViewModel.registerUserScreenState.showContinue) Icons.AutoMirrored.Default.ArrowForward else null
                             )

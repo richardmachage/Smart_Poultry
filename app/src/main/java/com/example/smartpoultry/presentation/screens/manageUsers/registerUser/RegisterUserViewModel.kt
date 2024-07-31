@@ -18,28 +18,32 @@ import javax.inject.Inject
 
 @HiltViewModel
 class RegisterUserViewModel @Inject constructor(
-private val preferencesRepo: PreferencesRepo
+    private val preferencesRepo: PreferencesRepo
 ) : ViewModel() {
 
     private var listOfParts = RegisterUserParts.entries.toList()
     private var currentPartIndex = 0
 
-    private var _registerUserScreenState by mutableStateOf(RegisterUserScreenState(
-        isLoading = false,
-        showPrevious = false,
-        showContinue = true,
-        currentPart = listOfParts[currentPartIndex],
-        isContinueEnabled = isContinueEnabled(listOfParts[currentPartIndex])
-    ))
-  val registerUserScreenState:RegisterUserScreenState
-      get() = _registerUserScreenState
 
     private var _registerUserScreenData by mutableStateOf(RegisterUserScreenData(country = getCountry()))
-    val registerUserScreenData : RegisterUserScreenData
+    val registerUserScreenData: RegisterUserScreenData
         get() = _registerUserScreenData
 
+    private var _registerUserScreenState by mutableStateOf(
+        RegisterUserScreenState(
+            isLoading = false,
+            showPrevious = false,
+            showContinue = true,
+            currentPart = listOfParts[currentPartIndex],
+            isContinueEnabled = isContinueEnabled(listOfParts[currentPartIndex])
+        )
+    )
+    val registerUserScreenState: RegisterUserScreenState
+        get() = _registerUserScreenState
+
+
     fun onPrevious() {
-        if (currentPartIndex > 0){
+        if (currentPartIndex > 0) {
             currentPartIndex-- //= currentPartIndex - 1
             _registerUserScreenState = _registerUserScreenState.copy(
                 currentPart = listOfParts[currentPartIndex],
@@ -51,7 +55,7 @@ private val preferencesRepo: PreferencesRepo
     }
 
     fun onContinue() {
-        if (currentPartIndex < (listOfParts.size - 1 )){
+        if (currentPartIndex < (listOfParts.size - 1)) {
             currentPartIndex++
             _registerUserScreenState = _registerUserScreenState.copy(
                 currentPart = listOfParts[currentPartIndex],
@@ -65,26 +69,33 @@ private val preferencesRepo: PreferencesRepo
     fun onDone() {
     }
 
-    fun onPersonalDetailsResponse(personalDetailsResponse: PersonalDetailsResponse){
-        if (personalDetailsResponse.isValidResponse()){
-            _registerUserScreenData = _registerUserScreenData.copy(firstName = personalDetailsResponse.firstName, lastName = personalDetailsResponse.lastName, gender = personalDetailsResponse.gender)
+    fun onPersonalDetailsResponse(personalDetailsResponse: PersonalDetailsResponse) {
+        if (personalDetailsResponse.isValidResponse()) {
+            _registerUserScreenData = _registerUserScreenData.copy(
+                firstName = personalDetailsResponse.firstName,
+                lastName = personalDetailsResponse.lastName,
+                gender = personalDetailsResponse.gender
+            )
             _registerUserScreenState = _registerUserScreenState.copy(isContinueEnabled = true)
 
-        }else{
+        } else {
             _registerUserScreenState = _registerUserScreenState.copy(isContinueEnabled = true)
         }
     }
 
-    fun onContactDetailsResponse(contactDetailsResponse: ContactDetailsResponse){
-        if (contactDetailsResponse.isNoEmptyField()){
-            _registerUserScreenData = _registerUserScreenData.copy(phone = contactDetailsResponse.phone, email = contactDetailsResponse.email)
-            _registerUserScreenState = _registerUserScreenState.copy(isContinueEnabled =true)
-        }else{
-            _registerUserScreenState = _registerUserScreenState.copy(isContinueEnabled =false)
+    fun onContactDetailsResponse(contactDetailsResponse: ContactDetailsResponse) {
+        if (contactDetailsResponse.isNoEmptyField()) {
+            _registerUserScreenData = _registerUserScreenData.copy(
+                phone = contactDetailsResponse.phone,
+                email = contactDetailsResponse.email
+            )
+            _registerUserScreenState = _registerUserScreenState.copy(isContinueEnabled = true)
+        } else {
+            _registerUserScreenState = _registerUserScreenState.copy(isContinueEnabled = false)
         }
     }
 
-    fun onAccessLevelResponse( accessLevelDetailsResponse: AccessLevelDetailsResponse ){
+    fun onAccessLevelResponse(accessLevelDetailsResponse: AccessLevelDetailsResponse) {
         _registerUserScreenData = _registerUserScreenData.copy(
             manageUsers = accessLevelDetailsResponse.manageUsers,
             editHenCountAccess = accessLevelDetailsResponse.editHenCount,
@@ -92,12 +103,14 @@ private val preferencesRepo: PreferencesRepo
             eggCollectionAccess = accessLevelDetailsResponse.eggCollection
         )
     }
-    private fun isContinueEnabled(currentPart: RegisterUserParts):Boolean{
-        return when(currentPart){
+
+    private fun isContinueEnabled(currentPart: RegisterUserParts): Boolean {
+        return when (currentPart) {
             RegisterUserParts.PERSONAL_DETAILS -> {
                 //false
                 _registerUserScreenData.personalDetailsNotBlank()
             }
+
             RegisterUserParts.CONTACT_DETAILS -> {
                 _registerUserScreenData.contactDetailsNotBlank()
 
@@ -109,13 +122,12 @@ private val preferencesRepo: PreferencesRepo
         }
     }
 
-    private fun getCountry(): Countries? {
-        val country = preferencesRepo.loadData(FARM_COUNTRY_KEY)!!
-
-        return when(country){
+    private fun getCountry(): Countries {
+        val country = preferencesRepo.loadData(FARM_COUNTRY_KEY)?: Countries.KENYA.countryName
+        return when (country) {
             Countries.KENYA.countryName -> Countries.KENYA
             Countries.TANZANIA.countryName -> Countries.TANZANIA
-            else -> null
+            else -> Countries.TANZANIA
         }
     }
 }

@@ -80,11 +80,11 @@ fun NormButton(
     ) {
         leadingIcon?.let {
             Icon(imageVector = it, contentDescription = null)
+            MyHorizontalSpacer(width = 3)
         }
-        MyHorizontalSpacer(width = 3)
         NormText(text = btnName)
-        MyHorizontalSpacer(width = 3)
         trailingIcon?.let {
+            MyHorizontalSpacer(width = 3)
             Icon(imageVector = it, contentDescription = null)
         }    }
 }
@@ -101,16 +101,16 @@ fun MyOutlineButton(
     OutlinedButton(
         onClick = onButtonClick,
         modifier = modifier
-            .padding(8.dp),
+           .padding(8.dp),
         enabled = enabled
     ) {
         leadingIcon?.let {
             Icon(imageVector = it, contentDescription = null)
+            MyHorizontalSpacer(width = 3)
         }
-        MyHorizontalSpacer(width = 3)
         NormText(text = btnName)
-        MyHorizontalSpacer(width = 3)
         trailingIcon?.let {
+            MyHorizontalSpacer(width = 3)
             Icon(imageVector = it, contentDescription = null)
         }
 
