@@ -65,7 +65,9 @@ fun NormButton(
     onButtonClick: () -> Unit,
     btnName: String,
     modifier: Modifier = Modifier,
-    enabled : Boolean = true
+    enabled : Boolean = true,
+    leadingIcon : ImageVector? = null,
+    trailingIcon: ImageVector? = null
 ) {
     Button(
         onClick = onButtonClick,
@@ -74,8 +76,15 @@ fun NormButton(
             .padding(8.dp),
         enabled = enabled
     ) {
+        leadingIcon?.let {
+            Icon(imageVector = it, contentDescription = null)
+        }
+        MyHorizontalSpacer(width = 3)
         NormText(text = btnName)
-    }
+        MyHorizontalSpacer(width = 3)
+        trailingIcon?.let {
+            Icon(imageVector = it, contentDescription = null)
+        }    }
 }
 
 @Composable

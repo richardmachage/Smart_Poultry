@@ -9,3 +9,7 @@ fun checkPasswordLength(password: String) : Boolean{
     return password.length >=6
 }
 fun isPasswordSame(password: String, confirmPassword : String) : Boolean = password == confirmPassword
+
+fun isValidPhone(phoneNumber : String) : Boolean{
+    return phoneNumber.length == 9
+}
