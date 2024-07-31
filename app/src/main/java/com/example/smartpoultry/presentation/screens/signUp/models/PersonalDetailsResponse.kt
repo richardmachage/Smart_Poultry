@@ -6,7 +6,7 @@ data class PersonalDetailsResponse (
     var gender : String ,//= Genders.NONE.type
 ){
     fun isValidResponse():Boolean{
-        return this.lastName.isNotBlank() && this.firstName.isNotBlank() && this.gender != "Select Gender"
+        return this.lastName.isNotBlank() && this.firstName.isNotBlank() && this.gender != "Select gender"
     }
 }
 

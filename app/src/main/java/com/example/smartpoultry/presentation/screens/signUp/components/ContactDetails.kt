@@ -67,16 +67,19 @@ fun ContactDetails(
             iconLeadingDescription = "phone",
             keyboardType = KeyboardType.Phone,
             onValueChange = { text ->
-                contactResponse = contactResponse.copy(phone = text)
                 if (text.length < 9){
                     showSupportingText = true
                     hasError = false
                 }
-                else{
+                if (text.length == 9){
+                    showSupportingText = false
+                    hasError = false
+                }
+                if (text.length > 9){
                     hasError = true
                     showSupportingText = false
                 }
-                //isPhoneValid = contactResponse.checkIfValidPhone()
+                contactResponse = contactResponse.copy(phone = text, hasError = text.length == 9)
                 onResponse(contactResponse)
             },
             onClear = { contactResponse = contactResponse.copy(phone = "")
@@ -91,7 +94,7 @@ fun ContactDetails(
             },
             hasError = hasError,
             supportingText = {
-               if (hasError){
+               if (hasError && contactResponse.phone.length > 9){
                    Text(
                        color = MaterialTheme.colorScheme.error,
                        text = stringResource(id =  R.string.invalid_phone_number))

@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -133,11 +134,14 @@ fun RegisterUserScreen(
                     Box(
                         modifier = Modifier
                             .fillMaxSize()
-                            .padding(6.dp),
+                            .padding(6.dp)
+                           .imePadding()
+                        ,
                         contentAlignment = Alignment.BottomCenter
                     ) {
                         Row(
                             modifier = Modifier
+                                .fillMaxWidth()
                                 .padding(6.dp),
                             horizontalArrangement = Arrangement.SpaceBetween
                         ) {
@@ -153,7 +157,7 @@ fun RegisterUserScreen(
                             }
 
                             NormButton(
-                                modifier = Modifier.weight(1f),
+                                modifier = Modifier.weight(0.8f),
                                 onButtonClick = {
                                     if (registerUserViewModel.registerUserScreenState.showContinue) {
                                         registerUserViewModel.onContinue()
@@ -165,7 +169,8 @@ fun RegisterUserScreen(
                                     id =
                                     if (registerUserViewModel.registerUserScreenState.showContinue) R.string.continue_btn else R.string.done_btn,
                                 ),
-                                trailingIcon = if (registerUserViewModel.registerUserScreenState.showContinue) Icons.AutoMirrored.Default.ArrowForward else null
+                                trailingIcon = if (registerUserViewModel.registerUserScreenState.showContinue) Icons.AutoMirrored.Default.ArrowForward else null,
+                                enabled = registerUserViewModel.registerUserScreenState.isContinueEnabled
                             )
                         }
                     }

@@ -48,7 +48,8 @@ class RegisterUserViewModel @Inject constructor(
             _registerUserScreenState = _registerUserScreenState.copy(
                 currentPart = listOfParts[currentPartIndex],
                 showPrevious = if (currentPartIndex == 0) false else true,
-                showContinue = true
+                showContinue = true,
+                isContinueEnabled = isContinueEnabled(listOfParts[currentPartIndex])
             )
 
         }
@@ -79,7 +80,7 @@ class RegisterUserViewModel @Inject constructor(
             _registerUserScreenState = _registerUserScreenState.copy(isContinueEnabled = true)
 
         } else {
-            _registerUserScreenState = _registerUserScreenState.copy(isContinueEnabled = true)
+            _registerUserScreenState = _registerUserScreenState.copy(isContinueEnabled = false)
         }
     }
 
@@ -89,7 +90,7 @@ class RegisterUserViewModel @Inject constructor(
                 phone = contactDetailsResponse.phone,
                 email = contactDetailsResponse.email
             )
-            _registerUserScreenState = _registerUserScreenState.copy(isContinueEnabled = true)
+            _registerUserScreenState = _registerUserScreenState.copy(isContinueEnabled = contactDetailsResponse.hasError)
         } else {
             _registerUserScreenState = _registerUserScreenState.copy(isContinueEnabled = false)
         }

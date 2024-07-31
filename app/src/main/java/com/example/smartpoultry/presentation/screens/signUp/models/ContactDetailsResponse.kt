@@ -5,7 +5,8 @@ import com.example.smartpoultry.utils.isValidPhone
 
 data class ContactDetailsResponse(
     var phone : String,
-    var email : String
+    var email : String,
+    var hasError : Boolean = false
 ){
     fun isNoEmptyField() : Boolean{
         return email.isNotBlank() && phone.isNotBlank()
