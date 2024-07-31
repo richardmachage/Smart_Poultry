@@ -26,6 +26,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.smartpoultry.R
+import com.example.smartpoultry.presentation.composables.MyCircularProgressBar
 import com.example.smartpoultry.presentation.composables.MyOutlineButton
 import com.example.smartpoultry.presentation.composables.MyVerticalSpacer
 import com.example.smartpoultry.presentation.composables.NormButton
@@ -50,6 +51,7 @@ fun RegisterUserScreen(
 
 ) {
     val registerUserViewModel = hiltViewModel<RegisterUserViewModel>()
+
     SmartPoultryTheme {
         Scaffold(
             topBar = {
@@ -69,6 +71,12 @@ fun RegisterUserScreen(
                 )
             }
         ) { paddingValues ->
+
+            MyCircularProgressBar(
+                isLoading = registerUserViewModel.registerUserScreenState.isLoading,
+                displayText = stringResource(id = R.string.registering)
+            )
+
             Box(
                 modifier = Modifier
                     .fillMaxSize()
@@ -135,7 +143,7 @@ fun RegisterUserScreen(
                         modifier = Modifier
                             .fillMaxSize()
                             .padding(6.dp)
-                           .imePadding()
+                            .imePadding()
                         ,
                         contentAlignment = Alignment.BottomCenter
                     ) {

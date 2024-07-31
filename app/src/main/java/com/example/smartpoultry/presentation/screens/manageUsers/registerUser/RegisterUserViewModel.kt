@@ -4,6 +4,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.smartpoultry.data.dataSource.local.datastore.PreferencesRepo
 import com.example.smartpoultry.presentation.screens.manageUsers.registerUser.components.AccessLevelDetailsResponse
 import com.example.smartpoultry.presentation.screens.manageUsers.registerUser.components.RegisterUserParts
@@ -14,6 +15,7 @@ import com.example.smartpoultry.presentation.screens.signUp.models.PersonalDetai
 import com.example.smartpoultry.utils.Countries
 import com.example.smartpoultry.utils.FARM_COUNTRY_KEY
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -72,7 +74,10 @@ class RegisterUserViewModel @Inject constructor(
     }
 
     private fun registerUser(){
+        viewModelScope.launch {
+            _registerUserScreenState.isLoading = true
 
+        }
     }
 
     fun onPersonalDetailsResponse(personalDetailsResponse: PersonalDetailsResponse) {
