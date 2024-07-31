@@ -6,6 +6,8 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.smartpoultry.data.dataSource.local.datastore.PreferencesRepo
+import com.example.smartpoultry.data.dataSource.remote.firebase.models.AccessLevel
+import com.example.smartpoultry.domain.repository.FirebaseAuthRepository
 import com.example.smartpoultry.presentation.screens.manageUsers.registerUser.components.AccessLevelDetailsResponse
 import com.example.smartpoultry.presentation.screens.manageUsers.registerUser.components.RegisterUserParts
 import com.example.smartpoultry.presentation.screens.manageUsers.registerUser.components.RegisterUserScreenData
@@ -14,13 +16,15 @@ import com.example.smartpoultry.presentation.screens.signUp.models.ContactDetail
 import com.example.smartpoultry.presentation.screens.signUp.models.PersonalDetailsResponse
 import com.example.smartpoultry.utils.Countries
 import com.example.smartpoultry.utils.FARM_COUNTRY_KEY
+import com.example.smartpoultry.utils.FARM_ID_KEY
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class RegisterUserViewModel @Inject constructor(
-    private val preferencesRepo: PreferencesRepo
+    private val preferencesRepo: PreferencesRepo,
+    private val firebaseAuthRepository: FirebaseAuthRepository
 ) : ViewModel() {
 
     private var listOfParts = RegisterUserParts.entries.toList()
@@ -70,12 +74,49 @@ class RegisterUserViewModel @Inject constructor(
     }
 
     fun onDone() {
-
+        registerUser()
     }
 
-    private fun registerUser(){
+    private fun registerUser() {
         viewModelScope.launch {
-            _registerUserScreenState.isLoading = true
+            _registerUserScreenState = _registerUserScreenState.copy(isLoading = true)
+
+            if (_registerUserScreenData.checkAllDetailsNotBlank()) {
+                val result = firebaseAuthRepository.registerUser(
+                    firstName = registerUserScreenData.firstName,
+                    lastName = registerUserScreenData.lastName,
+                    gender = registerUserScreenData.gender,
+                    email = registerUserScreenData.email,
+                    phone = registerUserScreenData.phone,
+                    password = "0000000",
+                    farmId = getFarmId(),
+                    accessLevel = AccessLevel(
+                        collectEggs = registerUserScreenData.eggCollectionAccess,
+                        editHenCount = registerUserScreenData.editHenCountAccess,
+                        manageUsers = registerUserScreenData.manageUsers,
+                        manageBlocksCells = registerUserScreenData.manageBlockCells
+                    )
+                )
+
+                result.onSuccess {
+                    _registerUserScreenState = _registerUserScreenState.copy(
+                        toastMessage = "${registerUserScreenData.firstName} registered successfully"
+                    )
+                }
+
+                result.onFailure {
+                    _registerUserScreenState = _registerUserScreenState.copy(
+                        toastMessage = "Failed to register ${it.localizedMessage}"
+                    )
+                }
+
+            } else {
+                _registerUserScreenState = _registerUserScreenState.copy(
+                    toastMessage = "Please fill in all required fields to register new user"
+                )
+            }
+
+            _registerUserScreenState = _registerUserScreenState.copy(isLoading = false)
 
         }
     }
@@ -100,7 +141,8 @@ class RegisterUserViewModel @Inject constructor(
                 phone = contactDetailsResponse.phone,
                 email = contactDetailsResponse.email
             )
-            _registerUserScreenState = _registerUserScreenState.copy(isContinueEnabled = contactDetailsResponse.hasError)
+            _registerUserScreenState =
+                _registerUserScreenState.copy(isContinueEnabled = contactDetailsResponse.hasError)
         } else {
             _registerUserScreenState = _registerUserScreenState.copy(isContinueEnabled = false)
         }
@@ -134,11 +176,18 @@ class RegisterUserViewModel @Inject constructor(
     }
 
     private fun getCountry(): Countries {
-        val country = preferencesRepo.loadData(FARM_COUNTRY_KEY)?: Countries.KENYA.countryName
+        val country = preferencesRepo.loadData(FARM_COUNTRY_KEY) ?: Countries.KENYA.countryName
         return when (country) {
             Countries.KENYA.countryName -> Countries.KENYA
             Countries.TANZANIA.countryName -> Countries.TANZANIA
             else -> Countries.TANZANIA
         }
     }
+
+    fun clearToastMessageValue() {
+        _registerUserScreenState = _registerUserScreenState.copy(toastMessage = "")
+    }
+
+    private fun getFarmId() = preferencesRepo.loadData(FARM_ID_KEY)!!
+
 }

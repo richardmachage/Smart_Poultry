@@ -6,7 +6,7 @@ import com.example.smartpoultry.data.dataSource.remote.firebase.models.User
 interface FirebaseAuthRepository {
     suspend fun signUp(email: String, password: String, role: String, farmName:String, firstName:String,lastName:String, phone:String, country:String,gender : String): Result<Boolean>
     //suspend fun registerUser(email : String, password:String, role:String): Result<Boolean>
-    suspend fun registerUser(email : String, password:String, farmId:String, name: String, phone: String, accessLevel: AccessLevel): Result<Boolean>
+    suspend fun registerUser(firstName: String, lastName: String,gender: String,email : String, password:String, farmId:String, phone: String, accessLevel: AccessLevel): Result<Boolean>
     suspend fun logIn(email: String, password: String) : Result<Boolean>
     suspend fun resetPassword(email: String) : Result<Boolean>
     suspend fun editUserName(name : String): Result<Boolean>

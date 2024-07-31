@@ -72,9 +72,7 @@ class AccountViewModel @Inject constructor(
             if (!isValidEmail(email)) {
                 isLoading.value = false
                 toastMessage.value = "Invalid email: $email"
-            /*} else if (userRole.isBlank()) {
-                isLoading.value = false
-                toastMessage.value = "Please select a role"*/
+
             } else {
                 val result = fireBaseAuthRepo.registerUser(
                     email = email,

@@ -121,10 +121,12 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
     }
 
     override suspend fun registerUser(
+        firstName: String,
+        lastName: String,
+        gender: String,
         email: String,
         password: String,
         farmId: String,
-        name: String,
         phone: String,
         accessLevel: AccessLevel
     ): Result<Boolean> = coroutineScope {
@@ -139,10 +141,12 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
                     val user =
                         User(
                             userId = firebaseUser.uid,
+                            firstName = firstName,
+                            lastName = lastName,
+                            gender = gender,
                             email = email,
                             farmId = farmId,
                             phone = phone,
-                            firstName = name,
                             passwordReset = false
                         )
                     firebaseFirestore.collection(USERS_COLLECTION)

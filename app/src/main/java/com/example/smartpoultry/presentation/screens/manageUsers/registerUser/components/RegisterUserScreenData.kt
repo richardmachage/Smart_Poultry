@@ -22,5 +22,5 @@ data class RegisterUserScreenData(
         return phone.isNotBlank() && email.isNotBlank()
     }
 
-
+    fun checkAllDetailsNotBlank() : Boolean = personalDetailsNotBlank() && contactDetailsNotBlank()
 }

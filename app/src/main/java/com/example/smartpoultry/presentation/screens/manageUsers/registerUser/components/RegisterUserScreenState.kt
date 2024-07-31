@@ -5,5 +5,6 @@ data class RegisterUserScreenState(
     var currentPart : RegisterUserParts ,//= RegisterUserParts.PERSONAL_DETAILS,
     var showContinue : Boolean ,//= true,
     var showPrevious : Boolean ,//= false
-    var isContinueEnabled : Boolean
+    var isContinueEnabled : Boolean,
+    var toastMessage : String = "",
 )
