@@ -8,6 +8,8 @@ import com.example.smartpoultry.data.dataSource.local.datastore.PreferencesRepo
 import com.example.smartpoultry.presentation.screens.manageUsers.registerUser.components.RegisterUserParts
 import com.example.smartpoultry.presentation.screens.manageUsers.registerUser.components.RegisterUserScreenData
 import com.example.smartpoultry.presentation.screens.manageUsers.registerUser.components.RegisterUserScreenState
+import com.example.smartpoultry.presentation.screens.signUp.models.ContactDetailsResponse
+import com.example.smartpoultry.presentation.screens.signUp.models.PersonalDetailsResponse
 import com.example.smartpoultry.utils.Countries
 import com.example.smartpoultry.utils.FARM_COUNTRY_KEY
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -60,9 +62,26 @@ private val preferencesRepo: PreferencesRepo
     }
 
     fun onDone() {
-
     }
 
+    fun onPersonalDetailsResponse(personalDetailsResponse: PersonalDetailsResponse){
+        if (personalDetailsResponse.isValidResponse()){
+            _registerUserScreenData = _registerUserScreenData.copy(firstName = personalDetailsResponse.firstName, lastName = personalDetailsResponse.lastName, gender = personalDetailsResponse.gender)
+            _registerUserScreenState = _registerUserScreenState.copy(isContinueEnabled = true)
+
+        }else{
+            _registerUserScreenState = _registerUserScreenState.copy(isContinueEnabled = true)
+        }
+    }
+
+    fun onContactDetailsResponse(contactDetailsResponse: ContactDetailsResponse){
+        if (contactDetailsResponse.isNoEmptyField()){
+            _registerUserScreenData = _registerUserScreenData.copy(phone = contactDetailsResponse.phone, email = contactDetailsResponse.email)
+            _registerUserScreenState = _registerUserScreenState.copy(isContinueEnabled =true)
+        }else{
+            _registerUserScreenState = _registerUserScreenState.copy(isContinueEnabled =false)
+        }
+    }
     private fun isContinueEnabled(currentPart: RegisterUserParts):Boolean{
         return when(currentPart){
             RegisterUserParts.PERSONAL_DETAILS -> {
