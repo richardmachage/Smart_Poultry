@@ -1,6 +1,7 @@
 package com.example.smartpoultry.presentation.screens.manageUsers.registerUser
 
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -35,11 +36,14 @@ import com.example.smartpoultry.presentation.screens.signUp.components.PersonalD
 import com.example.smartpoultry.presentation.screens.signUp.models.ContactDetailsResponse
 import com.example.smartpoultry.presentation.screens.signUp.models.PersonalDetailsResponse
 import com.example.smartpoultry.presentation.ui.theme.SmartPoultryTheme
+import com.ramcosta.composedestinations.annotation.Destination
 
 @OptIn(ExperimentalMaterial3Api::class)
+@Destination
 @Preview(showSystemUi = true)
 @Composable
-fun RegisterUserScreen() {
+fun RegisterUserScreen(
+) {
     val registerUserViewModel = hiltViewModel<RegisterUserViewModel>()
     SmartPoultryTheme {
         Scaffold(
@@ -66,7 +70,8 @@ fun RegisterUserScreen() {
                     .padding(paddingValues)
             ) {
                 Column(
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .fillMaxWidth()
                         .padding(6.dp)
                 ) {
 
@@ -119,7 +124,7 @@ fun RegisterUserScreen() {
                                 .padding(6.dp),
                             horizontalArrangement = Arrangement.SpaceBetween
                         ) {
-                            if (registerUserViewModel.registerUserScreenState.showPrevious) {
+                            AnimatedVisibility(visible = registerUserViewModel.registerUserScreenState.showPrevious) {
                                 MyOutlineButton(
                                     modifier = Modifier.weight(1f),
                                     onButtonClick = { registerUserViewModel.onPrevious() },
@@ -127,6 +132,7 @@ fun RegisterUserScreen() {
                                     leadingIcon = Icons.AutoMirrored.Default.ArrowBack
                                 )
                             }
+
                             NormButton(
                                 modifier = Modifier.weight(1f),
                                 onButtonClick = {

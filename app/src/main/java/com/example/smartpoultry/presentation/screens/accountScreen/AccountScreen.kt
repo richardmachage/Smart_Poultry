@@ -61,6 +61,7 @@ import com.example.smartpoultry.presentation.composables.MyInputDialog
 import com.example.smartpoultry.presentation.composables.MyOutlineTextFiled
 import com.example.smartpoultry.presentation.composables.MyVerticalSpacer
 import com.example.smartpoultry.presentation.destinations.ManageUsersScreenDestination
+import com.example.smartpoultry.presentation.destinations.RegisterUserScreenDestination
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
@@ -407,7 +408,11 @@ fun AccountScreen(
                     ActionButton(
                         text = stringResource(id = R.string.register_new_user),//"Register a new user",
                         icon = ImageVector.vectorResource(id = R.drawable.person_add),
-                        onClick = { showRegDialog = true })
+                        onClick = {
+                            //showRegDialog = true
+                            navigator.navigate( RegisterUserScreenDestination)
+
+                        })
                     Spacer(modifier = Modifier.height(16.dp))
                     ActionButton(
                         text = stringResource(id = R.string.manage_users),//"Manage existing users",

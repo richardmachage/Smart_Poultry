@@ -25,11 +25,5 @@ data class RegisterUserScreenData(
         return phone.isNotBlank() && email.isNotBlank()
     }
 
-    fun checkIfValidEmail():Boolean{
-            return contactDetailsNotBlank() && isValidEmail(this.email)
-    }
 
-    fun checkIfValidPhone() : Boolean{
-        return  isValidPhone(phone)
-    }
 }

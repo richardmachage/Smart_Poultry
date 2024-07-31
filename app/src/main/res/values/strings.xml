@@ -46,4 +46,6 @@
     <string name="previous_btn">Previous</string>
     <string name="continue_btn">Continue</string>
     <string name="done_btn">Done</string>
+    <string name="invalid_phone_number">Invalid phone number</string>
+    <string name="input_phone_number">eg. 716787805</string>
 </resources>

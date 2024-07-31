@@ -6,6 +6,7 @@ import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -33,6 +34,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -218,7 +220,9 @@ fun MyEditTextClear(
     onValueChange: (String) -> Unit = {},
     hasError : Boolean = false,
     singleLine: Boolean = true,
-    onClear : () ->Unit = {}
+    onClear : () ->Unit = {},
+    prefix :  @Composable() (() -> Unit)? = null,
+    supportingText :  @Composable (() -> Unit)? = null,
 ) {
     var text by remember { mutableStateOf(TextFieldValue(value)) }
     val color by animateColorAsState(
@@ -235,17 +239,28 @@ fun MyEditTextClear(
             .padding(start = (8.dp), end = (8.dp)),
         value = text,
         label = { Text(text = label) },
-       // placeholder = { Text(text = hint) },
+        placeholder = { Text(text = hint) },
         onValueChange = { newText ->
             text = newText
             onValueChange(newText.text)
         },
         keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
         leadingIcon = {
+            Row(
+                modifier = Modifier.padding(6.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
             Icon(
+                modifier = Modifier.padding(5.dp),
                 imageVector = iconLeading,
                 contentDescription = iconLeadingDescription
             )
+                
+                if (prefix != null) {
+                    MyHorizontalSpacer(width = 5)
+                    prefix()
+                }
+            }
         },
         trailingIcon = {
             AnimatedVisibility(
@@ -270,7 +285,8 @@ fun MyEditTextClear(
                 Icon(imageVector = Icons.Default.Clear, contentDescription = "Clear_input")
             }*/
         },
-        singleLine = singleLine
+        singleLine = singleLine,
+        supportingText = supportingText
     )
 }
 

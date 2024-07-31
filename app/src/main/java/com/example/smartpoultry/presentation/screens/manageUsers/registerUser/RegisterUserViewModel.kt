@@ -37,7 +37,7 @@ private val preferencesRepo: PreferencesRepo
 
     fun onPrevious() {
         if (currentPartIndex > 0){
-            currentPartIndex = currentPartIndex - 1
+            currentPartIndex-- //= currentPartIndex - 1
             _registerUserScreenState = _registerUserScreenState.copy(
                 currentPart = listOfParts[currentPartIndex],
                 showPrevious = if (currentPartIndex == 0) false else true,
@@ -48,7 +48,15 @@ private val preferencesRepo: PreferencesRepo
     }
 
     fun onContinue() {
-
+        if (currentPartIndex < (listOfParts.size - 1 )){
+            currentPartIndex++
+            _registerUserScreenState = _registerUserScreenState.copy(
+                currentPart = listOfParts[currentPartIndex],
+                showPrevious = true,
+                showContinue = if (currentPartIndex == listOfParts.size - 1) false else true,
+                isContinueEnabled = isContinueEnabled(currentPart = listOfParts[currentPartIndex])
+            )
+        }
     }
 
     fun onDone() {
