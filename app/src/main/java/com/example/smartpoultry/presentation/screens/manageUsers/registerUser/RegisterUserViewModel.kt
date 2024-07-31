@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.example.smartpoultry.data.dataSource.local.datastore.PreferencesRepo
+import com.example.smartpoultry.presentation.screens.manageUsers.registerUser.components.AccessLevelDetailsResponse
 import com.example.smartpoultry.presentation.screens.manageUsers.registerUser.components.RegisterUserParts
 import com.example.smartpoultry.presentation.screens.manageUsers.registerUser.components.RegisterUserScreenData
 import com.example.smartpoultry.presentation.screens.manageUsers.registerUser.components.RegisterUserScreenState
@@ -81,6 +82,15 @@ private val preferencesRepo: PreferencesRepo
         }else{
             _registerUserScreenState = _registerUserScreenState.copy(isContinueEnabled =false)
         }
+    }
+
+    fun onAccessLevelResponse( accessLevelDetailsResponse: AccessLevelDetailsResponse ){
+        _registerUserScreenData = _registerUserScreenData.copy(
+            manageUsers = accessLevelDetailsResponse.manageUsers,
+            editHenCountAccess = accessLevelDetailsResponse.editHenCount,
+            manageBlockCells = accessLevelDetailsResponse.manageBlocksCells,
+            eggCollectionAccess = accessLevelDetailsResponse.eggCollection
+        )
     }
     private fun isContinueEnabled(currentPart: RegisterUserParts):Boolean{
         return when(currentPart){
