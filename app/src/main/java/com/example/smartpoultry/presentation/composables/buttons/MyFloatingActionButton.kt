@@ -3,7 +3,6 @@ package com.example.smartpoultry.presentation.composables.buttons
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.MaterialTheme
@@ -14,14 +13,15 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun MyFloatingActionButton(
+    modifier: Modifier = Modifier,
     onClick: () -> Unit ,
     icon: @Composable () -> Unit ,
-    text: @Composable () -> Unit
+    text: @Composable () -> Unit,
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier
-            .padding(8.dp)
+        modifier = modifier
+            //.padding(8.dp)
             .wrapContentSize()
     ) {
         FloatingActionButton(

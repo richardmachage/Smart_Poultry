@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
@@ -46,6 +45,7 @@ import com.example.smartpoultry.presentation.composables.MyCard
 import com.example.smartpoultry.presentation.composables.MyInputDialog
 import com.example.smartpoultry.presentation.composables.MyOutlineTextFiled
 import com.example.smartpoultry.presentation.composables.MyVerticalSpacer
+import com.example.smartpoultry.presentation.composables.buttons.MyFloatingActionButton
 import com.example.smartpoultry.presentation.destinations.CellsScreenDestination
 import com.example.smartpoultry.presentation.uiModels.BlockItem
 import com.example.smartpoultry.presentation.uiModels.BlockParse
@@ -81,7 +81,7 @@ fun BlockCellScreen(
                 Column {
                     MyOutlineTextFiled(
                         label = "Block Number",
-                        keyboardType = KeyboardType.Number ,
+                        keyboardType = KeyboardType.Number,
                         initialText = blockCellViewModel.blockNumText.value,
                         onValueChange = { blockCellViewModel.blockNumText.value = it },
                     )
@@ -94,7 +94,7 @@ fun BlockCellScreen(
 
                     MyOutlineTextFiled(
                         label = "Number of Cells",
-                        keyboardType = KeyboardType.Number ,
+                        keyboardType = KeyboardType.Number,
                         initialText = blockCellViewModel.cellsText.value,
                         onValueChange = { blockCellViewModel.cellsText.value = it },
                     )
@@ -138,23 +138,27 @@ fun BlockCellScreen(
     Scaffold(
         //if (userRole != "Collector")
         floatingActionButton = {
-            if(blockCellViewModel.getManageBlockCellsAccess()/*userRole != "Collector"*/) {
-                IconButton(
+            if (blockCellViewModel.getManageBlockCellsAccess()) {
+                MyFloatingActionButton(
                     onClick = {
-                        //I want the dialog to show when this button is clicked
                         blockCellViewModel.showDialog.value = true
-                        //   Toast.makeText(context,"new block added", Toast.LENGTH_SHORT).show()
+                    },
+                    icon = {
+                        Icon(
+                            //modifier = Modifier.size(40.dp),
+                            imageVector = Icons.Default.AddCircle,
+                            contentDescription = "Add"
+                        )
+                    },
+                    text = {
+                        Text(text = "Add Cell")
                     }
-                ) {
-                    Icon(
-                        modifier = Modifier.size(100.dp),
-                        imageVector = Icons.Default.AddCircle,
-                        contentDescription = "Add"
-                    )
-                }
+                )
             }
         }
-    ) {  paddingValues->
+        ,
+
+    ) { paddingValues ->
         Surface(
             modifier = Modifier
                 .fillMaxSize()
@@ -162,19 +166,20 @@ fun BlockCellScreen(
             color = MaterialTheme.colorScheme.background
         ) {
             LazyColumn(
-                modifier = Modifier
-                   //.padding(6.dp)
-                ,
+                modifier = Modifier,
+                //.padding(6.dp)
                 //verticalArrangement = Arrangement.spacedBy(1.dp)
             ) {
-                itemsIndexed( listOfBlocksWithCells.sortedBy { it.block.blockNum }, key = {_, item -> item.block.blockId }
+                itemsIndexed(
+                    listOfBlocksWithCells.sortedBy { it.block.blockNum },
+                    key = { _, item -> item.block.blockId }
                 ) { _, blockWithCells ->
 
-                    MyCard (
+                    MyCard(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(3.dp)
-                    ){
+                    ) {
                         Row(
                             Modifier
                                 .fillMaxWidth()
@@ -189,11 +194,13 @@ fun BlockCellScreen(
                                     .padding(6.dp)
                                     .clip(CircleShape)
                                     .background(MaterialTheme.colorScheme.surfaceContainerHighest)
-                                   // .weight(1f),
+                                // .weight(1f),
                             ) {
                                 Text(
                                     modifier = Modifier.padding(6.dp),
-                                    text =" "+ blockWithCells.block.blockNum.toString() + " ", style = MaterialTheme.typography.headlineMedium )
+                                    text = " " + blockWithCells.block.blockNum.toString() + " ",
+                                    style = MaterialTheme.typography.headlineMedium
+                                )
                             }
 
                             Column(
