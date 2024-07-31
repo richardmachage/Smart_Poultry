@@ -4,15 +4,18 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import com.example.smartpoultry.data.dataSource.local.datastore.PreferencesRepo
 import com.example.smartpoultry.presentation.screens.manageUsers.registerUser.components.RegisterUserParts
 import com.example.smartpoultry.presentation.screens.manageUsers.registerUser.components.RegisterUserScreenData
 import com.example.smartpoultry.presentation.screens.manageUsers.registerUser.components.RegisterUserScreenState
+import com.example.smartpoultry.utils.Countries
+import com.example.smartpoultry.utils.FARM_COUNTRY_KEY
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
 class RegisterUserViewModel @Inject constructor(
-
+private val preferencesRepo: PreferencesRepo
 ) : ViewModel() {
 
     private var listOfParts = RegisterUserParts.entries.toList()
@@ -28,7 +31,7 @@ class RegisterUserViewModel @Inject constructor(
   val registerUserScreenState:RegisterUserScreenState
       get() = _registerUserScreenState
 
-    private var _registerUserScreenData by mutableStateOf(RegisterUserScreenData())
+    private var _registerUserScreenData by mutableStateOf(RegisterUserScreenData(country = getCountry()))
     val registerUserScreenData : RegisterUserScreenData
         get() = _registerUserScreenData
 
@@ -60,6 +63,16 @@ class RegisterUserViewModel @Inject constructor(
             RegisterUserParts.CONTACT_DETAILS -> {
                 false
             }
+        }
+    }
+
+    private fun getCountry(): Countries? {
+        val country = preferencesRepo.loadData(FARM_COUNTRY_KEY)!!
+
+        return when(country){
+            Countries.KENYA.countryName -> Countries.KENYA
+            Countries.TANZANIA.countryName -> Countries.TANZANIA
+            else -> null
         }
     }
 }

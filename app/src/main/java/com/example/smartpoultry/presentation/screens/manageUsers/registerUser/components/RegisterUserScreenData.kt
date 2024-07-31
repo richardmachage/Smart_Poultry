@@ -1,6 +1,7 @@
 package com.example.smartpoultry.presentation.screens.manageUsers.registerUser.components
 
 import com.example.smartpoultry.presentation.screens.signUp.models.Genders
+import com.example.smartpoultry.utils.Countries
 import com.example.smartpoultry.utils.isValidEmail
 import com.example.smartpoultry.utils.isValidPhone
 
@@ -10,6 +11,7 @@ data class RegisterUserScreenData(
     var phone : String ="",
     var email : String ="",
     var gender : String = Genders.NONE.type,
+    var country : Countries?,
     var eggCollectionAccess : Boolean = false,
     var editHenCountAccess : Boolean = false,
     var manageBlockCells : Boolean = false,
