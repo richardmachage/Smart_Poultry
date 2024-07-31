@@ -16,8 +16,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -49,6 +47,8 @@ import com.example.smartpoultry.data.dataSource.remote.firebase.models.User
 import com.example.smartpoultry.presentation.composables.MyCircularProgressBar
 import com.example.smartpoultry.presentation.composables.MyHorizontalSpacer
 import com.example.smartpoultry.presentation.composables.MyVerticalSpacer
+import com.example.smartpoultry.presentation.composables.buttons.MyFloatingActionButton
+import com.example.smartpoultry.presentation.destinations.RegisterUserScreenDestination
 import com.example.smartpoultry.presentation.ui.theme.SmartPoultryTheme
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -97,13 +97,23 @@ fun ManageUsersScreen(
                 )
             },
             floatingActionButton = {
-                FloatingActionButton(
-                    onClick = { /*TODO*/ },
-                    containerColor = MaterialTheme.colorScheme.surfaceContainer,
-                    elevation = FloatingActionButtonDefaults.elevation(20.dp)
-                ) {
-                    Icon(imageVector = ImageVector.vectorResource(id = R.drawable.person_add), contentDescription = null)
-                }
+                MyFloatingActionButton(
+                    onClick = {
+                        navigator.navigate(RegisterUserScreenDestination)
+                    },
+                    icon = {
+                     Icon(
+                         imageVector = ImageVector.vectorResource(id = R.drawable.person_add),
+                         contentDescription = "add_user")
+                    },
+                    text = {
+                        Text(
+                            text = "Add User",
+                            fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colorScheme.primary
+                        )
+                    }
+                )
             }
         ) {
             MyCircularProgressBar(isLoading = manageUsersViewModel.isLoading.value)

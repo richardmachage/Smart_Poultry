@@ -410,7 +410,8 @@ fun AccountScreen(
                             navigator.navigate( RegisterUserScreenDestination)
 
                         })
-                    Spacer(modifier = Modifier.height(16.dp))*/
+                        */
+                    Spacer(modifier = Modifier.height(16.dp))
                     ActionButton(
                         text = stringResource(id = R.string.manage_users),//"Manage existing users",
                         ImageVector.vectorResource(id = R.drawable.supervisor_account),
