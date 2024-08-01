@@ -14,18 +14,20 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
@@ -43,10 +45,11 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.smartpoultry.data.dataSource.local.room.entities.cells.Cells
 import com.example.smartpoultry.presentation.composables.MyCard
-import com.example.smartpoultry.presentation.composables.dialogs.MyInputDialog
 import com.example.smartpoultry.presentation.composables.MyOutlineTextFiled
 import com.example.smartpoultry.presentation.composables.MyVerticalSpacer
 import com.example.smartpoultry.presentation.composables.buttons.MyFloatingActionButton
+import com.example.smartpoultry.presentation.composables.dialogs.MyInputDialog
+import com.example.smartpoultry.presentation.composables.text.TitleText
 import com.example.smartpoultry.presentation.uiModels.BlockParse
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -57,7 +60,7 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 fun CellsScreen(
     navigator: DestinationsNavigator,
     //blockId: Int
-    block : BlockParse
+    block: BlockParse
 ) {
     val cellsViewModel = hiltViewModel<CellsViewModel>()
 
@@ -80,7 +83,7 @@ fun CellsScreen(
 
                     MyOutlineTextFiled(
                         label = "Cell Number",
-                        keyboardType = KeyboardType.Number ,
+                        keyboardType = KeyboardType.Number,
                         initialText = cellsViewModel.cellNumText.value,
                         onValueChange = {
                             cellsViewModel.cellNumText.value = it
@@ -91,7 +94,7 @@ fun CellsScreen(
 
                     MyOutlineTextFiled(
                         label = "Number of Chicken",
-                        keyboardType = KeyboardType.Number ,
+                        keyboardType = KeyboardType.Number,
                         initialText = cellsViewModel.henCountText.value,
                         onValueChange = {
                             cellsViewModel.henCountText.value = it
@@ -136,13 +139,13 @@ fun CellsScreen(
     MyInputDialog(
         showDialog = showAddCellDialog,
         title = "Create New Cell",
-        onConfirm = { 
-                    cellsViewModel.onAddNewCell(
-                        Cells(
-                        blockId = block.blockId,
-                        cellNum = if (listOfCells.isNotEmpty()) listOfCells.size + 1 else 1
-                    )
-                    )
+        onConfirm = {
+            cellsViewModel.onAddNewCell(
+                Cells(
+                    blockId = block.blockId,
+                    cellNum = if (listOfCells.isNotEmpty()) listOfCells.size + 1 else 1
+                )
+            )
             showAddCellDialog = false
         },
         onDismiss = {
@@ -154,18 +157,22 @@ fun CellsScreen(
         }
     }
 
-    Scaffold (
+    Scaffold(
         topBar = {
             TopAppBar(
                 title = { Text(text = "Cells") },
                 navigationIcon = {
                     IconButton(onClick = { navigator.navigateUp() }) {
-                        Icon(imageVector = Icons.AutoMirrored.Filled.ArrowBack, contentDescription ="Back" )
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = "Back"
+                        )
                     }
                 }
-            )},
+            )
+        },
         floatingActionButton = {
-            if(cellsViewModel.getManageBlockCellsAccess()/*userRole != "Collector"*/) {
+            if (cellsViewModel.getManageBlockCellsAccess()/*userRole != "Collector"*/) {
                 MyFloatingActionButton(
                     modifier = Modifier.padding(bottom = 50.dp),
                     onClick = {
@@ -185,45 +192,73 @@ fun CellsScreen(
 
             }
         }
-    ){ paddingValues->
-        Surface(
+    ) { paddingValues ->
+        Box(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues),
-            color = MaterialTheme.colorScheme.background
+            //color = MaterialTheme.colorScheme.background
         ) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
             ) {
 
-                MyCard(modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(6.dp)) {
+                Card(
+                    shape = RoundedCornerShape(16.dp),
+                    elevation = CardDefaults.cardElevation(8.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 16.dp, top = 6.dp, end = 16.dp),
+                )
+                {
                     Row(
                         modifier = Modifier
+                            .background(MaterialTheme.colorScheme.surfaceContainer)
+                            .fillMaxWidth()
+                            .padding(start = 16.dp, top = 6.dp, end = 16.dp),
+                        horizontalArrangement = Arrangement.SpaceEvenly,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        TitleText(text = "Total Chicken : ${listOfCells.sumOf { it.henCount }}")
+                        /*TitleText(
+                            modifier = Modifier.weight(1f),
+                            text = "Block ${block.blockNum}"
+                        )
+                        TitleText(
+                            modifier = Modifier.weight(0.3f),
+                            text = "||")
+                        //TitleText(text = "Cells : ${listOfCells.size}")
+                        TitleText(modifier = Modifier.weight(0.9f),
+                            text = "Chicken ${listOfCells.sumOf { it.henCount }}"
+                        )*/
+
+                    }
+
+                    Row(
+                        modifier = Modifier
+                            .background(MaterialTheme.colorScheme.surfaceContainer)
                             .fillMaxWidth()
                             .padding(6.dp),
                         horizontalArrangement = Arrangement.SpaceEvenly
                     ) {
-                        Text(text = "Block  : ${block.blockNum}")
-                        Text(text = "Cells : ${listOfCells.size}")
-                        Text(text = "Chicken : ${listOfCells.sumOf { it.henCount }}")
                     }
+
                 }
 
 
-//                MyVerticalSpacer(height = 3)
 
                 LazyColumn(
                     modifier = Modifier.padding(4.dp),
-                    //verticalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
-                    itemsIndexed(listOfCells.sortedBy { it.cellNum }, key = {_, item ->  item.cellId}) { _, item ->
+                    itemsIndexed(
+                        listOfCells.sortedBy { it.cellNum },
+                        key = { _, item -> item.cellId }) { _, item ->
                         //MyVerticalSpacer(height = 6)
 
                         MyCard(
-                            modifier = Modifier.fillMaxWidth()
+                            modifier = Modifier
+                                .fillMaxWidth()
                                 .padding(6.dp)
                         ) {
                             Row(
@@ -242,7 +277,9 @@ fun CellsScreen(
                                 ) {
                                     Text(
                                         modifier = Modifier.padding(6.dp),
-                                        text =" "+ item.cellNum + " ", style = MaterialTheme.typography.headlineMedium )
+                                        text = " " + item.cellNum + " ",
+                                        style = MaterialTheme.typography.headlineMedium
+                                    )
                                 }
 
                                 Column(
