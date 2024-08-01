@@ -111,11 +111,19 @@ class SignUpViewModel @Inject constructor(
         }
     }
     fun onContactDetailsResponse(contactDetailsResponse: ContactDetailsResponse){
-        if (contactDetailsResponse.isNoEmptyField()){
+        /*if (contactDetailsResponse.isNoEmptyField()){
             _signUpScreenData = _signUpScreenData.copy(phone = contactDetailsResponse.phone, email = contactDetailsResponse.email)
             _signUpScreenState = _signUpScreenState.copy(continueEnabled = true)
         }else{
             _signUpScreenState = _signUpScreenState.copy(continueEnabled = false)
+        }*/
+
+        if (contactDetailsResponse.isNoEmptyField()){
+            _signUpScreenData = _signUpScreenData.copy(
+                phone = contactDetailsResponse.phone,
+                email = contactDetailsResponse.email
+            )
+            _signUpScreenState = _signUpScreenState.copy( continueEnabled = contactDetailsResponse.hasError)
         }
     }
 

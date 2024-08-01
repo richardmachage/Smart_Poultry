@@ -2,8 +2,12 @@ package com.example.smartpoultry.presentation.screens.signUp
 
 import android.widget.Toast
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,6 +15,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -114,277 +121,168 @@ fun SignUpScreen(
                 displayText = "Signing In..."
             )
 
-            /*Column(
-               modifier = Modifier.fillMaxSize(),
-               verticalArrangement = Arrangement.SpaceBetween
 
-           ) {
+            Box (
+                modifier = Modifier.fillMaxSize()
+            ){
                 Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .fillMaxHeight(0.8f)
-                        .padding(8.dp)
-                        .verticalScroll(rememberScrollState()),
-                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier.padding(top = 5.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-
-                    Card( //Personal details
-                        shape = RoundedCornerShape(16.dp),
-                        elevation = CardDefaults.cardElevation(8.dp),
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Column(
-                            modifier = Modifier
-                                .background(MaterialTheme.colorScheme.surface)
-                                .padding(16.dp)
-                        ) {
-                            MyText(text = "Name and Contact details")
-                            MyEditTextClear( // Input user name
-                                label = "Name",
-                                hint = "eg. smartPoultry@gmail.com",
-                                iconLeading = Icons.Default.AccountCircle,
-                                iconLeadingDescription = "account",
-                                keyboardType = KeyboardType.Text,
-                                onValueChange = { text ->
-                                    singUpViewModel.name.value = text.trim()
-                                }
-                            )
-                            MyEditTextClear( // Input Email address
-                                label = "Email",
-                                hint = "eg. john",
-                                iconLeading = Icons.Default.Email,
-                                iconLeadingDescription = "Email",
-                                keyboardType = KeyboardType.Email,
-                                onValueChange = { text ->
-                                    singUpViewModel.email.value = text.trim()
-                                }
-                            )
-
-                            MyEditTextClear( // Input Phone number
-                                label = "Phone",
-                                hint = "eg. 0718672654",
-                                iconLeading = Icons.Default.Phone,
-                                iconLeadingDescription = "phone",
-                                keyboardType = KeyboardType.Phone,
-                                onValueChange = { text ->
-                                    singUpViewModel.phone.value = text.trim()
-                                }
-                            )
-                        }
-                    }
-
-                    MyVerticalSpacer(height = 10)
-                    Card( //Farm details
-                        shape = RoundedCornerShape(16.dp),
-                        elevation = CardDefaults.cardElevation(8.dp),
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Column(
-                            modifier = Modifier
-                                .background(MaterialTheme.colorScheme.surface)
-                                .padding(16.dp)
-                        ) {
-                            MyText(text = "Your Poultry Farm")
-                            MyEditTextClear(
-                                label = "Farm Name",
-                                hint = "eg. Abuya Poultry Farm",
-                                iconLeading = ImageVector.vectorResource(id = R.drawable.egg_outline),// painterResource(id = R.drawable.egg_outline),//Image(imageVector =, contentDescription = ),
-                                iconLeadingDescription = "place",
-                                keyboardType = KeyboardType.Text,
-                                onValueChange = {
-                                    singUpViewModel.farmName.value = it
-                                }
-                            )
-                        }
-                    }
-
-                    MyVerticalSpacer(height = 10)
-
-                    Card( //Set Password card
-                        shape = RoundedCornerShape(16.dp),
-                        elevation = CardDefaults.cardElevation(8.dp),
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Column(
-                            modifier = Modifier
-                                .background(MaterialTheme.colorScheme.surface)
-                                .padding(16.dp)
-                        ) {
-                            MyText(text = "Set Password")
-                            MyPasswordEditText( // Input new Password
-                                label = "Password",
-                                // hint = "New Password",
-                                iconLeading = Icons.Default.Lock,
-                                iconLeadingDescription = "Password",
-                                keyboardType = KeyboardType.Password,
-                                onValueChange = { text ->
-                                    singUpViewModel.password.value = text
-                                }
-                            )
-
-                            MyPasswordEditText( // Confirm Password
-                                label = "Confirm Password",
-                                //hint = "Confirm Password",
-                                iconLeading = Icons.Default.Lock,
-                                iconLeadingDescription = "Password",
-                                keyboardType = KeyboardType.Password,
-                                onValueChange = { text ->
-                                    singUpViewModel.confirmPassword.value = text
-                                }
-                            )
-                        }
-                    }
-                }
-
-               Row (verticalAlignment = Alignment.CenterVertically){
-                   Checkbox(checked = singUpViewModel.terms.value, onCheckedChange = {
-                       singUpViewModel.terms.value = it} )
-                   Text(text = "Accept Terms and conditions")
-
-               }
-
-
-                NormButton( //The sign up Button
-                    onButtonClick = { singUpViewModel.onSignUp() },
-                    btnName = "Sign Up",
-                    modifier = Modifier.fillMaxWidth(),
-                    enabled = singUpViewModel.terms.value
-                )
-               MyVerticalSpacer(height = 10)
-
-            }*/
-
-            Column(
-                modifier = Modifier.padding(top = 5.dp),
-                horizontalAlignment = Alignment.CenterHorizontally) {
-                Image(
-                    modifier = Modifier
-                        .width(100.dp)
-                        .height(100.dp),
-                    //.padding(8.dp),
-                    painter = painterResource(id = (if (isSystemInDarkTheme()) R.drawable.chicken_white else R.drawable.chicken)),
-                    contentDescription = "chicken",
-                    contentScale = ContentScale.Fit
-                )
-                NormText(text = "SMART POULTRY")
-
-                Column(
-                    modifier = Modifier.padding(6.dp),
-                ) {
-                    MyVerticalSpacer(height = 20)
-                    //Header
-                    Text(
+                    Image(
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(10.dp),
-                        text = singUpViewModel.signUpScreenState.currentPart.title,//"Hello, lets start with your name",
-                        style = MaterialTheme.typography.headlineMedium,
-                        fontStyle = FontStyle.Italic
+                            .width(100.dp)
+                            .height(100.dp),
+                        //.padding(8.dp),
+                        painter = painterResource(id = (if (isSystemInDarkTheme()) R.drawable.chicken_white else R.drawable.chicken)),
+                        contentDescription = "chicken",
+                        contentScale = ContentScale.Fit
                     )
+                    NormText(text = "SMART POULTRY")
 
-                    //Part
-                    AnimatedContent(
-                        targetState = singUpViewModel.signUpScreenState.currentPart,
-                        label = "signUpContentAnime"
-                    ) { currentPart ->
-                        when (currentPart) {
-                            SignUpParts.PERSONAL_DETAILS -> {
-                                PersonalDetails(
-                                    personalDetailsResponse = PersonalDetailsResponse(
-                                        firstName = singUpViewModel.signUpScreenData.firstName,
-                                        lastName = singUpViewModel.signUpScreenData.lastName,
-                                        gender = singUpViewModel.signUpScreenData.gender
-                                    ),
-                                    onResponse = {
-                                        //update data
-                                            singUpViewModel.onPersonalDetailsResponse(personalDetailsResponse = it)
-                                    }
-                                )
-                            }
-
-                            SignUpParts.CONTACT_DETAILS -> {
-                                ContactDetails(
-                                    contactDetailResponse = ContactDetailsResponse(
-                                        phone = singUpViewModel.signUpScreenData.phone,
-                                        email = singUpViewModel.signUpScreenData.email
-                                    ),
-                                    onResponse = {
-                                        singUpViewModel.onContactDetailsResponse(contactDetailsResponse = it)
-                                    }
-                                )
-                            }
-
-                            SignUpParts.FARM_DETAILS -> {
-                                FarmDetails(
-                                    farmDetailsResponse = FarmDetailsResponse(
-                                        farmName = singUpViewModel.signUpScreenData.farmName,
-                                        country = singUpViewModel.signUpScreenData.country
-                                    ),
-                                    onResponse = {
-                                        singUpViewModel.onFarmDetailsResponse(farmDetailsResponse = it)
-                                    })
-                            }
-
-                            SignUpParts.SET_PASSWORD -> {
-                                SetPassword(
-                                    onResponse = {password, hasError->
-                                        singUpViewModel.onSetPasswordResponse(password, hasError)
-                                    }
-                                )
-                            }
-                        }
-                    }
-
-                    MyVerticalSpacer(height = 30)
-                    Row(
-                        Modifier
-                            .fillMaxWidth()
-                            .padding(6.dp)
+                    Column(
+                        modifier = Modifier.padding(6.dp),
                     ) {
-
-                        if (singUpViewModel.signUpScreenState.showPrevious) {
-                            MyOutlineButton(//Previous button
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .weight(1f),
-                                onButtonClick = { singUpViewModel.onPrevious() },
-                                btnName = "Previous"
-                            )
-                        }
-
-                        NormButton(
+                        MyVerticalSpacer(height = 20)
+                        //Header
+                        Text(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .weight(1f),
-                            onButtonClick = {
-                                if (singUpViewModel.signUpScreenState.showContinue) {
-                                    singUpViewModel.onContinue()
-                                } else {
-                                    singUpViewModel.onDone()
-                                }
-                            },
-                            btnName = if (singUpViewModel.signUpScreenState.showContinue) "Continue" else "Done",
-                            enabled = singUpViewModel.signUpScreenState.continueEnabled
-                        )
-                    }
-
-                    if (!singUpViewModel.signUpScreenState.showPrevious) {
-                        Text(
-                            text = "Already registered?",
-                            textAlign = TextAlign.Left,
-                            modifier = Modifier.fillMaxWidth().padding(start = 10.dp),
+                                .padding(10.dp),
+                            text = singUpViewModel.signUpScreenState.currentPart.title,//"Hello, lets start with your name",
+                            style = MaterialTheme.typography.headlineMedium,
                             fontStyle = FontStyle.Italic
+                        )
 
-                        )
-                        MyOutlineButton(
-                            modifier = Modifier.fillMaxWidth(),
-                            onButtonClick = { navigator.navigateUp()},
-                            btnName = "Go to Log In",
-                        )
+                        //Part
+                        AnimatedContent(
+                            targetState = singUpViewModel.signUpScreenState.currentPart,
+                            label = "signUpContentAnime"
+                        ) { currentPart ->
+                            when (currentPart) {
+                                SignUpParts.PERSONAL_DETAILS -> {
+                                    PersonalDetails(
+                                        personalDetailsResponse = PersonalDetailsResponse(
+                                            firstName = singUpViewModel.signUpScreenData.firstName,
+                                            lastName = singUpViewModel.signUpScreenData.lastName,
+                                            gender = singUpViewModel.signUpScreenData.gender
+                                        ),
+                                        onResponse = {
+                                            //update data
+                                            singUpViewModel.onPersonalDetailsResponse(
+                                                personalDetailsResponse = it
+                                            )
+                                        }
+                                    )
+                                }
+
+                                SignUpParts.CONTACT_DETAILS -> {
+                                    ContactDetails(
+                                        contactDetailResponse = ContactDetailsResponse(
+                                            phone = singUpViewModel.signUpScreenData.phone,
+                                            email = singUpViewModel.signUpScreenData.email
+                                        ),
+                                        onResponse = {
+                                            singUpViewModel.onContactDetailsResponse(
+                                                contactDetailsResponse = it
+                                            )
+                                        }
+                                    )
+                                }
+
+                                SignUpParts.FARM_DETAILS -> {
+                                    FarmDetails(
+                                        farmDetailsResponse = FarmDetailsResponse(
+                                            farmName = singUpViewModel.signUpScreenData.farmName,
+                                            country = singUpViewModel.signUpScreenData.country
+                                        ),
+                                        onResponse = {
+                                            singUpViewModel.onFarmDetailsResponse(
+                                                farmDetailsResponse = it
+                                            )
+                                        })
+                                }
+
+                                SignUpParts.SET_PASSWORD -> {
+                                    SetPassword(
+                                        onResponse = { password, hasError ->
+                                            singUpViewModel.onSetPasswordResponse(
+                                                password,
+                                                hasError
+                                            )
+                                        }
+                                    )
+                                }
+                            }
+                        }
+
+                        Box(
+                            modifier =
+                            if (!singUpViewModel.signUpScreenState.showPrevious) Modifier.fillMaxWidth().animateContentSize() else Modifier.fillMaxSize().animateContentSize(),
+                            contentAlignment = Alignment.BottomCenter
+                        ) {
+                            Row(
+                                Modifier
+                                    .fillMaxWidth()
+                                    .padding(6.dp),
+                                horizontalArrangement = Arrangement.SpaceBetween
+                            ) {
+
+                                AnimatedVisibility(visible = singUpViewModel.signUpScreenState.showPrevious) {
+                                    MyOutlineButton(//Previous button
+                                        modifier = Modifier,
+                                        //.fillMaxWidth(),
+                                        //.weight(1f),
+                                        onButtonClick = { singUpViewModel.onPrevious() },
+                                        btnName = "Previous",
+                                        leadingIcon = Icons.AutoMirrored.Default.ArrowBack
+                                    )
+                                }
+
+                                NormButton(
+
+                                    modifier = if (!singUpViewModel.signUpScreenState.showPrevious) Modifier.weight(1f) else Modifier,
+                                    onButtonClick = {
+                                        if (singUpViewModel.signUpScreenState.showContinue) {
+                                            singUpViewModel.onContinue()
+                                        } else {
+                                            singUpViewModel.onDone()
+                                        }
+                                    },
+                                    btnName = if (singUpViewModel.signUpScreenState.showContinue) "Continue" else "Done",
+                                    enabled = singUpViewModel.signUpScreenState.continueEnabled,
+                                    trailingIcon = if (singUpViewModel.signUpScreenState.showContinue) Icons.AutoMirrored.Default.ArrowForward else null
+
+                                )
+                            }
+                        }
+
+                        AnimatedVisibility(visible = !singUpViewModel.signUpScreenState.showPrevious) {
+                            Box (
+                                modifier = Modifier.fillMaxSize(),
+                                contentAlignment = Alignment.BottomCenter
+                            ){
+                                Column {
+                                    Text(
+                                        text = "Already registered?",
+                                        textAlign = TextAlign.Left,
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .padding(start = 10.dp),
+                                        fontStyle = FontStyle.Italic
+
+                                    )
+                                    MyOutlineButton(
+                                        modifier = Modifier.fillMaxWidth(),
+                                        onButtonClick = { navigator.navigateUp() },
+                                        btnName = "Go to Log In",
+                                    )
+                                }
+                            }
+                        }
                     }
                 }
             }
-
 
         }
     }
