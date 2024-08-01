@@ -49,7 +49,7 @@ import com.example.smartpoultry.presentation.composables.MyCard
 import com.example.smartpoultry.presentation.composables.MyCardInventory
 import com.example.smartpoultry.presentation.composables.MyCircularProgressBar
 import com.example.smartpoultry.presentation.composables.MyHorizontalSpacer
-import com.example.smartpoultry.presentation.composables.MyInputDialog
+import com.example.smartpoultry.presentation.composables.dialogs.MyInputDialog
 import com.example.smartpoultry.presentation.composables.MyOutlineButton
 import com.example.smartpoultry.presentation.composables.MyVerticalSpacer
 import com.example.smartpoultry.presentation.composables.NormText

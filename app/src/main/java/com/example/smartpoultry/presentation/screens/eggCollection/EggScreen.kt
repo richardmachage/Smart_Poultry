@@ -44,7 +44,7 @@ import com.example.smartpoultry.presentation.composables.MyBorderedColumn
 import com.example.smartpoultry.presentation.composables.MyCard
 import com.example.smartpoultry.presentation.composables.MyCircularProgressBar
 import com.example.smartpoultry.presentation.composables.MyDatePicker
-import com.example.smartpoultry.presentation.composables.MyInputDialog
+import com.example.smartpoultry.presentation.composables.dialogs.MyInputDialog
 import com.example.smartpoultry.presentation.composables.MyOutlineButton
 import com.example.smartpoultry.presentation.uiModels.CellEggCollection
 import com.ramcosta.composedestinations.annotation.Destination

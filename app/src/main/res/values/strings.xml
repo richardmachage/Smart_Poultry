@@ -54,4 +54,5 @@
     <string name="log_in_btn">Log In</string>
     <string name="app_name_caps">SMART POULTRY</string>
     <string name="signing_in_loading_text">Signing In</string>
+    <string name="dismiss_dialog_btn">Dismiss</string>
 </resources>

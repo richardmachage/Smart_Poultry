@@ -33,7 +33,7 @@ import com.example.smartpoultry.data.dataSource.remote.firebase.models.AccessLev
 import com.example.smartpoultry.data.dataSource.remote.firebase.models.User
 import com.example.smartpoultry.presentation.composables.AccessLevelItem
 import com.example.smartpoultry.presentation.composables.MyBorderedColumn
-import com.example.smartpoultry.presentation.composables.MyInputDialog
+import com.example.smartpoultry.presentation.composables.dialogs.MyInputDialog
 import com.example.smartpoultry.presentation.composables.MyVerticalSpacer
 import com.example.smartpoultry.presentation.screens.accountScreen.UserInfoRow
 import kotlinx.coroutines.CoroutineScope

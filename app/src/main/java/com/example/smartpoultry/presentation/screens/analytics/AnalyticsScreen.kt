@@ -42,7 +42,7 @@ import com.example.smartpoultry.presentation.composables.BlocksDropDownMenu
 import com.example.smartpoultry.presentation.composables.CellsDropDownMenu
 import com.example.smartpoultry.presentation.composables.MonthsDropDownMenu
 import com.example.smartpoultry.presentation.composables.MyDatePicker
-import com.example.smartpoultry.presentation.composables.MyInputDialog
+import com.example.smartpoultry.presentation.composables.dialogs.MyInputDialog
 import com.example.smartpoultry.presentation.composables.MyOutlineButton
 import com.example.smartpoultry.presentation.composables.MyVerticalSpacer
 import com.example.smartpoultry.presentation.composables.NormButton

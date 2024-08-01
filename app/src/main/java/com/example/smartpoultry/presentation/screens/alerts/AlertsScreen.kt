@@ -44,7 +44,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.smartpoultry.presentation.composables.MyBorderedRow
 import com.example.smartpoultry.presentation.composables.MyCard
-import com.example.smartpoultry.presentation.composables.MyInputDialog
+import com.example.smartpoultry.presentation.composables.dialogs.MyInputDialog
 import com.example.smartpoultry.presentation.screens.mainActivity.MainActivity
 import com.ramcosta.composedestinations.annotation.Destination
 import java.text.SimpleDateFormat

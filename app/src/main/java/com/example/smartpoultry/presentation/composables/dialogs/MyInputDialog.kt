@@ -1,9 +1,11 @@
-package com.example.smartpoultry.presentation.composables
+package com.example.smartpoultry.presentation.composables.dialogs
 
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import com.example.smartpoultry.presentation.composables.MyOutlineButton
+import com.example.smartpoultry.presentation.composables.NormButton
 
 @Composable
 fun MyInputDialog(
