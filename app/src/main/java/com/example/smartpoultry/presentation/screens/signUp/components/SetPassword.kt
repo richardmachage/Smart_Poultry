@@ -12,7 +12,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
-import com.example.smartpoultry.presentation.composables.MyPasswordEditText
+import com.example.smartpoultry.presentation.composables.textInputFields.MyPasswordEditText
 
 @Composable
 fun SetPassword(

@@ -27,9 +27,9 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.smartpoultry.R
-import com.example.smartpoultry.presentation.composables.MyCard
-import com.example.smartpoultry.presentation.composables.MyOutlineButton
-import com.example.smartpoultry.presentation.composables.MyVerticalSpacer
+import com.example.smartpoultry.presentation.composables.buttons.MyOutlineButton
+import com.example.smartpoultry.presentation.composables.cards.MyCard
+import com.example.smartpoultry.presentation.composables.spacers.MyVerticalSpacer
 
 @Preview
 @Composable

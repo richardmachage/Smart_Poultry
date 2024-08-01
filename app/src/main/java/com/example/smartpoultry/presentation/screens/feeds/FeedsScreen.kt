@@ -25,11 +25,11 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.smartpoultry.presentation.composables.buttons.NormButton
 import com.example.smartpoultry.presentation.composables.others.MyDatePicker
 import com.example.smartpoultry.presentation.composables.dialogs.MyInputDialog
-import com.example.smartpoultry.presentation.composables.MyOutlineTextFiled
-import com.example.smartpoultry.presentation.composables.MyVerticalSpacer
-import com.example.smartpoultry.presentation.composables.NormButton
+import com.example.smartpoultry.presentation.composables.spacers.MyVerticalSpacer
+import com.example.smartpoultry.presentation.composables.textInputFields.MyOutlineTextFiled
 import com.example.smartpoultry.presentation.ui.theme.SmartPoultryTheme
 import com.ramcosta.composedestinations.annotation.Destination
 import com.vanpra.composematerialdialogs.rememberMaterialDialogState

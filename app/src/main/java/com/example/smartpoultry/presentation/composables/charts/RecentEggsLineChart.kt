@@ -19,7 +19,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import com.example.smartpoultry.R
 import com.example.smartpoultry.data.dataModels.DailyEggCollection
-import com.example.smartpoultry.presentation.composables.MyOutlineButton
+import com.example.smartpoultry.presentation.composables.buttons.MyOutlineButton
 import com.example.smartpoultry.presentation.uiModels.ChartClass
 import com.example.smartpoultry.utils.toGraphDate
 import com.patrykandpatrick.vico.compose.axis.horizontal.rememberBottomAxis

@@ -53,8 +53,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.smartpoultry.R
 import com.example.smartpoultry.presentation.composables.progressBars.MyCircularProgressBar
 import com.example.smartpoultry.presentation.composables.dialogs.MyInputDialog
-import com.example.smartpoultry.presentation.composables.MyOutlineTextFiled
-import com.example.smartpoultry.presentation.composables.MyVerticalSpacer
+import com.example.smartpoultry.presentation.composables.spacers.MyVerticalSpacer
+import com.example.smartpoultry.presentation.composables.textInputFields.MyOutlineTextFiled
 import com.example.smartpoultry.presentation.destinations.ManageUsersScreenDestination
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator

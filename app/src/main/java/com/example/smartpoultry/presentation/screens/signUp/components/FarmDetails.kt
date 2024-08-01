@@ -14,8 +14,9 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.smartpoultry.R
 import com.example.smartpoultry.presentation.composables.dropDownMenus.DropDownMenu
-import com.example.smartpoultry.presentation.composables.MyEditTextClear
-import com.example.smartpoultry.presentation.composables.MyVerticalSpacer
+import com.example.smartpoultry.presentation.composables.spacers.MyVerticalSpacer
+import com.example.smartpoultry.presentation.composables.textInputFields.MyEditTextClear
+
 import com.example.smartpoultry.presentation.screens.signUp.models.FarmDetailsResponse
 
 @Preview

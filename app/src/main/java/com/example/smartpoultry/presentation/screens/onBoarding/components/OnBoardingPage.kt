@@ -13,7 +13,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.example.smartpoultry.presentation.composables.MyVerticalSpacer
+import com.example.smartpoultry.presentation.composables.spacers.MyVerticalSpacer
 
 @Composable
 fun OnBoardingPage(page: Page) {

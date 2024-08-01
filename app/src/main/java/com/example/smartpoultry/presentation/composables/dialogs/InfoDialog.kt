@@ -6,7 +6,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import com.example.smartpoultry.R
-import com.example.smartpoultry.presentation.composables.NormButton
+import com.example.smartpoultry.presentation.composables.buttons.NormButton
 import com.example.smartpoultry.presentation.composables.text.TitleText
 
 @Composable

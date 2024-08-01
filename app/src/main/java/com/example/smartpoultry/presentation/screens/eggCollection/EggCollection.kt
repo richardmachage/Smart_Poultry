@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.dp
 import com.example.smartpoultry.data.dataSource.local.room.entities.cells.Cells
 import com.example.smartpoultry.data.dataSource.local.room.relations.BlocksWithCells
 import com.example.smartpoultry.presentation.composables.dropDownMenus.BlocksDropDownMenu
-import com.example.smartpoultry.presentation.composables.MyVerticalSpacer
+import com.example.smartpoultry.presentation.composables.spacers.MyVerticalSpacer
 import com.example.smartpoultry.presentation.screens.eggCollection.components.CellEggCollectionItem
 
 @OptIn(ExperimentalFoundationApi::class)

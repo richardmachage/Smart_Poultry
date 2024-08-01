@@ -13,8 +13,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.smartpoultry.presentation.composables.dropDownMenus.DropDownMenu
-import com.example.smartpoultry.presentation.composables.MyEditTextClear
-import com.example.smartpoultry.presentation.composables.MyVerticalSpacer
+import com.example.smartpoultry.presentation.composables.spacers.MyVerticalSpacer
+import com.example.smartpoultry.presentation.composables.textInputFields.MyEditTextClear
 import com.example.smartpoultry.presentation.screens.signUp.models.Genders
 import com.example.smartpoultry.presentation.screens.signUp.models.PersonalDetailsResponse
 import com.example.smartpoultry.presentation.ui.theme.SmartPoultryTheme

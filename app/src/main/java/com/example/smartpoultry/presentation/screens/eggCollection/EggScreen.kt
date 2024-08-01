@@ -41,11 +41,11 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.smartpoultry.R
 import com.example.smartpoultry.presentation.composables.others.MyBorderedColumn
-import com.example.smartpoultry.presentation.composables.MyCard
+import com.example.smartpoultry.presentation.composables.buttons.MyOutlineButton
+import com.example.smartpoultry.presentation.composables.cards.MyCard
 import com.example.smartpoultry.presentation.composables.progressBars.MyCircularProgressBar
 import com.example.smartpoultry.presentation.composables.others.MyDatePicker
 import com.example.smartpoultry.presentation.composables.dialogs.MyInputDialog
-import com.example.smartpoultry.presentation.composables.MyOutlineButton
 import com.example.smartpoultry.presentation.uiModels.CellEggCollection
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator

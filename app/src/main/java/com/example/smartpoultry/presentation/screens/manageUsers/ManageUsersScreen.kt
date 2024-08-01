@@ -45,9 +45,9 @@ import androidx.lifecycle.viewModelScope
 import com.example.smartpoultry.R
 import com.example.smartpoultry.data.dataSource.remote.firebase.models.User
 import com.example.smartpoultry.presentation.composables.progressBars.MyCircularProgressBar
-import com.example.smartpoultry.presentation.composables.MyHorizontalSpacer
-import com.example.smartpoultry.presentation.composables.MyVerticalSpacer
 import com.example.smartpoultry.presentation.composables.buttons.MyFloatingActionButton
+import com.example.smartpoultry.presentation.composables.spacers.MyHorizontalSpacer
+import com.example.smartpoultry.presentation.composables.spacers.MyVerticalSpacer
 import com.example.smartpoultry.presentation.destinations.RegisterUserScreenDestination
 import com.example.smartpoultry.presentation.ui.theme.SmartPoultryTheme
 import com.ramcosta.composedestinations.annotation.Destination

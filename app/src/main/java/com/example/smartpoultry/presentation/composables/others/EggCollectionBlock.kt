@@ -32,8 +32,8 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.smartpoultry.R
-import com.example.smartpoultry.presentation.composables.MySimpleEditText
-import com.example.smartpoultry.presentation.composables.NormButton
+import com.example.smartpoultry.presentation.composables.buttons.NormButton
+import com.example.smartpoultry.presentation.composables.textInputFields.MySimpleEditText
 import com.example.smartpoultry.presentation.ui.theme.SmartPoultryTheme
 
 

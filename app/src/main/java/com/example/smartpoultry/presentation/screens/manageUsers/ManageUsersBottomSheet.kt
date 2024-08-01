@@ -31,10 +31,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.smartpoultry.data.dataSource.remote.firebase.models.AccessLevel
 import com.example.smartpoultry.data.dataSource.remote.firebase.models.User
+import com.example.smartpoultry.presentation.composables.dialogs.MyInputDialog
 import com.example.smartpoultry.presentation.composables.others.AccessLevelItem
 import com.example.smartpoultry.presentation.composables.others.MyBorderedColumn
-import com.example.smartpoultry.presentation.composables.dialogs.MyInputDialog
-import com.example.smartpoultry.presentation.composables.MyVerticalSpacer
+import com.example.smartpoultry.presentation.composables.spacers.MyVerticalSpacer
 import com.example.smartpoultry.presentation.screens.accountScreen.UserInfoRow
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch

@@ -18,9 +18,9 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.smartpoultry.presentation.composables.MyVerticalSpacer
-import com.example.smartpoultry.presentation.composables.NormButton
+import com.example.smartpoultry.presentation.composables.buttons.NormButton
 import com.example.smartpoultry.presentation.composables.charts.chartComponents.rememberMarker
+import com.example.smartpoultry.presentation.composables.spacers.MyVerticalSpacer
 import com.example.smartpoultry.presentation.uiModels.ChartClass
 import com.patrykandpatrick.vico.compose.axis.horizontal.rememberBottomAxis
 import com.patrykandpatrick.vico.compose.axis.vertical.rememberStartAxis

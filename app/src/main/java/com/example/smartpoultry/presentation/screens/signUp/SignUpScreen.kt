@@ -38,11 +38,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.smartpoultry.R
+import com.example.smartpoultry.presentation.composables.buttons.MyOutlineButton
+import com.example.smartpoultry.presentation.composables.buttons.NormButton
 import com.example.smartpoultry.presentation.composables.progressBars.MyCircularProgressBar
-import com.example.smartpoultry.presentation.composables.MyOutlineButton
-import com.example.smartpoultry.presentation.composables.MyVerticalSpacer
-import com.example.smartpoultry.presentation.composables.NormButton
-import com.example.smartpoultry.presentation.composables.NormText
+import com.example.smartpoultry.presentation.composables.spacers.MyVerticalSpacer
+import com.example.smartpoultry.presentation.composables.text.NormText
 import com.example.smartpoultry.presentation.composables.text.TitleText
 import com.example.smartpoultry.presentation.screens.signUp.components.ContactDetails
 import com.example.smartpoultry.presentation.screens.signUp.components.FarmDetails
