@@ -206,6 +206,7 @@ fun SettingsScreen(
 
                             ) //(Consecutive days of low production to be considered before flagging a cell?)")
                             var showNumberOfDaysAnalysisInfo by remember { mutableStateOf(false) }
+
                             IconButton(onClick = { showNumberOfDaysAnalysisInfo = true }) {
                                 Icon(imageVector = Icons.Default.Info, contentDescription = null)
                             }
@@ -268,15 +269,15 @@ fun SettingsScreen(
                         ) {
                             Text(
                                 modifier = Modifier.padding(5.dp),
-                                text = "Threshold Ratio for trend analysis ",
+                                text = stringResource(id = R.string.threshold_ratio),//"Threshold Ratio for trend analysis",
                                 fontWeight = FontWeight.Bold
 
                             )//(What should be the minimum henCount to EggCount ration in determining poor egg production?)")
                             var thresholdRatioInfo by remember { mutableStateOf(false) }
                             InfoDialog(
                                 showDialog = thresholdRatioInfo,
-                                title = stringResource(id = R.string.repeat_interval),
-                                message = stringResource(id = R.string.repeat_interval_description),
+                                title = stringResource(id = R.string.threshold_ratio),
+                                message = stringResource(id = R.string.threshold_ratio_description),
                                 onConfirm = { thresholdRatioInfo = false })
                             IconButton(onClick = { thresholdRatioInfo = true }) {
                                 Icon(imageVector = Icons.Default.Info, contentDescription = null)

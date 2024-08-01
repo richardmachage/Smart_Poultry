@@ -57,4 +57,6 @@
     <string name="dismiss_dialog_btn">Dismiss</string>
     <string name="repeat_interval">Repeat Interval</string>
     <string name="repeat_interval_description">The time period through which the repeated analysis should be triggered.\nFor example if set to 12 hours, the app will automatically perform analysis every 12 hours and you will be alerted about the results by a notification.</string>
+    <string name="threshold_ratio">Threshold Ratio for trend analysis</string>
+    <string name="threshold_ratio_description">Set this to be the minimum henCount to EggCount ratio in determining poor egg production\nNOTE: It should always be a decimal between 0 and 1 (for example 0.5, 0.8)</string>
 </resources>
