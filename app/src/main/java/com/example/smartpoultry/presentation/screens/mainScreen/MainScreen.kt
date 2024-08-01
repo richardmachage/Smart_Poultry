@@ -8,8 +8,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.rememberNavController
-import com.example.smartpoultry.presentation.composables.MyBottomNavBar
-import com.example.smartpoultry.presentation.composables.MyTopAppBar
+import com.example.smartpoultry.presentation.composables.others.MyBottomNavBar
+import com.example.smartpoultry.presentation.composables.others.MyTopAppBar
 import com.example.smartpoultry.presentation.navigation.BottomNavGraph
 import com.example.smartpoultry.presentation.ui.theme.SmartPoultryTheme
 import com.ramcosta.composedestinations.annotation.Destination

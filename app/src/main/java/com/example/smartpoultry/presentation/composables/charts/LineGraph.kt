@@ -1,4 +1,4 @@
-package com.example.smartpoultry.presentation.composables
+package com.example.smartpoultry.presentation.composables.charts
 
 import androidx.compose.runtime.Composable
 import com.patrykandpatrick.vico.compose.axis.horizontal.rememberBottomAxis

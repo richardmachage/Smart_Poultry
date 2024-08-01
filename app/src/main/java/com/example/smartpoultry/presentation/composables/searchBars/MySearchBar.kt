@@ -1,4 +1,4 @@
-package com.example.smartpoultry.presentation.composables
+package com.example.smartpoultry.presentation.composables.searchBars
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.icons.Icons

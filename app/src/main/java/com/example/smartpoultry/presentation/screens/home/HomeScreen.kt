@@ -48,12 +48,12 @@ import com.example.smartpoultry.data.dataSource.local.room.entities.cells.Cells
 import com.example.smartpoultry.presentation.NavGraphs
 import com.example.smartpoultry.presentation.composables.MyCard
 import com.example.smartpoultry.presentation.composables.MyCardInventory
-import com.example.smartpoultry.presentation.composables.MyCircularProgressBar
+import com.example.smartpoultry.presentation.composables.progressBars.MyCircularProgressBar
 import com.example.smartpoultry.presentation.composables.MyHorizontalSpacer
 import com.example.smartpoultry.presentation.composables.MyOutlineButton
 import com.example.smartpoultry.presentation.composables.MyVerticalSpacer
 import com.example.smartpoultry.presentation.composables.NormText
-import com.example.smartpoultry.presentation.composables.RecentEggsLineChart
+import com.example.smartpoultry.presentation.composables.charts.RecentEggsLineChart
 import com.example.smartpoultry.presentation.composables.dialogs.MyInputDialog
 import com.example.smartpoultry.presentation.composables.text.TitleText
 import com.example.smartpoultry.presentation.destinations.LogInScreenDestination

@@ -1,4 +1,4 @@
-package com.example.smartpoultry.presentation.composables
+package com.example.smartpoultry.presentation.composables.others
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement

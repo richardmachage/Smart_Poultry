@@ -44,7 +44,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.smartpoultry.R
 import com.example.smartpoultry.data.dataSource.remote.firebase.models.User
-import com.example.smartpoultry.presentation.composables.MyCircularProgressBar
+import com.example.smartpoultry.presentation.composables.progressBars.MyCircularProgressBar
 import com.example.smartpoultry.presentation.composables.MyHorizontalSpacer
 import com.example.smartpoultry.presentation.composables.MyVerticalSpacer
 import com.example.smartpoultry.presentation.composables.buttons.MyFloatingActionButton

@@ -52,7 +52,7 @@ import com.example.smartpoultry.presentation.composables.MyCard
 import com.example.smartpoultry.presentation.composables.MyHorizontalSpacer
 import com.example.smartpoultry.presentation.composables.MyOutlineTextFiled
 import com.example.smartpoultry.presentation.composables.MyVerticalSpacer
-import com.example.smartpoultry.presentation.composables.ToggleButton
+import com.example.smartpoultry.presentation.composables.buttons.ToggleButton
 import com.example.smartpoultry.presentation.composables.dialogs.InfoDialog
 import com.example.smartpoultry.presentation.composables.dialogs.MyInputDialog
 import com.example.smartpoultry.presentation.composables.text.TitleText

@@ -1,4 +1,4 @@
-package com.example.smartpoultry.presentation.composables
+package com.example.smartpoultry.presentation.composables.others
 
 import android.app.Activity
 import android.content.Intent

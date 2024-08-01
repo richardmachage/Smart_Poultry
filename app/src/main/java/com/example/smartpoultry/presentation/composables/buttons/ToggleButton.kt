@@ -1,4 +1,4 @@
-package com.example.smartpoultry.presentation.composables
+package com.example.smartpoultry.presentation.composables.buttons
 
 import androidx.compose.material3.Switch
 import androidx.compose.runtime.Composable

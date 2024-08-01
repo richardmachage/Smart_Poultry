@@ -49,18 +49,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.smartpoultry.R
+import com.example.smartpoultry.presentation.composables.text.NormText
 
-
-@Composable
-fun NormText(
-    modifier: Modifier = Modifier,
-    text: String) {
-    Text(
-        modifier = modifier.padding(4.dp),
-        text = text,
-        maxLines = 1,
-    )
-}
 
 @Composable
 fun NormButton(

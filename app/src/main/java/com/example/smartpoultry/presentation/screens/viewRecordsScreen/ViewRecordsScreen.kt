@@ -32,7 +32,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.smartpoultry.presentation.composables.MyBorderedRow
+import com.example.smartpoultry.presentation.composables.others.MyBorderedRow
 import com.example.smartpoultry.presentation.composables.dialogs.MyInputDialog
 import com.example.smartpoultry.presentation.composables.MyVerticalSpacer
 import com.ramcosta.composedestinations.annotation.Destination

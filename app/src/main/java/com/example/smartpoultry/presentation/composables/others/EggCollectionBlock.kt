@@ -1,4 +1,4 @@
-package com.example.smartpoultry.presentation.composables
+package com.example.smartpoultry.presentation.composables.others
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -32,6 +32,8 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.smartpoultry.R
+import com.example.smartpoultry.presentation.composables.MySimpleEditText
+import com.example.smartpoultry.presentation.composables.NormButton
 import com.example.smartpoultry.presentation.ui.theme.SmartPoultryTheme
 
 
