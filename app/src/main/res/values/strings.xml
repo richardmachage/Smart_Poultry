@@ -50,4 +50,8 @@
     <string name="input_phone_number">eg. 716787805</string>
     <string name="access_levele_register_user_title">Permissions allowed for this user</string>
     <string name="registering">Registering new user...</string>
+    <string name="already_registered_sign_up">Already registered?</string>
+    <string name="log_in_btn">Log In</string>
+    <string name="app_name_caps">SMART POULTRY</string>
+    <string name="signing_in_loading_text">Signing In</string>
 </resources>

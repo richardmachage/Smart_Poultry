@@ -30,6 +30,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -42,6 +43,7 @@ import com.example.smartpoultry.presentation.composables.MyOutlineButton
 import com.example.smartpoultry.presentation.composables.MyVerticalSpacer
 import com.example.smartpoultry.presentation.composables.NormButton
 import com.example.smartpoultry.presentation.composables.NormText
+import com.example.smartpoultry.presentation.composables.text.TitleText
 import com.example.smartpoultry.presentation.screens.signUp.components.ContactDetails
 import com.example.smartpoultry.presentation.screens.signUp.components.FarmDetails
 import com.example.smartpoultry.presentation.screens.signUp.components.PersonalDetails
@@ -92,22 +94,6 @@ fun SignUpScreen(
     }
 
     Scaffold(
-        topBar = {
-            /*TopAppBar(
-                title = { Text(text = "Sign Up") },
-                scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(),
-                navigationIcon = {
-                    IconButton(onClick = {
-                        navigator.navigateUp()
-                    }) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Back"
-                        )
-                    }
-                }
-            )*/
-        }
     ) { paddingValues ->
 
         Surface(
@@ -118,13 +104,13 @@ fun SignUpScreen(
         ) {
             MyCircularProgressBar(
                 isLoading = isLoading,
-                displayText = "Signing In..."
+                displayText = stringResource(id = R.string.signing_in_loading_text)//"Signing In..."
             )
 
 
-            Box (
+            Box(
                 modifier = Modifier.fillMaxSize()
-            ){
+            ) {
                 Column(
                     modifier = Modifier.padding(top = 5.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
@@ -138,21 +124,25 @@ fun SignUpScreen(
                         contentDescription = "chicken",
                         contentScale = ContentScale.Fit
                     )
-                    NormText(text = "SMART POULTRY")
+                    NormText(text = stringResource(id = R.string.app_name_caps))//"SMART POULTRY")
 
                     Column(
                         modifier = Modifier.padding(6.dp),
                     ) {
                         MyVerticalSpacer(height = 20)
                         //Header
-                        Text(
+                        TitleText(
+                            modifier = Modifier.fillMaxWidth().padding(10.dp),
+                            text = singUpViewModel.signUpScreenState.currentPart.title
+                        )
+                       /* Text(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(10.dp),
                             text = singUpViewModel.signUpScreenState.currentPart.title,//"Hello, lets start with your name",
                             style = MaterialTheme.typography.headlineMedium,
                             fontStyle = FontStyle.Italic
-                        )
+                        )*/
 
                         //Part
                         AnimatedContent(
@@ -218,7 +208,11 @@ fun SignUpScreen(
 
                         Box(
                             modifier =
-                            if (!singUpViewModel.signUpScreenState.showPrevious) Modifier.fillMaxWidth().animateContentSize() else Modifier.fillMaxSize().animateContentSize(),
+                            if (!singUpViewModel.signUpScreenState.showPrevious) Modifier
+                                .fillMaxWidth()
+                                .animateContentSize() else Modifier
+                                .fillMaxSize()
+                                .animateContentSize(),
                             contentAlignment = Alignment.BottomCenter
                         ) {
                             Row(
@@ -234,14 +228,16 @@ fun SignUpScreen(
                                         //.fillMaxWidth(),
                                         //.weight(1f),
                                         onButtonClick = { singUpViewModel.onPrevious() },
-                                        btnName = "Previous",
+                                        btnName = stringResource(id = R.string.previous_btn),
                                         leadingIcon = Icons.AutoMirrored.Default.ArrowBack
                                     )
                                 }
 
                                 NormButton(
 
-                                    modifier = if (!singUpViewModel.signUpScreenState.showPrevious) Modifier.weight(1f) else Modifier,
+                                    modifier = if (!singUpViewModel.signUpScreenState.showPrevious) Modifier.weight(
+                                        1f
+                                    ) else Modifier,
                                     onButtonClick = {
                                         if (singUpViewModel.signUpScreenState.showContinue) {
                                             singUpViewModel.onContinue()
@@ -249,7 +245,9 @@ fun SignUpScreen(
                                             singUpViewModel.onDone()
                                         }
                                     },
-                                    btnName = if (singUpViewModel.signUpScreenState.showContinue) "Continue" else "Done",
+                                    btnName = if (singUpViewModel.signUpScreenState.showContinue) stringResource(
+                                        id = R.string.continue_btn
+                                    ) else stringResource(id = R.string.done_btn),
                                     enabled = singUpViewModel.signUpScreenState.continueEnabled,
                                     trailingIcon = if (singUpViewModel.signUpScreenState.showContinue) Icons.AutoMirrored.Default.ArrowForward else null
 
@@ -258,13 +256,13 @@ fun SignUpScreen(
                         }
 
                         AnimatedVisibility(visible = !singUpViewModel.signUpScreenState.showPrevious) {
-                            Box (
+                            Box(
                                 modifier = Modifier.fillMaxSize(),
                                 contentAlignment = Alignment.BottomCenter
-                            ){
+                            ) {
                                 Column {
                                     Text(
-                                        text = "Already registered?",
+                                        text = stringResource(id = R.string.already_registered_sign_up),//"Already registered?",
                                         textAlign = TextAlign.Left,
                                         modifier = Modifier
                                             .fillMaxWidth()
@@ -275,7 +273,7 @@ fun SignUpScreen(
                                     MyOutlineButton(
                                         modifier = Modifier.fillMaxWidth(),
                                         onButtonClick = { navigator.navigateUp() },
-                                        btnName = "Go to Log In",
+                                        btnName = stringResource(id = R.string.log_in_btn)
                                     )
                                 }
                             }
