@@ -273,6 +273,11 @@ fun SettingsScreen(
 
                             )//(What should be the minimum henCount to EggCount ration in determining poor egg production?)")
                             var thresholdRatioInfo by remember { mutableStateOf(false) }
+                            InfoDialog(
+                                showDialog = thresholdRatioInfo,
+                                title = stringResource(id = R.string.repeat_interval),
+                                message = stringResource(id = R.string.repeat_interval_description),
+                                onConfirm = { thresholdRatioInfo = false })
                             IconButton(onClick = { thresholdRatioInfo = true }) {
                                 Icon(imageVector = Icons.Default.Info, contentDescription = null)
                             }
@@ -419,13 +424,13 @@ fun SettingsScreen(
                             MyHorizontalSpacer(width = 5)
                             
 //                            var thresholdRatioInfo by remember { mutableStateOf(false) }
-                            var showInfoDialog by remember { mutableStateOf(false)}
+                            var showIntervalInfoDialog by remember { mutableStateOf(false)}
                             InfoDialog(
-                                showDialog = showInfoDialog,
+                                showDialog = showIntervalInfoDialog,
                                 title = stringResource(id = R.string.repeat_interval),
                                 message = stringResource(id = R.string.repeat_interval_description),
-                                onConfirm = { showInfoDialog = false })
-                            IconButton(onClick = { showInfoDialog = true }) {
+                                onConfirm = { showIntervalInfoDialog = false })
+                            IconButton(onClick = { showIntervalInfoDialog = true }) {
                                 Icon(imageVector = Icons.Default.Info, contentDescription = null)
                             }
                         }
