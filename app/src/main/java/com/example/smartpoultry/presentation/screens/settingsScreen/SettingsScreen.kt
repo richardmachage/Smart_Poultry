@@ -50,10 +50,11 @@ import com.example.smartpoultry.domain.permissions.checkIfPermissionGranted
 import com.example.smartpoultry.presentation.NavGraphs
 import com.example.smartpoultry.presentation.composables.MyCard
 import com.example.smartpoultry.presentation.composables.MyHorizontalSpacer
-import com.example.smartpoultry.presentation.composables.dialogs.MyInputDialog
 import com.example.smartpoultry.presentation.composables.MyOutlineTextFiled
 import com.example.smartpoultry.presentation.composables.MyVerticalSpacer
 import com.example.smartpoultry.presentation.composables.ToggleButton
+import com.example.smartpoultry.presentation.composables.dialogs.InfoDialog
+import com.example.smartpoultry.presentation.composables.dialogs.MyInputDialog
 import com.example.smartpoultry.presentation.composables.text.TitleText
 import com.example.smartpoultry.presentation.destinations.LogInScreenDestination
 import com.example.smartpoultry.utils.CONSUCUTIVE_DAYS_KEY
@@ -115,7 +116,7 @@ fun SettingsScreen(
 
             Column(
                 Modifier
-                    .padding(6.dp)
+                    .padding(start = 16.dp, end = 16.dp)
                     .verticalScroll(rememberScrollState())
             ) {
                 MyVerticalSpacer(height = 10)
@@ -346,10 +347,10 @@ fun SettingsScreen(
 
                     ) {
                         Text(
-                            text = "Repeat interval",
+                            text = stringResource(id = R.string.repeat_interval),//"Repeat interval",
                             fontWeight = FontWeight.Bold
 
-                        )// for automated analysis")
+                        )
 
                         var showDialog by remember { mutableStateOf(false) }
                         var isNotificationPermissionGranted by remember {
@@ -389,7 +390,7 @@ fun SettingsScreen(
                             Text(text = "This feature requires use of Notifications.\nAllow notifications Permission to proceed.\nYou can also go to App settings to enable notifications")
                         }
 
-
+                        //Toggle button
                         Row {
                             ToggleButton(
                                 modifier = Modifier.align(Alignment.CenterVertically),
@@ -417,12 +418,17 @@ fun SettingsScreen(
 
                             MyHorizontalSpacer(width = 5)
                             
-                            var thresholdRatioInfo by remember { mutableStateOf(false) }
-                            IconButton(onClick = { thresholdRatioInfo = true }) {
+//                            var thresholdRatioInfo by remember { mutableStateOf(false) }
+                            var showInfoDialog by remember { mutableStateOf(false)}
+                            InfoDialog(
+                                showDialog = showInfoDialog,
+                                title = stringResource(id = R.string.repeat_interval),
+                                message = stringResource(id = R.string.repeat_interval_description),
+                                onConfirm = { showInfoDialog = false })
+                            IconButton(onClick = { showInfoDialog = true }) {
                                 Icon(imageVector = Icons.Default.Info, contentDescription = null)
                             }
                         }
-                        
 
                     }
                     //edit part

@@ -65,6 +65,11 @@ class SettingsViewModel @Inject constructor (
     private val _isAutomatedAnalysis = MutableStateFlow("")
     val isAutomatedAnalysis : StateFlow<String> = _isAutomatedAnalysis
 
+    private var _showInfoDialog  = MutableStateFlow(false)
+    val showInfoDialog : StateFlow<Boolean>
+        get() = _showInfoDialog
+
+
     init {
         //getPastDays()
         loadInitialValues()
@@ -168,5 +173,8 @@ class SettingsViewModel @Inject constructor (
         }
     }
 
+    fun toggleInfoDialog(showDialog : Boolean ){
+        _showInfoDialog.value = showDialog
+    }
 
 }

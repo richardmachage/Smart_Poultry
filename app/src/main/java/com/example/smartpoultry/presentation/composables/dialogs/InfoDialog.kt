@@ -2,11 +2,11 @@ package com.example.smartpoultry.presentation.composables.dialogs
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import com.example.smartpoultry.R
 import com.example.smartpoultry.presentation.composables.NormButton
-import com.example.smartpoultry.presentation.composables.NormText
 import com.example.smartpoultry.presentation.composables.text.TitleText
 
 @Composable
@@ -26,7 +26,7 @@ fun InfoDialog(
             },
             text = {
                 Box {
-                    NormText(text = message)
+                    Text(text = message)
                 }
             },
             icon = icon,
