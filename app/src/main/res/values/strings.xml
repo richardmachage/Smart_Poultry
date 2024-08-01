@@ -59,4 +59,7 @@
     <string name="repeat_interval_description">The time period through which the repeated analysis should be triggered.\nFor example if set to 12 hours, the app will automatically perform analysis every 12 hours and you will be alerted about the results by a notification.</string>
     <string name="threshold_ratio">Threshold Ratio for trend analysis</string>
     <string name="threshold_ratio_description">Set this to be the minimum henCount to EggCount ratio in determining poor egg production\nNOTE: It should always be a decimal between 0 and 1 (for example 0.5, 0.8)</string>
+    <string name="number_of_days_for_trend_analysis_description">This term refers to the number of consecutive days during which low production levels are observed. If production remains low for this specified period, the system will flag the cell as needing attention.</string>
+    <string name="past_days_summarry">Past Days Summary in Home Screen</string>
+    <string name="past_days_summarry_description">This number represents the days in the past that are included in the summary displayed on the home screen\'s recent trends graphs. It determines how many days\' worth of data are visualized to show recent trends in the graphs.</string>
 </resources>

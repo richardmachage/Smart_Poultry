@@ -77,10 +77,6 @@ fun SettingsScreen(
     val context = LocalContext.current
     val settingsViewModel = hiltViewModel<SettingsViewModel>()
 
-    var showPastDayInfoDialog by remember {
-        mutableStateOf(false)
-    }
-
     LaunchedEffect(settingsViewModel.toastMessage.value) {
         val toastMessage = settingsViewModel.toastMessage.value
         if (toastMessage.isNotBlank()) {
@@ -134,10 +130,16 @@ fun SettingsScreen(
                         ) {
                             Text(
                                 modifier = Modifier.padding(5.dp),
-                                text = "Past Days Summary in Home Screen",
+                                text = stringResource(id = R.string.past_days_summarry),//"Past Days Summary in Home Screen",
                                 fontWeight = FontWeight.Bold
                             )
-                            IconButton(onClick = { showPastDayInfoDialog = true }) {
+                            var showPastDayInfo by remember{ mutableStateOf(false) }
+                            InfoDialog(
+                                showDialog = showPastDayInfo,
+                                title = stringResource(id = R.string.past_days_summarry),
+                                message = stringResource(id = R.string.past_days_summarry_description),
+                                onConfirm = { showPastDayInfo = false })
+                            IconButton(onClick = { showPastDayInfo = true }) {
                                 Icon(imageVector = Icons.Default.Info, contentDescription = null)
                             }
                         }
@@ -155,7 +157,7 @@ fun SettingsScreen(
                             }
                             MyInputDialog(
                                 showDialog = showDialog,
-                                title = "Consecutive Days to Consider",
+                                title = stringResource(id = R.string.past_days_summarry),//"Consecutive Days to Consider",
                                 onConfirm = {
                                     settingsViewModel.saveToDataStore(
                                         PAST_DAYS_KEY,
@@ -206,7 +208,13 @@ fun SettingsScreen(
 
                             ) //(Consecutive days of low production to be considered before flagging a cell?)")
                             var showNumberOfDaysAnalysisInfo by remember { mutableStateOf(false) }
-
+                            InfoDialog(
+                                showDialog = showNumberOfDaysAnalysisInfo,
+                                title = stringResource(id = R.string.number_of_days_for_trend_analysis),
+                                message = stringResource(id = R.string.number_of_days_for_trend_analysis_description),
+                                onConfirm = { 
+                                    showNumberOfDaysAnalysisInfo = false
+                                })
                             IconButton(onClick = { showNumberOfDaysAnalysisInfo = true }) {
                                 Icon(imageVector = Icons.Default.Info, contentDescription = null)
                             }
@@ -226,7 +234,7 @@ fun SettingsScreen(
                             }
                             MyInputDialog(
                                 showDialog = showDialog,
-                                title = "Consecutive Days to Consider",
+                                title = stringResource(id = R.string.number_of_days_for_trend_analysis),//"Consecutive Days to Consider",
                                 onConfirm = {
                                     showDialog = false
                                     settingsViewModel.saveToDataStore(
@@ -298,7 +306,7 @@ fun SettingsScreen(
                             }
                             MyInputDialog(
                                 showDialog = showDialog,
-                                title = "Threshold Ratio",
+                                title = stringResource(id = R.string.threshold_ratio),//"Threshold Ratio",
                                 onConfirm = {
                                     if (validateThresholdInput(newThreshold)) {
                                         showDialog = false
@@ -454,7 +462,7 @@ fun SettingsScreen(
                             }
                             MyInputDialog(
                                 showDialog = showDialog,
-                                title = "Repeat Interval",
+                                title = stringResource(id = R.string.repeat_interval),//"Repeat Interval",
                                 onConfirm = {
                                     settingsViewModel.saveToDataStore(
                                         REPEAT_INTERVAL_KEY,
