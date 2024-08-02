@@ -23,23 +23,24 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SignUpViewModel @Inject constructor(
-    private  val firebaseAuthRepository: FirebaseAuthRepository
+    private val firebaseAuthRepository: FirebaseAuthRepository
 ) : ViewModel() {
     private var listOfParts = SignUpParts.values().asList()
     private var currentPartIndex = 0
 
-    private var _signUpScreenState by mutableStateOf(SignUpScreenState(
-        currentPart = listOfParts[currentPartIndex],//SignUpParts.PERSONAL_DETAILS,
-        showPrevious = false,
-        showContinue = true
-    ))
-    val signUpScreenState : SignUpScreenState
-            get() = _signUpScreenState
+    private var _signUpScreenState by mutableStateOf(
+        SignUpScreenState(
+            currentPart = listOfParts[currentPartIndex],//SignUpParts.PERSONAL_DETAILS,
+            showPrevious = false,
+            showContinue = true
+        )
+    )
+    val signUpScreenState: SignUpScreenState
+        get() = _signUpScreenState
 
-   private var _signUpScreenData by mutableStateOf(SignUpScreenData())
-    val signUpScreenData:SignUpScreenData
+    private var _signUpScreenData by mutableStateOf(SignUpScreenData())
+    val signUpScreenData: SignUpScreenData
         get() = _signUpScreenData
-
 
 
     var farmName = mutableStateOf("")
@@ -57,9 +58,9 @@ class SignUpViewModel @Inject constructor(
         private set
 
 
-    fun onPrevious(){
-        if (currentPartIndex > 0){
-            currentPartIndex= currentPartIndex - 1
+    fun onPrevious() {
+        if (currentPartIndex > 0) {
+            currentPartIndex = currentPartIndex - 1
             _signUpScreenState = _signUpScreenState.copy(
                 currentPart = listOfParts[currentPartIndex],
                 showPrevious = if (currentPartIndex == 0) false else true,
@@ -68,8 +69,9 @@ class SignUpViewModel @Inject constructor(
             )
         }
     }
-    fun onContinue(){
-        if (currentPartIndex < (listOfParts.size - 1 )){
+
+    fun onContinue() {
+        if (currentPartIndex < (listOfParts.size - 1)) {
             currentPartIndex++
             _signUpScreenState = _signUpScreenState.copy(
                 currentPart = listOfParts[currentPartIndex],
@@ -80,60 +82,74 @@ class SignUpViewModel @Inject constructor(
         }
     }
 
-    fun isContinueEnabled(currentPart : SignUpParts): Boolean {
-         when (currentPart){
-             SignUpParts.PERSONAL_DETAILS -> {
-                 return  _signUpScreenData.firstName.isNotBlank() && _signUpScreenData.lastName.isNotBlank() && _signUpScreenData.gender != "Select Gender"
-             }
+    fun isContinueEnabled(currentPart: SignUpParts): Boolean {
+        when (currentPart) {
+            SignUpParts.PERSONAL_DETAILS -> {
+                return _signUpScreenData.firstName.isNotBlank() && _signUpScreenData.lastName.isNotBlank() && _signUpScreenData.gender != "Select Gender"
+            }
 
-             SignUpParts.CONTACT_DETAILS -> {
-                 return _signUpScreenData.email.isNotBlank() && _signUpScreenData.phone.isNotBlank()
-             }
-             SignUpParts.FARM_DETAILS -> {
-                 return _signUpScreenData.farmName.isNotBlank() && _signUpScreenData.country != null
-             }
-             SignUpParts.SET_PASSWORD -> {
-                 return _signUpScreenData.password.isNotBlank()
-             }
-         }
+            SignUpParts.CONTACT_DETAILS -> {
+                return _signUpScreenData.email.isNotBlank() && _signUpScreenData.phone.isNotBlank()
+            }
+
+            SignUpParts.FARM_DETAILS -> {
+                return _signUpScreenData.farmName.isNotBlank() && _signUpScreenData.country != null
+            }
+
+            SignUpParts.SET_PASSWORD -> {
+                return _signUpScreenData.password.isNotBlank()
+            }
+        }
     }
-    fun onDone(){
+
+    fun onDone() {
         onSignUp()
     }
 
-    fun onPersonalDetailsResponse(personalDetailsResponse: PersonalDetailsResponse){
-        if (personalDetailsResponse.lastName.isNotBlank() && personalDetailsResponse.firstName.isNotBlank() && personalDetailsResponse.gender != "Select Gender"){
-            _signUpScreenData = _signUpScreenData.copy(firstName = personalDetailsResponse.firstName, lastName = personalDetailsResponse.lastName, gender = personalDetailsResponse.gender)
+    fun onPersonalDetailsResponse(personalDetailsResponse: PersonalDetailsResponse) {
+        if (personalDetailsResponse.lastName.isNotBlank() && personalDetailsResponse.firstName.isNotBlank() && personalDetailsResponse.gender != "Select Gender") {
+            _signUpScreenData = _signUpScreenData.copy(
+                firstName = personalDetailsResponse.firstName,
+                lastName = personalDetailsResponse.lastName,
+                gender = personalDetailsResponse.gender
+            )
             _signUpScreenState = _signUpScreenState.copy(continueEnabled = true)
 
-        }else{
+        } else {
             _signUpScreenState = _signUpScreenState.copy(continueEnabled = false)
         }
     }
-    fun onContactDetailsResponse(contactDetailsResponse: ContactDetailsResponse){
 
-        if (contactDetailsResponse.isNoEmptyField()){
+    fun onContactDetailsResponse(contactDetailsResponse: ContactDetailsResponse) {
+
+        if (contactDetailsResponse.isNoEmptyField() && contactDetailsResponse.checkIfValidEmail()) {
             _signUpScreenData = _signUpScreenData.copy(
                 phone = contactDetailsResponse.phone,
                 email = contactDetailsResponse.email
             )
-            _signUpScreenState = _signUpScreenState.copy( continueEnabled = contactDetailsResponse.hasError)
+            _signUpScreenState =
+                _signUpScreenState.copy(continueEnabled = contactDetailsResponse.hasError)
+        } else {
+            _signUpScreenState = _signUpScreenState.copy(continueEnabled = false)
         }
     }
 
-    fun onFarmDetailsResponse(farmDetailsResponse: FarmDetailsResponse){
-        if (farmDetailsResponse.isNoEmptyField()){
-            _signUpScreenData = _signUpScreenData.copy(farmName = farmDetailsResponse.farmName, country = farmDetailsResponse.country)
+    fun onFarmDetailsResponse(farmDetailsResponse: FarmDetailsResponse) {
+        if (farmDetailsResponse.isNoEmptyField()) {
+            _signUpScreenData = _signUpScreenData.copy(
+                farmName = farmDetailsResponse.farmName,
+                country = farmDetailsResponse.country
+            )
             _signUpScreenState = _signUpScreenState.copy(continueEnabled = true)
-        }else{
+        } else {
             _signUpScreenState = _signUpScreenState.copy(continueEnabled = false)
         }
     }
 
-    fun onSetPasswordResponse(password : String, hasError :Boolean){
-        if (hasError){
+    fun onSetPasswordResponse(password: String, hasError: Boolean) {
+        if (hasError) {
             _signUpScreenState = _signUpScreenState.copy(continueEnabled = false)
-        }else {
+        } else {
             _signUpScreenData = _signUpScreenData.copy(password = password)
             _signUpScreenState = _signUpScreenState.copy(continueEnabled = true)
 
@@ -144,19 +160,14 @@ class SignUpViewModel @Inject constructor(
     fun onSignUp() {
         viewModelScope.launch {
             if (
-                //validateSignUp()
+            //validateSignUp()
                 _signUpScreenData.checkBlanks()
-                ) {
+            ) {
                 isLoading.value = true
                 val result =
-                    _signUpScreenData.country?.countryName?.let { country->
+                    _signUpScreenData.country?.countryName?.let { countryName ->
                         firebaseAuthRepository.signUp(
-                            /*email = email.value.trim(),
-                                            password = password.value,
-                                            role = "Super",
-                                            farmName = farmName.value.trim(),
-                                            firstName = name.value,
-                                            phone = phone.value*/
+
 
                             email = _signUpScreenData.email,//email.value.trim(),
                             password = _signUpScreenData.password,//password.value,
@@ -164,12 +175,11 @@ class SignUpViewModel @Inject constructor(
                             farmName = _signUpScreenData.farmName,//farmName.value.trim(),
                             firstName = _signUpScreenData.firstName,//name.value,
                             phone = _signUpScreenData.phone,//phone.value,
-                            country = country,
+                            country = countryName,
                             gender = _signUpScreenData.gender,
                             lastName = _signUpScreenData.lastName,
                         )
                     }
-                   // firebaseAuthRepository.registerUser(email.value, password.value, userType.value)
                 result?.onSuccess {
                     validationError.value = "Account created successfully, proceed to log in"
                     isLoading.value = false
@@ -177,11 +187,10 @@ class SignUpViewModel @Inject constructor(
                 }
                     ?.onFailure {
                         validationError.value = "Failed to sign up : ${it.message.toString()}"
-                        Log.d("error:","Failed to sign up : ${it.message.toString()}" )
+                        Log.d("error:", "Failed to sign up : ${it.message.toString()}")
                         isLoading.value = false
                     }
-            }
-            else{
+            } else {
                 toastMessage.value = "Please fill in all required fields to sign up"
             }
         }
@@ -189,7 +198,7 @@ class SignUpViewModel @Inject constructor(
 
     private fun validateSignUp(): Boolean {
         //check empty fields
-        if (checkEmptyFields()){
+        if (checkEmptyFields()) {
             //validationError.value = "You must fill in all fields to Sign Up"
             toastMessage.value = "You must fill in all fields to Sign Up"
             return false
@@ -220,8 +229,8 @@ class SignUpViewModel @Inject constructor(
         return true
     }
 
-    private fun checkEmptyFields() : Boolean{
-        return  farmName.value.isBlank() || email.value.isBlank() || password.value.isBlank() || confirmPassword.value.isBlank() || name.value.isBlank() || phone.value.isBlank()
+    private fun checkEmptyFields(): Boolean {
+        return farmName.value.isBlank() || email.value.isBlank() || password.value.isBlank() || confirmPassword.value.isBlank() || name.value.isBlank() || phone.value.isBlank()
     }
 }
 

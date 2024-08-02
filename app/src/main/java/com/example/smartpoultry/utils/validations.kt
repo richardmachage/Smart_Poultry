@@ -1,8 +1,10 @@
 package com.example.smartpoultry.utils
 
+import android.util.Patterns
+
 fun isValidEmail(email: String): Boolean {
-    val emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$".toRegex()
-    return email.matches(emailRegex)
+    //val emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$".toRegex()
+    return email.matches(Patterns.EMAIL_ADDRESS.toRegex())
 }
 
 fun checkPasswordLength(password: String) : Boolean{
