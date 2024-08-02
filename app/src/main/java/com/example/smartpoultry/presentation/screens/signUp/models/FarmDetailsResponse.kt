@@ -8,5 +8,5 @@ data class FarmDetailsResponse(
 )
 
 fun FarmDetailsResponse.isNoEmptyField() : Boolean {
-    return farmName.isNotBlank() || country != null
+    return farmName.isNotBlank() && country != null
 }
