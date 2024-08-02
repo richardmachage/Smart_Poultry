@@ -16,19 +16,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.tooling.preview.Preview
 import com.example.smartpoultry.R
 import com.example.smartpoultry.presentation.composables.spacers.MyVerticalSpacer
 import com.example.smartpoultry.presentation.composables.textInputFields.MyEditTextClear
 import com.example.smartpoultry.presentation.screens.signUp.models.ContactDetailsResponse
 import com.example.smartpoultry.utils.Countries
 
-@Preview(showSystemUi = true)
+//@Preview(showSystemUi = true)
 @Composable
 fun ContactDetails(
     onResponse: (ContactDetailsResponse) -> Unit = {},
     contactDetailResponse : ContactDetailsResponse = ContactDetailsResponse("",""),
-    country : Countries = Countries.KENYA
+    country : Countries?
 ){
 
     var contactResponse by remember{ mutableStateOf(contactDetailResponse)}
@@ -86,11 +85,14 @@ fun ContactDetails(
                 onResponse(contactResponse)
             },
             prefix = {
-                Text(
-                    text = country.countryCode,
-                    fontWeight = FontWeight.Bold,
-                    style = MaterialTheme.typography.bodyLarge
-                )
+                country?.let {
+                    Text(
+                        text = it.countryCode,
+                        fontWeight = FontWeight.Bold,
+                        style = MaterialTheme.typography.bodyLarge
+                    )
+                }
+
             },
             hasError = hasError,
             supportingText = {

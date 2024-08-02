@@ -90,7 +90,7 @@ class SignUpViewModel @Inject constructor(
                  return _signUpScreenData.email.isNotBlank() && _signUpScreenData.phone.isNotBlank()
              }
              SignUpParts.FARM_DETAILS -> {
-                 return _signUpScreenData.farmName.isNotBlank() && _signUpScreenData.country.isNotBlank()
+                 return _signUpScreenData.farmName.isNotBlank() && _signUpScreenData.country != null
              }
              SignUpParts.SET_PASSWORD -> {
                  return _signUpScreenData.password.isNotBlank()
@@ -111,12 +111,6 @@ class SignUpViewModel @Inject constructor(
         }
     }
     fun onContactDetailsResponse(contactDetailsResponse: ContactDetailsResponse){
-        /*if (contactDetailsResponse.isNoEmptyField()){
-            _signUpScreenData = _signUpScreenData.copy(phone = contactDetailsResponse.phone, email = contactDetailsResponse.email)
-            _signUpScreenState = _signUpScreenState.copy(continueEnabled = true)
-        }else{
-            _signUpScreenState = _signUpScreenState.copy(continueEnabled = false)
-        }*/
 
         if (contactDetailsResponse.isNoEmptyField()){
             _signUpScreenData = _signUpScreenData.copy(
@@ -129,7 +123,7 @@ class SignUpViewModel @Inject constructor(
 
     fun onFarmDetailsResponse(farmDetailsResponse: FarmDetailsResponse){
         if (farmDetailsResponse.isNoEmptyField()){
-            _signUpScreenData = signUpScreenData.copy(farmName = farmDetailsResponse.farmName, country = farmDetailsResponse.country)
+            _signUpScreenData = _signUpScreenData.copy(farmName = farmDetailsResponse.farmName, country = farmDetailsResponse.country)
             _signUpScreenState = _signUpScreenState.copy(continueEnabled = true)
         }else{
             _signUpScreenState = _signUpScreenState.copy(continueEnabled = false)
@@ -155,31 +149,33 @@ class SignUpViewModel @Inject constructor(
                 ) {
                 isLoading.value = true
                 val result =
-                    firebaseAuthRepository.signUp(
-                        /*email = email.value.trim(),
-                        password = password.value,
-                        role = "Super",
-                        farmName = farmName.value.trim(),
-                        firstName = name.value,
-                        phone = phone.value*/
+                    _signUpScreenData.country?.countryName?.let { country->
+                        firebaseAuthRepository.signUp(
+                            /*email = email.value.trim(),
+                                            password = password.value,
+                                            role = "Super",
+                                            farmName = farmName.value.trim(),
+                                            firstName = name.value,
+                                            phone = phone.value*/
 
-                        email = _signUpScreenData.email,//email.value.trim(),
-                        password = _signUpScreenData.password,//password.value,
-                        role = "Super",
-                        farmName = _signUpScreenData.farmName,//farmName.value.trim(),
-                        firstName = _signUpScreenData.firstName,//name.value,
-                        phone = _signUpScreenData.phone,//phone.value,
-                        country = _signUpScreenData.country,
-                        gender = _signUpScreenData.gender,
-                        lastName = _signUpScreenData.lastName,
-                    )
+                            email = _signUpScreenData.email,//email.value.trim(),
+                            password = _signUpScreenData.password,//password.value,
+                            role = "Super",
+                            farmName = _signUpScreenData.farmName,//farmName.value.trim(),
+                            firstName = _signUpScreenData.firstName,//name.value,
+                            phone = _signUpScreenData.phone,//phone.value,
+                            country = country,
+                            gender = _signUpScreenData.gender,
+                            lastName = _signUpScreenData.lastName,
+                        )
+                    }
                    // firebaseAuthRepository.registerUser(email.value, password.value, userType.value)
-                result.onSuccess {
+                result?.onSuccess {
                     validationError.value = "Account created successfully, proceed to log in"
                     isLoading.value = false
                     isCreateAccountSuccess = true
                 }
-                    .onFailure {
+                    ?.onFailure {
                         validationError.value = "Failed to sign up : ${it.message.toString()}"
                         Log.d("error:","Failed to sign up : ${it.message.toString()}" )
                         isLoading.value = false

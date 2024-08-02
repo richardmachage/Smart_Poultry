@@ -8,7 +8,7 @@ data class RegisterUserScreenData(
     var phone : String ="",
     var email : String ="",
     var gender : String = "Select gender",//Genders.NONE.type,
-    var country : Countries,
+    var country : Countries?,
     var eggCollectionAccess : Boolean = false,
     var editHenCountAccess : Boolean = false,
     var manageBlockCells : Boolean = false,

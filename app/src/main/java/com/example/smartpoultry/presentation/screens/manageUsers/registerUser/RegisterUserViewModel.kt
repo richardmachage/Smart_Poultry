@@ -175,12 +175,12 @@ class RegisterUserViewModel @Inject constructor(
         }
     }
 
-    private fun getCountry(): Countries {
+    fun getCountry(): Countries? {
         val country = preferencesRepo.loadData(FARM_COUNTRY_KEY) ?: Countries.KENYA.countryName
         return when (country) {
             Countries.KENYA.countryName -> Countries.KENYA
             Countries.TANZANIA.countryName -> Countries.TANZANIA
-            else -> Countries.TANZANIA
+            else -> null
         }
     }
 

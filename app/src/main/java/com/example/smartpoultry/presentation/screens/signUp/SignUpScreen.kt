@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
@@ -135,14 +136,7 @@ fun SignUpScreen(
                             modifier = Modifier.fillMaxWidth().padding(10.dp),
                             text = singUpViewModel.signUpScreenState.currentPart.title
                         )
-                       /* Text(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(10.dp),
-                            text = singUpViewModel.signUpScreenState.currentPart.title,//"Hello, lets start with your name",
-                            style = MaterialTheme.typography.headlineMedium,
-                            fontStyle = FontStyle.Italic
-                        )*/
+
 
                         //Part
                         AnimatedContent(
@@ -176,7 +170,8 @@ fun SignUpScreen(
                                             singUpViewModel.onContactDetailsResponse(
                                                 contactDetailsResponse = it
                                             )
-                                        }
+                                        },
+                                        country = singUpViewModel.signUpScreenData.country
                                     )
                                 }
 
@@ -208,10 +203,14 @@ fun SignUpScreen(
 
                         Box(
                             modifier =
-                            if (!singUpViewModel.signUpScreenState.showPrevious) Modifier
+                            if (!singUpViewModel.signUpScreenState.showPrevious)
+                                Modifier
                                 .fillMaxWidth()
-                                .animateContentSize() else Modifier
+                                .animateContentSize()
+                            else
+                                Modifier
                                 .fillMaxSize()
+                                .imePadding()
                                 .animateContentSize(),
                             contentAlignment = Alignment.BottomCenter
                         ) {

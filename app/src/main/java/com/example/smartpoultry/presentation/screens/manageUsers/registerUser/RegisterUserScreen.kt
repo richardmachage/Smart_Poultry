@@ -131,7 +131,8 @@ fun RegisterUserScreen(
                                     ),
                                     onResponse = {contactDetails->
                                         registerUserViewModel.onContactDetailsResponse(contactDetails)
-                                    }
+                                    },
+                                    country = registerUserViewModel.getCountry()
                                 )
                             }
 

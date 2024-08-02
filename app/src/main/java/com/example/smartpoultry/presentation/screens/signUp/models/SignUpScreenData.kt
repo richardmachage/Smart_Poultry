@@ -1,5 +1,7 @@
 package com.example.smartpoultry.presentation.screens.signUp.models
 
+import com.example.smartpoultry.utils.Countries
+
 data class SignUpScreenData(
     var firstName: String = "",
     var lastName: String = "",
@@ -7,7 +9,7 @@ data class SignUpScreenData(
     var phone: String = "",
     var email: String = "",
     var farmName: String = "",
-    var country: String = "",
+    var country: Countries? = null,//String = "",
     var password: String = ""
 ) {
     fun checkBlanks(): Boolean {
@@ -18,7 +20,7 @@ data class SignUpScreenData(
                 phone.isNotBlank() ||
                 email.isNotBlank() ||
                 farmName.isNotBlank() ||
-                country.isNotBlank() ||
+                country != null ||
                 password.isNotBlank())
     }
 }

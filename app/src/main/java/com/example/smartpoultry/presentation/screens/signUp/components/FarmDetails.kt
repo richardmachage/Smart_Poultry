@@ -11,18 +11,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.tooling.preview.Preview
 import com.example.smartpoultry.R
-import com.example.smartpoultry.presentation.composables.dropDownMenus.DropDownMenu
+import com.example.smartpoultry.presentation.composables.dropDownMenus.CountriesDropDownMenu
 import com.example.smartpoultry.presentation.composables.spacers.MyVerticalSpacer
 import com.example.smartpoultry.presentation.composables.textInputFields.MyEditTextClear
-
 import com.example.smartpoultry.presentation.screens.signUp.models.FarmDetailsResponse
 
-@Preview
 @Composable
 fun FarmDetails(
-    farmDetailsResponse: FarmDetailsResponse = FarmDetailsResponse("",""),
+    farmDetailsResponse: FarmDetailsResponse ,//= FarmDetailsResponse("",""),
     onResponse : (FarmDetailsResponse) ->Unit = {}
 ){
     var farmDetails by remember { mutableStateOf(farmDetailsResponse) }
@@ -48,13 +45,13 @@ fun FarmDetails(
 
         MyVerticalSpacer(height = 5)
 
-        DropDownMenu(
-            items = listOf("Kenya","Tanzania", "Uganda"),
-            defaultValue = farmDetails.country.ifBlank {  "Select your Country"},
-            onItemClick = {
-                farmDetails = farmDetails.copy(country = it)
-                onResponse(farmDetails)
-            }
-        )
+            CountriesDropDownMenu (
+                selectedCountry = farmDetails.country,//if(farmDetails.country == null) "Select your Country" else farmDetails.country!!.countryName,//country.countryName.ifBlank { "Select your Country" },
+                onItemClick = {
+                    farmDetails = farmDetails.copy(country = it)
+                    onResponse(farmDetails)
+                }
+            )
+        }
+
     }
-}

@@ -14,17 +14,20 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.example.smartpoultry.R
 import com.example.smartpoultry.utils.Countries
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CountriesDropDownMenu(
     modifier: Modifier = Modifier,
+    selectedCountry : Countries? ,
     onItemClick: (Countries) -> Unit,
 ){
     val listOfCountries = Countries.entries.toList()
-    var selectedItem by remember { mutableStateOf("Select your Country") }
+    var selectedItem by remember { mutableStateOf(selectedCountry) }
     var expanded by  remember { mutableStateOf(false) }
 
 
@@ -34,7 +37,7 @@ fun CountriesDropDownMenu(
                 .menuAnchor()
                 .fillMaxWidth()
                 .padding(start = (6.dp), end = (6.dp)),
-            value = selectedItem,
+            value = if (selectedItem != null) selectedItem!!.countryName else stringResource(id = R.string.select_your_country),//"Select your country",//selectedItem,
             onValueChange = {},
             readOnly = true,
             trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
@@ -49,7 +52,7 @@ fun CountriesDropDownMenu(
                 DropdownMenuItem(
                     text = { Text(text = country.countryName) },
                     onClick = {
-                        selectedItem = country.countryName
+                        selectedItem = country
                         onItemClick(country)
                         expanded = false
                     }
