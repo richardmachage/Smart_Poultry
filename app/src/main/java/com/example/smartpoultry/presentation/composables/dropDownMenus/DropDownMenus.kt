@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -163,60 +162,7 @@ fun DropDownMenu(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun UserTypeDropDownMenu(
-    listOfItems: List<String> = listOf("Collector","Manager", "Director"),
-    onItemClick: (String) -> Unit,
-    modifier: Modifier = Modifier,
-){
 
-    var selectedText by remember { mutableStateOf("-") }
-    var expanded by remember { mutableStateOf(false) }
-
-    ExposedDropdownMenuBox(
-        modifier = modifier
-            .padding(3.dp),
-        expanded = expanded,
-        onExpandedChange = {
-            expanded = !expanded
-        }) {
-
-        OutlinedTextField(
-            modifier = modifier
-                .menuAnchor()
-                .fillMaxWidth()
-                .padding(start = (6.dp), end = (6.dp)),
-            value = " $selectedText",
-            onValueChange = {},
-            readOnly = true,
-            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
-            label = { Text(text = "User Type")},
-            leadingIcon = {
-                Icon(
-                    imageVector = Icons.Default.AccountCircle,
-                    contentDescription = "User"
-                )
-            }
-        )
-
-        ExposedDropdownMenu(
-            expanded = expanded,
-            onDismissRequest = { expanded = false }
-        ) {
-            listOfItems.forEach { item ->
-                DropdownMenuItem(
-                    text = { Text(text = item) },
-                    onClick = {
-                        selectedText = item
-                        onItemClick(item)
-                        expanded = false
-                    }
-                )
-            }
-        }
-    }
-}
 
 
 
