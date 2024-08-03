@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -31,7 +30,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextRange
@@ -40,12 +38,12 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.smartpoultry.R
-import com.example.smartpoultry.presentation.composables.others.MyBorderedColumn
 import com.example.smartpoultry.presentation.composables.buttons.MyOutlineButton
 import com.example.smartpoultry.presentation.composables.cards.MyCard
-import com.example.smartpoultry.presentation.composables.progressBars.MyCircularProgressBar
-import com.example.smartpoultry.presentation.composables.others.MyDatePicker
 import com.example.smartpoultry.presentation.composables.dialogs.MyInputDialog
+import com.example.smartpoultry.presentation.composables.others.MyBorderedColumn
+import com.example.smartpoultry.presentation.composables.others.MyDatePicker
+import com.example.smartpoultry.presentation.composables.progressBars.MyCircularProgressBar
 import com.example.smartpoultry.presentation.uiModels.CellEggCollection
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -198,9 +196,7 @@ fun EggScreen(
                                             itemsIndexed(listOfBlocks[blockIndex].cells) { cellIndex, cell ->
 
                                                 MyCard(
-                                                    modifier = Modifier.width(
-                                                        (LocalConfiguration.current.screenWidthDp / 3).dp
-                                                    )
+                                                    modifier = Modifier.padding(4.dp)
                                                 ) {
                                                     Text(
                                                         text = "Cell :${cell.cellNum}",
