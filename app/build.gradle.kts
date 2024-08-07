@@ -33,6 +33,7 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            signingConfig = signingConfigs.getByName("debug")
         }
     }
     compileOptions {
@@ -139,5 +140,9 @@ dependencies {
 
     //SplashScreen api
     implementation("androidx.core:core-splashscreen:1.0.1")
+
+    //Play Billing
+    val billing_version = "7.0.0"
+    implementation("com.android.billingclient:billing:$billing_version")
 
 }

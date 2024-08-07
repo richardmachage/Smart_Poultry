@@ -315,24 +315,6 @@ fun HomeScreen(
                 }
             }
 
-            /*  MyVerticalSpacer(height = 5)
-        Card(
-            shape = RoundedCornerShape(16.dp),
-            elevation = CardDefaults.cardElevation(8.dp),
-            modifier = Modifier.fillMaxWidth()//.padding(6.dp)
-
-        ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(MaterialTheme.colorScheme.surfaceContainer)
-            ) {
-                Text(
-                    color = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier.fillMaxWidth().padding(6.dp),
-                    text = "Egg Laying Percentage  -> 80%")
-            }
-        }*/
 
         }
     }
