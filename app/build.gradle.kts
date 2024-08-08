@@ -10,11 +10,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.smartpoultry"
+    namespace = "com.forsythe.smartpoultry"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.smartpoultry"
+        applicationId = "com.forsythe.smartpoultry"
         minSdk = 24
         targetSdk = 34
         versionCode = 1

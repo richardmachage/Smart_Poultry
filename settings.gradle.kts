@@ -15,4 +15,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "Smart Poultry"
 include(":app")
- 
+include(":billing")

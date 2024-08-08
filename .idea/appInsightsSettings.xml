@@ -4,13 +4,27 @@
     <option name="selectedTabId" value="Firebase Crashlytics" />
     <option name="tabSettings">
       <map>
+        <entry key="Android Vitals">
+          <value>
+            <InsightsFilterSettings>
+              <option name="connection">
+                <ConnectionSetting>
+                  <option name="appId" value="com.forsythe.smartpoultry" />
+                </ConnectionSetting>
+              </option>
+              <option name="signal" value="SIGNAL_UNSPECIFIED" />
+              <option name="timeIntervalDays" value="SEVEN_DAYS" />
+              <option name="visibilityType" value="ALL" />
+            </InsightsFilterSettings>
+          </value>
+        </entry>
         <entry key="Firebase Crashlytics">
           <value>
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="com.example.smartpoultry" />
-                  <option name="mobileSdkAppId" value="1:283094112127:android:3ca8066a9038f24a676c4a" />
+                  <option name="appId" value="com.forsythe.smartpoultry" />
+                  <option name="mobileSdkAppId" value="1:283094112127:android:676616ea4e08537a676c4a" />
                   <option name="projectId" value="smart-poultry-a2600" />
                   <option name="projectNumber" value="283094112127" />
                 </ConnectionSetting>
