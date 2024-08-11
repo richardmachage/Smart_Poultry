@@ -124,7 +124,89 @@ class EggCollectionRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun addNewRecord(eggCollection: EggCollection): Boolean {
+    override suspend fun addNewRecord(eggCollection: EggCollection, isNetworkAvailable : Boolean): AddRecordResult {
+        var result = AddRecordResult()
+        return try {
+            // First insert to Local DB to get record Id
+            val recordId = eggCollectionDao.insertCollectionRecord(eggCollection)
+
+            //asertain networkconnection
+            if (isNetworkAvailable) {
+                // Device is online
+                val farmsCollection = fireStoreDb.collection(FARMS_COLLECTION)
+                val farmDocument = farmsCollection.document(getFarmId())
+                val eggsCollectionRef: CollectionReference =
+                    farmDocument.collection(EGGS_COLLECTION)
+
+                eggsCollectionRef
+                    .document(recordId.toString())
+                    .set(
+                        EggCollection(
+                            productionId = recordId.toInt(),
+                            date = eggCollection.date,
+                            cellId = eggCollection.cellId,
+                            eggCount = eggCollection.eggCount,
+                            henCount = eggCollection.henCount
+                        )
+                    )
+                    .addOnSuccessListener {
+                        result = result.copy(
+                            isSuccess = true,
+                            message =  "Success: added record $recordId for cellId ${eggCollection.cellId} to firebase "
+
+                        )
+                        /*Log.d(
+                            "add new record",
+                            "Success: added record $recordId for cellId ${eggCollection.cellId} to firebase "
+                        )*/
+                    }
+                    .addOnFailureListener {
+                        Log.d(
+                            "add new record",
+                            "Failed to add record $recordId for cellId ${eggCollection.cellId} to firebase "
+                        )
+                        CoroutineScope(Dispatchers.IO).launch {
+                            eggCollectionDao.deleteCollectionRecord(recordId.toInt())
+                        }
+
+                        result = result.copy(
+                            isSuccess = false,
+                            message ="Failed to add record $recordId for cellId ${eggCollection.cellId} to firebase "
+                        )
+                    }
+                    .await()
+                return result
+            }
+            else{
+                // Device is offline: Update local storage and assume success
+                //proceed to set, using caching
+                val farmsCollection = fireStoreDb.collection(FARMS_COLLECTION)
+                val farmDocument = farmsCollection.document(getFarmId())
+                val eggsCollectionRef: CollectionReference = farmDocument.collection(EGGS_COLLECTION)
+
+                eggsCollectionRef
+                    .document(recordId.toString())
+                    .set(
+                        EggCollection(
+                            productionId = recordId.toInt(),
+                            date = eggCollection.date,
+                            cellId = eggCollection.cellId,
+                            eggCount = eggCollection.eggCount,
+                            henCount = eggCollection.henCount
+                        )
+                    )
+                // Assume success since the write will be cached
+                result = result.copy(isSuccess = true, message = "Record pending, waiting for internet connection to sync")
+                return result
+            }
+        }
+        catch (exception : Exception){
+            result = result.copy(isSuccess = false, message = "Failed: ${exception.message.toString()}")
+
+            return result
+        }
+
+        /*
         try {
             var insertStatus:Boolean = false
 
@@ -165,7 +247,7 @@ class EggCollectionRepositoryImpl @Inject constructor(
         } catch (e: Exception) {
             Log.d("add new record", "Failed: ${e.message.toString()} ")
             return false
-        }
+        }*/
     }
 
     override suspend fun deleteRecord(recordId: Int) {
@@ -266,4 +348,10 @@ class EggCollectionRepositoryImpl @Inject constructor(
     }
 
     private fun getFarmId() = preferencesRepo.loadData(FARM_ID_KEY)!!
+
 }
+
+data class AddRecordResult(
+    var isSuccess : Boolean = false,
+    var message: String = ""
+)

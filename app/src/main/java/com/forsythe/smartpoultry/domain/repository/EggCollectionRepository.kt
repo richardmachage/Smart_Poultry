@@ -3,11 +3,12 @@ package com.forsythe.smartpoultry.domain.repository
 import com.forsythe.smartpoultry.data.dataModels.DailyEggCollection
 import com.forsythe.smartpoultry.data.dataModels.EggRecordFull
 import com.forsythe.smartpoultry.data.dataSource.local.room.entities.eggCollection.EggCollection
+import com.forsythe.smartpoultry.data.repositoryImpl.AddRecordResult
 import kotlinx.coroutines.flow.Flow
 import java.sql.Date
 
 interface EggCollectionRepository{
-    suspend fun addNewRecord(eggCollection: EggCollection) : Boolean
+    suspend fun addNewRecord(eggCollection: EggCollection, isNetworkAvailable : Boolean) : AddRecordResult
 
     suspend fun deleteRecord(recordId: Int)
 

@@ -117,7 +117,8 @@ fun EggScreen(
                                 eggViewModel.zeroCellEggs?.let {thisCell->
                                     eggViewModel.onSaveSingleCellRecord(
                                         cell = thisCell,
-                                        eggCount = 0
+                                        eggCount = 0,
+                                        isNetAvailable = context.isNetworkAvailable()
                                     )
                                     showZeroEggsDialog = false
                                 }
@@ -138,7 +139,7 @@ fun EggScreen(
                                     eggViewModel.zeroCellEggs = cell
                                     showZeroEggsDialog = true
                                 } else{
-                                    eggViewModel.onSaveSingleCellRecord(cell,eggCount)
+                                    eggViewModel.onSaveSingleCellRecord(cell,eggCount, context.isNetworkAvailable())
                                 }
                             }
                         )
@@ -274,7 +275,8 @@ fun EggScreen(
                                             onButtonClick = {
                                                 eggViewModel.onSaveRecord(
                                                     block = blockIndex,
-                                                    cellsInput = listOfBlocks[blockIndex].cells
+                                                    cellsInput = listOfBlocks[blockIndex].cells,
+                                                    isNetAvailable = context.isNetworkAvailable()
                                                 )
 
                                             },

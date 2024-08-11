@@ -114,7 +114,7 @@ class EggScreenViewModel @Inject constructor(
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    fun onSaveRecord(block: Int, cellsInput: List<CellEggCollection>) {
+    fun onSaveRecord(block: Int, cellsInput: List<CellEggCollection>, isNetAvailable : Boolean) {
         viewModelScope.launch {
             isLoading.value = true
             run loop@{
@@ -126,8 +126,9 @@ class EggScreenViewModel @Inject constructor(
                                 cellId = record.cellId,
                                 eggCount = record.eggCount,
                                 henCount = record.henCount
-                            )
-                        )
+                            ),
+                            isNetAvailable
+                        ).isSuccess
                     ) {
                         insertStatus.value = true
                         //updateEggCount(blockIndex = block, cellIndex = index, newEggCount = 0)
@@ -148,22 +149,25 @@ class EggScreenViewModel @Inject constructor(
         }
     }
 
-    fun onSaveSingleCellRecord(cell: Cells, eggCount: Int) {
+    fun onSaveSingleCellRecord(cell: Cells, eggCount: Int, isNetAvailable : Boolean) {
         viewModelScope.launch {
             isLoading.value = true
-            insertStatus.value = eggCollectionRepository.addNewRecord(
+            //insertStatus.value
+            val result = eggCollectionRepository.addNewRecord(
                 EggCollection(
                     date = chosenDateValue,
                     cellId = cell.cellId,
                     eggCount = eggCount,
-                    henCount = cell.henCount
-                )
+                    henCount = cell.henCount,
+                ),
+                isNetAvailable
             )
             isLoading.value = false
 
-            toastMessage.value =
+            /*toastMessage.value =
                 if (insertStatus.value) "saved successfully"
-                else "Failed! Records for ${cell.cellNum} on ${selectedDate.value} already exist"
+                else "Failed! Records for ${cell.cellNum} on ${selectedDate.value} already exist"*/
+            toastMessage.value = result.message
         }
     }
 
