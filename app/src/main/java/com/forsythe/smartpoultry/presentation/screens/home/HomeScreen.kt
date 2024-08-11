@@ -115,11 +115,7 @@ fun HomeScreen(
             }
         }
     }
-    /*Surface(
-        modifier = Modifier
-            .fillMaxSize(),
-        color = MaterialTheme.colorScheme.background
-    ) {*/
+
     MyCircularProgressBar(
         isLoading = homeViewModel.isLoading,
         displayText = homeViewModel.isLoadingText
@@ -131,8 +127,6 @@ fun HomeScreen(
     ){
         Column( //Full Screen column
             modifier = Modifier
-                //.fillMaxSize()
-                //.padding(8.dp)
                 .verticalScroll(rememberScrollState())
         ) {
             var showPasswordResetDialog by remember {
@@ -184,7 +178,6 @@ fun HomeScreen(
                 }
             }
 
-
             Card(
                 shape = RoundedCornerShape(16.dp),
                 elevation = CardDefaults.cardElevation(8.dp),
@@ -200,7 +193,7 @@ fun HomeScreen(
                     ) {
                     TitleText(
                         modifier = Modifier.padding(5.dp),
-                        text = stringResource(id = R.string.inventory_home_screen)
+                        text = "${homeViewModel.farmName.value} Inventory",//stringResource(id = R.string.inventory_home_screen)
                     )
 
 
