@@ -49,6 +49,7 @@ import com.forsythe.smartpoultry.presentation.composables.textInputFields.MyOutl
 import com.forsythe.smartpoultry.presentation.destinations.CellsScreenDestination
 import com.forsythe.smartpoultry.presentation.uiModels.BlockItem
 import com.forsythe.smartpoultry.presentation.uiModels.BlockParse
+import com.forsythe.smartpoultry.utils.isNetworkAvailable
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -70,8 +71,6 @@ fun BlockCellScreen(
 
     //AddBlockDialog
     if (showDialog) {
-        // This dialog asks for the block number and number of cells.
-        // Upon confirmation, it creates a BlockItem and calls onAddNewBlock.
         AlertDialog(
             onDismissRequest = {
                 blockCellViewModel.showDialog.value = false
@@ -85,11 +84,7 @@ fun BlockCellScreen(
                         initialText = blockCellViewModel.blockNumText.value,
                         onValueChange = { blockCellViewModel.blockNumText.value = it },
                     )
-                    /*TextField(
-                        value = blockCellViewModel.blockNumText.value,
-                        onValueChange = { blockCellViewModel.blockNumText.value = it },
-                        label = { Text(text = "Block Number") },
-                    )*/
+
                     MyVerticalSpacer(height = 5)
 
                     MyOutlineTextFiled(
@@ -98,11 +93,6 @@ fun BlockCellScreen(
                         initialText = blockCellViewModel.cellsText.value,
                         onValueChange = { blockCellViewModel.cellsText.value = it },
                     )
-                    /*TextField(
-                        value = blockCellViewModel.cellsText.value,
-                        onValueChange = { blockCellViewModel.cellsText.value = it },
-                        label = { Text(text = "Number of cells") },
-                    )*/
                 }
             },
 
@@ -113,7 +103,8 @@ fun BlockCellScreen(
                             BlockItem(
                                 blockNum = blockCellViewModel.blockNumText.value.toInt(),
                                 numberOfCells = blockCellViewModel.cellsText.value.toInt()
-                            )
+                            ),
+                            isNetAvailable = context.isNetworkAvailable()
                         )
                         blockCellViewModel.showDialog.value = false
                         blockCellViewModel.clearTextFields()
@@ -136,7 +127,6 @@ fun BlockCellScreen(
 
 
     Scaffold(
-        //if (userRole != "Collector")
         floatingActionButton = {
 
             if (blockCellViewModel.getManageBlockCellsAccess()) {
@@ -168,8 +158,7 @@ fun BlockCellScreen(
         ) {
             LazyColumn(
                 modifier = Modifier,
-                //.padding(6.dp)
-                //verticalArrangement = Arrangement.spacedBy(1.dp)
+
             ) {
                 itemsIndexed(
                     listOfBlocksWithCells.sortedBy { it.block.blockNum },

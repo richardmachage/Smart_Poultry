@@ -5,7 +5,7 @@ import com.forsythe.smartpoultry.data.dataSource.local.room.relations.BlocksWith
 import kotlinx.coroutines.flow.Flow
 
 interface BlocksRepository {
-    suspend fun addNewBlock(block: Blocks) : Long
+    suspend fun addNewBlock(block: Blocks, isNetAvailable:Boolean) : Long
     suspend fun deleteBlock(block: Blocks)
 
     fun getAllBlocks() : Flow<List<Blocks>>

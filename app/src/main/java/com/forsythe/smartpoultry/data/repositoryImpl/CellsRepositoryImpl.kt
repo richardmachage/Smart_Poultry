@@ -2,9 +2,9 @@ package com.forsythe.smartpoultry.data.repositoryImpl
 
 import android.util.Log
 import com.forsythe.smartpoultry.data.dataSource.local.datastore.PreferencesRepo
-import com.forsythe.smartpoultry.data.dataSource.remote.firebase.models.Cell
 import com.forsythe.smartpoultry.data.dataSource.local.room.entities.cells.Cells
 import com.forsythe.smartpoultry.data.dataSource.local.room.entities.cells.CellsDao
+import com.forsythe.smartpoultry.data.dataSource.remote.firebase.models.Cell
 import com.forsythe.smartpoultry.domain.repository.CellsRepository
 import com.forsythe.smartpoultry.utils.CELLS_COLLECTION
 import com.forsythe.smartpoultry.utils.FARMS_COLLECTION
@@ -97,79 +97,6 @@ class CellsRepositoryImpl @Inject constructor(
         }
         //}
 
-        /*else {
-            // to retrieve farm Id first here
-            fireStoreDb.collection(USERS_COLLECTION)
-                .document(firebaseAuth.currentUser?.uid.toString())
-                .get()
-                .addOnSuccessListener { docSnapshot ->
-                    val user = docSnapshot.toObject(User::class.java)
-                    user?.let {
-                        //store the id in preferences
-                        preferencesRepo.saveData(FARM_ID_KEY, it.farmId)
-                        val farmID = preferencesRepo.loadData(FARM_ID_KEY) ?: ""
-                        val farmDoc = farmsCollection.document(farmID)
-                        val cellsColle = farmDoc.collection(CELLS_COLLECTION)
-
-                        cellsColle.addSnapshotListener { querySnapshot, exception ->
-                            if (exception != null) { //if an error exists, it logs the error and returns early from the listener.
-                                Log.w("Error", "Listen failed.", exception)
-                                return@addSnapshotListener
-                            }
-
-                            for (docChange in querySnapshot!!.documentChanges) {
-                                val cell =
-                                    docChange.document.toObject(Cell::class.java) // converting the doc to cell object
-
-                                when (docChange.type) {
-                                    DocumentChange.Type.ADDED -> {
-                                        CoroutineScope(Dispatchers.IO).launch {
-                                            cellsDao.addNewCell(
-                                                Cells(
-                                                    cellId = cell.cellId,
-                                                    cellNum = cell.cellNum,
-                                                    blockId = cell.blockId,
-                                                    henCount = cell.henCount
-                                                )
-                                            )
-                                        }
-                                    }
-
-                                    DocumentChange.Type.MODIFIED -> {
-                                        CoroutineScope(Dispatchers.IO).launch {
-                                            cellsDao.updateCellInfo(
-                                                Cells(
-                                                    cellId = cell.cellId,
-                                                    cellNum = cell.cellNum,
-                                                    blockId = cell.blockId,
-                                                    henCount = cell.henCount
-                                                )
-                                            )
-                                        }
-                                    }
-
-                                    DocumentChange.Type.REMOVED -> {
-                                        CoroutineScope(Dispatchers.IO).launch {
-                                            cellsDao.deleteCell(
-                                                Cells(
-                                                    cellId = cell.cellId,
-                                                    cellNum = cell.cellNum,
-                                                    blockId = cell.blockId,
-                                                    henCount = cell.henCount
-                                                )
-                                            )
-                                        }
-                                    }
-
-                                }
-                            }
-                        }
-
-                    }
-
-                }
-
-        }*/
     }
 
     override suspend fun addNewCell(cell: Cells) {
@@ -187,12 +114,7 @@ class CellsRepositoryImpl @Inject constructor(
                     henCount = cell.henCount
                 )
             )
-            .addOnSuccessListener {
 
-            }
-            .addOnFailureListener {
-
-            }
     }
 
     override suspend fun deleteCell(cell: Cells) {
@@ -204,12 +126,7 @@ class CellsRepositoryImpl @Inject constructor(
         val cellsCollection: CollectionReference = farmDocument.collection(CELLS_COLLECTION)
         cellsCollection.document(cell.cellId.toString())
             .delete()
-            .addOnSuccessListener {
 
-            }
-            .addOnFailureListener {
-
-            }
     }
 
     override fun getAllCells(): Flow<List<Cells>> {

@@ -48,24 +48,27 @@ class BlockCellViewModel @Inject constructor(
     var cellsText = mutableStateOf("")
 
     //fun getUserRole() = preferencesRepo.loadData(USER_ROLE_KEY)!!
-    fun getManageBlockCellsAccess() = preferencesRepo.loadData(MANAGE_BLOCKS_CELLS_ACCESS).toBoolean()
-    fun onAddNewBlock(blockItem: BlockItem) {
+    fun getManageBlockCellsAccess() =
+        preferencesRepo.loadData(MANAGE_BLOCKS_CELLS_ACCESS).toBoolean()
+
+    fun onAddNewBlock(blockItem: BlockItem, isNetAvailable: Boolean) {
         viewModelScope.launch {
             //Create the new Block first
             val blockId = blocksRepository.addNewBlock(
                 block = Blocks(
                     blockNum = blockItem.blockNum,
                     totalCells = blockItem.numberOfCells
-                )
+                ),
+                isNetAvailable = isNetAvailable
             )
 
             //Then also create the cells for that block
-            for(cell in 1..blockItem.numberOfCells){
+            for (cell in 1..blockItem.numberOfCells) {
                 cellsRepository.addNewCell(
                     Cells(
-                    blockId = blockId.toInt(),
-                    cellNum = cell
-                )
+                        blockId = blockId.toInt(),
+                        cellNum = cell
+                    )
                 )
             }
 
@@ -73,14 +76,14 @@ class BlockCellViewModel @Inject constructor(
         }
     }
 
-    fun onDeleteBlock(block: Blocks){
+    fun onDeleteBlock(block: Blocks) {
 
         viewModelScope.launch {
             blocksRepository.deleteBlock(block = block)
         }
     }
 
-    fun clearTextFields(){
+    fun clearTextFields() {
         blockNumText.value = ""
         cellsText.value = ""
     }
