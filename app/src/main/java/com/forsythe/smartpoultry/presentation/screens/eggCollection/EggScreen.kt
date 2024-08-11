@@ -45,6 +45,7 @@ import com.forsythe.smartpoultry.presentation.composables.others.MyBorderedColum
 import com.forsythe.smartpoultry.presentation.composables.others.MyDatePicker
 import com.forsythe.smartpoultry.presentation.composables.progressBars.MyCircularProgressBar
 import com.forsythe.smartpoultry.presentation.uiModels.CellEggCollection
+import com.forsythe.smartpoultry.utils.isNetworkAvailable
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.vanpra.composematerialdialogs.rememberMaterialDialogState
@@ -87,6 +88,8 @@ fun EggScreen(
                 onButtonClick = { switchModes = !switchModes },
                 btnName = if (!switchModes) "Switch to input Per Cell" else "Switch to input Per Block"
             )
+            val isNetAvailable = context.isNetworkAvailable().toString()
+            Text(text = "Connection status : $isNetAvailable")
             AnimatedContent(targetState = switchModes, label = "eggCollectionMode") {state->
                 if (state) {
                     Column(
