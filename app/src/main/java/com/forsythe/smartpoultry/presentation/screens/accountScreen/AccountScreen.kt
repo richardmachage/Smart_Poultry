@@ -51,8 +51,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.forsythe.smartpoultry.R
-import com.forsythe.smartpoultry.presentation.composables.progressBars.MyCircularProgressBar
 import com.forsythe.smartpoultry.presentation.composables.dialogs.MyInputDialog
+import com.forsythe.smartpoultry.presentation.composables.progressBars.MyCircularProgressBar
 import com.forsythe.smartpoultry.presentation.composables.spacers.MyVerticalSpacer
 import com.forsythe.smartpoultry.presentation.composables.textInputFields.MyOutlineTextFiled
 import com.forsythe.smartpoultry.presentation.destinations.ManageUsersScreenDestination
@@ -67,7 +67,7 @@ fun AccountScreen(
 ) {
     val accountViewModel = hiltViewModel<AccountViewModel>()
     val context = LocalContext.current
-    val userName by remember {
+    var userName by remember {
         mutableStateOf(accountViewModel.user.firstName)
     }//accountViewModel.userName.collectAsState()
     val userEmail by remember {
@@ -139,32 +139,50 @@ fun AccountScreen(
                         Spacer(modifier = Modifier.height(16.dp))
                         //Name
                         var showNameDialog by remember { mutableStateOf(false) }
-                        var newUserName by remember { mutableStateOf(userName) }
+                        var newFirstName by remember { mutableStateOf(accountViewModel.user.firstName )}
+                        var newLastName by remember { mutableStateOf(accountViewModel.user.lastName )}
                         MyInputDialog(
                             showDialog = showNameDialog,
                             title = stringResource(id = R.string.user_name_title),//"User Name",
                             onConfirm = {
-                                if (newUserName.isBlank())
+                                if (newFirstName.isBlank() || newLastName.isBlank())
                                     accountViewModel.toastMessage.value = "Empty field"
-                                else if (newUserName == userName)
+                                else if (newFirstName == accountViewModel.user.firstName && newLastName == accountViewModel.user.lastName)
                                     accountViewModel.toastMessage.value =
                                         "Same name, no change made"
                                 else {
-                                    accountViewModel.changeUserName(newUserName)
+                                    if (newFirstName != accountViewModel.user.firstName){
+                                        accountViewModel.editFirstName(newFirstName)
+                                    }
+                                    if (newLastName != accountViewModel.user.lastName)
+                                        accountViewModel.editLastName(newLastName)
+                                    }
                                     showNameDialog = false
-                                }
                             },
                             onDismiss = { showNameDialog = false }
                         ) {
-                            MyOutlineTextFiled(
-                                modifier = Modifier.fillMaxWidth(),
-                                label = "User Name",
-                                keyboardType = KeyboardType.Text,
-                                initialText = newUserName,
-                                onValueChange = {
-                                    newUserName = it
-                                }
-                            )
+                            Column {
+
+                                MyOutlineTextFiled(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    label = "First Name",
+                                    keyboardType = KeyboardType.Text,
+                                    initialText = newFirstName,
+                                    onValueChange = {
+                                        newFirstName = it
+                                    }
+                                )
+
+                                MyOutlineTextFiled(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    label = "Last Name",
+                                    keyboardType = KeyboardType.Text,
+                                    initialText = newLastName,
+                                    onValueChange = {
+                                        newLastName = it
+                                    }
+                                )
+                            }
                         }
 
                         //Name

@@ -24,10 +24,12 @@ import com.forsythe.smartpoultry.utils.THRESHOLD_RATIO_KEY
 import com.forsythe.smartpoultry.utils.USERS_COLLECTION
 import com.forsythe.smartpoultry.utils.USER_EMAIL_KEY
 import com.forsythe.smartpoultry.utils.USER_FIRST_NAME_KEY
+import com.forsythe.smartpoultry.utils.USER_LAST_NAME_KEY
 import com.forsythe.smartpoultry.utils.USER_PHONE_KEY
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.toObject
 import com.google.firebase.functions.functions
@@ -226,6 +228,10 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
             USER_FIRST_NAME_KEY,
             user.firstName
         )
+        preferencesRepo.saveData(
+            USER_LAST_NAME_KEY,
+            user.lastName
+        )
 
         //user email
         preferencesRepo.saveData(
@@ -328,13 +334,31 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    override suspend fun editUserName(name: String): Result<Boolean> {
+    override suspend fun editFirstName(name: String): Result<Boolean> {
         val result = CompletableDeferred<Boolean>()
         firebaseFirestore.collection(USERS_COLLECTION)
             .document(firebaseAuth.currentUser?.uid.toString())//firebaseAuth.uid.toString())
-            .update("name", name)
+            .update("firstName", name)
             .addOnSuccessListener {
                 result.complete(true)
+                preferencesRepo.saveData(USER_FIRST_NAME_KEY, name)
+            }
+            .addOnFailureListener {
+                result.completeExceptionally(it)
+            }
+
+        return if (result.await()) Result.success(true) else Result.failure(result.getCompletionExceptionOrNull()!!)
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    override suspend fun editLastName(name: String): Result<Boolean> {
+        val result = CompletableDeferred<Boolean>()
+        firebaseFirestore.collection(USERS_COLLECTION)
+            .document(firebaseAuth.currentUser?.uid.toString())//firebaseAuth.uid.toString())
+            .update("lastName", name)
+            .addOnSuccessListener {
+                result.complete(true)
+                preferencesRepo.saveData(USER_FIRST_NAME_KEY, name)
             }
             .addOnFailureListener {
                 result.completeExceptionally(it)
@@ -369,6 +393,7 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
                     .update("email", email)
                     .addOnSuccessListener {
                         completableDeferred.complete(true)
+                        preferencesRepo.saveData(USER_EMAIL_KEY, email)
                     }
                     .addOnFailureListener {
                         completableDeferred.completeExceptionally(it)
@@ -386,6 +411,20 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
         TODO("Not yet implemented")
     }
 
+    override suspend fun editFarmName(farmName: String): Result<Boolean> {
+        val farmsCollection = firebaseFirestore.collection(FARMS_COLLECTION)
+        val farmDocument: DocumentReference = farmsCollection.document(getFarmId())
+
+        //update remote
+        farmDocument.update("name", farmName)
+            .addOnSuccessListener {
+                preferencesRepo
+                    .saveData(FARM_NAME_KEY, farmName)
+            }
+
+        return Result.success(true)
+
+    }
     @OptIn(ExperimentalCoroutinesApi::class)
     override suspend fun editPhone(phone: String): Result<Boolean> {
         val completableDeferred = CompletableDeferred<Boolean>()
@@ -394,6 +433,7 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
             .update("phone", phone)
             .addOnSuccessListener {
                 completableDeferred.complete(true)
+                preferencesRepo.saveData(USER_PHONE_KEY, phone)
             }
             .addOnFailureListener {
                 completableDeferred.completeExceptionally(it)
@@ -504,4 +544,7 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
     override fun logOut() {
         firebaseAuth.signOut()
     }
+
+    private fun getFarmId() = preferencesRepo.loadData(FARM_ID_KEY)!!
+
 }

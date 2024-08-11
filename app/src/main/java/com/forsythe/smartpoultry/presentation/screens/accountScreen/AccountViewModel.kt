@@ -40,7 +40,7 @@ class AccountViewModel @Inject constructor(
     val user = User(
         firstName = getUserFirstName(),
         lastName = getUserLastName(),
-        gender =  getUserGender(),
+        gender = getUserGender(),
         email = getUserEmail(),
         phone = getUserPhone(),
     )
@@ -64,41 +64,17 @@ class AccountViewModel @Inject constructor(
     fun getFarmName() = preferencesRepo.loadData(FARM_NAME_KEY)!!
     fun getFarmCountry() = preferencesRepo.loadData(FARM_COUNTRY_KEY)!!
 
-/*
-
-    fun registerUser( email: String, name: String, phone: String) {
+    fun changeFarmName(farmName: String) {
         viewModelScope.launch {
-            isLoading.value = true
-            if (!isValidEmail(email)) {
-                isLoading.value = false
-                toastMessage.value = "Invalid email: $email"
-
-            } else {
-                val result = fireBaseAuthRepo.registerUser(
-                    email = email,
-                    password = "0000000",
-                    farmId = getFarmId(),
-                    name = name,
-                    phone = phone,
-                    accessLevel = AccessLevel(
-                        collectEggs = eggCollectionAccess.value,
-                        editHenCount = editHenCountAccess.value,
-                        manageBlocksCells = manageBlocksCellsAccess.value,
-                        manageUsers = manageUsersAccess.value
-                    )
-                )
-                result.onSuccess {
-                    isLoading.value = false
-                    toastMessage.value = "User registered successfully"
-                }
-                result.onFailure {
-                    toastMessage.value = "Failed to register: ${it.message.toString()}"
-                    isLoading.value = false
-                }
+            val result = fireBaseAuthRepo.editFarmName(farmName)
+            result.onSuccess {
+                toastMessage.value = "Request successful, changes will reflect on next log in"
+            }
+            result.onFailure {
+                toastMessage.value = "failed: ${it.message.toString()}"
             }
         }
     }
-*/
 
     fun changeEmail(email: String) {
         viewModelScope.launch {
@@ -112,10 +88,23 @@ class AccountViewModel @Inject constructor(
         }
     }
 
-    fun changeUserName(name: String) {
+    fun editFirstName(name: String) {
         viewModelScope.launch {
             isLoading.value = true
-            val result = fireBaseAuthRepo.editUserName(name)
+            val result = fireBaseAuthRepo.editFirstName(name)
+            if (result.isSuccess) toastMessage.value =
+                "Change successful, changes will reflect on next log in"
+            else if (result.isFailure) toastMessage.value =
+                "Failed: ${result.exceptionOrNull()?.message.toString()}"
+
+            isLoading.value = false
+        }
+    }
+
+    fun editLastName(name: String) {
+        viewModelScope.launch {
+            isLoading.value = true
+            val result = fireBaseAuthRepo.editLastName(name)
             if (result.isSuccess) toastMessage.value =
                 "Change successful, changes will reflect on next log in"
             else if (result.isFailure) toastMessage.value =
@@ -139,5 +128,4 @@ class AccountViewModel @Inject constructor(
             isLoading.value = false
         }
     }
-
 }
