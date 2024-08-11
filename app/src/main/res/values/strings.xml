@@ -63,4 +63,5 @@
     <string name="past_days_summarry">Past Days Summary in Home Screen</string>
     <string name="past_days_summarry_description">This number represents the days in the past that are included in the summary displayed on the home screen\'s recent trends graphs. It determines how many days\' worth of data are visualized to show recent trends in the graphs.</string>
     <string name="select_your_country">Select your country</string>
+    <string name="similar_farm_no_change">same farm name, no change made</string>
 </resources>

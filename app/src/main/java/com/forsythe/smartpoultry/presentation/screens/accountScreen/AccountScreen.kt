@@ -292,13 +292,44 @@ fun AccountScreen(
 
                         MyVerticalSpacer(height = 10)
 
+
                         //FarmName
+                        var showFarmDialog by remember { mutableStateOf(false) }
+                        var newFarmName by remember { mutableStateOf(accountViewModel.getFarmName() )}
+
+                        MyInputDialog(
+                            showDialog = showFarmDialog,
+                            title = stringResource(id = R.string.phone_number_title),//"Phone Number",
+                            onConfirm = {
+                                if (newFarmName.isBlank()) accountViewModel.toastMessage.value = R.string.empty_field.toString()
+                                else if (newFarmName == userPhone) accountViewModel.toastMessage.value = R.string.similar_farm_no_change.toString()
+                                else {
+                                    accountViewModel.changeFarmName(farmName = newFarmName)
+                                    showFarmDialog = false
+                                }
+                            },
+                            onDismiss = { showFarmDialog = false }
+                        ) {
+                            MyOutlineTextFiled(
+                                modifier = Modifier.fillMaxWidth(),
+                                label = stringResource(id =R.string.farm_name),
+                                keyboardType = KeyboardType.Phone,
+                                initialText = newFarmName,
+                                onValueChange = {
+                                    newFarmName = it
+                                }
+                            )
+                        }
                         UserInfoRow(
                             icon = ImageVector.vectorResource(id = R.drawable.egg_outline),
 
                             label = stringResource(id = R.string.farm_name),
                             value = accountViewModel.getFarmName(),
-                            true
+                            editable = true,
+
+                            onEditClick = {
+                                showFarmDialog = true
+                            }
                         )
                         MyVerticalSpacer(height = 10)
 
