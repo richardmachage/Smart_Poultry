@@ -10,20 +10,20 @@ plugins {
 }
 
 android {
-    namespace = "com.example.smartpoultry"
-    compileSdk = 34
+    namespace = "com.forsythe.smartpoultry"
+   // compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.smartpoultry"
-        minSdk = 24
-        targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
+        applicationId = "com.forsythe.smartpoultry"
+       // minSdk = 24
+        //targetSdk = 34
+        versionCode = 2
+        versionName = "1.0.1"
 
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        /*testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
             useSupportLibrary = true
-        }
+        }*/
     }
 
     buildTypes {
@@ -33,9 +33,10 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            signingConfig = signingConfigs.getByName("debug")
         }
     }
-    compileOptions {
+    /*compileOptions {
         //isCoreLibraryDesugaringEnabled = true
         //sourceCompatibility = JavaVersion.VERSION_1_8
         sourceCompatibility = JavaVersion.VERSION_17
@@ -44,11 +45,13 @@ android {
     }
     kotlinOptions {
         jvmTarget = "17"
-    }
+    }*/
+
     buildFeatures {
         compose = true
     }
-    composeOptions {
+
+    /*composeOptions {
         kotlinCompilerExtensionVersion = "1.5.2"
     }
     packaging {
@@ -56,10 +59,14 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
 
         }
-    }
+    }*/
 }
 
 dependencies {
+
+    //project modules
+    implementation(projects.billing)
+   // implementation()
 
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
@@ -77,13 +84,7 @@ dependencies {
     implementation("com.google.firebase:firebase-functions")
     implementation("com.google.firebase:firebase-crashlytics-ktx")
 
-    testImplementation("junit:junit:4.13.2")
-    androidTestImplementation("androidx.test.ext:junit:1.1.5")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
-    androidTestImplementation(platform("androidx.compose:compose-bom:2023.08.00"))
-    androidTestImplementation("androidx.compose.ui:ui-test-junit4")
-    debugImplementation("androidx.compose.ui:ui-tooling")
-    debugImplementation("androidx.compose.ui:ui-test-manifest")
+
 
     //viewModel for compose
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0")
@@ -139,5 +140,9 @@ dependencies {
 
     //SplashScreen api
     implementation("androidx.core:core-splashscreen:1.0.1")
+
+    //Play Billing
+    val billing_version = "7.0.0"
+    implementation("com.android.billingclient:billing:$billing_version")
 
 }
