@@ -43,8 +43,6 @@ import com.forsythe.smartpoultry.presentation.composables.spacers.MyVerticalSpac
 import com.forsythe.smartpoultry.presentation.composables.text.NormText
 import com.forsythe.smartpoultry.presentation.composables.textInputFields.MyEditTextClear
 import com.forsythe.smartpoultry.presentation.composables.textInputFields.MyPasswordEditText
-
-import com.forsythe.smartpoultry.presentation.destinations.LogInScreenDestination
 import com.forsythe.smartpoultry.presentation.destinations.MainScreenDestination
 import com.forsythe.smartpoultry.presentation.destinations.SignUpScreenDestination
 import com.forsythe.smartpoultry.utils.isValidEmail
@@ -52,7 +50,7 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.navigation.popUpTo
 
-@Destination(start = true)
+@Destination//(start = true)
 @Composable
 fun LogInScreen(
     navigator: DestinationsNavigator
@@ -76,9 +74,13 @@ fun LogInScreen(
     //observing the viewmodel state and show toast when validation error message changes
     LaunchedEffect(key1 = logInViewModel.isLogInSuccess){
        if (logInViewModel.isLogInSuccess){
-           navigator.navigate(MainScreenDestination){
+           /*navigator.navigate(MainScreenDestination){
                popUpTo(LogInScreenDestination){inclusive=true}
+           }*/
+           navigator.navigate(MainScreenDestination) {
+               popUpTo(MainScreenDestination) { inclusive = true }
            }
+
            // Reset the login success state in the ViewModel if needed to prevent repeated navigation
            logInViewModel.isLogInSuccess = false
        }

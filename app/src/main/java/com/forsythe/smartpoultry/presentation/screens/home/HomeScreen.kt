@@ -1,8 +1,13 @@
 package com.forsythe.smartpoultry.presentation.screens.home
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.os.Build
 import android.widget.Toast
+import android.window.OnBackInvokedCallback
+import android.window.OnBackInvokedDispatcher
+import androidx.activity.ComponentActivity
+import androidx.activity.OnBackPressedCallback
 import androidx.annotation.RequiresApi
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
@@ -25,6 +30,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
@@ -49,7 +55,6 @@ import com.forsythe.smartpoultry.presentation.NavGraphs
 import com.forsythe.smartpoultry.presentation.composables.buttons.MyOutlineButton
 import com.forsythe.smartpoultry.presentation.composables.cards.MyCard
 import com.forsythe.smartpoultry.presentation.composables.cards.MyCardInventory
-
 import com.forsythe.smartpoultry.presentation.composables.charts.RecentEggsLineChart
 import com.forsythe.smartpoultry.presentation.composables.dialogs.MyInputDialog
 import com.forsythe.smartpoultry.presentation.composables.progressBars.MyCircularProgressBar
@@ -115,6 +120,112 @@ fun HomeScreen(
             }
         }
     }
+//leave app dialog
+    var showLeaveDialog by remember { mutableStateOf(false) }
+    MyInputDialog(
+        showDialog = showLeaveDialog,
+        title = "Leave Smart Poultry",
+        onConfirm = {
+            (context as Activity).finish()
+        },
+        onDismiss = {
+            showLeaveDialog = false
+        }
+    ) {
+        Text(text = "Are you sure you want to leave the App?")
+    }
+
+
+/*
+    DisposableEffect(key1 = Unit) {
+        // Cast the context to an Activity, if possible
+        val activity = context as? ComponentActivity
+
+        // Determine which back dispatcher to use based on the Android version
+        val onBackInvokedDispatcher =
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+                activity?.onBackInvokedDispatcher
+            } else {
+                null
+            }
+
+        // Register a back callback for Android 14 and above
+        val backCallback = if (onBackInvokedDispatcher != null) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                val callback = OnBackInvokedCallback {
+                    //on back pressed action
+                    showLeaveDialog = true
+                }
+                onBackInvokedDispatcher.registerOnBackInvokedCallback(
+                    OnBackInvokedDispatcher.PRIORITY_DEFAULT,
+                    callback
+                )
+                callback
+            } else {
+                null
+            }
+        } else {
+            // Fallback for older versions of Android
+            val callback = object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    //on back pressed action
+                    showLeaveDialog = true
+                }
+
+            }
+            activity?.onBackPressedDispatcher?.addCallback(activity, callback)
+            callback
+        }
+
+        onDispose {
+            // Cleanup: Unregister the back callback when the composable leaves the composition
+            if (onBackInvokedDispatcher != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                onBackInvokedDispatcher.unregisterOnBackInvokedCallback(backCallback as OnBackInvokedCallback)
+            } else {
+                (backCallback as? OnBackPressedCallback)?.remove()
+            }
+        }
+    }
+*/
+
+    DisposableEffect(key1 = Unit) {
+        // Cast the context to an Activity, if possible
+        val activity = context as? ComponentActivity
+
+        // Register a back callback for Android 14 and above
+        val backCallback = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            // Use OnBackInvokedDispatcher for Android 14 and above
+            val callback = OnBackInvokedCallback {
+                // Show the leave dialog when the back button is pressed
+                showLeaveDialog = true
+            }
+            activity?.onBackInvokedDispatcher?.registerOnBackInvokedCallback(
+                OnBackInvokedDispatcher.PRIORITY_DEFAULT,
+                callback
+            )
+            callback
+        } else {
+            // Fallback for older versions of Android
+            val callback = object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    // Show the leave dialog when the back button is pressed
+                    showLeaveDialog = true
+                }
+            }
+            activity?.onBackPressedDispatcher?.addCallback(activity, callback)
+            callback
+        }
+
+        onDispose {
+            // Cleanup: Unregister the back callback when the composable leaves the composition
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+                activity?.onBackInvokedDispatcher?.unregisterOnBackInvokedCallback(backCallback as OnBackInvokedCallback)
+            } else {
+                (backCallback as? OnBackPressedCallback)?.remove()
+            }
+        }
+    }
+
 
     MyCircularProgressBar(
         isLoading = homeViewModel.isLoading,

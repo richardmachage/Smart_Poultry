@@ -1,13 +1,26 @@
 package com.forsythe.smartpoultry.presentation.screens.mainScreen
 
+import android.app.Activity
 import android.os.Build
+import android.window.OnBackInvokedCallback
+import android.window.OnBackInvokedDispatcher
+import androidx.activity.ComponentActivity
+import androidx.activity.OnBackPressedCallback
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.rememberNavController
+import com.forsythe.smartpoultry.presentation.composables.dialogs.MyInputDialog
 import com.forsythe.smartpoultry.presentation.composables.others.MyBottomNavBar
 import com.forsythe.smartpoultry.presentation.composables.others.MyTopAppBar
 import com.forsythe.smartpoultry.presentation.navigation.BottomNavGraph
@@ -16,25 +29,29 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
 @RequiresApi(Build.VERSION_CODES.O)
-@Destination
+@Destination(start = true)
 @Composable
 fun MainScreen(
-    navigator: DestinationsNavigator
-){
+    navigator: DestinationsNavigator,
+    onBackPressed: () -> Unit = {}
+) {
 
     val mainViewModel = hiltViewModel<MainScreenViewModel>()
     val navController = rememberNavController()
+    val context = LocalContext.current
+
 
     SmartPoultryTheme {
-        Scaffold (
+        Scaffold(
             topBar = { MyTopAppBar(navController, navigator) },
             bottomBar = { MyBottomNavBar(navController, mainViewModel.getEggCollectionAccess()) }
-        ){ paddingValues ->
+        ) { paddingValues ->
             BottomNavGraph(
                 modifier = Modifier
                     .padding(paddingValues = paddingValues),
                 navController = navController,
-                navigator = navigator)
+                navigator = navigator
+            )
         }
     }
 }
