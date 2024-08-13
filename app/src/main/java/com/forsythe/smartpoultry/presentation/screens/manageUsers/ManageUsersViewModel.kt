@@ -39,19 +39,46 @@ class ManageUsersViewModel @Inject constructor(
     val showBottomSheet = mutableStateOf(false)
     val updateListOfEmployees = mutableStateOf("")
     val isLoading = mutableStateOf(false)
+    val loadingMessage = mutableStateOf("")
+    val  anyUsers = mutableStateOf(true)
     val myId = firebaseAuth.currentUser?.uid
 
 
     init {
         viewModelScope.launch {
+            isLoading.value = true
             farmId.value = preferencesRepo.loadData(FARM_ID_KEY).toString()
             val result = firebaseAuthRepository.getFarmEmployees(farmId.value)
             result.onSuccess {
                 listOfUsers.addAll(it)
             }
+            result.onFailure {
+                anyUsers.value = false
+            }
+            isLoading.value = false
         }
     }
-     fun getUserEmail() = preferencesRepo.loadData(USER_EMAIL_KEY)!!
+
+    fun refreshList() {
+        viewModelScope.launch {
+            isLoading.value = true
+            loadingMessage.value = "Refreshing list"
+            farmId.value = preferencesRepo.loadData(FARM_ID_KEY).toString()
+            val result = firebaseAuthRepository.getFarmEmployees(farmId.value)
+            result.onSuccess {
+                listOfUsers.clear()
+                listOfUsers.addAll(it)
+            }
+            result.onFailure {
+                //TODO show feedback to user about failure
+            }
+
+            isLoading.value = false
+            loadingMessage.value = ""
+        }
+    }
+
+    fun getUserEmail() = preferencesRepo.loadData(USER_EMAIL_KEY)!!
 
 
     suspend fun updateListOfUsers() {

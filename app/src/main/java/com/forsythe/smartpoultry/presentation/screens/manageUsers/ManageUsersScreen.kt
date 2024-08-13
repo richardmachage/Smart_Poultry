@@ -4,9 +4,11 @@ import android.widget.Toast
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -15,6 +17,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -36,6 +39,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -44,14 +48,16 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewModelScope
 import com.forsythe.smartpoultry.R
 import com.forsythe.smartpoultry.data.dataSource.remote.firebase.models.User
-import com.forsythe.smartpoultry.presentation.composables.progressBars.MyCircularProgressBar
 import com.forsythe.smartpoultry.presentation.composables.buttons.MyFloatingActionButton
+import com.forsythe.smartpoultry.presentation.composables.progressBars.MyCircularProgressBar
 import com.forsythe.smartpoultry.presentation.composables.spacers.MyHorizontalSpacer
 import com.forsythe.smartpoultry.presentation.composables.spacers.MyVerticalSpacer
+import com.forsythe.smartpoultry.presentation.destinations.AccountScreenDestination
 import com.forsythe.smartpoultry.presentation.destinations.RegisterUserScreenDestination
 import com.forsythe.smartpoultry.presentation.ui.theme.SmartPoultryTheme
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import com.ramcosta.composedestinations.navigation.popUpTo
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -86,7 +92,9 @@ fun ManageUsersScreen(
                     title = { Text(text = "Manage Users") },
                     navigationIcon = {
                         IconButton(onClick = {
-                            navigator.navigateUp()
+                            navigator.navigate(AccountScreenDestination) {
+                                popUpTo(AccountScreenDestination) { inclusive = true }
+                            }
                         }) {
                             Icon(
                                 imageVector = Icons.AutoMirrored.Filled.ArrowBack,
@@ -95,25 +103,50 @@ fun ManageUsersScreen(
                         }
                     }
                 )
+
             },
             floatingActionButton = {
-                MyFloatingActionButton(
-                    onClick = {
-                        navigator.navigate(RegisterUserScreenDestination)
-                    },
-                    icon = {
-                     Icon(
-                         imageVector = ImageVector.vectorResource(id = R.drawable.person_add),
-                         contentDescription = "add_user")
-                    },
-                    text = {
-                        Text(
-                            text = "Add User",
-                            fontWeight = FontWeight.Bold,
-                            color = MaterialTheme.colorScheme.primary
-                        )
-                    }
-                )
+                Column {
+
+                    MyFloatingActionButton(
+                        onClick = {
+                            manageUsersViewModel.refreshList()
+                        },
+                        icon = {
+                            Icon(
+                                imageVector = Icons.Default.Refresh,//ImageVector.vectorResource(id = R.drawable.person_add),
+                                contentDescription = "refresh"
+                            )
+                        },
+                        text = {
+                            Text(
+                                text = "Refresh",
+                                fontWeight = FontWeight.Bold,
+                                color = MaterialTheme.colorScheme.primary
+                            )
+                        }
+                    )
+
+                    MyVerticalSpacer(height = 15)
+                    MyFloatingActionButton(
+                        onClick = {
+                            navigator.navigate(RegisterUserScreenDestination)
+                        },
+                        icon = {
+                            Icon(
+                                imageVector = ImageVector.vectorResource(id = R.drawable.person_add),
+                                contentDescription = "add_user"
+                            )
+                        },
+                        text = {
+                            Text(
+                                text = "Add User",
+                                fontWeight = FontWeight.Bold,
+                                color = MaterialTheme.colorScheme.primary
+                            )
+                        }
+                    )
+                }
             }
         ) {
             MyCircularProgressBar(isLoading = manageUsersViewModel.isLoading.value)
@@ -122,13 +155,16 @@ fun ManageUsersScreen(
                     user = manageUsersViewModel.selectedUser!!,
                     sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
                     scope = rememberCoroutineScope(),
-                    onDismiss = {user, accessLevel, doUpdate->
-                        if (doUpdate){
-                            manageUsersViewModel.viewModelScope.launch{
-                                if(manageUsersViewModel.editAccessLevel(user,accessLevel)) showBottomSheet = false  else showBottomSheet = true
+                    onDismiss = { user, accessLevel, doUpdate ->
+                        if (doUpdate) {
+                            manageUsersViewModel.viewModelScope.launch {
+                                if (manageUsersViewModel.editAccessLevel(
+                                        user,
+                                        accessLevel
+                                    )
+                                ) showBottomSheet = false else showBottomSheet = true
                             }
-                        }
-                        else {
+                        } else {
                             showBottomSheet = false
                         }
                     },
@@ -139,24 +175,36 @@ fun ManageUsersScreen(
                 )
             }
 
-            LazyColumn(
-                modifier = Modifier
-                    .padding(it)
-                    .animateContentSize()
+           // val listOfEmployees by remember { mutableStateOf(manageUsersViewModel.listOfUsers.toList()) }
+            if (
+                manageUsersViewModel.anyUsers.value
             ) {
 
-                items(manageUsersViewModel.listOfUsers.filter { user -> user.email != manageUsersViewModel.getUserEmail() })
-                { user ->
-                    // UserItem()
-                    //Text(text = "userId : ${user.userId} != ${manageUsersViewModel.myId}")
-                    UserListItem(
-                        user = user,
-                        onClick = { userClicked ->
-                            manageUsersViewModel.onListItemClicked(userClicked)
-                        }
-                    )
-                    //Text(text = "users: ${manageUsersViewModel.listOfUsers.size}")
+                LazyColumn(
+                    modifier = Modifier
+                        .padding(it)
+                        .animateContentSize(),
+                    verticalArrangement = Arrangement.spacedBy(5.dp)
+                ) {
 
+                    items(manageUsersViewModel.listOfUsers.filter { user -> user.email != manageUsersViewModel.getUserEmail() })
+                    { user ->
+                        UserListItem(
+                            user = user,
+                            onClick = { userClicked ->
+                                manageUsersViewModel.onListItemClicked(userClicked)
+                            }
+                        )
+                    }
+
+                }
+            } else {
+                Box (modifier = Modifier
+                    .fillMaxSize()
+                    .padding(6.dp), contentAlignment = Alignment.Center){
+                    Text(
+                        fontStyle = FontStyle.Italic,
+                        text = "There are no farm other users currently, \nyou can click on add user below to add one.. \nor click on refresh to load the list again")
                 }
             }
         }
@@ -172,7 +220,7 @@ fun UserListItem(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            // .padding(start = 6.dp, end = 6.dp)
+            //.padding(start = 6.dp, end = 6.dp)
             .clickable {
                 onClick(user)
             }

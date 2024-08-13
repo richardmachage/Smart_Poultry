@@ -40,7 +40,6 @@ fun OnBoardingScreen(
 
     Scaffold {
 
-
         Surface(
             color = MaterialTheme.colorScheme.background,
             modifier = Modifier.fillMaxSize().padding(it)
