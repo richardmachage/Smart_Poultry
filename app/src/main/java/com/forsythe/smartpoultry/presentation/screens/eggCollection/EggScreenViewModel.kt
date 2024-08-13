@@ -54,7 +54,6 @@ class EggScreenViewModel @Inject constructor(
     init {
         setChosenDateValue(LocalDate.now())
         setMyInputBlocks()
-
     }
 
     private fun setMyInputBlocks() {

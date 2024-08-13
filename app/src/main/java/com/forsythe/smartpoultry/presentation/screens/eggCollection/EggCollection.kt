@@ -41,15 +41,7 @@ fun EggCollectionScreen(
                 listOfCells.clear()
                 listOfCells.addAll(cells)
                 showCellsAnime = true
-                /*onBlockSelected(BlocksWithCells(
-                    block = Blocks(
-                        blockId = blockId,
-                        blockNum =  blockNum,
-                        totalCells = cells.size
-                    ),
-                    cell = cells
-                )
-                )*/
+
             }
         )
 
