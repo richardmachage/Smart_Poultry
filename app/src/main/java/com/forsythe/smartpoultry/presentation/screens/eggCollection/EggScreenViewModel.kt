@@ -140,6 +140,7 @@ class EggScreenViewModel @Inject constructor(
                 }
             }
             setMyInputBlocks()
+
             isLoading.value = false
             if (insertStatus.value) toastMessage.value =
                 "records for block ${block + 1} saved successfully"
@@ -148,10 +149,8 @@ class EggScreenViewModel @Inject constructor(
         }
     }
 
-    fun onSaveSingleCellRecord(cell: Cells, eggCount: Int, isNetAvailable : Boolean) {
-        viewModelScope.launch {
+    suspend fun onSaveSingleCellRecord(cell: Cells, eggCount: Int, isNetAvailable : Boolean)  : Boolean {
             isLoading.value = true
-            //insertStatus.value
             val result = eggCollectionRepository.addNewRecord(
                 EggCollection(
                     date = chosenDateValue,
@@ -162,12 +161,9 @@ class EggScreenViewModel @Inject constructor(
                 isNetAvailable
             )
             isLoading.value = false
+        toastMessage.value = result.message
 
-            /*toastMessage.value =
-                if (insertStatus.value) "saved successfully"
-                else "Failed! Records for ${cell.cellNum} on ${selectedDate.value} already exist"*/
-            toastMessage.value = result.message
-        }
+        return result.isSuccess
     }
 
     private fun resetEntries(block: Int, cellsInput: List<CellEggCollection>) {

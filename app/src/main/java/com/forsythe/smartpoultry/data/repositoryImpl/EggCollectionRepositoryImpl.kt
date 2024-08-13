@@ -191,6 +191,7 @@ class EggCollectionRepositoryImpl @Inject constructor(
                             henCount = eggCollection.henCount
                         )
                     )
+
                 // Assume success since the write will be cached
                 result = result.copy(isSuccess = true, message = "Record added locally successfully")
                 return result

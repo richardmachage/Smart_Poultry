@@ -26,6 +26,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -49,6 +50,7 @@ import com.forsythe.smartpoultry.utils.isNetworkAvailable
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.vanpra.composematerialdialogs.rememberMaterialDialogState
+import kotlinx.coroutines.launch
 import java.time.LocalDate
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -56,12 +58,13 @@ import java.time.LocalDate
 @Destination
 @Composable
 fun EggScreen(
-    navigator: DestinationsNavigator
+    navigator : DestinationsNavigator
 ) {
 
     val eggViewModel = hiltViewModel<EggScreenViewModel>()
     val listOfBlocks = remember { eggViewModel.myInputBlocks }
     val context = LocalContext.current
+    val scope = rememberCoroutineScope()
 
     LaunchedEffect(eggViewModel.toastMessage.value) {
         if (eggViewModel.toastMessage.value.isNotBlank()) {
@@ -88,8 +91,7 @@ fun EggScreen(
                 onButtonClick = { switchModes = !switchModes },
                 btnName = if (!switchModes) "Switch to input Per Cell" else "Switch to input Per Block"
             )
-            val isNetAvailable = context.isNetworkAvailable().toString()
-            Text(text = "Connection status : $isNetAvailable")
+//            val isNetAvailable = context.isNetworkAvailable().toString()
             AnimatedContent(targetState = switchModes, label = "eggCollectionMode") {state->
                 if (state) {
                     Column(
@@ -115,12 +117,13 @@ fun EggScreen(
                             title = "No eggs Collected",
                             onConfirm = {
                                 eggViewModel.zeroCellEggs?.let {thisCell->
-                                    eggViewModel.onSaveSingleCellRecord(
-                                        cell = thisCell,
-                                        eggCount = 0,
-                                        isNetAvailable = context.isNetworkAvailable()
-                                    )
-                                    showZeroEggsDialog = false
+                                    scope.launch{eggViewModel.onSaveSingleCellRecord(
+                                            cell = thisCell,
+                                            eggCount = 0,
+                                            isNetAvailable = context.isNetworkAvailable()
+                                        )
+                                        showZeroEggsDialog = false
+                                    }
                                 }
                             },
                             onDismiss = {
@@ -132,15 +135,18 @@ fun EggScreen(
                                 Text(text = "This will record 0 egg count.")
                             }
                         }
-                        EggCollectionScreen(
+                        EggCollectionPerCell(
                             listOfBlocks = eggViewModel.getAllBlocks.collectAsState().value,
                             onSave = { cell, eggCount ->
                                 if (eggCount == 0) {
                                     eggViewModel.zeroCellEggs = cell
                                     showZeroEggsDialog = true
                                 } else{
-                                    eggViewModel.onSaveSingleCellRecord(cell,eggCount, context.isNetworkAvailable())
+                                     scope.launch {
+                                        eggViewModel.onSaveSingleCellRecord(cell = cell, eggCount = eggCount, isNetAvailable = context.isNetworkAvailable())
+                                    }
                                 }
+
                             }
                         )
                     }

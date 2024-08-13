@@ -23,9 +23,10 @@ import com.forsythe.smartpoultry.presentation.screens.eggCollection.components.C
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun EggCollectionScreen(
+fun EggCollectionPerCell(
     listOfBlocks: List<BlocksWithCells>,
-    onSave : (cell : Cells, eggCount : Int) -> Unit  = {_,_ ->}
+    onSave : (cell : Cells, eggCount : Int) -> Unit
+
 ) {
     val listOfCells = remember { mutableStateListOf<Cells>() }
     var showCellsAnime by remember{ mutableStateOf(false) }
@@ -55,7 +56,8 @@ fun EggCollectionScreen(
                             cellNum = cell.cellNum,
                             henCount = cell.henCount,
                             onSave = {eggCount->
-                                onSave(cell, eggCount)}
+                                onSave(cell, eggCount)
+                            }
                         )
 
                 }

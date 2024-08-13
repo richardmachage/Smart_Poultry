@@ -24,20 +24,19 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.forsythe.smartpoultry.R
 import com.forsythe.smartpoultry.presentation.composables.buttons.MyOutlineButton
 import com.forsythe.smartpoultry.presentation.composables.cards.MyCard
 import com.forsythe.smartpoultry.presentation.composables.spacers.MyVerticalSpacer
 
-@Preview
+//@Preview
 @Composable
 fun CellEggCollectionItem(
     modifier: Modifier = Modifier,
     cellNum: Int = 0,
     henCount: Int = 0,
-    onSave: (Int) -> Unit = {}
+    onSave: (Int) -> Unit
 ) {
     var eggCount by remember { mutableStateOf(TextFieldValue("0")) }
     var hasError by remember { mutableStateOf(false) }
@@ -110,7 +109,12 @@ fun CellEggCollectionItem(
 
                 MyOutlineButton(
                     modifier = Modifier.weight(1f),
-                    onButtonClick = { onSave(eggCount.text.toIntOrNull() ?: 0) },
+                    onButtonClick = {
+
+                        onSave(eggCount.text.toIntOrNull() ?: 0)
+                        eggCount = eggCount.copy(text = "0")
+
+                    },
                     btnName = stringResource(id = R.string.save_btn),
                     enabled = !hasError
                 )
