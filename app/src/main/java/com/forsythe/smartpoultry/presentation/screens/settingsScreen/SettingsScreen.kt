@@ -62,6 +62,7 @@ import com.forsythe.smartpoultry.presentation.composables.textInputFields.MyOutl
 import com.forsythe.smartpoultry.presentation.destinations.LogInScreenDestination
 import com.forsythe.smartpoultry.utils.ABOUT_US_LINK
 import com.forsythe.smartpoultry.utils.CONSUCUTIVE_DAYS_KEY
+import com.forsythe.smartpoultry.utils.CONTACT_US
 import com.forsythe.smartpoultry.utils.IS_AUTOMATED_ANALYSIS_KEY
 import com.forsythe.smartpoultry.utils.PAST_DAYS_KEY
 import com.forsythe.smartpoultry.utils.PRIVACY_POLICY_LINK
@@ -566,7 +567,14 @@ fun SettingsScreen(
                         ){
 
                             MyTextButton(//Contact us
-                                onButtonClick = { /*TODO*/ },
+                                onButtonClick = {
+                                    context.startActivity(
+                                        Intent(
+                                            Intent.ACTION_VIEW,
+                                            Uri.parse(CONTACT_US)
+                                        )
+                                    )
+                                },
                                 btnText = stringResource(id = R.string.contact_us)
                             )
                             MyTextButton(//About info

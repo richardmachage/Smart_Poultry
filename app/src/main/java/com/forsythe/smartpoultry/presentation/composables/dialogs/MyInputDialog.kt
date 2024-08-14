@@ -37,7 +37,6 @@ fun MyInputDialog(
                     modifier = Modifier
                 )
             }
-
         )
     }
 }
