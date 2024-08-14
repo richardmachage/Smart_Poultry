@@ -11,7 +11,9 @@ fun getTimeAgo(pastTime: Long): String {
 
     return when {
         seconds < 60 -> "$seconds seconds ago"
+        minutes == 1L -> "$minutes minute ago"
         minutes < 60 -> "$minutes minutes ago"
+        hours == 1L -> "$hours hour ago"
         hours < 24 -> "$hours hours ago"
         days == 1L -> "$days day ago"
         else -> "$days days ago"
