@@ -41,11 +41,13 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.forsythe.smartpoultry.presentation.composables.cards.MyCard
 import com.forsythe.smartpoultry.presentation.composables.dialogs.MyInputDialog
-import com.forsythe.smartpoultry.presentation.composables.others.MyBorderedRow
+import com.forsythe.smartpoultry.presentation.composables.text.TitleText
 import com.forsythe.smartpoultry.presentation.screens.mainActivity.MainActivity
+import com.forsythe.smartpoultry.utils.getTimeAgo
 import com.ramcosta.composedestinations.annotation.Destination
 import java.text.SimpleDateFormat
 
@@ -61,14 +63,14 @@ fun AlertScreen(
     val listOfAlerts by remember { alertsViewModel.getFlaggedCells() }.collectAsState(initial = emptyList())
     val context = LocalContext.current
     LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher?.addCallback(
-        LocalLifecycleOwner.current,object  : OnBackPressedCallback(true){
-        override fun handleOnBackPressed() {
-            //navigate to main activity
-            context.startActivity(Intent(context,MainActivity::class.java))
-            (context as Activity).finish()
-        }
+        LocalLifecycleOwner.current, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                //navigate to main activity
+                context.startActivity(Intent(context, MainActivity::class.java))
+                (context as Activity).finish()
+            }
 
-    })
+        })
 
     var showDeleteDialog by remember { mutableStateOf(false) }
     MyInputDialog(
@@ -90,7 +92,7 @@ fun AlertScreen(
                 navigationIcon = {
                     IconButton(onClick = {
                         //navigate back to Main Activity
-                        context.startActivity(Intent(context,MainActivity::class.java))
+                        context.startActivity(Intent(context, MainActivity::class.java))
                         (context as Activity).finish()
                     }) {
                         Icon(
@@ -112,7 +114,111 @@ fun AlertScreen(
                 Column {
 
                     MyCard(
-                        modifier = Modifier.padding(6.dp).fillMaxWidth()
+                        modifier = Modifier
+                            .padding(6.dp)
+                            .fillMaxWidth()
+                    ) {
+                        Box (
+                            modifier = Modifier.fillMaxWidth(),
+                           contentAlignment = Alignment.Center
+                        ){
+                            TitleText(
+                                fontSize = 20.sp,
+                                text = "${listOfAlerts.filter { alertFull -> !alertFull.attended }.size} alerts not yet attended"
+                            )
+                        }
+
+                    }
+
+                    LazyColumn() {
+                        itemsIndexed(
+                            listOfAlerts,
+                            key = { _, alert -> alert.alertId }) { index, alert ->
+                            // MyVerticalSpacer(height = 5)
+
+                            MyCard (
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(6.dp)
+                            ){
+                                Row(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(6.dp)
+                                        .animateItemPlacement(),
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.SpaceBetween
+                                ) {
+
+                                    TitleText(text = (index + 1).toString())
+                                    Column {
+                                        Text(
+                                            text = "Date : ${
+                                                SimpleDateFormat("dd MMM, yyyy").format(
+                                                    alert.date
+                                                )
+                                            }"
+                                        )
+                                        Row {
+                                            Text(text = "Block : ${alert.blockNum}")
+                                            Text(text = "Cell : ${alert.cellNum}")
+                                        }
+
+                                        TitleText(
+                                            fontSize = 16.sp,
+                                            text = getTimeAgo( alert.date.time)
+                                        )
+                                    }
+
+                                    if (!alert.attended) {
+                                        //Text(text = "Mark attended")
+                                        IconButton(onClick = {
+                                            alertsViewModel.onMarkAttended(
+                                                true,
+                                                alert.alertId
+                                            )
+                                        }) {
+                                            Icon(
+                                                imageVector = Icons.Outlined.ThumbUp,
+                                                contentDescription = "Check"
+                                            )
+                                        }
+                                    }
+                                    else {
+                                        IconButton(onClick = {
+                                            alertsViewModel.onMarkAttended(
+                                                false,
+                                                alert.alertId
+                                            )
+                                        }) {
+                                            Icon(
+                                                imageVector = Icons.Filled.ThumbUp,
+                                                contentDescription = "Check"
+                                            )
+                                        }
+                                    }
+
+                                    IconButton(onClick = {
+                                        alertsViewModel.selectedAlertId = alert.alertId
+                                        showDeleteDialog = true
+                                    }) {
+                                        Icon(
+                                            imageVector = Icons.Default.Delete,
+                                            contentDescription = "delete"
+                                        )
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            } else {
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Card(
+                        modifier = Modifier.padding(6.dp)
                     ) {
                         Row(
                             modifier = Modifier
@@ -122,95 +228,10 @@ fun AlertScreen(
                         ) {
                             Text(
                                 textAlign = TextAlign.Center,
-                                text = "Alerts not yet attended to : ${listOfAlerts.filter { alertFull -> !alertFull.attended }.size}"
+                                text = "No cells flagged"
                             )
                         }
                     }
-
-                    LazyColumn() {
-                        itemsIndexed(listOfAlerts, key = {_, alert ->  alert.alertId} ) { index, alert ->
-                           // MyVerticalSpacer(height = 5)
-                            MyBorderedRow(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(6.dp)
-                                    .animateItemPlacement(),
-                            ) {
-                                Text(text = (index + 1).toString())
-                                Column {
-                                    Text(
-                                        text = "Date : ${
-                                            SimpleDateFormat("dd MMM, yyyy").format(
-                                                alert.date
-                                            )
-                                        }"
-                                    )
-                                    Text(text = "Cell : ${alert.cellNum}")
-                                    Text(text = "Block : ${alert.blockNum}")
-                                }
-
-                                if (!alert.attended) {
-                                    //Text(text = "Mark attended")
-                                    IconButton(onClick = {
-                                        alertsViewModel.onMarkAttended(
-                                            true,
-                                            alert.alertId
-                                        )
-                                    }) {
-                                        Icon(
-                                            imageVector = Icons.Outlined.ThumbUp,
-                                            contentDescription = "Check"
-                                        )
-                                    }
-                                } else {
-                                    IconButton(onClick = {
-                                        alertsViewModel.onMarkAttended(
-                                            false,
-                                            alert.alertId
-                                        )
-                                    }) {
-                                        Icon(
-                                            imageVector = Icons.Filled.ThumbUp,
-                                            contentDescription = "Check"
-                                        )
-                                    }
-                                }
-
-                                IconButton(onClick = {
-                                    alertsViewModel.selectedAlertId = alert.alertId
-                                    showDeleteDialog = true
-                                }) {
-                                    Icon(
-                                        imageVector = Icons.Default.Delete,
-                                        contentDescription = "delete"
-                                    )
-                                }
-
-                            }
-                        }
-                    }
-                }
-            }
-            else{
-                Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ){
-                Card(
-                    modifier = Modifier.padding(6.dp)
-                ) {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(6.dp),
-                        horizontalArrangement = Arrangement.Center
-                    ) {
-                        Text(
-                            textAlign = TextAlign.Center,
-                            text = "No cells flagged"
-                        )
-                    }
-                }
                 }
             }
 

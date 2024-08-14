@@ -88,6 +88,7 @@ dependencies {
 
     //viewModel for compose
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0")
+    testImplementation("org.testng:testng:6.9.6")
 
 
     //Vico Charts
