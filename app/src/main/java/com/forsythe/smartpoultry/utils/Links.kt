@@ -1,3 +1,4 @@
 package com.forsythe.smartpoultry.utils
 
-const val PRIVACY_POLICY = "https://docs.google.com/document/d/1meo7Z5_uIz45P-vQZpDNgMAMG9kIFJXupIaF_pBKvLA/edit?usp=drive_link"
+const val PRIVACY_POLICY_LINK = "https://drive.google.com/file/d/1_wAKIX-XH-_J1886Qz3VCusjbQG5r7Ki/view?usp=drive_link"
+const val ABOUT_US_LINK = "https://aboutsmartPoultry.com"

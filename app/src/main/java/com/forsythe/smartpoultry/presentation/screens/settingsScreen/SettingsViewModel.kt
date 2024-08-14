@@ -177,4 +177,8 @@ class SettingsViewModel @Inject constructor (
         _showInfoDialog.value = showDialog
     }
 
+    fun onSendFeedback() {
+        //TODO
+    }
+
 }

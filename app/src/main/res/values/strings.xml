@@ -69,4 +69,7 @@
     <string name="give_feedback">Give feedback</string>
     <string name="contact_us">Contact us</string>
     <string name="about_info">About us</string>
+    <string name="ok_btn">Ok</string>
+    <string name="cancel_btn">Cancel</string>
+    <string name="send_btn">Send</string>
 </resources>

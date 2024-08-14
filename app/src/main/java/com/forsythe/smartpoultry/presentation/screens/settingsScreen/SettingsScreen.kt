@@ -1,5 +1,7 @@
 package com.forsythe.smartpoultry.presentation.screens.settingsScreen
 
+import android.content.Intent
+import android.net.Uri
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -58,9 +60,11 @@ import com.forsythe.smartpoultry.presentation.composables.spacers.MyVerticalSpac
 import com.forsythe.smartpoultry.presentation.composables.text.TitleText
 import com.forsythe.smartpoultry.presentation.composables.textInputFields.MyOutlineTextFiled
 import com.forsythe.smartpoultry.presentation.destinations.LogInScreenDestination
+import com.forsythe.smartpoultry.utils.ABOUT_US_LINK
 import com.forsythe.smartpoultry.utils.CONSUCUTIVE_DAYS_KEY
 import com.forsythe.smartpoultry.utils.IS_AUTOMATED_ANALYSIS_KEY
 import com.forsythe.smartpoultry.utils.PAST_DAYS_KEY
+import com.forsythe.smartpoultry.utils.PRIVACY_POLICY_LINK
 import com.forsythe.smartpoultry.utils.REPEAT_INTERVAL_KEY
 import com.forsythe.smartpoultry.utils.THRESHOLD_RATIO_KEY
 import com.ramcosta.composedestinations.annotation.Destination
@@ -519,12 +523,39 @@ fun SettingsScreen(
                         ) {
                             MyTextButton(//Privacy policy
                                 onButtonClick = {
-                                    
+                                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(PRIVACY_POLICY_LINK))
+                                    context.startActivity(intent)
                                 },
                                 btnText = stringResource(id = R.string.privacy_policy)
                             )
+
+                            //Give feedBack dialog
+                            var showFeedbackDialog by remember{ mutableStateOf(false) }
+                            MyInputDialog(
+                                showDialog = showFeedbackDialog,
+                                title = stringResource(id = R.string.give_feedback),
+                                confirmBtnName = stringResource(id = R.string.send_btn),
+                                onConfirm = {
+                                    settingsViewModel.onSendFeedback()
+                                    showFeedbackDialog = false
+                                },
+                                onDismiss = {
+                                    showFeedbackDialog = false
+                                }
+                            )
+                            {
+                                var text by remember { mutableStateOf("") }
+                                MyOutlineTextFiled(
+                                    label = stringResource(id = R.string.give_feedback),
+                                    keyboardType = KeyboardType.Text,
+                                    initialText = text,
+                                    onValueChange = {
+                                        text = it
+                                    }
+                                )
+                            }
                             MyTextButton(//FeedBack
-                                onButtonClick = { /*TODO*/ },
+                                onButtonClick = { showFeedbackDialog = true },
                                 btnText = stringResource(id = R.string.give_feedback)
                             )
                         }
@@ -534,12 +565,15 @@ fun SettingsScreen(
                             horizontalArrangement = Arrangement.SpaceEvenly,
                         ){
 
-                            MyTextButton(//Contact Support
+                            MyTextButton(//Contact us
                                 onButtonClick = { /*TODO*/ },
                                 btnText = stringResource(id = R.string.contact_us)
                             )
-                            MyTextButton(//Developer info
-                                onButtonClick = { /*TODO*/ },
+                            MyTextButton(//About info
+                                onButtonClick = {
+                                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(ABOUT_US_LINK))
+                                    context.startActivity(intent)
+                                },
                                 btnText = stringResource(id = R.string.about_info)
                             )
                         }
