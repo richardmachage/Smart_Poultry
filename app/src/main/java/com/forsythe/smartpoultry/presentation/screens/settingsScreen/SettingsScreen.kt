@@ -48,6 +48,7 @@ import com.forsythe.smartpoultry.R
 import com.forsythe.smartpoultry.domain.permissions.POST_NOTIFICATIONS
 import com.forsythe.smartpoultry.domain.permissions.checkIfPermissionGranted
 import com.forsythe.smartpoultry.presentation.NavGraphs
+import com.forsythe.smartpoultry.presentation.composables.buttons.MyTextButton
 import com.forsythe.smartpoultry.presentation.composables.buttons.ToggleButton
 import com.forsythe.smartpoultry.presentation.composables.cards.MyCard
 import com.forsythe.smartpoultry.presentation.composables.dialogs.InfoDialog
@@ -113,7 +114,8 @@ fun SettingsScreen(
             Column(
                 Modifier
                     .padding(start = 16.dp, end = 16.dp)
-                    .verticalScroll(rememberScrollState())
+                    .verticalScroll(rememberScrollState()),
+
             ) {
                 MyVerticalSpacer(height = 10)
 
@@ -497,6 +499,52 @@ fun SettingsScreen(
 
                 }
             }
+                MyVerticalSpacer(height = 10)
+
+                //Links
+                MyCard (
+                    modifier = Modifier.fillMaxWidth()
+                ){
+                    Column {
+                        /*Text(
+                            modifier = Modifier.padding(start = 10.dp),
+                            text = stringResource(id = R.string.extras),
+                            fontWeight = FontWeight.Bold
+                        )*/
+
+                        Row (
+                            modifier = Modifier.fillMaxWidth(),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.SpaceEvenly,
+                        ) {
+                            MyTextButton(//Privacy policy
+                                onButtonClick = {
+                                    
+                                },
+                                btnText = stringResource(id = R.string.privacy_policy)
+                            )
+                            MyTextButton(//FeedBack
+                                onButtonClick = { /*TODO*/ },
+                                btnText = stringResource(id = R.string.give_feedback)
+                            )
+                        }
+                        Row (
+                            modifier = Modifier.fillMaxWidth(),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.SpaceEvenly,
+                        ){
+
+                            MyTextButton(//Contact Support
+                                onButtonClick = { /*TODO*/ },
+                                btnText = stringResource(id = R.string.contact_us)
+                            )
+                            MyTextButton(//Developer info
+                                onButtonClick = { /*TODO*/ },
+                                btnText = stringResource(id = R.string.about_info)
+                            )
+                        }
+                    }
+                }
                 
                 MyVerticalSpacer(height = 10)
 
@@ -512,10 +560,6 @@ fun SettingsScreen(
                             navigator.navigate(LogInScreenDestination) {
                                 popUpTo(NavGraphs.root) { inclusive = true }
                             }
-                            /*withContext(Dispatchers.Main){
-                                (context as Activity).finish()
-                            }*/
-
                         }
                     },
                     onDismiss = {
