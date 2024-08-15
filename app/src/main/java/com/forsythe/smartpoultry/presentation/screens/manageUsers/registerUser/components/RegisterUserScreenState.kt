@@ -7,4 +7,5 @@ data class RegisterUserScreenState(
     var showPrevious : Boolean ,//= false
     var isContinueEnabled : Boolean,
     var toastMessage : String = "",
+    var navigateToManageUsers: Boolean = false
 )

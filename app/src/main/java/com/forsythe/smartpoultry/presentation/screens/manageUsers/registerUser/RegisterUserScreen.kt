@@ -34,6 +34,8 @@ import com.forsythe.smartpoultry.presentation.composables.buttons.NormButton
 import com.forsythe.smartpoultry.presentation.composables.progressBars.MyCircularProgressBar
 import com.forsythe.smartpoultry.presentation.composables.spacers.MyVerticalSpacer
 import com.forsythe.smartpoultry.presentation.composables.text.TitleText
+import com.forsythe.smartpoultry.presentation.destinations.ManageUsersScreenDestination
+import com.forsythe.smartpoultry.presentation.destinations.RegisterUserScreenDestination
 import com.forsythe.smartpoultry.presentation.screens.manageUsers.registerUser.components.AccessLevelDetails
 import com.forsythe.smartpoultry.presentation.screens.manageUsers.registerUser.components.AccessLevelDetailsResponse
 import com.forsythe.smartpoultry.presentation.screens.manageUsers.registerUser.components.RegisterUserParts
@@ -44,6 +46,7 @@ import com.forsythe.smartpoultry.presentation.screens.signUp.models.PersonalDeta
 import com.forsythe.smartpoultry.presentation.ui.theme.SmartPoultryTheme
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import com.ramcosta.composedestinations.navigation.popUpTo
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Destination
@@ -64,6 +67,15 @@ fun RegisterUserScreen(
 
     }
 
+    LaunchedEffect(key1 = registerUserViewModel.registerUserScreenState.navigateToManageUsers) {
+        if (registerUserViewModel.registerUserScreenState.navigateToManageUsers){
+            navigator.navigate(ManageUsersScreenDestination){
+                popUpTo(RegisterUserScreenDestination){inclusive = true}
+            }
+           // navigator.navigateUp() //navigate(ManageUsersScreenDestination)
+            registerUserViewModel.registerUserScreenState.navigateToManageUsers = false
+        }
+    }
     SmartPoultryTheme {
         Scaffold(
             topBar = {

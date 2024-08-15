@@ -100,7 +100,8 @@ class RegisterUserViewModel @Inject constructor(
 
                 result.onSuccess {
                     _registerUserScreenState = _registerUserScreenState.copy(
-                        toastMessage = "${registerUserScreenData.firstName} registered successfully"
+                        toastMessage = "${registerUserScreenData.firstName} registered successfully",
+                        navigateToManageUsers = true
                     )
                 }
 

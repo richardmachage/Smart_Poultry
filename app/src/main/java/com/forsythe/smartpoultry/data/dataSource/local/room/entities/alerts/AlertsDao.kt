@@ -25,6 +25,6 @@ interface AlertsDao {
     suspend fun updateAttendedStatus(status:Boolean, alertId:Int)
 
     @Transaction
-    @Query("SELECT alerts_tbl.alertId, alerts_tbl.date, alerts_tbl.attended, cells_tbl.cellNum, blocks_tbl.blockNum FROM alerts_tbl INNER JOIN cells_tbl ON alerts_tbl.flaggedCellId = cells_tbl.cellId INNER JOIN blocks_tbl ON cells_tbl.blockId = blocks_tbl.blockId ORDER BY attended ASC, date ASC")
+    @Query("SELECT alerts_tbl.alertId, alerts_tbl.date, alerts_tbl.attended, cells_tbl.cellNum, blocks_tbl.blockNum FROM alerts_tbl INNER JOIN cells_tbl ON alerts_tbl.flaggedCellId = cells_tbl.cellId INNER JOIN blocks_tbl ON cells_tbl.blockId = blocks_tbl.blockId ORDER BY  attended ASC, date DESC")
     fun getFlaggedCellsFull() : Flow<List<AlertFull>>
 }

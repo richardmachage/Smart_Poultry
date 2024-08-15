@@ -152,18 +152,14 @@ class EggCollectionRepositoryImpl @Inject constructor(
                     .addOnSuccessListener {
                         result = result.copy(
                             isSuccess = true,
-                            message =  "Success: added record $recordId for cellId ${eggCollection.cellId} to firebase "
-
+                            message =  "Record added successfully"
                         )
-                        /*Log.d(
-                            "add new record",
-                            "Success: added record $recordId for cellId ${eggCollection.cellId} to firebase "
-                        )*/
+
                     }
                     .addOnFailureListener {
                         Log.d(
                             "add new record",
-                            "Failed to add record $recordId for cellId ${eggCollection.cellId} to firebase "
+                            "Failed to add record to firebase ${it.message}"
                         )
                         CoroutineScope(Dispatchers.IO).launch {
                             eggCollectionDao.deleteCollectionRecord(recordId.toInt())
@@ -171,7 +167,7 @@ class EggCollectionRepositoryImpl @Inject constructor(
 
                         result = result.copy(
                             isSuccess = false,
-                            message ="Failed to add record $recordId for cellId ${eggCollection.cellId} to firebase "
+                            message ="Failed : ${it.localizedMessage}"
                         )
                     }
                     .await()
@@ -195,64 +191,21 @@ class EggCollectionRepositoryImpl @Inject constructor(
                             henCount = eggCollection.henCount
                         )
                     )
+
                 // Assume success since the write will be cached
-                result = result.copy(isSuccess = true, message = "Record pending, waiting for internet connection to sync")
+                result = result.copy(isSuccess = true, message = "Record added locally successfully")
                 return result
             }
         }
         catch (exception : Exception){
             result = result.copy(isSuccess = false, message = "Failed: ${exception.message.toString()}")
-
             return result
         }
 
-        /*
-        try {
-            var insertStatus:Boolean = false
-
-            //first insert to Local DB
-            val recordId = eggCollectionDao.insertCollectionRecord(eggCollection)
-
-            //then now update remote DB
-            val farmsCollection = fireStoreDb.collection(FARMS_COLLECTION)
-            val farmDocument = farmsCollection.document(getFarmId())
-            val eggsCollectionRef : CollectionReference = farmDocument.collection(EGGS_COLLECTION)
-
-            eggsCollectionRef
-                .document(recordId.toString())
-                .set(
-                    EggCollection(
-                        productionId = recordId.toInt(),
-                        date = eggCollection.date,
-                        cellId = eggCollection.cellId,
-                        eggCount = eggCollection.eggCount,
-                        henCount = eggCollection.henCount
-
-                    )
-                )
-                .addOnSuccessListener{
-                    Log.d("add new record", "Success: added record $recordId for cellId ${eggCollection.cellId} to firebase ")
-                    insertStatus = true
-                }
-                .addOnFailureListener{
-                    Log.d("add new record", "Failed to add record $recordId for cellId ${eggCollection.cellId} to firebase ")
-
-                    CoroutineScope(Dispatchers.IO).launch{
-                        eggCollectionDao.deleteCollectionRecord(recordId.toInt())
-                    }
-                    Throwable(it)
-                }
-                .await()
-            return insertStatus
-        } catch (e: Exception) {
-            Log.d("add new record", "Failed: ${e.message.toString()} ")
-            return false
-        }*/
     }
 
     override suspend fun deleteRecord(recordId: Int) {
         eggCollectionDao.deleteCollectionRecord(recordId)
-        //fireStoreDb.collection(eggsCollectionPath.path)
         val farmsCollection = fireStoreDb.collection(FARMS_COLLECTION)
         val farmDocument: DocumentReference = farmsCollection.document(getFarmId())
         val eggsCollection: CollectionReference = farmDocument.collection(EGGS_COLLECTION)

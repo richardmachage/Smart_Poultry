@@ -23,7 +23,7 @@ class AlertsViewModel @Inject constructor(
     fun getFlaggedCells(): Flow<List<AlertFull>>{
         return alertsRepository.getFlaggedCells().stateIn(
             scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(),
+            started = SharingStarted.Eagerly,
             initialValue = emptyList()
         )
     }

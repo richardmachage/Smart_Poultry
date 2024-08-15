@@ -136,58 +136,6 @@ fun HomeScreen(
     }
 
 
-/*
-    DisposableEffect(key1 = Unit) {
-        // Cast the context to an Activity, if possible
-        val activity = context as? ComponentActivity
-
-        // Determine which back dispatcher to use based on the Android version
-        val onBackInvokedDispatcher =
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
-                activity?.onBackInvokedDispatcher
-            } else {
-                null
-            }
-
-        // Register a back callback for Android 14 and above
-        val backCallback = if (onBackInvokedDispatcher != null) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                val callback = OnBackInvokedCallback {
-                    //on back pressed action
-                    showLeaveDialog = true
-                }
-                onBackInvokedDispatcher.registerOnBackInvokedCallback(
-                    OnBackInvokedDispatcher.PRIORITY_DEFAULT,
-                    callback
-                )
-                callback
-            } else {
-                null
-            }
-        } else {
-            // Fallback for older versions of Android
-            val callback = object : OnBackPressedCallback(true) {
-                override fun handleOnBackPressed() {
-                    //on back pressed action
-                    showLeaveDialog = true
-                }
-
-            }
-            activity?.onBackPressedDispatcher?.addCallback(activity, callback)
-            callback
-        }
-
-        onDispose {
-            // Cleanup: Unregister the back callback when the composable leaves the composition
-            if (onBackInvokedDispatcher != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                onBackInvokedDispatcher.unregisterOnBackInvokedCallback(backCallback as OnBackInvokedCallback)
-            } else {
-                (backCallback as? OnBackPressedCallback)?.remove()
-            }
-        }
-    }
-*/
-
     DisposableEffect(key1 = Unit) {
         // Cast the context to an Activity, if possible
         val activity = context as? ComponentActivity
@@ -272,7 +220,7 @@ fun HomeScreen(
             }
             if (homeViewModel.passwordReset.value == "false") {
                 MyCard(
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth().padding(bottom = 6.dp)
                 ) {
                     TextButton(onClick = {
                         //show password reset dialog

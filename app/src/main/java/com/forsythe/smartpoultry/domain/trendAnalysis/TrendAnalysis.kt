@@ -19,6 +19,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import java.sql.Date
 import java.time.LocalDate
@@ -31,23 +32,24 @@ class TrendAnalysis @Inject constructor(
     private val preferencesRepo: PreferencesRepo
 ) {
 
-    //var THRESHOLD_RATIO = preferencesRepo.loadData(THRESHOLD_RATIO_KEY)!!.toFloatOrNull() ?: 0.0f//by Delegates.notNull<Float>()
-   // var CONSUCUTIVE_DAYS = preferencesRepo.loadData(CONSUCUTIVE_DAYS_KEY)!!.toIntOrNull()?: 0//by Delegates.notNull<Int>()
-
     //first get all cells
     var listOfAllCells = mutableListOf<Cells>()
-    //private var listOfFlaggedCells = mutableListOf<Cells>()
 
     init {
         getAllCells()
     }
 
 
-    private fun getThreshHoldRatio() : Float = preferencesRepo.loadData(THRESHOLD_RATIO_KEY)!!.toFloatOrNull() ?: 0.0f
-    private fun getConsucutiveDays() : Int = preferencesRepo.loadData(CONSUCUTIVE_DAYS_KEY)!!.toIntOrNull()?: 0
+    private fun getThreshHoldRatio(): Float =
+        preferencesRepo.loadData(THRESHOLD_RATIO_KEY)!!.toFloatOrNull() ?: 0.0f
+
+    private fun getConsucutiveDays(): Int =
+        preferencesRepo.loadData(CONSUCUTIVE_DAYS_KEY)!!.toIntOrNull() ?: 0
+
     private fun getAllCells() {
         CoroutineScope(Dispatchers.IO).launch {
             cellsRepository.getAllCells().collect {
+                listOfAllCells.clear()
                 listOfAllCells.addAll(it)
             }
         }
@@ -59,9 +61,8 @@ class TrendAnalysis @Inject constructor(
 
         val deferredResults = listOfAllCells.map { cell ->
             async(Dispatchers.Default) {
-               // if (flagCell(cell.cellId).await())
-                if(myFlagCell(cell.cellId).await())
-                {
+
+                if (myFlagCell(cell.cellId).await()) {
                     cell
                 } else null
             }
@@ -78,26 +79,28 @@ class TrendAnalysis @Inject constructor(
         CoroutineScope(Dispatchers.IO).launch {
             var result = false
             Log.d("Analysis", "started cell $cellId")
-            eggCollectionRepository.getCellEggCollectionForPastDays(
-                cellId= cellId,
+            val records = eggCollectionRepository.getCellEggCollectionForPastDays(
+                cellId = cellId,
                 startDate = Date(
                     localDateToJavaDate(getDateDaysAgo(getConsucutiveDays()))
                 )
-            ).collect{records->
-                var count = 0
-                for (record in records){
-                    val ratio = record.eggCount.toFloat() / record.henCount.toFloat()
-                   // Log.d("Compare", "is $ratio < $THRESHOLD_RATIO")
-                    if (ratio <= getThreshHoldRatio()){
-                        count++
-                        if (count >= getConsucutiveDays()) result = true
-                    }else{
-                        count = 0
-                    }
+            ).first()
+
+            // { records ->
+            var count = 0
+            for (record in records) {
+                val ratio = record.eggCount.toFloat() / record.henCount.toFloat()
+                // Log.d("Compare", "is $ratio < $THRESHOLD_RATIO")
+                if (ratio <= getThreshHoldRatio()) {
+                    count++
+                    if (count >= getConsucutiveDays()) result = true
                 }
-               // Log.d("Flag status", "isFlagged $result")
-                isUnderPerforming.complete(result)
+                else {
+                    count = 0
+                }
             }
+            isUnderPerforming.complete(result)
+            //}
         }
         return isUnderPerforming
     }

@@ -15,7 +15,7 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun MyCard(
     modifier: Modifier = Modifier,
-    content : @Composable () -> Unit
+    content : @Composable () -> Unit,
 ){
     Card(
         modifier = modifier
@@ -35,7 +35,6 @@ fun MyCard(
             disabledContentColor = MaterialTheme.colorScheme.primaryContainer
         ),
         shape = RoundedCornerShape(20),
-
         ) {
         content()
     }

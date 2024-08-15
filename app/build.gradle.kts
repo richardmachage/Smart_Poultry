@@ -88,6 +88,7 @@ dependencies {
 
     //viewModel for compose
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0")
+    testImplementation("org.testng:testng:6.9.6")
 
 
     //Vico Charts
@@ -144,5 +145,9 @@ dependencies {
     //Play Billing
     val billing_version = "7.0.0"
     implementation("com.android.billingclient:billing:$billing_version")
+
+    //Splash Screen
+    implementation ("androidx.core:core-splashscreen:1.0.1")
+
 
 }

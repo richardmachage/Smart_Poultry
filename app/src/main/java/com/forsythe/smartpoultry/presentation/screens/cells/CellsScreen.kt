@@ -160,7 +160,7 @@ fun CellsScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(text = "Cells") },
+                title = { Text(text = "Block ${block.blockNum}") },
                 navigationIcon = {
                     IconButton(onClick = { navigator.navigateUp() }) {
                         Icon(
