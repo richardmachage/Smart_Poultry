@@ -6,6 +6,7 @@ import android.os.Environment
 import android.provider.MediaStore
 import com.forsythe.smartpoultry.data.dataModels.EggRecordFull
 import com.forsythe.smartpoultry.utils.format
+import com.forsythe.smartpoultry.utils.toUtilDate
 import org.apache.poi.ss.usermodel.Row
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
 
@@ -19,12 +20,12 @@ fun createWorkBook(
     val sheet = workbook.createSheet(sheetName)
 
     val headerRow = sheet.createRow(0)
-    headerRow.createCell(0).setCellValue("Record Id")
-    headerRow.createCell(1).setCellValue("Date")
-    headerRow.createCell(2).setCellValue("Block")
-    headerRow.createCell(3).setCellValue("Cell")
-    headerRow.createCell(4).setCellValue("Egg Count")
-    headerRow.createCell(5).setCellValue("Hen Count")
+   // headerRow.createCell(0).setCellValue("Record Id")
+    headerRow.createCell(0).setCellValue("Date")
+    headerRow.createCell(1).setCellValue("Block")
+    headerRow.createCell(2).setCellValue("Cell")
+    headerRow.createCell(3).setCellValue("Egg Count")
+    headerRow.createCell(4).setCellValue("Hen Count")
 
 
     //populating the sheet
@@ -68,7 +69,7 @@ fun saveWorkbookWithMediaStore(context: Context, workbook: XSSFWorkbook, fileNam
 
 }
 fun Row.addEggRecord(record : EggRecordFull){
-    createCell(0).setCellValue(record.date.format())
+    createCell(0).setCellValue(record.date.toUtilDate().format())
     createCell(1).setCellValue(record.blockNum.toDouble())
     createCell(2).setCellValue(record.cellNum.toDouble())
     createCell(3).setCellValue(record.eggCount.toDouble())

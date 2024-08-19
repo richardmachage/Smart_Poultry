@@ -14,13 +14,16 @@ fun LocalDate.format(pattern : String? = null) : String{
     }
 }
 
+fun java.sql.Date.toUtilDate () : java.util.Date{
+    return java.util.Date(this.time)
+}
 
 @SuppressLint("SimpleDateFormat")
 fun java.util.Date.format(pattern : String? = null) : String{
     return  pattern?.let {
         SimpleDateFormat(pattern).format(this)
     }?: run {
-       SimpleDateFormat("dd/mm/yyyy").format(this)
+       SimpleDateFormat("dd-MM-yyyy").format(this)
     }
 }
 
