@@ -9,7 +9,6 @@ import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import com.forsythe.smartpoultry.data.dataSource.local.datastore.AppDataStore
 import com.forsythe.smartpoultry.data.dataSource.local.datastore.PreferencesRepo
-import com.forsythe.smartpoultry.data.dataSource.local.room.database.SmartPoultryDatabase
 import com.forsythe.smartpoultry.domain.workers.AnalysisWorker
 import com.forsythe.smartpoultry.utils.CONSUCUTIVE_DAYS_KEY
 import com.forsythe.smartpoultry.utils.EDIT_HEN_COUNT_ACCESS
@@ -44,7 +43,6 @@ class SettingsViewModel @Inject constructor (
     private val dataStore: AppDataStore,
     private val firebaseAuth: FirebaseAuth,
     private val preferencesRepo: PreferencesRepo,
-    private val smartPoultryDatabase: SmartPoultryDatabase
 ): ViewModel() {
 
     val toastMessage = mutableStateOf("")
@@ -162,9 +160,6 @@ class SettingsViewModel @Inject constructor (
         }
     }
 
-    /*fun toggleInfoDialog(showDialog : Boolean ){
-        _showInfoDialog.value = showDialog
-    }*/
 
     fun onSendFeedback() {
         //TODO
