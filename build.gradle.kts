@@ -29,7 +29,7 @@ fun BaseExtension.defaultConfig(){
     compileSdkVersion(34)
 
     defaultConfig {
-        minSdk = 24
+        minSdk = 26
         targetSdk = 34
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"

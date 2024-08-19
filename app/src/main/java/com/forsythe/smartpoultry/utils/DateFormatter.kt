@@ -1,24 +1,37 @@
 package com.forsythe.smartpoultry.utils
 
 import android.annotation.SuppressLint
-import android.os.Build
-import androidx.annotation.RequiresApi
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
-@RequiresApi(Build.VERSION_CODES.O)
+fun LocalDate.format(pattern : String? = null) : String{
+    return  pattern?.let {it->
+        DateTimeFormatter.ofPattern(it).format(this)
+    }?: run {
+        DateTimeFormatter.ofPattern("dd/mm/yyyy").format(this)
+    }
+}
+
+
+@SuppressLint("SimpleDateFormat")
+fun java.util.Date.format(pattern : String? = null) : String{
+    return  pattern?.let {
+        SimpleDateFormat(pattern).format(this)
+    }?: run {
+       SimpleDateFormat("dd/mm/yyyy").format(this)
+    }
+}
+
 fun myDateFormatter(date: LocalDate): String {
     return DateTimeFormatter.ofPattern("dd/mm/yyyy").format(date)
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 fun getDateDaysAgo(numberOfDays: Int): LocalDate {
     return LocalDate.now().minusDays(numberOfDays.toLong())
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 fun localDateToJavaDate(localDate: LocalDate): Long {
     val startOfDayUtc = localDate.atStartOfDay(ZoneId.of("UTC"))
 
@@ -52,3 +65,4 @@ fun toYearMonth(year: String, month: String): String {
         else -> ""
     }
 }
+

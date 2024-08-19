@@ -88,7 +88,9 @@ dependencies {
 
     //viewModel for compose
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0")
+    implementation("androidx.test.ext:junit-ktx:1.2.1")
     testImplementation("org.testng:testng:6.9.6")
+    androidTestImplementation("junit:junit:4.12")
 
 
     //Vico Charts
@@ -150,8 +152,13 @@ dependencies {
     implementation ("androidx.core:core-splashscreen:1.0.1")
 
     //Poi for exporting excel documents
-    implementation("org.apache.poi:poi:5.2.3") // For `.xls` files
-    implementation("org.apache.poi:poi-ooxml:5.2.3") // For `.xlsx` files
+    implementation("org.apache.poi:poi:5.3.0") {// For `.xls` files
+       // exclude(group = "org.apache.logging.log4j", module="log4j-api") //removed coz it supports only aPIs 26
+
+    }
+    implementation("org.apache.poi:poi-ooxml:5.3.0"){// For `.xlsx` files
+      //  exclude(group = "org.apache.logging.log4j", module="log4j-api") //removed coz it supports only aPIs 26
+    }
 
 
 }

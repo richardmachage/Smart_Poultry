@@ -4,15 +4,15 @@ import android.content.ContentValues
 import android.content.Context
 import android.os.Environment
 import android.provider.MediaStore
-import android.util.Log
-import com.forsythe.smartpoultry.data.dataSource.local.room.entities.eggCollection.EggCollection
+import com.forsythe.smartpoultry.data.dataModels.EggRecordFull
+import com.forsythe.smartpoultry.utils.format
 import org.apache.poi.ss.usermodel.Row
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
 
 fun createWorkBook(
     context: Context,
     sheetName : String,
-    listOfRecords : List<EggCollection>
+    listOfRecords : List<EggRecordFull>
 ) : XSSFWorkbook{
     val workbook = XSSFWorkbook()
     //let each sheet be named after a block...then
@@ -21,9 +21,10 @@ fun createWorkBook(
     val headerRow = sheet.createRow(0)
     headerRow.createCell(0).setCellValue("Record Id")
     headerRow.createCell(1).setCellValue("Date")
-    headerRow.createCell(2).setCellValue("Cell")
-    headerRow.createCell(3).setCellValue("Egg Count")
-    headerRow.createCell(4).setCellValue("Hen Count")
+    headerRow.createCell(2).setCellValue("Block")
+    headerRow.createCell(3).setCellValue("Cell")
+    headerRow.createCell(4).setCellValue("Egg Count")
+    headerRow.createCell(5).setCellValue("Hen Count")
 
 
     //populating the sheet
@@ -53,19 +54,23 @@ fun saveWorkbookWithMediaStore(context: Context, workbook: XSSFWorkbook, fileNam
                 workbook.write(outputStream)
                 outputStream?.flush()
             }
+            workbook.close()
+
         } ?: run {
             // Handle the case where the file could not be created
             workbook.close()
             throw IllegalStateException("Unable to create file in MediaStore")
         }
     }catch (e : Exception){
-        Log.d("WorkBook", "saveWorkbookWithMediaStore: ${e.message}")
+        Throwable(e)
+        //Log.d("WorkBook", "saveWorkbookWithMediaStore: ${e.message}")
     }
 
 }
-fun Row.addEggRecord(record : EggCollection){
-    createCell(0).setCellValue(record.productionId.toString())
-    createCell(1).setCellValue(record.date)
-    createCell(2).setCellValue(record.eggCount.toDouble())
-    createCell(3).setCellValue(record.henCount.toDouble())
+fun Row.addEggRecord(record : EggRecordFull){
+    createCell(0).setCellValue(record.date.format())
+    createCell(1).setCellValue(record.blockNum.toDouble())
+    createCell(2).setCellValue(record.cellNum.toDouble())
+    createCell(3).setCellValue(record.eggCount.toDouble())
+    createCell(4).setCellValue(record.henCount.toDouble())
 }

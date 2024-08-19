@@ -30,4 +30,5 @@ class GraphsViewModel @Inject constructor(
             getFarmName()
         )
     }
+
 }

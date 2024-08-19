@@ -1,5 +1,6 @@
 package com.forsythe.smartpoultry.presentation.screens.viewRecordsScreen
 
+import android.widget.Toast
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
@@ -11,6 +12,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ExitToApp
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Search
@@ -24,16 +26,19 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.forsythe.smartpoultry.presentation.composables.dialogs.MyInputDialog
 import com.forsythe.smartpoultry.presentation.composables.others.MyBorderedRow
+import com.forsythe.smartpoultry.presentation.composables.progressBars.MyCircularProgressBar
 import com.forsythe.smartpoultry.presentation.composables.spacers.MyVerticalSpacer
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -47,6 +52,15 @@ fun ViewRecordsScreen(
     val recordsViewModel = hiltViewModel<ViewRecordsViewModel>()
     val listOfRecordsFull =
         recordsViewModel.getAllFullRecords().collectAsState(initial = emptyList())
+    val context = LocalContext.current
+
+    LaunchedEffect(key1 = recordsViewModel.toastMessage.value) {
+        if (recordsViewModel.toastMessage.value.isNotBlank()){
+            Toast.makeText(context, recordsViewModel.toastMessage.value, Toast.LENGTH_SHORT).show()
+            recordsViewModel.toastMessage.value = ""
+        }
+    }
+    MyCircularProgressBar(isLoading = recordsViewModel.isLoading.value, displayText = "Exporting Excel..")
     Scaffold(
         topBar = {
             TopAppBar(
@@ -59,6 +73,13 @@ fun ViewRecordsScreen(
                         )
                     }
                 },
+                actions = {
+                    IconButton(onClick = {
+                        recordsViewModel.onExportToExcel(context = context, listOfRecords = listOfRecordsFull.value)
+                    }) {
+                        Icon(imageVector = Icons.AutoMirrored.Filled.ExitToApp, contentDescription = "export")
+                    }
+                }
             )
         }
     ) { paddingValues ->
@@ -108,8 +129,10 @@ fun ViewRecordsScreen(
                             .fillMaxSize(),
                         color = MaterialTheme.colorScheme.background,
                     ) {
-                        
-                        LazyColumn(modifier = Modifier.padding(6.dp).animateContentSize()) {
+
+                        LazyColumn(modifier = Modifier
+                            .padding(6.dp)
+                            .animateContentSize()) {
                             itemsIndexed(
                                 recordsViewModel.searchRecord(
                                     queryValue,
@@ -132,7 +155,9 @@ fun ViewRecordsScreen(
                                 MyVerticalSpacer(height = 5)
                                 //val cell = recordsViewModel.getCell(item.cellId)
                                 MyBorderedRow(
-                                    modifier = Modifier.fillMaxWidth().animateItemPlacement(),
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .animateItemPlacement(),
                                     horizontalArrangement = Arrangement.SpaceBetween
                                 ) {
                                     Column (
@@ -143,7 +168,7 @@ fun ViewRecordsScreen(
                                         Text(text = "Eggs collected on this day: ${item.eggCount}")
                                         Text(text = "Chicken on this day: ${item.henCount}")
                                     }
-                                    
+
                                     IconButton(onClick = {
                                         showDeleteDialog = true
                                     }) {
@@ -171,7 +196,9 @@ fun ViewRecordsScreen(
                         }
                         MyVerticalSpacer(height = 10)
                         MyBorderedRow(
-                            modifier = Modifier.fillMaxWidth().animateItemPlacement(),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .animateItemPlacement(),
                             horizontalArrangement = Arrangement.SpaceBetween
                         ) {
                             Column (
