@@ -311,7 +311,12 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
                 //fetch farm
                 val farm = fetchFarm(user.farmId)?: return@withContext Result.failure(Exception("Failed to get farm details"))
 
-                //store fecthed data to shared preferences
+                //check if User's fetched farm is the same to previously logged in User's farm
+                if (!isSimilarFarm(farm)){
+                    //the farm is not similar
+                }
+
+                //store fetched data to shared preferences
                 saveToPreferences( user, accessLevel, farm)
 
                 Result.success(true)
@@ -321,6 +326,9 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
         }
     }
 
+    private fun isSimilarFarm(farm: Farm) : Boolean{
+        return farm.id == getFarmId()
+    }
     override suspend fun resetPassword(email: String): Result<Boolean> = coroutineScope {
         try {
             // Await the completion of the password reset email sending

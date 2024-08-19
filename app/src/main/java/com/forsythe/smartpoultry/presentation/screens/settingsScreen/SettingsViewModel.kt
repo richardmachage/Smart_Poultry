@@ -14,7 +14,6 @@ import com.forsythe.smartpoultry.domain.workers.AnalysisWorker
 import com.forsythe.smartpoultry.utils.CONSUCUTIVE_DAYS_KEY
 import com.forsythe.smartpoultry.utils.EDIT_HEN_COUNT_ACCESS
 import com.forsythe.smartpoultry.utils.EGG_COLLECTION_ACCESS
-import com.forsythe.smartpoultry.utils.FARM_ID_KEY
 import com.forsythe.smartpoultry.utils.IS_AUTOMATED_ANALYSIS_KEY
 import com.forsythe.smartpoultry.utils.IS_PASSWORD_RESET_KEY
 import com.forsythe.smartpoultry.utils.MANAGE_BLOCKS_CELLS_ACCESS
@@ -24,6 +23,8 @@ import com.forsythe.smartpoultry.utils.REPEAT_INTERVAL_KEY
 import com.forsythe.smartpoultry.utils.THRESHOLD_RATIO_KEY
 import com.forsythe.smartpoultry.utils.USER_EMAIL_KEY
 import com.forsythe.smartpoultry.utils.USER_FIRST_NAME_KEY
+import com.forsythe.smartpoultry.utils.USER_GENDER_KEY
+import com.forsythe.smartpoultry.utils.USER_LAST_NAME_KEY
 import com.forsythe.smartpoultry.utils.USER_PHONE_KEY
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -128,34 +129,24 @@ class SettingsViewModel @Inject constructor (
         // Clear preferences and database in the IO context
         withContext(Dispatchers.IO) {
             //clear preferences
-            Log.d("Clear Preferences", "onLogOut called: Start clearing... ")
-            preferencesRepo.deleteData(FARM_ID_KEY)
-            Log.d("Clear Preferences", "cleared farm id ")
-
+            //1. User Details
             preferencesRepo.deleteData(USER_FIRST_NAME_KEY)
-            Log.d("Clear Preferences", "cleared user name")
-
+            preferencesRepo.deleteData(USER_LAST_NAME_KEY)
             preferencesRepo.deleteData(USER_EMAIL_KEY)
-            Log.d("Clear Preferences", "cleared email ")
+            preferencesRepo.deleteData(USER_PHONE_KEY)
+            preferencesRepo.deleteData(USER_GENDER_KEY)
 
+            //2. Access Levels
             preferencesRepo.deleteData(EGG_COLLECTION_ACCESS)
             preferencesRepo.deleteData(EDIT_HEN_COUNT_ACCESS)
             preferencesRepo.deleteData(MANAGE_USERS_ACCESS)
             preferencesRepo.deleteData(MANAGE_BLOCKS_CELLS_ACCESS)
-            Log.d("Clear Preferences", "cleared user role ")
 
-            preferencesRepo.deleteData(USER_PHONE_KEY)
-            Log.d("Clear Preferences", "cleared user phone ")
-
+            //3.is password reset feature
             preferencesRepo.deleteData(IS_PASSWORD_RESET_KEY)
-            Log.d("Clear Preferences", "cleared is password reset ")
 
 
-            //check if preferences is cleared
-            val ema = preferencesRepo.loadData(USER_EMAIL_KEY)!!
-            Log.d("Clear Preferences", "The user email now is : $ema")
-            // Clear database and sign out concurrently
-            Log.d("Clear Database", "Clearing Database begins ")
+
             val clearDatabaseJob = async {
                 smartPoultryDatabase.clearAllTables()
                 Log.d("Clear Database", "Clearing Database finish ")

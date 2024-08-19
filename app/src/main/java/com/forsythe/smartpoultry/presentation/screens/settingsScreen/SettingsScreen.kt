@@ -511,11 +511,6 @@ fun SettingsScreen(
                     modifier = Modifier.fillMaxWidth()
                 ){
                     Column {
-                        /*Text(
-                            modifier = Modifier.padding(start = 10.dp),
-                            text = stringResource(id = R.string.extras),
-                            fontWeight = FontWeight.Bold
-                        )*/
 
                         Row (
                             modifier = Modifier.fillMaxWidth(),
