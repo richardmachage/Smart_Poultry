@@ -145,6 +145,8 @@ class SettingsViewModel @Inject constructor (
             //3.is password reset feature
             preferencesRepo.deleteData(IS_PASSWORD_RESET_KEY)
 
+            //4. Settings
+            preferencesRepo.deleteData(IS_AUTOMATED_ANALYSIS_KEY)
 
 
 
@@ -160,9 +162,9 @@ class SettingsViewModel @Inject constructor (
         }
     }
 
-    fun toggleInfoDialog(showDialog : Boolean ){
+    /*fun toggleInfoDialog(showDialog : Boolean ){
         _showInfoDialog.value = showDialog
-    }
+    }*/
 
     fun onSendFeedback() {
         //TODO
