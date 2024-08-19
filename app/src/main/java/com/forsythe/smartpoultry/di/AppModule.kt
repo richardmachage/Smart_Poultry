@@ -91,8 +91,8 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun providesFirebaseAuthRepository(firebaseAuth: FirebaseAuth, fireStoreDb: FirebaseFirestore, dataStore: AppDataStore, preferencesRepo: PreferencesRepo) : FirebaseAuthRepository{
-        return FirebaseAuthRepositoryImpl(firebaseAuth = firebaseAuth, firebaseFirestore = fireStoreDb, /*dataStore= dataStore,*/ preferencesRepo = preferencesRepo)
+    fun providesFirebaseAuthRepository(firebaseAuth: FirebaseAuth, fireStoreDb: FirebaseFirestore, preferencesRepo: PreferencesRepo, smartPoultryDatabase: SmartPoultryDatabase) : FirebaseAuthRepository{
+        return FirebaseAuthRepositoryImpl(firebaseAuth = firebaseAuth, firebaseFirestore = fireStoreDb, preferencesRepo = preferencesRepo, smartPoultryDatabase = smartPoultryDatabase )
     }
 
     @Provides

@@ -147,18 +147,14 @@ class SettingsViewModel @Inject constructor (
 
 
 
-            val clearDatabaseJob = async {
-                smartPoultryDatabase.clearAllTables()
-                Log.d("Clear Database", "Clearing Database finish ")
 
-            }
             val signOutJob = async {
                 firebaseAuth.signOut()
                 Log.d("Clear Database", "Clearing finish, sign outs ")
 
             }
 
-            clearDatabaseJob.await()
+            //clearDatabaseJob.await()
             signOutJob.await()
             isLoading.value = false
         }

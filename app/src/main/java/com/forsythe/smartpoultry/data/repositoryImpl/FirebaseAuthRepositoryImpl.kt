@@ -2,6 +2,7 @@ package com.forsythe.smartpoultry.data.repositoryImpl
 
 import android.util.Log
 import com.forsythe.smartpoultry.data.dataSource.local.datastore.PreferencesRepo
+import com.forsythe.smartpoultry.data.dataSource.local.room.database.SmartPoultryDatabase
 import com.forsythe.smartpoultry.data.dataSource.remote.firebase.models.AccessLevel
 import com.forsythe.smartpoultry.data.dataSource.remote.firebase.models.Farm
 import com.forsythe.smartpoultry.data.dataSource.remote.firebase.models.User
@@ -50,21 +51,23 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
     private val firebaseAuth: FirebaseAuth,
     private val firebaseFirestore: FirebaseFirestore,
     // private val dataStore: AppDataStore,
-    private val preferencesRepo: PreferencesRepo
+    private val preferencesRepo: PreferencesRepo,
+    private val smartPoultryDatabase: SmartPoultryDatabase
 ) : FirebaseAuthRepository {
 
 
     val functions = Firebase.functions
+
     override suspend fun signUp(
         email: String,
         password: String,
         role: String,
         farmName: String,
         firstName: String,
-        lastName : String,
+        lastName: String,
         phone: String,
-        country : String,
-        gender : String
+        country: String,
+        gender: String
     ): Result<Boolean> = coroutineScope {
         //step 1. Create user -> using email and password
         //step 2. create farm and retrieve farm ID
@@ -77,7 +80,14 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
                 val firebaseUser = authResult.user
                 //step 2 create farm
                 val newFarm = firebaseFirestore.collection(FARMS_COLLECTION).document()
-                newFarm.set(Farm(name = farmName, id = newFarm.id, superUserEmail = email, country = country)).await()
+                newFarm.set(
+                    Farm(
+                        name = farmName,
+                        id = newFarm.id,
+                        superUserEmail = email,
+                        country = country
+                    )
+                ).await()
                 //step 3 add created user to the Users Collection
                 firebaseUser?.let {
                     val user = User(
@@ -174,43 +184,45 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
         deferred.await()
     }
 
-    suspend fun fetchUserDetails(firebaseUser: FirebaseUser) : User?{
-            val task = firebaseFirestore.collection(USERS_COLLECTION).document(firebaseUser.uid).get()
-            val documentSnapshot = task.await()
+    suspend fun fetchUserDetails(firebaseUser: FirebaseUser): User? {
+        val task = firebaseFirestore.collection(USERS_COLLECTION).document(firebaseUser.uid).get()
+        val documentSnapshot = task.await()
 
-            if (task.isSuccessful){
-                return documentSnapshot.toObject(User::class.java)
-            }else{
-                Throwable(task.exception)
-                return null
-            }
+        if (task.isSuccessful) {
+            return documentSnapshot.toObject(User::class.java)
+        } else {
+            Throwable(task.exception)
+            return null
+        }
 
     }
 
-    suspend fun fetchUserAccessLevel(userId: String):AccessLevel?{
-        val task = firebaseFirestore.collection(USERS_COLLECTION).document(userId).collection(ACCESS_LEVEL).document(userId + "accessLevel").get()
+    suspend fun fetchUserAccessLevel(userId: String): AccessLevel? {
+        val task =
+            firebaseFirestore.collection(USERS_COLLECTION).document(userId).collection(ACCESS_LEVEL)
+                .document(userId + "accessLevel").get()
         val documentSnapShot = task.await()
 
-        if (task.isSuccessful){
-            return  documentSnapShot.toObject(AccessLevel::class.java)
-        }else{
+        if (task.isSuccessful) {
+            return documentSnapShot.toObject(AccessLevel::class.java)
+        } else {
             Throwable(task.exception)
             return null
         }
     }
 
-    suspend fun fetchFarm(farmId: String): Farm?{
-       val task =  firebaseFirestore.collection(FARMS_COLLECTION).document(farmId).get()
+    suspend fun fetchFarm(farmId: String): Farm? {
+        val task = firebaseFirestore.collection(FARMS_COLLECTION).document(farmId).get()
         val documentSnapShot = task.await()
         if (task.isSuccessful) {
             return documentSnapShot.toObject(Farm::class.java)
-        }else {
+        } else {
             Throwable(task.exception)
             return null
         }
     }
 
-    fun saveToPreferences(user:User,accessLevel: AccessLevel, farm : Farm){
+    fun saveToPreferences(user: User, accessLevel: AccessLevel, farm: Farm) {
         //is password reset
         preferencesRepo.saveData(
             IS_PASSWORD_RESET_KEY,
@@ -296,39 +308,52 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
     }
 
     override suspend fun logIn(email: String, password: String): Result<Boolean> = coroutineScope {
-        withContext(Dispatchers.IO){
+        withContext(Dispatchers.IO) {
             try {
                 //first, sign in
-                val authResult = firebaseAuth.signInWithEmailAndPassword(email,password).await()
-                val firebaseUser = authResult.user ?: return@withContext Result.failure(Exception("Authentication failed"))
+                val authResult = firebaseAuth.signInWithEmailAndPassword(email, password).await()
+                val firebaseUser = authResult.user
+                    ?: return@withContext Result.failure(Exception("Authentication failed"))
 
                 //then fetch user details
-                val user = fetchUserDetails(firebaseUser)?: return@withContext Result.failure(Exception("Failed to fetch user details"))
+                val user = fetchUserDetails(firebaseUser) ?: return@withContext Result.failure(
+                    Exception("Failed to fetch user details")
+                )
 
                 //fetch access level
-                val  accessLevel = fetchUserAccessLevel(firebaseUser.uid)?: return@withContext Result.failure(Exception("Failed to get access level"))
+                val accessLevel =
+                    fetchUserAccessLevel(firebaseUser.uid) ?: return@withContext Result.failure(
+                        Exception("Failed to get access level")
+                    )
 
                 //fetch farm
-                val farm = fetchFarm(user.farmId)?: return@withContext Result.failure(Exception("Failed to get farm details"))
+                val farm = fetchFarm(user.farmId)
+                    ?: return@withContext Result.failure(Exception("Failed to get farm details"))
 
                 //check if User's fetched farm is the same to previously logged in User's farm
-                if (!isSimilarFarm(farm)){
-                    //the farm is not similar
+                if (!isSimilarFarm(farm)) {
+                    //the farm is not similar so clear the database
+                    val clearDatabaseJob = async {
+                        smartPoultryDatabase.clearAllTables()
+                        Log.d("Clear Database", "Clearing Database finish ")
+                    }
+                    clearDatabaseJob.await()
                 }
 
                 //store fetched data to shared preferences
-                saveToPreferences( user, accessLevel, farm)
+                saveToPreferences(user, accessLevel, farm)
 
                 Result.success(true)
-            }catch (e:Exception){
+            } catch (e: Exception) {
                 Result.failure(e)
             }
         }
     }
 
-    private fun isSimilarFarm(farm: Farm) : Boolean{
+    private fun isSimilarFarm(farm: Farm): Boolean {
         return farm.id == getFarmId()
     }
+
     override suspend fun resetPassword(email: String): Result<Boolean> = coroutineScope {
         try {
             // Await the completion of the password reset email sending
@@ -434,6 +459,7 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
         return Result.success(true)
 
     }
+
     @OptIn(ExperimentalCoroutinesApi::class)
     override suspend fun editPhone(phone: String): Result<Boolean> {
         val completableDeferred = CompletableDeferred<Boolean>()
@@ -453,36 +479,38 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
         )
     }
 
-    override suspend fun editAccessLevel(userId: String, accessLevel: AccessLevel): Result<Boolean> {
-        val task  = firebaseFirestore.collection(USERS_COLLECTION).document(userId)
+    override suspend fun editAccessLevel(
+        userId: String,
+        accessLevel: AccessLevel
+    ): Result<Boolean> {
+        val task = firebaseFirestore.collection(USERS_COLLECTION).document(userId)
             .collection(ACCESS_LEVEL).document(userId + "accessLevel")
             .set(accessLevel)
-         task.await()
+        task.await()
 
         return if (task.isSuccessful) Result.success(true) else Result.failure(task.exception?.cause!!)
     }
 
     override suspend fun getFarmEmployees(farmId: String): Result<List<User>> {
         val listOfEmployees = mutableListOf<User>()
-        var superUserEmail : String? = null
+        var superUserEmail: String? = null
 
         try {
-             val farm = firebaseFirestore.collection(FARMS_COLLECTION)
+            val farm = firebaseFirestore.collection(FARMS_COLLECTION)
                 .document(farmId)
                 .get()
-                 .await()
+                .await()
             val myFarm = farm.toObject<Farm>()
             myFarm?.let {
                 superUserEmail = it.superUserEmail
             }
 
-        }
-        catch (e : Exception){
+        } catch (e: Exception) {
             Log.d("get employees", e.message.toString())
             return Result.failure(e)
         }
 
-        return superUserEmail?.let {superEmail->
+        return superUserEmail?.let { superEmail ->
             try {
                 val querySnapshot = firebaseFirestore.collection(USERS_COLLECTION)
                     .whereEqualTo("farmId", farmId)
@@ -503,7 +531,7 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
                 /*return*/
                 Result.failure(e)
             }
-        }?: Result.success(listOfEmployees)
+        } ?: Result.success(listOfEmployees)
     }
 
     override suspend fun deleteUser(userId: String): Result<String> {
@@ -548,26 +576,26 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getAccessLevel(userId: String): Result<AccessLevel> {
-          return try {
-              //var accessLevel = AccessLevel()
-              val task  = firebaseFirestore.collection(USERS_COLLECTION).document(userId)
-                  .collection(ACCESS_LEVEL).document(userId + "accessLevel")
-                  .get()
+        return try {
+            //var accessLevel = AccessLevel()
+            val task = firebaseFirestore.collection(USERS_COLLECTION).document(userId)
+                .collection(ACCESS_LEVEL).document(userId + "accessLevel")
+                .get()
 
-              val docSnapShot = task.await()
+            val docSnapShot = task.await()
 
-              if (task.isSuccessful) {
-                  val accessLevel = docSnapShot.toObject(AccessLevel::class.java)
-                  if (accessLevel != null) {
-                      Result.success(accessLevel)
-                  } else {
-                      Result.failure(Exception("AccessLevel is null"))
-                  }
-              } else {
-                  Result.failure(task.exception ?: Exception("Unknown Firestore error"))
-              }
+            if (task.isSuccessful) {
+                val accessLevel = docSnapShot.toObject(AccessLevel::class.java)
+                if (accessLevel != null) {
+                    Result.success(accessLevel)
+                } else {
+                    Result.failure(Exception("AccessLevel is null"))
+                }
+            } else {
+                Result.failure(task.exception ?: Exception("Unknown Firestore error"))
+            }
 
-        }catch (e : Exception){
+        } catch (e: Exception) {
             Result.failure(e)
         }
     }
