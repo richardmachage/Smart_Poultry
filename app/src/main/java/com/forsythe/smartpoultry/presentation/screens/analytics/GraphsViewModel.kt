@@ -2,7 +2,7 @@ package com.forsythe.smartpoultry.presentation.screens.analytics
 
 import androidx.lifecycle.ViewModel
 import com.forsythe.smartpoultry.data.dataSource.local.datastore.PreferencesRepo
-import com.forsythe.smartpoultry.domain.reports.Report
+import com.forsythe.smartpoultry.domain.reports.PdfReport
 import com.forsythe.smartpoultry.presentation.uiModels.ChartClass
 import com.forsythe.smartpoultry.utils.FARM_NAME_KEY
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -10,7 +10,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class GraphsViewModel @Inject constructor(
-    private  val report: Report,
+    private  val pdfReport: PdfReport,
     private val preferencesRepo: PreferencesRepo
 ) : ViewModel() {
 
@@ -23,7 +23,7 @@ class GraphsViewModel @Inject constructor(
         content : List<ChartClass>,
         reportType : String
     ){
-        report.createAndSavePDF(
+        pdfReport.createAndSavePDF(
             name = name,
             content = content,
             reportType = reportType,

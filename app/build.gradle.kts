@@ -149,5 +149,9 @@ dependencies {
     //Splash Screen
     implementation ("androidx.core:core-splashscreen:1.0.1")
 
+    //Poi for exporting excel documents
+    implementation("org.apache.poi:poi:5.2.3") // For `.xls` files
+    implementation("org.apache.poi:poi-ooxml:5.2.3") // For `.xlsx` files
+
 
 }
