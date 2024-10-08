@@ -49,6 +49,7 @@ class SettingsViewModel @Inject constructor (
     val myDataStore = dataStore
     val isLoading = mutableStateOf(false)
     // Initialize StateFlows with default values
+
     private val _pastDays = MutableStateFlow("")
     val pastDays: StateFlow<String> = _pastDays
 
