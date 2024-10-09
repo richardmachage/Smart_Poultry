@@ -1,9 +1,18 @@
 package com.forsythe.smartpoultry.presentation.screens.accountScreen
 
 //import com.forsythe.smartpoultry.utils.USER_ROLE_KEY
+import android.app.Activity
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.android.billingclient.api.BillingClient
+import com.android.billingclient.api.BillingClient.BillingResponseCode
+import com.android.billingclient.api.BillingClientStateListener
+import com.android.billingclient.api.BillingFlowParams
+import com.android.billingclient.api.BillingResult
+import com.android.billingclient.api.PurchasesUpdatedListener
+import com.android.billingclient.api.QueryProductDetailsParams
+import com.forsythe.billing.SUBSCRIPTION_ID
 import com.forsythe.smartpoultry.data.dataSource.local.datastore.PreferencesRepo
 import com.forsythe.smartpoultry.data.dataSource.remote.firebase.models.AccessLevel
 import com.forsythe.smartpoultry.data.dataSource.remote.firebase.models.User
@@ -26,6 +35,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AccountViewModel @Inject constructor(
+    //@ApplicationContext private val context: Context,
     private val fireBaseAuthRepo: FirebaseAuthRepository,
     private val preferencesRepo: PreferencesRepo
 ) : ViewModel() {
@@ -127,5 +137,62 @@ class AccountViewModel @Inject constructor(
             }
             isLoading.value = false
         }
+    }
+
+    fun launchPurchaseFlow(activity: Activity) {
+        val purchasesUpdateListener = PurchasesUpdatedListener { billingResult, purchases ->
+            // To be implemented in a later section.
+            //Implement the logic for processing purchases,
+            // including acknowledgment of purchases (required for subscriptions)
+        }
+
+        //initialize billing client
+        val billingClient = BillingClient
+            .newBuilder(activity)
+            .setListener(purchasesUpdateListener)
+            .enablePendingPurchases()
+            .build()
+
+        //connect to google play
+        billingClient.startConnection(object : BillingClientStateListener {
+            override fun onBillingServiceDisconnected() {
+                //connectToGooglePlay()
+                //reconnect
+            }
+
+            override fun onBillingSetupFinished(billingResult: BillingResult) {
+                if (billingResult.responseCode == BillingResponseCode.OK) {
+                    // The BillingClient is ready. You can query purchases here.
+                    val queryProductDetailsParams = QueryProductDetailsParams.newBuilder()
+                        .setProductList(
+                            listOf(
+                                QueryProductDetailsParams.Product.newBuilder()
+                                    .setProductId(SUBSCRIPTION_ID)
+                                    .setProductType(BillingClient.ProductType.SUBS)
+                                    .build()
+                            )
+                        )
+                        .build()
+
+                    billingClient.queryProductDetailsAsync(queryProductDetailsParams) { billResult, productDetailsList ->
+                        if (billResult.responseCode == BillingResponseCode.OK && productDetailsList.isNotEmpty()) {
+                            val productDetails = productDetailsList[0]
+                            val billingFlowParams = BillingFlowParams.newBuilder()
+                                .setProductDetailsParamsList(
+                                    listOf(
+                                        BillingFlowParams.ProductDetailsParams.newBuilder()
+                                            .setProductDetails(productDetails)
+                                            .build()
+                                    )
+                                )
+                                .build()
+
+                            billingClient.launchBillingFlow(activity, billingFlowParams)
+                        }
+                    }
+                }
+            }
+
+        })
     }
 }

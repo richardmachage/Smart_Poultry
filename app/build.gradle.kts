@@ -17,7 +17,7 @@ android {
         applicationId = "com.forsythe.smartpoultry"
        // minSdk = 24
         //targetSdk = 34
-        versionCode = 4
+        versionCode = 5
         versionName = "1.0.2"
 
     }
@@ -140,9 +140,6 @@ dependencies {
     //SplashScreen api
     implementation("androidx.core:core-splashscreen:1.0.1")
 
-    //Play Billing
-    val billing_version = "7.0.0"
-    implementation("com.android.billingclient:billing:$billing_version")
 
     //Splash Screen
     implementation ("androidx.core:core-splashscreen:1.0.1")
@@ -157,4 +154,6 @@ dependencies {
     }
 
 
+    //Play Billing
+    implementation("com.android.billingclient:billing-ktx:7.1.1")
 }

@@ -5,17 +5,6 @@ plugins {
 
 android {
     namespace = "com.forsythe.billing"
-    //compileSdk = 34
-
-/*
-    defaultConfig {
-        minSdk = 24
-
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        consumerProguardFiles("consumer-rules.pro")
-    }
-*/
-
 
     buildFeatures{
         compose = true
@@ -42,4 +31,8 @@ dependencies {
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
+
+
+    //Play Billing
+    implementation("com.android.billingclient:billing-ktx:7.1.1")
 }
