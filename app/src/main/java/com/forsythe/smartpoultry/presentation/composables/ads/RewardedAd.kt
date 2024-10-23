@@ -26,6 +26,7 @@ fun rewardedAdSmartPoultry(
                     override fun onAdFailedToLoad(loadAdError: LoadAdError) {
                         super.onAdFailedToLoad(loadAdError)
                         continuation.resume(null)
+                        onFailedToLoadAd()
                     }
 
                     override fun onAdLoaded(loadedAd: RewardedAd) {
@@ -45,8 +46,6 @@ fun rewardedAdSmartPoultry(
                 onRewardEarned()
                 onDismissed()
             }
-        } ?: {
-            onFailedToLoadAd()
         }
 
     }

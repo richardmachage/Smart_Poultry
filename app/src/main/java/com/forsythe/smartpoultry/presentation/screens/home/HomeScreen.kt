@@ -48,15 +48,18 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewModelScope
 import com.forsythe.smartpoultry.R
 import com.forsythe.smartpoultry.data.dataModels.DailyEggCollection
 import com.forsythe.smartpoultry.data.dataSource.local.room.entities.cells.Cells
 import com.forsythe.smartpoultry.presentation.NavGraphs
 import com.forsythe.smartpoultry.presentation.composables.ads.BannerAd
+import com.forsythe.smartpoultry.presentation.composables.ads.rewardedAdSmartPoultry
 import com.forsythe.smartpoultry.presentation.composables.buttons.MyOutlineButton
 import com.forsythe.smartpoultry.presentation.composables.cards.MyCard
 import com.forsythe.smartpoultry.presentation.composables.cards.MyCardInventory
 import com.forsythe.smartpoultry.presentation.composables.charts.RecentEggsLineChart
+import com.forsythe.smartpoultry.presentation.composables.dialogs.ConfirmDialog
 import com.forsythe.smartpoultry.presentation.composables.dialogs.MyInputDialog
 import com.forsythe.smartpoultry.presentation.composables.progressBars.MyCircularProgressBar
 import com.forsythe.smartpoultry.presentation.composables.spacers.MyHorizontalSpacer
@@ -65,7 +68,9 @@ import com.forsythe.smartpoultry.presentation.composables.text.NormText
 import com.forsythe.smartpoultry.presentation.composables.text.TitleText
 import com.forsythe.smartpoultry.presentation.destinations.LogInScreenDestination
 import com.forsythe.smartpoultry.utils.BANNER_AD_ID
+import com.forsythe.smartpoultry.utils.EXPORT_TO_PDF_REWARDED_AD_ID
 import com.forsythe.smartpoultry.utils.PAST_DAYS_KEY
+import com.forsythe.smartpoultry.utils.isNetworkAvailable
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.navigation.popUpTo
@@ -220,6 +225,50 @@ fun HomeScreen(
                     )
                 }
             }
+
+            //show ad dialog
+            var showAdDialog by remember { mutableStateOf(false) }
+            ConfirmDialog(
+                showDialog = showAdDialog,
+                title = stringResource(R.string.show_add),
+                message = stringResource(R.string.pdf_ad_message),
+                onDismiss = {
+                    showAdDialog = false
+                },
+                onConfirm = {
+                    //todo go on to show add and export data as reward
+
+                    rewardedAdSmartPoultry(
+                        context = context,
+                        adUnitId = EXPORT_TO_PDF_REWARDED_AD_ID,
+                        coroutineScope = homeViewModel.viewModelScope,
+                        onRewardEarned = {
+                            val reportType = "Inventory Status"
+                            homeViewModel.onCreateReport(
+                                name = "$reportType ${SimpleDateFormat("dd/MMM/yyyy").format(System.currentTimeMillis())}",
+                                content =
+                                "\nTotal Blocks : ${totalBlocks.value.size}" +
+                                        "\nTotal Cells: ${totalCells.value.size}" +
+                                        "\nTotal Chicken: ${totalCells.value.sumOf { cell: Cells -> cell.henCount }}",
+                                reportType = reportType
+                            )
+                            Toast.makeText(
+                                context,
+                                R.string.export_inventory_success,
+                                Toast.LENGTH_LONG
+                            ).show()
+                        },
+                        onDismiss = {
+                            showAdDialog = false
+                        },
+                        onFailedToLoadAd = {
+                            showAdDialog = false
+                            Toast.makeText(context,"Failed to load ad" ,Toast.LENGTH_SHORT).show()
+                        }
+                    )
+
+                }
+            )
             if (homeViewModel.passwordReset.value == "false") {
                 MyCard(
                     modifier = Modifier.fillMaxWidth().padding(bottom = 6.dp)
@@ -285,25 +334,12 @@ fun HomeScreen(
 
                     }
 
-                    MyOutlineButton(
+                    MyOutlineButton( //export to pdf
                         modifier = Modifier.fillMaxWidth(),
                         onButtonClick = {
-                            val reportType = "Farm Inventory Status"
-                            homeViewModel.onCreateReport(
-                                name = "$reportType ${SimpleDateFormat("dd/MMM/yyyy").format(System.currentTimeMillis())}",
-                                content =
-                                "\nTotal Blocks : ${totalBlocks.value.size}" +
-                                        "\nTotal Cells: ${totalCells.value.size}" +
-                                        "\nTotal Chicken: ${totalCells.value.sumOf { cell: Cells -> cell.henCount }}",
-                                reportType = reportType
-                            )
-                            Toast.makeText(
-                                context,
-                                R.string.export_inventory_success,
-                                Toast.LENGTH_LONG
-                            ).show()
+                            showAdDialog = true
                         },
-                        btnName = stringResource(id = R.string.export_inventory_summary_as_pdf)//"Export inventory summary as PDF>"
+                        btnName = stringResource(id = R.string.export_inventory_summary_as_pdf)
                     )
                 }
             }
@@ -313,9 +349,7 @@ fun HomeScreen(
             if (userName.isNotBlank()) {
                 Text(
                     modifier = Modifier
-                        .fillMaxWidth()
-                    // .padding(6.dp)
-                    ,
+                        .fillMaxWidth(),
                     text = "👋🏼 " + stringResource(id = R.string.greeting_home) + ", $userName. " + stringResource(
                         id = homeViewModel.getGreetingBasedOnTime()
                     ),
@@ -355,7 +389,7 @@ fun HomeScreen(
 
             if (
                 //TODO implement condition to check subscription status
-                true
+                context.isNetworkAvailable()
             ) {
                 MyVerticalSpacer(10)
                 Box(
