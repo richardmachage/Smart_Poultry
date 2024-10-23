@@ -12,7 +12,6 @@ import com.android.billingclient.api.BillingFlowParams
 import com.android.billingclient.api.BillingResult
 import com.android.billingclient.api.PurchasesUpdatedListener
 import com.android.billingclient.api.QueryProductDetailsParams
-import com.forsythe.billing.SUBSCRIPTION_ID
 import com.forsythe.smartpoultry.data.dataSource.local.datastore.PreferencesRepo
 import com.forsythe.smartpoultry.data.dataSource.remote.firebase.models.AccessLevel
 import com.forsythe.smartpoultry.data.dataSource.remote.firebase.models.User
@@ -24,6 +23,7 @@ import com.forsythe.smartpoultry.utils.FARM_ID_KEY
 import com.forsythe.smartpoultry.utils.FARM_NAME_KEY
 import com.forsythe.smartpoultry.utils.MANAGE_BLOCKS_CELLS_ACCESS
 import com.forsythe.smartpoultry.utils.MANAGE_USERS_ACCESS
+import com.forsythe.smartpoultry.utils.SUBSCRIPTION_ID
 import com.forsythe.smartpoultry.utils.USER_EMAIL_KEY
 import com.forsythe.smartpoultry.utils.USER_FIRST_NAME_KEY
 import com.forsythe.smartpoultry.utils.USER_GENDER_KEY

@@ -4,7 +4,7 @@ plugins {
     id("kotlin-parcelize")
     id("com.google.devtools.ksp")
     id("com.google.dagger.hilt.android")
-    id("kotlin-kapt")
+    //id("kotlin-kapt")
     id("com.google.gms.google-services")
     id("com.google.firebase.crashlytics")
 }
@@ -60,10 +60,6 @@ android {
 
 dependencies {
 
-    //project modules
-    implementation(projects.billing)
-   // implementation()
-
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
     implementation("androidx.activity:activity-compose:1.8.2")
@@ -74,7 +70,7 @@ dependencies {
     implementation("androidx.compose.material3:material3")
 
     //firebase
-    implementation (platform("com.google.firebase:firebase-bom:33.1.0"))
+    implementation (platform("com.google.firebase:firebase-bom:33.4.0"))
     implementation("com.google.firebase:firebase-firestore")
     implementation("com.google.firebase:firebase-auth")
     implementation("com.google.firebase:firebase-functions")
@@ -111,9 +107,9 @@ dependencies {
 
     //Hilt dependency injection
     implementation("com.google.dagger:hilt-android:2.50")
-    kapt("com.google.dagger:hilt-android-compiler:2.50")
+    ksp("com.google.dagger:hilt-android-compiler:2.50")
     implementation ("androidx.hilt:hilt-navigation-compose:1.1.0") // For hiltViewModel()
-    kapt ("androidx.hilt:hilt-compiler:1.1.0") // Or a newer stable version
+    ksp ("androidx.hilt:hilt-compiler:1.1.0") // Or a newer stable version
     implementation ("androidx.hilt:hilt-work:1.2.0") // for work manager
 
 
@@ -155,5 +151,7 @@ dependencies {
 
 
     //Play Billing
-    implementation("com.android.billingclient:billing-ktx:7.1.1")
+    implementation("com.android.billingclient:billing-ktx:7.0.0")
+
+
 }

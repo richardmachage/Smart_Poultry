@@ -37,3 +37,6 @@ const val EGG_COLLECTION_ACCESS = "egg_collection"
 const val EDIT_HEN_COUNT_ACCESS = "edit_hen_count"
 const val MANAGE_USERS_ACCESS = "manage_users"
 const val MANAGE_BLOCKS_CELLS_ACCESS = "manage_blocks_cells"
+
+//billing
+const val SUBSCRIPTION_ID = ""

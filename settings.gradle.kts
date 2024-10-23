@@ -17,4 +17,3 @@ enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 rootProject.name = "SmartPoultry"
 include(":app")
-include(":billing")
