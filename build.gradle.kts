@@ -29,7 +29,7 @@ fun BaseExtension.defaultConfig(){
     compileSdkVersion(34)
 
     defaultConfig {
-        minSdk = 24
+        minSdk = 26
         targetSdk = 34
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -93,4 +93,12 @@ subprojects{
             )
         }
     }*/
+}
+
+allprojects {
+    tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile::class.java).configureEach {
+        kotlinOptions {
+            jvmTarget = "17"
+        }
+    }
 }

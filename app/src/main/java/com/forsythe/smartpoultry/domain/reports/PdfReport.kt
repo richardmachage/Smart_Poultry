@@ -15,7 +15,7 @@ import java.text.SimpleDateFormat
 import javax.inject.Inject
 
 
-class Report @Inject constructor(
+class PdfReport @Inject constructor(
     @ApplicationContext private val context: Context
 ) {
     private fun addTextToPage(

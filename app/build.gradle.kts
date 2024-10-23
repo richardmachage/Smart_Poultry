@@ -4,7 +4,7 @@ plugins {
     id("kotlin-parcelize")
     id("com.google.devtools.ksp")
     id("com.google.dagger.hilt.android")
-    id("kotlin-kapt")
+    //id("kotlin-kapt")
     id("com.google.gms.google-services")
     id("com.google.firebase.crashlytics")
 }
@@ -17,13 +17,9 @@ android {
         applicationId = "com.forsythe.smartpoultry"
        // minSdk = 24
         //targetSdk = 34
-        versionCode = 3
+        versionCode = 5
         versionName = "1.0.2"
 
-        /*testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        vectorDrawables {
-            useSupportLibrary = true
-        }*/
     }
 
     buildTypes {
@@ -64,10 +60,6 @@ android {
 
 dependencies {
 
-    //project modules
-    implementation(projects.billing)
-   // implementation()
-
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
     implementation("androidx.activity:activity-compose:1.8.2")
@@ -78,7 +70,7 @@ dependencies {
     implementation("androidx.compose.material3:material3")
 
     //firebase
-    implementation (platform("com.google.firebase:firebase-bom:33.1.0"))
+    implementation (platform("com.google.firebase:firebase-bom:33.4.0"))
     implementation("com.google.firebase:firebase-firestore")
     implementation("com.google.firebase:firebase-auth")
     implementation("com.google.firebase:firebase-functions")
@@ -88,7 +80,9 @@ dependencies {
 
     //viewModel for compose
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0")
+    implementation("androidx.test.ext:junit-ktx:1.2.1")
     testImplementation("org.testng:testng:6.9.6")
+    androidTestImplementation("junit:junit:4.12")
 
 
     //Vico Charts
@@ -113,9 +107,9 @@ dependencies {
 
     //Hilt dependency injection
     implementation("com.google.dagger:hilt-android:2.50")
-    kapt("com.google.dagger:hilt-android-compiler:2.50")
+    ksp("com.google.dagger:hilt-android-compiler:2.50")
     implementation ("androidx.hilt:hilt-navigation-compose:1.1.0") // For hiltViewModel()
-    kapt ("androidx.hilt:hilt-compiler:1.1.0") // Or a newer stable version
+    ksp ("androidx.hilt:hilt-compiler:1.1.0") // Or a newer stable version
     implementation ("androidx.hilt:hilt-work:1.2.0") // for work manager
 
 
@@ -142,12 +136,22 @@ dependencies {
     //SplashScreen api
     implementation("androidx.core:core-splashscreen:1.0.1")
 
-    //Play Billing
-    val billing_version = "7.0.0"
-    implementation("com.android.billingclient:billing:$billing_version")
 
     //Splash Screen
     implementation ("androidx.core:core-splashscreen:1.0.1")
+
+    //Poi for exporting excel documents
+    implementation("org.apache.poi:poi:5.3.0") {// For `.xls` files
+       // exclude(group = "org.apache.logging.log4j", module="log4j-api") //removed coz it supports only aPIs 26
+
+    }
+    implementation("org.apache.poi:poi-ooxml:5.3.0"){// For `.xlsx` files
+      //  exclude(group = "org.apache.logging.log4j", module="log4j-api") //removed coz it supports only aPIs 26
+    }
+
+
+    //Play Billing
+    implementation("com.android.billingclient:billing-ktx:7.0.0")
 
 
 }

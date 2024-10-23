@@ -22,6 +22,7 @@ import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Phone
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -56,6 +57,7 @@ import com.forsythe.smartpoultry.presentation.composables.progressBars.MyCircula
 import com.forsythe.smartpoultry.presentation.composables.spacers.MyVerticalSpacer
 import com.forsythe.smartpoultry.presentation.composables.textInputFields.MyOutlineTextFiled
 import com.forsythe.smartpoultry.presentation.destinations.ManageUsersScreenDestination
+import com.forsythe.smartpoultry.presentation.screens.mainActivity.MainActivity
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
@@ -67,6 +69,7 @@ fun AccountScreen(
 ) {
     val accountViewModel = hiltViewModel<AccountViewModel>()
     val context = LocalContext.current
+    val activity = context as MainActivity
     var userName by remember {
         mutableStateOf(accountViewModel.user.firstName)
     }//accountViewModel.userName.collectAsState()
@@ -450,16 +453,6 @@ fun AccountScreen(
 */
 
                 if (accountViewModel.accessLevel.value.manageUsers) {
-                   /* Spacer(modifier = Modifier.height(24.dp))
-                    ActionButton(
-                        text = stringResource(id = R.string.register_new_user),//"Register a new user",
-                        icon = ImageVector.vectorResource(id = R.drawable.person_add),
-                        onClick = {
-                            //showRegDialog = true
-                            navigator.navigate( RegisterUserScreenDestination)
-
-                        })
-                        */
                     Spacer(modifier = Modifier.height(16.dp))
                     ActionButton(
                         text = stringResource(id = R.string.manage_users),//"Manage existing users",
@@ -468,12 +461,22 @@ fun AccountScreen(
                             navigator.navigate(
                                 ManageUsersScreenDestination
                             )
-                        })
+                        }
+                    )
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    ActionButton(
+                        text = "Upgrade to premium",
+                        icon = Icons.Default.Star,
+                        onClick = {
+                            //launch Purchase flow
+                            Toast.makeText(context, "upgrade clicked", Toast.LENGTH_SHORT).show()
+                            accountViewModel.launchPurchaseFlow(activity)
+                        }
+                    )
                 }
-
-
             }
-
         }
     }
 

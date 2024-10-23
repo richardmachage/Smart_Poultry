@@ -14,7 +14,7 @@ import com.forsythe.smartpoultry.data.dataModels.AlertFull
 import com.forsythe.smartpoultry.data.dataModels.DailyEggCollection
 import com.forsythe.smartpoultry.data.dataSource.local.datastore.AppDataStore
 import com.forsythe.smartpoultry.data.dataSource.local.datastore.PreferencesRepo
-import com.forsythe.smartpoultry.domain.reports.Report
+import com.forsythe.smartpoultry.domain.reports.PdfReport
 import com.forsythe.smartpoultry.domain.repository.AlertsRepository
 import com.forsythe.smartpoultry.domain.repository.BlocksRepository
 import com.forsythe.smartpoultry.domain.repository.CellsRepository
@@ -42,7 +42,7 @@ class HomeViewModel @Inject constructor(
     val blocksRepository: BlocksRepository,
     val cellsRepository: CellsRepository,
     val eggCollectionRepository: EggCollectionRepository,
-    private val report: Report,
+    private val pdfReport: PdfReport,
     val dataStore: AppDataStore,
     val preferencesRepo: PreferencesRepo,
     val firebaseAuthRepository: FirebaseAuthRepository,
@@ -156,7 +156,7 @@ class HomeViewModel @Inject constructor(
 
     @SuppressLint("SimpleDateFormat")
     fun onCreateReport(name: String, content: String, reportType: String) {
-        report.createAndSavePDF(name, content, reportType, getFarmName())
+        pdfReport.createAndSavePDF(name, content, reportType, getFarmName())
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
