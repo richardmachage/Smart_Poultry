@@ -52,6 +52,7 @@ import com.forsythe.smartpoultry.R
 import com.forsythe.smartpoultry.data.dataModels.DailyEggCollection
 import com.forsythe.smartpoultry.data.dataSource.local.room.entities.cells.Cells
 import com.forsythe.smartpoultry.presentation.NavGraphs
+import com.forsythe.smartpoultry.presentation.composables.ads.BannerAd
 import com.forsythe.smartpoultry.presentation.composables.buttons.MyOutlineButton
 import com.forsythe.smartpoultry.presentation.composables.cards.MyCard
 import com.forsythe.smartpoultry.presentation.composables.cards.MyCardInventory
@@ -63,6 +64,7 @@ import com.forsythe.smartpoultry.presentation.composables.spacers.MyVerticalSpac
 import com.forsythe.smartpoultry.presentation.composables.text.NormText
 import com.forsythe.smartpoultry.presentation.composables.text.TitleText
 import com.forsythe.smartpoultry.presentation.destinations.LogInScreenDestination
+import com.forsythe.smartpoultry.utils.BANNER_AD_ID
 import com.forsythe.smartpoultry.utils.PAST_DAYS_KEY
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -335,31 +337,15 @@ fun HomeScreen(
                     Column(
                         //Recent production trends block
                         modifier = Modifier
-                            /*.border(
-                            width = 1.dp,
-                            color = MaterialTheme.colorScheme.primary,
-                            shape = RoundedCornerShape(
-                                (0.03 * LocalConfiguration.current.screenWidthDp).dp
-                            )
-                        )*/
                             .fillMaxWidth()
                             .background(MaterialTheme.colorScheme.surface)
                             .padding(6.dp),
-                        /*.animateContentSize(
-                        tween(
-                            500,
-                            easing = EaseIn
-
-                        )
-                    )*/
                     ) {
                         TitleText(
                             modifier = Modifier.padding(start = 5.dp),
                             text = stringResource(id = R.string.recent_production_trends_home)
                         )
-                        //Text(text = "Recent Production Trends:")
                         MyVerticalSpacer(height = 10)
-
                         if (dailyEggsForPastDays.value.isNotEmpty()) RecentEggsLineChart(
                             dailyEggCollections = dailyEggsForPastDays.value.reversed()
                         )
@@ -367,7 +353,20 @@ fun HomeScreen(
                 }
             }
 
-
+            if (
+                //TODO implement condition to check subscription status
+                true
+            ) {
+                MyVerticalSpacer(10)
+                Box(
+                    modifier = Modifier.fillMaxSize()
+                ) {
+                    BannerAd(
+                        modifier = Modifier.align(Alignment.BottomCenter),
+                        adId = BANNER_AD_ID
+                    )
+                }
+            }
         }
     }
     // }

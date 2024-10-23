@@ -153,5 +153,7 @@ dependencies {
     //Play Billing
     implementation("com.android.billingclient:billing-ktx:7.0.0")
 
+    //ads
+    implementation("com.google.android.gms:play-services-ads:23.4.0")
 
 }

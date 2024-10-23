@@ -40,3 +40,7 @@ const val MANAGE_BLOCKS_CELLS_ACCESS = "manage_blocks_cells"
 
 //billing
 const val SUBSCRIPTION_ID = ""
+
+//Ads
+const val BANNER_AD_ID = "ca-app-pub-1519272773745618/1133617337"
+const val EXPORT_TO_PDF_REWARDED_AD_ID = "ca-app-pub-1519272773745618/7507453994"
