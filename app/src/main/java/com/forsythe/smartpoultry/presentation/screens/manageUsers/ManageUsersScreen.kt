@@ -29,6 +29,7 @@ import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
@@ -38,6 +39,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -49,6 +51,7 @@ import androidx.lifecycle.viewModelScope
 import com.forsythe.smartpoultry.R
 import com.forsythe.smartpoultry.data.dataSource.remote.firebase.models.User
 import com.forsythe.smartpoultry.presentation.composables.buttons.MyFloatingActionButton
+import com.forsythe.smartpoultry.presentation.composables.dialogs.InfoDialog
 import com.forsythe.smartpoultry.presentation.composables.progressBars.MyCircularProgressBar
 import com.forsythe.smartpoultry.presentation.composables.spacers.MyHorizontalSpacer
 import com.forsythe.smartpoultry.presentation.composables.spacers.MyVerticalSpacer
@@ -106,6 +109,15 @@ fun ManageUsersScreen(
 
             },
             floatingActionButton = {
+                var showUpgradeDialog by remember { mutableStateOf(false) }
+                InfoDialog(
+                    showDialog = showUpgradeDialog,
+                    title = stringResource(R.string.upgrade_to_premium),
+                    message = stringResource(R.string.upgrade_to_premium_message),
+                    onConfirm = {
+                        showUpgradeDialog = false
+                    }
+                )
                 Column {
 
                     MyFloatingActionButton(
@@ -130,7 +142,14 @@ fun ManageUsersScreen(
                     MyVerticalSpacer(height = 15)
                     MyFloatingActionButton(
                         onClick = {
-                            navigator.navigate(RegisterUserScreenDestination)
+                            //check if theres already two other users
+                            //TODO add a check for subscription status as well in the condition
+                            if (manageUsersViewModel.listOfUsers.size < 3){
+                                navigator.navigate(RegisterUserScreenDestination)
+                            }
+                            else {
+                                showUpgradeDialog = true
+                            }
                         },
                         icon = {
                             Icon(

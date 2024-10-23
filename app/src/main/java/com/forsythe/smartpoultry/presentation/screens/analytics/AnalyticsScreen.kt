@@ -15,6 +15,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
@@ -30,26 +32,32 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewModelScope
+import com.forsythe.smartpoultry.R
 import com.forsythe.smartpoultry.data.dataModels.DailyEggCollection
 import com.forsythe.smartpoultry.data.dataSource.local.room.entities.cells.Cells
 import com.forsythe.smartpoultry.data.dataSource.local.room.entities.eggCollection.EggCollection
 import com.forsythe.smartpoultry.domain.permissions.POST_NOTIFICATIONS
 import com.forsythe.smartpoultry.domain.permissions.checkIfPermissionGranted
+import com.forsythe.smartpoultry.presentation.composables.ads.rewardedAdSmartPoultry
 import com.forsythe.smartpoultry.presentation.composables.buttons.MyOutlineButton
 import com.forsythe.smartpoultry.presentation.composables.buttons.NormButton
 import com.forsythe.smartpoultry.presentation.composables.buttons.RadioButtonGroup
+import com.forsythe.smartpoultry.presentation.composables.dialogs.ConfirmDialog
+import com.forsythe.smartpoultry.presentation.composables.dialogs.MyInputDialog
 import com.forsythe.smartpoultry.presentation.composables.dropDownMenus.BlocksDropDownMenu
 import com.forsythe.smartpoultry.presentation.composables.dropDownMenus.CellsDropDownMenu
 import com.forsythe.smartpoultry.presentation.composables.dropDownMenus.MonthsDropDownMenu
-import com.forsythe.smartpoultry.presentation.composables.others.MyDatePicker
-import com.forsythe.smartpoultry.presentation.composables.dialogs.MyInputDialog
-import com.forsythe.smartpoultry.presentation.composables.spacers.MyVerticalSpacer
 import com.forsythe.smartpoultry.presentation.composables.dropDownMenus.YearsDropDownMenu
+import com.forsythe.smartpoultry.presentation.composables.others.MyDatePicker
+import com.forsythe.smartpoultry.presentation.composables.spacers.MyVerticalSpacer
 import com.forsythe.smartpoultry.presentation.destinations.ViewRecordsScreenDestination
 import com.forsythe.smartpoultry.presentation.uiModels.ChartClass
+import com.forsythe.smartpoultry.utils.EXPORT_TO_PDF_REWARDED_AD_ID
 import com.forsythe.smartpoultry.utils.localDateToJavaDate
 import com.forsythe.smartpoultry.utils.toGraphDate
 import com.ramcosta.composedestinations.annotation.Destination
@@ -76,8 +84,8 @@ fun AnalyticsScreen(
 
     LaunchedEffect(analyticsViewModel.toastMessage.value) {
         val toastMessage = analyticsViewModel.toastMessage.value
-        if (toastMessage.isNotBlank()){
-            Toast.makeText(context,toastMessage,Toast.LENGTH_SHORT).show()
+        if (toastMessage.isNotBlank()) {
+            Toast.makeText(context, toastMessage, Toast.LENGTH_SHORT).show()
         }
         analyticsViewModel.toastMessage.value = ""
 
@@ -88,6 +96,7 @@ fun AnalyticsScreen(
             .fillMaxSize(),
         color = MaterialTheme.colorScheme.background
     ) {
+
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -158,7 +167,6 @@ fun AnalyticsScreen(
                                     analyticsViewModel.selectedBlockId.intValue = blockId
                                     analyticsViewModel.selectedBlockNum.intValue = blockNum
                                     analyticsViewModel.plotChart.value = false
-                                    // Toast.makeText(context, "Selected block num: ${analyticsViewModel.selectedBlockNum.intValue}", Toast.LENGTH_SHORT).show()
                                 },
                                 width = width,
                             )
@@ -362,7 +370,7 @@ fun AnalyticsScreen(
                         val turnToChartData = listOfRecords.map { record ->
                             when (record) {
                                 is EggCollection -> ChartClass(
-                                    xDateValue = toGraphDate(record.date ),//as java.sql.Date),
+                                    xDateValue = toGraphDate(record.date),//as java.sql.Date),
                                     yNumOfEggs = record.eggCount,
                                     numOfChicken = record.henCount
 
@@ -400,8 +408,7 @@ fun AnalyticsScreen(
                         }
 
 
-                    }
-                    else {
+                    } else {
                         // analyticsViewModel.plotChart.value = false
                         Text(text = "Not data retrieved for that period")
                         MyVerticalSpacer(height = 10)
@@ -419,7 +426,11 @@ fun AnalyticsScreen(
 
 
             var showDialog by remember { mutableStateOf(false) }
-            var isNotificationPermissionGranted by remember { mutableStateOf( checkIfPermissionGranted(context, POST_NOTIFICATIONS))}
+            var isNotificationPermissionGranted by remember {
+                mutableStateOf(
+                    checkIfPermissionGranted(context, POST_NOTIFICATIONS)
+                )
+            }
             val launcher = rememberLauncherForActivityResult(
                 contract = ActivityResultContracts.RequestPermission(),
                 onResult = { isGranted ->
@@ -427,10 +438,11 @@ fun AnalyticsScreen(
                         isNotificationPermissionGranted = true
                         showDialog = false
                         analyticsViewModel.fireWorker(context)
-                    }else{
+                    } else {
                         isNotificationPermissionGranted = false
                         showDialog = false
-                        analyticsViewModel.toastMessage.value = "Permission denied...Go to settings and enable notifications permission"
+                        analyticsViewModel.toastMessage.value =
+                            "Permission denied...Go to settings and enable notifications permission"
                     }
                 }
 
@@ -440,7 +452,7 @@ fun AnalyticsScreen(
                 title = "Permission Required",
                 onConfirm = {
                     launcher.launch(POST_NOTIFICATIONS)
-                   // showDialog = false
+                    // showDialog = false
                 },
                 onDismiss = {
                     analyticsViewModel.toastMessage.value = "Permission denied..."
@@ -450,17 +462,54 @@ fun AnalyticsScreen(
                 Text(text = "This feature requires use of Notifications.\nAllow notifications Permission to proceed.")
             }
 
+            //show ad confirm dialog
+            var showAdDialog by remember { mutableStateOf(false) }
+            ConfirmDialog(
+                showDialog = showAdDialog,
+                title = stringResource(R.string.automated_analysis),
+                message = stringResource(R.string.automated_analysis_is_premium),
+                onDismiss = {
+                    showAdDialog = false
+                },
+                onConfirm = {
+                    //show the ad and perform analysis on reward attained
+                    rewardedAdSmartPoultry(
+                        context = context,
+                        adUnitId = EXPORT_TO_PDF_REWARDED_AD_ID,
+                        coroutineScope = analyticsViewModel.viewModelScope,
+                        onRewardEarned = {
+                            // check is notification  permission is allowed or not
+                            if (isNotificationPermissionGranted) {
+                                analyticsViewModel.fireWorker(context)
+                            } else {
+                                showDialog = true
+                            }
+                        },
+                        onFailedToLoadAd = {
+                            Toast.makeText(context,"failed to load ad",Toast.LENGTH_SHORT).show()
+                            showAdDialog = false
+                        },
+                        onDismiss = {
+                            showAdDialog = false
+                        }
+                    )
+                },
+
+            )
             MyOutlineButton(
                 modifier = Modifier.fillMaxWidth(),
                 onButtonClick = {
-                    // check is notification  permission is allowed or not
-                    if (isNotificationPermissionGranted){
-                        analyticsViewModel.fireWorker(context)
-                    }else{
-                        showDialog = true
-                    }
+                    showAdDialog = true
                 },
-                btnName = "Perform Automated Analysis >>>"
+                btnName = "Perform Automated Analysis",
+                trailingIcon = if (
+                //todo check if premium subscription
+                    true) {
+                    Icons.Default.Star
+                } else {
+                    null
+                }
+
             )
 
             MyOutlineButton(
