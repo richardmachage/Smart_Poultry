@@ -70,6 +70,7 @@ fun AccountScreen(
     val accountViewModel = hiltViewModel<AccountViewModel>()
     val context = LocalContext.current
     val activity = context as MainActivity
+    accountViewModel.initBillingClient(activity)
     var userName by remember {
         mutableStateOf(accountViewModel.user.firstName)
     }//accountViewModel.userName.collectAsState()
@@ -471,8 +472,8 @@ fun AccountScreen(
                         icon = Icons.Default.Star,
                         onClick = {
                             //launch Purchase flow
-                            Toast.makeText(context, "upgrade clicked", Toast.LENGTH_SHORT).show()
-                            accountViewModel.launchPurchaseFlow(activity)
+                           // accountViewModel.launchPurchaseFlow(activity)
+                            Toast.makeText(context, "Coming soon...", Toast.LENGTH_SHORT).show()
                         }
                     )
                 }

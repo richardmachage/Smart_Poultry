@@ -39,7 +39,7 @@ const val MANAGE_USERS_ACCESS = "manage_users"
 const val MANAGE_BLOCKS_CELLS_ACCESS = "manage_blocks_cells"
 
 //billing
-const val SUBSCRIPTION_ID = ""
+const val SUBSCRIPTION_ID = "com.forsythe.smartpoultry.premimum"
 
 //Ads
 const val BANNER_AD_ID = "ca-app-pub-1519272773745618/1133617337"
