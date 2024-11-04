@@ -1,5 +1,6 @@
 package com.forsythe.smartpoultry.domain.repository
 
+import androidx.paging.PagingSource
 import com.forsythe.smartpoultry.data.dataModels.DailyEggCollection
 import com.forsythe.smartpoultry.data.dataModels.EggRecordFull
 import com.forsythe.smartpoultry.data.dataSource.local.room.entities.eggCollection.EggCollection
@@ -46,6 +47,6 @@ interface EggCollectionRepository{
 
     fun getOverallCollectionForPAstDays(startDate: Date) : Flow<List<DailyEggCollection>>
 
-    fun getAllFullEggCollection() : Flow<List<EggRecordFull>>
+    fun getAllFullEggCollection() : PagingSource<Int, EggRecordFull>//Flow<List<EggRecordFull>>
 
 }

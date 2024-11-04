@@ -4,6 +4,9 @@ import android.content.Context
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
 import com.forsythe.smartpoultry.data.dataModels.EggRecordFull
 import com.forsythe.smartpoultry.data.dataSource.local.datastore.PreferencesRepo
 import com.forsythe.smartpoultry.data.dataSource.local.room.entities.cells.Cells
@@ -15,8 +18,6 @@ import com.forsythe.smartpoultry.utils.FARM_NAME_KEY
 import com.forsythe.smartpoultry.utils.format
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import java.util.Date
 import javax.inject.Inject
@@ -41,21 +42,26 @@ class ViewRecordsViewModel @Inject constructor(
             }
         }
 
-        viewModelScope.launch {
+        /*viewModelScope.launch {
             eggCollectionRepository.getAllFullEggCollection().collect{
                 listOfCollectionRecords.addAll(it)
             }
-        }
+        }*/
     }
 
-    fun getAllFullRecords (): Flow<List<EggRecordFull>> {
-        return eggCollectionRepository.getAllFullEggCollection()
-            .stateIn(
-                scope = viewModelScope,
-                started = SharingStarted.WhileSubscribed(),
-                initialValue = emptyList()
-            )
+    fun getAllFullRecords (): Flow<PagingData<EggRecordFull>> {
+        val pager = Pager(
+            config = PagingConfig(
+                pageSize = 15,
+                prefetchDistance = 25
+            ),
+            pagingSourceFactory = {
+                eggCollectionRepository.getAllFullEggCollection()
+            }
+        )
+        return pager.flow
     }
+
     fun getCell(cellId : Int): Cells?{
         return cellsMap[cellId]
     }

@@ -5,9 +5,13 @@ import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.exclude
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
@@ -27,7 +31,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -36,6 +39,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.collectAsLazyPagingItems
+import com.forsythe.smartpoultry.data.dataModels.EggRecordFull
 import com.forsythe.smartpoultry.presentation.composables.dialogs.MyInputDialog
 import com.forsythe.smartpoultry.presentation.composables.others.MyBorderedRow
 import com.forsythe.smartpoultry.presentation.composables.progressBars.MyCircularProgressBar
@@ -50,8 +56,10 @@ fun ViewRecordsScreen(
     navigator: DestinationsNavigator
 ) {
     val recordsViewModel = hiltViewModel<ViewRecordsViewModel>()
-    val listOfRecordsFull =
+    /*val listOfRecordsFull =
         recordsViewModel.getAllFullRecords().collectAsState(initial = emptyList())
+*/
+    val listOfAllRecords : LazyPagingItems<EggRecordFull> = recordsViewModel.getAllFullRecords().collectAsLazyPagingItems()
     val context = LocalContext.current
 
     LaunchedEffect(key1 = recordsViewModel.toastMessage.value) {
@@ -75,7 +83,7 @@ fun ViewRecordsScreen(
                 },
                 actions = {
                     IconButton(onClick = {
-                        recordsViewModel.onExportToExcel(context = context, listOfRecords = listOfRecordsFull.value)
+                      //  recordsViewModel.onExportToExcel(context = context, listOfRecords = listOfRecordsFull.value)
                     }) {
                         Icon(imageVector = Icons.AutoMirrored.Filled.ExitToApp, contentDescription = "export")
                     }
@@ -121,7 +129,8 @@ fun ViewRecordsScreen(
                             }) {
                             Icon(imageVector = Icons.Default.Clear, contentDescription = "clear")
                         }
-                    }
+                    },
+                    windowInsets = WindowInsets.systemBars.exclude(WindowInsets.statusBars)
                 ) {
                     //SearchBar Content
                     Surface(
@@ -136,7 +145,8 @@ fun ViewRecordsScreen(
                             itemsIndexed(
                                 recordsViewModel.searchRecord(
                                     queryValue,
-                                    listOfRecordsFull.value
+                                    //listOfRecordsFull.value
+                                    listOfAllRecords.itemSnapshotList.toList().filterNotNull()
                                 ),
                                 key = {_, item -> item.productionId }
                             ) { _, item ->
@@ -181,40 +191,53 @@ fun ViewRecordsScreen(
                 }
                 //General List
                 LazyColumn(modifier = Modifier.padding(6.dp)) {
-                    itemsIndexed(listOfRecordsFull.value, key = {_, item ->  item.productionId}) { _, item ->
-                        var showDeleteDialog by remember{ mutableStateOf(false)}
-                        MyInputDialog(
-                            showDialog= showDeleteDialog,
-                            title = "Delete Record",
-                            onConfirm = {
-                                recordsViewModel.onDeleteRecord(item.productionId)
-                                showDeleteDialog = false
-                            },
-                            onDismiss = {showDeleteDialog = false}
-                        ) {
-                            Text(text = "Delete record for block ${item.blockNum} cell ${item.cellNum} date ${item.date} ?")
-                        }
-                        MyVerticalSpacer(height = 10)
-                        MyBorderedRow(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .animateItemPlacement(),
-                            horizontalArrangement = Arrangement.SpaceBetween
-                        ) {
-                            Column (
+
+                    items(
+                        count = listOfAllRecords.itemCount
+                    ){index ->
+                        val record = listOfAllRecords[index]
+                        record?.let { item->
+                            var showDeleteDialog by remember{ mutableStateOf(false)}
+                            MyInputDialog(
+                                showDialog= showDeleteDialog,
+                                title = "Delete Record",
+                                onConfirm = {
+                                    recordsViewModel.onDeleteRecord(item.productionId)
+                                    showDeleteDialog = false
+                                },
+                                onDismiss = {showDeleteDialog = false}
                             ) {
-                                Text(text = "Date: ${item.date}")
-                                Text(text = "Block: ${item.blockNum}")
-                                Text(text = "Cell : ${item.cellNum}")
-                                Text(text = "Eggs collected on this day: ${item.eggCount}")
-                                Text(text = "Chicken on this day: ${item.henCount}")
+                                Text(text = "Delete record for block ${item.blockNum} cell ${item.cellNum} date ${item.date} ?")
                             }
 
-                            IconButton(onClick = {showDeleteDialog = true}) {
-                                Icon(imageVector = Icons.Filled.Delete, contentDescription = "delete")
+                            MyVerticalSpacer(height = 10)
+
+                            MyBorderedRow(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .animateItemPlacement(),
+                                horizontalArrangement = Arrangement.SpaceBetween
+                            ) {
+                                Column (
+                                ) {
+                                    Text(text = "Date: ${item.date}")
+                                    Text(text = "Block: ${item.blockNum}")
+                                    Text(text = "Cell : ${item.cellNum}")
+                                    Text(text = "Eggs collected on this day: ${item.eggCount}")
+                                    Text(text = "Chicken on this day: ${item.henCount}")
+                                }
+
+                                IconButton(onClick = {showDeleteDialog = true}) {
+                                    Icon(imageVector = Icons.Filled.Delete, contentDescription = "delete")
+                                }
                             }
                         }
+
                     }
+                    /*itemsIndexed(listOfRecordsFull.value, key = {_, item ->  item.productionId}) { _, item ->
+
+
+                    }*/
                 }
             }
 

@@ -1,6 +1,7 @@
 package com.forsythe.smartpoultry.data.repositoryImpl
 
 import android.util.Log
+import androidx.paging.PagingSource
 import com.forsythe.smartpoultry.data.dataModels.DailyEggCollection
 import com.forsythe.smartpoultry.data.dataModels.EggRecordFull
 import com.forsythe.smartpoultry.data.dataSource.local.datastore.PreferencesRepo
@@ -285,7 +286,7 @@ class EggCollectionRepositoryImpl @Inject constructor(
         return eggCollectionDao.getOverallCollectionForPAstDays(startDate)
     }
 
-    override fun getAllFullEggCollection(): Flow<List<EggRecordFull>> {
+    override fun getAllFullEggCollection(): PagingSource<Int, EggRecordFull> {
         return eggCollectionDao.getEggRecordsFull()
     }
 
