@@ -35,6 +35,7 @@ class CellsViewModel @Inject constructor(
     //dialog inputs
     var cellNumText = mutableStateOf("")
     var henCountText = mutableStateOf("")
+
     fun getCellsForBLock(blockId: Int): StateFlow<List<Cells>> {
         return cellsRepository.getCellsForBlock(blockId).stateIn(
             viewModelScope,

@@ -116,11 +116,10 @@ dependencies {
     //Room database
     val roomVersion = "2.6.1"
     implementation("androidx.room:room-runtime:$roomVersion")
-    annotationProcessor("androidx.room:room-compiler:$roomVersion")
-    // To use Kotlin Symbol Processing (KSP)
+   // annotationProcessor("androidx.room:room-compiler:$roomVersion")
     ksp("androidx.room:room-compiler:$roomVersion")
-    // optional - Kotlin Extensions and Coroutines support for Room
     implementation("androidx.room:room-ktx:$roomVersion")
+    runtimeOnly("androidx.room:room-paging:$roomVersion")
 
 
     //navigation compose
@@ -155,5 +154,10 @@ dependencies {
 
     //ads
     implementation("com.google.android.gms:play-services-ads:23.4.0")
+
+    //compose paging
+    val paging_version = "3.3.2"
+    implementation("androidx.paging:paging-runtime-ktx:$paging_version")
+    implementation("androidx.paging:paging-compose:$paging_version")
 
 }
