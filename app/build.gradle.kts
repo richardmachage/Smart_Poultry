@@ -77,7 +77,6 @@ dependencies {
     implementation("com.google.firebase:firebase-crashlytics-ktx")
 
 
-
     //viewModel for compose
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0")
     implementation("androidx.test.ext:junit-ktx:1.2.1")
