@@ -19,6 +19,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -290,7 +291,7 @@ fun CellsScreen(
                                                 cellsViewModel.showDialog.value = true
                                             }
                                         }
-                                        .fillMaxWidth(0.9f)
+                                       // .fillMaxWidth(0.9f)
 
                                         .padding(6.dp)
                                 ) {
@@ -299,7 +300,16 @@ fun CellsScreen(
                                     Text(text = "Number of Chicken : ${item.henCount}")
                                 }
 
-                                // MyHorizontalSpacer(width = 5)
+                                if (cellsViewModel.getManageBlockCellsAccess()) {
+                                    IconButton(
+                                        onClick = {
+                                            cellsViewModel.setTheSelectedCell(item)
+                                            cellsViewModel.showDialog.value = true
+                                        }
+                                    ) {
+                                        Icon(Icons.Default.Edit, contentDescription = "edit")
+                                    }
+                                }
 
                                 var showDeleteDialog by remember { mutableStateOf(false) }
                                 MyInputDialog(
