@@ -1,6 +1,7 @@
 package com.forsythe.smartpoultry.presentation.screens.cells
 
 import android.widget.Toast
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -14,7 +15,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.AddCircle
@@ -22,15 +22,15 @@ import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -40,11 +40,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.forsythe.smartpoultry.data.dataSource.local.room.entities.cells.Cells
+import com.forsythe.smartpoultry.presentation.composables.ads.BannerAd
 import com.forsythe.smartpoultry.presentation.composables.buttons.MyFloatingActionButton
 import com.forsythe.smartpoultry.presentation.composables.cards.MyCard
 import com.forsythe.smartpoultry.presentation.composables.dialogs.MyInputDialog
@@ -52,6 +54,7 @@ import com.forsythe.smartpoultry.presentation.composables.spacers.MyVerticalSpac
 import com.forsythe.smartpoultry.presentation.composables.text.TitleText
 import com.forsythe.smartpoultry.presentation.composables.textInputFields.MyOutlineTextFiled
 import com.forsythe.smartpoultry.presentation.uiModels.BlockParse
+import com.forsythe.smartpoultry.utils.BANNER_AD_ID
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
@@ -64,7 +67,7 @@ fun CellsScreen(
     block: BlockParse
 ) {
     val cellsViewModel = hiltViewModel<CellsViewModel>()
-
+    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
     val listOfCells by remember {
         cellsViewModel.getCellsForBLock(block.blockId)
     }.collectAsState()
@@ -159,9 +162,26 @@ fun CellsScreen(
     }
 
     Scaffold(
+        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
-            TopAppBar(
-                title = { Text(text = "Block ${block.blockNum}") },
+            LargeTopAppBar(
+                title = {
+                    Box(
+                        contentAlignment = Alignment.Center
+                    ) {
+
+                        Column {
+                            Text(
+                                text = "Block ${block.blockNum}"
+                            )
+                            AnimatedVisibility(
+                                visible = scrollBehavior.state.collapsedFraction < 0.2F
+                            ) {
+                                TitleText(text = "Total Chicken : ${listOfCells.sumOf { it.henCount }}")
+                            }
+                        }
+                    }
+                },
                 navigationIcon = {
                     IconButton(onClick = { navigator.navigateUp() }) {
                         Icon(
@@ -169,7 +189,8 @@ fun CellsScreen(
                             contentDescription = "Back"
                         )
                     }
-                }
+                },
+                scrollBehavior = scrollBehavior
             )
         },
         floatingActionButton = {
@@ -198,56 +219,15 @@ fun CellsScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues),
-            //color = MaterialTheme.colorScheme.background
         ) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
             ) {
 
-                Card(
-                    shape = RoundedCornerShape(16.dp),
-                    elevation = CardDefaults.cardElevation(8.dp),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 16.dp, top = 6.dp, end = 16.dp),
+                BannerAd(
+                    adId = BANNER_AD_ID
                 )
-                {
-                    Row(
-                        modifier = Modifier
-                            .background(MaterialTheme.colorScheme.surfaceContainer)
-                            .fillMaxWidth()
-                            .padding(start = 16.dp, top = 6.dp, end = 16.dp),
-                        horizontalArrangement = Arrangement.SpaceEvenly,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        TitleText(text = "Total Chicken : ${listOfCells.sumOf { it.henCount }}")
-                        /*TitleText(
-                            modifier = Modifier.weight(1f),
-                            text = "Block ${block.blockNum}"
-                        )
-                        TitleText(
-                            modifier = Modifier.weight(0.3f),
-                            text = "||")
-                        //TitleText(text = "Cells : ${listOfCells.size}")
-                        TitleText(modifier = Modifier.weight(0.9f),
-                            text = "Chicken ${listOfCells.sumOf { it.henCount }}"
-                        )*/
-
-                    }
-
-                    Row(
-                        modifier = Modifier
-                            .background(MaterialTheme.colorScheme.surfaceContainer)
-                            .fillMaxWidth()
-                            .padding(6.dp),
-                        horizontalArrangement = Arrangement.SpaceEvenly
-                    ) {
-                    }
-
-                }
-
-
 
                 LazyColumn(
                     modifier = Modifier.padding(4.dp),

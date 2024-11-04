@@ -41,6 +41,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.forsythe.smartpoultry.presentation.composables.ads.BannerAd
 import com.forsythe.smartpoultry.presentation.composables.buttons.MyFloatingActionButton
 import com.forsythe.smartpoultry.presentation.composables.cards.MyCard
 import com.forsythe.smartpoultry.presentation.composables.dialogs.MyInputDialog
@@ -49,6 +50,7 @@ import com.forsythe.smartpoultry.presentation.composables.textInputFields.MyOutl
 import com.forsythe.smartpoultry.presentation.destinations.CellsScreenDestination
 import com.forsythe.smartpoultry.presentation.uiModels.BlockItem
 import com.forsythe.smartpoultry.presentation.uiModels.BlockParse
+import com.forsythe.smartpoultry.utils.BANNER_AD_ID
 import com.forsythe.smartpoultry.utils.isNetworkAvailable
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlinx.coroutines.CoroutineScope
@@ -125,7 +127,6 @@ fun BlockCellScreen(
         )
     }
 
-
     Scaffold(
         floatingActionButton = {
 
@@ -156,113 +157,127 @@ fun BlockCellScreen(
                 .padding(),
             color = MaterialTheme.colorScheme.background
         ) {
-            LazyColumn(
-                modifier = Modifier,
+            Column (
+                modifier = Modifier.fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ){
+                //banner add
+                if (
+                    //TODO check if premium subscription is active
+                    true
+                ){
+                    //show banner add
+                    BannerAd(
+                        adId = BANNER_AD_ID
+                    )
+                }
+                LazyColumn(
+                    modifier = Modifier,
+                ) {
+                    itemsIndexed(
+                        listOfBlocksWithCells.sortedBy { it.block.blockNum },
+                        key = { _, item -> item.block.blockId }
+                    ) { _, blockWithCells ->
 
-            ) {
-                itemsIndexed(
-                    listOfBlocksWithCells.sortedBy { it.block.blockNum },
-                    key = { _, item -> item.block.blockId }
-                ) { _, blockWithCells ->
-
-                    MyCard(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(3.dp)
-                    ) {
-                        Row(
-                            Modifier
+                        MyCard(
+                            modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(3.dp)
-                                .animateItemPlacement(),
-                            horizontalArrangement = Arrangement.Absolute.SpaceBetween,
-                            verticalAlignment = Alignment.CenterVertically
                         ) {
-
-                            Box(
-                                modifier = Modifier
-                                    .padding(6.dp)
-                                    .clip(CircleShape)
-                                    .background(MaterialTheme.colorScheme.surfaceContainerHighest)
-                                // .weight(1f),
-                            ) {
-                                Text(
-                                    modifier = Modifier.padding(6.dp),
-                                    text = " " + blockWithCells.block.blockNum.toString() + " ",
-                                    style = MaterialTheme.typography.headlineMedium
-                                )
-                            }
-
-                            Column(
+                            Row(
                                 Modifier
-                                    .clickable {
-                                        navigator.navigate(
-                                            CellsScreenDestination(
-                                                BlockParse(
-                                                    blockId = blockWithCells.block.blockId,
-                                                    blockNum = blockWithCells.block.blockNum,
-                                                    totalCells = blockWithCells.cell.size
+                                    .fillMaxWidth()
+                                    .padding(3.dp)
+                                    .animateItemPlacement(),
+                                horizontalArrangement = Arrangement.Absolute.SpaceBetween,
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+
+                                Box(
+                                    modifier = Modifier
+                                        .padding(6.dp)
+                                        .clip(CircleShape)
+                                        .background(MaterialTheme.colorScheme.surfaceContainerHighest)
+                                    // .weight(1f),
+                                ) {
+                                    Text(
+                                        modifier = Modifier.padding(6.dp),
+                                        text = " " + blockWithCells.block.blockNum.toString() + " ",
+                                        style = MaterialTheme.typography.headlineMedium
+                                    )
+                                }
+
+                                Column(
+                                    Modifier
+                                        .clickable {
+                                            navigator.navigate(
+                                                CellsScreenDestination(
+                                                    BlockParse(
+                                                        blockId = blockWithCells.block.blockId,
+                                                        blockNum = blockWithCells.block.blockNum,
+                                                        totalCells = blockWithCells.cell.size
+                                                    )
                                                 )
                                             )
+                                        }
+                                        //.fillMaxWidth(0.9f)
+                                        .padding(4.dp)
+                                        .weight(1f)
+                                ) {
+                                    //  Text(text = "BlockId : ${blockWithCells.block.blockId}")
+                                    Text(text = "Block Number : ${blockWithCells.block.blockNum}")
+                                    Text(text = "Number of cells: ${blockWithCells.cell.size}")
+                                }
+
+                                // MyHorizontalSpacer(width = 5)
+
+
+                                var showDeleteDialog by remember { mutableStateOf(false) }
+                                MyInputDialog(
+                                    showDialog = showDeleteDialog,
+                                    title = "Delete Block",
+                                    onConfirm = {
+                                        // on delete block
+                                        val blockId = blockWithCells.block.blockId
+                                        val blockNum = blockWithCells.block.blockNum
+
+                                        CoroutineScope(Dispatchers.IO).launch {
+                                            blockCellViewModel.onDeleteBlock(block = blockWithCells.block)
+                                        }
+
+                                        showDeleteDialog = false
+
+                                    },
+                                    onDismiss = {
+                                        showDeleteDialog = false
+                                    }
+                                )
+                                {
+                                    Column {
+                                        Text(text = "Warning! \nDeleting this block will also delete all the cells within the block ")
+                                        MyVerticalSpacer(height = 10)
+                                        Text(text = "Are you sure you want to delete?")
+                                    }
+                                }
+                                if (blockCellViewModel.getManageBlockCellsAccess()/*userRole != "Collector"*/) {
+
+                                    IconButton(onClick = {
+                                        //show confirm delete dialog
+                                        showDeleteDialog = true
+
+                                    }) {
+                                        Icon(
+                                            imageVector = Icons.Default.Delete,
+                                            contentDescription = "delete"
                                         )
                                     }
-                                    //.fillMaxWidth(0.9f)
-                                    .padding(4.dp)
-                                    .weight(1f)
-                            ) {
-                                //  Text(text = "BlockId : ${blockWithCells.block.blockId}")
-                                Text(text = "Block Number : ${blockWithCells.block.blockNum}")
-                                Text(text = "Number of cells: ${blockWithCells.cell.size}")
-                            }
-
-                            // MyHorizontalSpacer(width = 5)
-
-
-                            var showDeleteDialog by remember { mutableStateOf(false) }
-                            MyInputDialog(
-                                showDialog = showDeleteDialog,
-                                title = "Delete Block",
-                                onConfirm = {
-                                    // on delete block
-                                    val blockId = blockWithCells.block.blockId
-                                    val blockNum = blockWithCells.block.blockNum
-
-                                    CoroutineScope(Dispatchers.IO).launch {
-                                        blockCellViewModel.onDeleteBlock(block = blockWithCells.block)
-                                    }
-
-                                    showDeleteDialog = false
-
-                                },
-                                onDismiss = {
-                                    showDeleteDialog = false
-                                }
-                            )
-                            {
-                                Column {
-                                    Text(text = "Warning! \nDeleting this block will also delete all the cells within the block ")
-                                    MyVerticalSpacer(height = 10)
-                                    Text(text = "Are you sure you want to delete?")
-                                }
-                            }
-                            if (blockCellViewModel.getManageBlockCellsAccess()/*userRole != "Collector"*/) {
-
-                                IconButton(onClick = {
-                                    //show confirm delete dialog
-                                    showDeleteDialog = true
-
-                                }) {
-                                    Icon(
-                                        imageVector = Icons.Default.Delete,
-                                        contentDescription = "delete"
-                                    )
                                 }
                             }
                         }
+
                     }
 
                 }
-
             }
         }
     }
