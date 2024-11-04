@@ -1,6 +1,7 @@
 package com.forsythe.smartpoultry.data.repositoryImpl
 
 import android.util.Log
+import androidx.paging.PagingSource
 import com.forsythe.smartpoultry.data.dataSource.local.datastore.PreferencesRepo
 import com.forsythe.smartpoultry.data.dataSource.local.room.entities.cells.Cells
 import com.forsythe.smartpoultry.data.dataSource.local.room.entities.cells.CellsDao
@@ -137,11 +138,12 @@ class CellsRepositoryImpl @Inject constructor(
         return cellsDao.getCell(cellId = cellId)
     }
 
-    override fun getTotalHenCount(): Flow<List<Int>> {
-        return cellsDao.getTotalHenCount()
+    override fun getTotalHenCount(blockId: Int): Flow<Int> {
+        return cellsDao.getTotalHenCount(blockId)
     }
 
-    override fun getCellsForBlock(blockId: Int): Flow<List<Cells>> {
+    override fun getCellsForBlock(blockId: Int): PagingSource<Int, Cells>//Flow<List<Cells>>
+    {
         return cellsDao.getCellsForABLock(blockId = blockId)
     }
 

@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -45,6 +44,10 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.collectAsLazyPagingItems
+import androidx.paging.compose.itemContentType
+import androidx.paging.compose.itemKey
 import com.forsythe.smartpoultry.data.dataSource.local.room.entities.cells.Cells
 import com.forsythe.smartpoultry.presentation.composables.ads.BannerAd
 import com.forsythe.smartpoultry.presentation.composables.buttons.MyFloatingActionButton
@@ -68,9 +71,12 @@ fun CellsScreen(
 ) {
     val cellsViewModel = hiltViewModel<CellsViewModel>()
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
-    val listOfCells by remember {
+    /*val listOfCells by remember {
         cellsViewModel.getCellsForBLock(block.blockId)
-    }.collectAsState()
+    }.collectAsState()*/
+
+    val lisOfCells : LazyPagingItems<Cells> = cellsViewModel.getCellsForBLock(block.blockId).collectAsLazyPagingItems()
+    val totalHenCount by remember { cellsViewModel.getTotalHenCount(block.blockId) }.collectAsState(0)
     val context = LocalContext.current
 
     //Edit cell Dialog
@@ -147,7 +153,10 @@ fun CellsScreen(
             cellsViewModel.onAddNewCell(
                 Cells(
                     blockId = block.blockId,
-                    cellNum = if (listOfCells.isNotEmpty()) listOfCells.size + 1 else 1
+                    cellNum = if (
+                        //listOfCells.isNotEmpty()
+                        lisOfCells.itemCount > 0
+                        ) lisOfCells.itemCount + 1 else 1
                 )
             )
             showAddCellDialog = false
@@ -177,7 +186,7 @@ fun CellsScreen(
                             AnimatedVisibility(
                                 visible = scrollBehavior.state.collapsedFraction < 0.2F
                             ) {
-                                TitleText(text = "Total Chicken : ${listOfCells.sumOf { it.henCount }}")
+                                TitleText(text = "Total Chicken : $totalHenCount")
                             }
                         }
                     }
@@ -232,109 +241,120 @@ fun CellsScreen(
                 LazyColumn(
                     modifier = Modifier.padding(4.dp),
                 ) {
-                    itemsIndexed(
+                    items(
+                        count = lisOfCells.itemCount,
+                        key = lisOfCells.itemKey { it.cellId },
+                        contentType = lisOfCells.itemContentType { "cells" }
+                    ){index: Int ->
+                        val cellItem = lisOfCells[index]
+                        cellItem?.let { cell ->
+                            MyCard(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(6.dp)
+                            ) {
+                                Row(
+                                    Modifier
+                                        .fillMaxWidth()
+                                        .animateItemPlacement(),
+                                    horizontalArrangement = Arrangement.SpaceBetween,
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    Box(
+                                        modifier = Modifier
+                                            .padding(6.dp)
+                                            .clip(CircleShape)
+                                            .background(MaterialTheme.colorScheme.surfaceContainerHighest)
+                                        // .weight(1f),
+                                    ) {
+                                        Text(
+                                            modifier = Modifier.padding(6.dp),
+                                            text = " " + cell.cellNum + " ",
+                                            style = MaterialTheme.typography.headlineMedium
+                                        )
+                                    }
+
+                                    Column(
+                                        modifier = Modifier
+                                            .clickable {
+                                                if (cellsViewModel.getEditHenCountAccess()) {
+                                                    cellsViewModel.setTheSelectedCell(cell)
+                                                    cellsViewModel.showDialog.value = true
+                                                }
+                                            }
+                                            // .fillMaxWidth(0.9f)
+
+                                            .padding(6.dp)
+                                    ) {
+                                        // Text(text = "Cell Id : ${item.cellId}")
+                                        Text(text = "Cell number : ${cell.cellNum}")
+                                        Text(text = "Number of Chicken : ${cell.henCount}")
+                                    }
+
+                                    if (cellsViewModel.getManageBlockCellsAccess()) {
+                                        IconButton(
+                                            onClick = {
+                                                cellsViewModel.setTheSelectedCell(cell)
+                                                cellsViewModel.showDialog.value = true
+                                            }
+                                        ) {
+                                            Icon(Icons.Default.Edit, contentDescription = "edit")
+                                        }
+                                    }
+
+                                    var showDeleteDialog by remember { mutableStateOf(false) }
+                                    MyInputDialog(
+                                        showDialog = showDeleteDialog,
+                                        title = "Delete Cell",
+                                        onConfirm = {
+                                            // on delete Cell
+                                            val cellNum = cell.cellNum
+                                            val cellId = cell.cellId
+                                            cellsViewModel.onDeleteCell(cell)
+
+                                            Toast.makeText(
+                                                context,
+                                                "Cell id: $cellId number: $cellNum deleted successfully",
+                                                Toast
+                                                    .LENGTH_SHORT
+                                            ).show()
+                                            showDeleteDialog = false
+
+                                        },
+                                        onDismiss = {
+                                            showDeleteDialog = false
+                                        }
+                                    )
+                                    {
+                                        Text(text = "Are you sure you want to delete cell ${cell.cellNum}?")
+                                    }
+
+                                    if (cellsViewModel.getManageBlockCellsAccess()/*userRole != "Collector"*/) {
+
+                                        IconButton(
+                                            onClick = {
+                                                //On delete cell
+                                                showDeleteDialog = true
+                                            }) {
+                                            Icon(
+                                                imageVector = Icons.Default.Delete,
+                                                contentDescription = "delete"
+                                            )
+                                        }
+                                    }
+                                }
+                            }
+
+                        }
+                    }
+                    /*itemsIndexed(
                         listOfCells.sortedBy { it.cellNum },
                         key = { _, item -> item.cellId }) { _, item ->
                         //MyVerticalSpacer(height = 6)
 
-                        MyCard(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(6.dp)
-                        ) {
-                            Row(
-                                Modifier
-                                    .fillMaxWidth()
-                                    .animateItemPlacement(),
-                                horizontalArrangement = Arrangement.SpaceBetween,
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                Box(
-                                    modifier = Modifier
-                                        .padding(6.dp)
-                                        .clip(CircleShape)
-                                        .background(MaterialTheme.colorScheme.surfaceContainerHighest)
-                                    // .weight(1f),
-                                ) {
-                                    Text(
-                                        modifier = Modifier.padding(6.dp),
-                                        text = " " + item.cellNum + " ",
-                                        style = MaterialTheme.typography.headlineMedium
-                                    )
-                                }
 
-                                Column(
-                                    modifier = Modifier
-                                        .clickable {
-                                            if (cellsViewModel.getEditHenCountAccess()) {
-                                                cellsViewModel.setTheSelectedCell(item)
-                                                cellsViewModel.showDialog.value = true
-                                            }
-                                        }
-                                        // .fillMaxWidth(0.9f)
 
-                                        .padding(6.dp)
-                                ) {
-                                    // Text(text = "Cell Id : ${item.cellId}")
-                                    Text(text = "Cell number : ${item.cellNum}")
-                                    Text(text = "Number of Chicken : ${item.henCount}")
-                                }
-
-                                if (cellsViewModel.getManageBlockCellsAccess()) {
-                                    IconButton(
-                                        onClick = {
-                                            cellsViewModel.setTheSelectedCell(item)
-                                            cellsViewModel.showDialog.value = true
-                                        }
-                                    ) {
-                                        Icon(Icons.Default.Edit, contentDescription = "edit")
-                                    }
-                                }
-
-                                var showDeleteDialog by remember { mutableStateOf(false) }
-                                MyInputDialog(
-                                    showDialog = showDeleteDialog,
-                                    title = "Delete Cell",
-                                    onConfirm = {
-                                        // on delete Cell
-                                        val cellNum = item.cellNum
-                                        val cellId = item.cellId
-                                        cellsViewModel.onDeleteCell(item)
-
-                                        Toast.makeText(
-                                            context,
-                                            "Cell id: $cellId number: $cellNum deleted successfully",
-                                            Toast
-                                                .LENGTH_SHORT
-                                        ).show()
-                                        showDeleteDialog = false
-
-                                    },
-                                    onDismiss = {
-                                        showDeleteDialog = false
-                                    }
-                                )
-                                {
-                                    Text(text = "Are you sure you want to delete cell ${item.cellNum}?")
-                                }
-
-                                if (cellsViewModel.getManageBlockCellsAccess()/*userRole != "Collector"*/) {
-
-                                    IconButton(
-                                        onClick = {
-                                            //On delete cell
-                                            showDeleteDialog = true
-                                        }) {
-                                        Icon(
-                                            imageVector = Icons.Default.Delete,
-                                            contentDescription = "delete"
-                                        )
-                                    }
-                                }
-                            }
-                        }
-
-                    }
+                    }*/
                 }
             }
         }

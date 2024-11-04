@@ -118,7 +118,7 @@ dependencies {
    // annotationProcessor("androidx.room:room-compiler:$roomVersion")
     ksp("androidx.room:room-compiler:$roomVersion")
     implementation("androidx.room:room-ktx:$roomVersion")
-    runtimeOnly("androidx.room:room-paging:$roomVersion")
+    implementation("androidx.room:room-paging:$roomVersion")
 
 
     //navigation compose

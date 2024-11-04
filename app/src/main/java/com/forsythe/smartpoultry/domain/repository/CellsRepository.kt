@@ -1,5 +1,6 @@
 package com.forsythe.smartpoultry.domain.repository
 
+import androidx.paging.PagingSource
 import com.forsythe.smartpoultry.data.dataSource.local.room.entities.cells.Cells
 import kotlinx.coroutines.flow.Flow
 
@@ -13,9 +14,9 @@ interface CellsRepository {
 
     fun getCell(cellId:Int): Flow<List<Cells>>
 
-    fun getTotalHenCount():Flow<List<Int>>
+    fun getTotalHenCount(blockId: Int):Flow<Int>
 
-    fun getCellsForBlock(blockId : Int):Flow<List<Cells>>
+    fun getCellsForBlock(blockId : Int): PagingSource<Int, Cells>//Flow<List<Cells>>
 
     suspend fun updateCellInfo(cell: Cells)
 
