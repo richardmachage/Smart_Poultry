@@ -291,7 +291,7 @@ fun CellsScreen(
                                                 cellsViewModel.showDialog.value = true
                                             }
                                         }
-                                       // .fillMaxWidth(0.9f)
+                                        // .fillMaxWidth(0.9f)
 
                                         .padding(6.dp)
                                 ) {
@@ -335,11 +335,7 @@ fun CellsScreen(
                                     }
                                 )
                                 {
-                                    Column {
-                                        Text(text = "Warning! \nDeleting this block will also delete all the cells within the block ")
-                                        MyVerticalSpacer(height = 10)
-                                        Text(text = "Are you sure you want to delete?")
-                                    }
+                                    Text(text = "Are you sure you want to delete cell ${item.cellNum}?")
                                 }
 
                                 if (cellsViewModel.getManageBlockCellsAccess()/*userRole != "Collector"*/) {
