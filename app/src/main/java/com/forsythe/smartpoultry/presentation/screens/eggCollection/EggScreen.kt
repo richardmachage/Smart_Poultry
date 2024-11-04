@@ -97,7 +97,7 @@ fun EggScreen(
                 onButtonClick = { switchModes = !switchModes },
                 btnName = if (!switchModes) "Switch to input Per Cell" else "Switch to input Per Block"
             )
-//            val isNetAvailable = context.isNetworkAvailable().toString()
+
             AnimatedContent(targetState = switchModes, label = "eggCollectionMode") {state->
                 if (state) {
                     Column(
@@ -160,7 +160,6 @@ fun EggScreen(
                 else {
                     Column(
                         modifier = Modifier
-                        // .fillMaxSize()
                     ) {
                         //Defining the datePicker
                         MyDatePicker(
@@ -207,7 +206,7 @@ fun EggScreen(
                                                     modifier = Modifier
                                                         .padding(start = 16.dp),
                                                     fontSize = 20.sp,
-                                                    text = "Block  ${listOfBlocks[blockIndex].blockNum}"
+                                                    text = "Block ${block.blockNum}"// ${listOfBlocks[blockIndex].blockNum}"
                                                 )
 
                                                 TitleText(

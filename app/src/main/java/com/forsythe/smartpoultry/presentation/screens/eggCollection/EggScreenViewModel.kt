@@ -98,7 +98,7 @@ class EggScreenViewModel @Inject constructor(
         return listOfBlocks.map { block ->
             BlockEggCollection(
                 blockId = block.block.blockId,
-                blockNum = listOfBlocks.indexOf(block) + 1,
+                blockNum = block.block.blockNum,//listOfBlocks.indexOf(block) + 1,
                 cells = transformCellsEntityToCellsWithEggCount(block.cell)
             )
         }
