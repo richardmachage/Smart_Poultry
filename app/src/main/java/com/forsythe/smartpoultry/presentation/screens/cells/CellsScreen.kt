@@ -314,9 +314,9 @@ fun CellsScreen(
                                 var showDeleteDialog by remember { mutableStateOf(false) }
                                 MyInputDialog(
                                     showDialog = showDeleteDialog,
-                                    title = "Delete Block",
+                                    title = "Delete Cell",
                                     onConfirm = {
-                                        // on delete block
+                                        // on delete Cell
                                         val cellNum = item.cellNum
                                         val cellId = item.cellId
                                         cellsViewModel.onDeleteCell(item)
