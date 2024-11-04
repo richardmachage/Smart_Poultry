@@ -305,7 +305,7 @@ fun EggScreen(
                                             MyOutlineButton(
                                                 onButtonClick = {
                                                     eggViewModel.onSaveRecord(
-                                                        block = blockIndex,
+                                                        block = block.blockNum,
                                                         cellsInput = listOfBlocks[blockIndex].cells,
                                                         isNetAvailable = context.isNetworkAvailable()
                                                     )

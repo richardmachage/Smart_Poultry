@@ -143,9 +143,9 @@ class EggScreenViewModel @Inject constructor(
 
             isLoading.value = false
             if (insertStatus.value) toastMessage.value =
-                "records for block ${block + 1} saved successfully"
+                "records for block $block saved successfully"
             else toastMessage.value =
-                "Failed! Records for Block: ${block + 1} for date: ${selectedDate.value} already exist"
+                "Failed! Records for Block: $block for date: ${selectedDate.value} already exist"
         }
     }
 
